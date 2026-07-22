@@ -1,0 +1,128 @@
+:root {
+  color-scheme: light;
+  font-family: Arial, sans-serif;
+  background: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background: #fff;
+}
+
+.fibre-field {
+  --glow-rgb: 64, 163, 246;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  isolation: isolate;
+  overflow: hidden;
+  background: #fff;
+  cursor: crosshair;
+  touch-action: pan-x pan-y;
+}
+
+.fibre-field__glow {
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  bottom: -36%;
+  width: min(1240px, 122vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(var(--glow-rgb), 0.4) 0%,
+    rgba(var(--glow-rgb), 0.22) 25%,
+    rgba(var(--glow-rgb), 0.08) 49%,
+    rgba(var(--glow-rgb), 0) 72%
+  );
+  filter: blur(18px);
+  opacity: 0.82;
+  transform: translateX(-50%) scale(1.15, 0.72);
+  transition: background 700ms ease;
+}
+
+.fibre-field__canvas {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.palette-toggle {
+  position: absolute;
+  z-index: 2;
+  top: clamp(18px, 2.4vw, 30px);
+  right: clamp(18px, 2.4vw, 30px);
+  display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  place-items: center;
+  border: 1px solid rgba(37, 79, 173, 0.24);
+  border-radius: 2px;
+  color: rgb(var(--glow-rgb));
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 1px 5px rgba(34, 71, 150, 0.08);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    color 500ms ease,
+    border-color 500ms ease,
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.palette-toggle:hover {
+  background: #fff;
+  transform: scale(1.06);
+}
+
+.palette-toggle:active {
+  transform: scale(0.94);
+}
+
+.palette-toggle:focus-visible {
+  outline: 2px solid rgb(var(--glow-rgb));
+  outline-offset: 3px;
+}
+
+.palette-toggle svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.35;
+}
+
+@media (max-width: 600px) {
+  .fibre-field__glow {
+    bottom: -20%;
+    width: 150vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fibre-field__glow,
+  .palette-toggle {
+    transition-duration: 0.01ms;
+  }
+}
