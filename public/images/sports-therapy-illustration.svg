@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400" role="img" aria-labelledby="title desc">
+  <title id="title">Sports therapy movement study</title>
+  <desc id="desc">Abstract line drawing of a moving human figure with points of connection.</desc>
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#86bfff" stop-opacity=".75"/>
+      <stop offset=".55" stop-color="#dfeeff" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#f7faff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#111c3d"/>
+      <stop offset="1" stop-color="#3156c8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1400" fill="#f4f8ff"/>
+  <circle cx="610" cy="650" r="520" fill="url(#glow)"/>
+  <g fill="none" stroke="url(#line)" stroke-linecap="round">
+    <circle cx="605" cy="250" r="84" stroke-width="7"/>
+    <path d="M570 343c-95 120-123 278-88 450 27 130 103 228 121 388" stroke-width="10"/>
+    <path d="M639 344c76 126 91 288 51 433-31 115-90 236-79 405" stroke-width="10"/>
+    <path d="M535 458c-135 73-238 187-299 342M659 454c127 69 223 176 296 317" stroke-width="8"/>
+    <path d="M487 780c-111 98-190 212-231 340M690 772c118 95 202 203 253 333" stroke-width="9"/>
+    <path d="M527 579c55 42 111 42 168 0M494 708c72 54 138 53 207-3" stroke-width="5" opacity=".6"/>
+  </g>
+  <g fill="#3156c8">
+    <circle cx="535" cy="458" r="13"/><circle cx="659" cy="454" r="13"/>
+    <circle cx="487" cy="780" r="13"/><circle cx="690" cy="772" r="13"/>
+    <circle cx="256" cy="1120" r="11"/><circle cx="943" cy="1105" r="11"/>
+  </g>
+  <g fill="none" stroke="#3156c8" stroke-width="2" opacity=".26">
+    <circle cx="605" cy="690" r="370"/><circle cx="605" cy="690" r="460"/>
+    <path d="M145 690h920M605 230v920"/>
+  </g>
+</svg>

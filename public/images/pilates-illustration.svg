@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400" role="img" aria-labelledby="title desc">
+  <title id="title">Pilates balance study</title>
+  <desc id="desc">Abstract line drawing of a balanced human figure surrounded by movement arcs.</desc>
+  <defs>
+    <radialGradient id="glow" cx="52%" cy="46%" r="62%">
+      <stop offset="0" stop-color="#b6d8ff" stop-opacity=".85"/>
+      <stop offset=".55" stop-color="#e3efff" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#f4f8ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="line" x1=".2" y1="0" x2=".8" y2="1">
+      <stop stop-color="#3156c8"/>
+      <stop offset="1" stop-color="#101b39"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1400" fill="#eef5ff"/>
+  <ellipse cx="610" cy="690" rx="520" ry="570" fill="url(#glow)"/>
+  <g fill="none" stroke="url(#line)" stroke-linecap="round">
+    <circle cx="610" cy="250" r="82" stroke-width="7"/>
+    <path d="M594 338c-38 138-42 276 12 410 45 112 48 231 4 399" stroke-width="10"/>
+    <path d="M622 338c53 133 55 270-2 408-47 112-53 238-10 401" stroke-width="7" opacity=".65"/>
+    <path d="M568 449C405 537 278 657 188 807M649 449c158 88 282 209 370 361" stroke-width="8"/>
+    <path d="M605 742c-100 96-200 184-325 253M615 742c96 97 199 186 326 253" stroke-width="9"/>
+    <path d="M480 617c84 49 169 48 258-2" stroke-width="5" opacity=".55"/>
+  </g>
+  <g fill="#3156c8">
+    <circle cx="568" cy="449" r="12"/><circle cx="649" cy="449" r="12"/>
+    <circle cx="605" cy="742" r="13"/><circle cx="188" cy="807" r="11"/>
+    <circle cx="1019" cy="810" r="11"/><circle cx="280" cy="995" r="11"/><circle cx="941" cy="995" r="11"/>
+  </g>
+  <g fill="none" stroke="#3156c8" stroke-width="2" opacity=".28">
+    <ellipse cx="610" cy="690" rx="430" ry="540"/>
+    <ellipse cx="610" cy="690" rx="330" ry="440"/>
+    <path d="M130 690h960M610 130v1120"/>
+  </g>
+</svg>
