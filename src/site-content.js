@@ -1,3 +1,5 @@
+import { legacyPages } from "./legacy-content.js";
+
 const BUSINESS = {
   phoneDisplay: "07881 821 901",
   phoneHref: "tel:+447881821901",
@@ -9,39 +11,40 @@ const escapePath = (path) => path.replace(/\/+$/, "") || "/";
 const navGroups = [
   { label: "Home", href: "/", links: [] },
   {
-    label: "Sports Therapy",
-    href: "/what-is-what-are-the-benifits",
-    links: [
-      ["Overview", "/what-is-what-are-the-benifits"],
-      ["Treatment", "/treatment"],
-      ["Myofascial Release", "/myofascial-release"],
-      ["What to expect", "/what-to-expect"],
-      ["Kinesiology Taping", "/kinesiology-taping"],
-      ["Workplace massage", "/office-based-sports-massage"],
-    ],
-  },
-  {
     label: "Pilates",
     href: "/pilates",
     links: [
-      ["Overview", "/pilates"],
-      ["Studham studio", "/blank-1"],
-      ["Small-group timetable", "/small-group-pilates-timetable"],
-      ["Individual Pilates", "/individual-pilates"],
-      ["Pilates for golfers", "/pilates-for-golfers"],
-      ["Pre & postnatal Pilates", "/blank"],
-      ["Pilates retreats", "/retreats"],
-      ["Clinic policies", "/clinic-policies"],
+      ["Overview", "/pilates#overview"],
+      ["Studham studio", "/pilates#studio"],
+      ["Individual Pilates", "/pilates#individual"],
+      ["Small-group timetable", "/pilates#small-group"],
+      ["Pre & postnatal Pilates", "/pilates#pre-postnatal"],
+      ["Pilates for golfers", "/pilates#golfers"],
+      ["Practical details", "/pilates#practical"],
+      ["Pilates retreats", "/pilates#retreats"],
     ],
   },
   {
     label: "Clinics",
     href: "/clinics",
     links: [
-      ["Locations", "/clinics"],
-      ["Testimonials", "/testimonial"],
-      ["Professional links", "/links"],
-      ["Charity work", "/charity-work"],
+      ["Locations", "/clinics#locations"],
+      ["Testimonials", "/clinics#testimonials"],
+      ["Professional links", "/clinics#links"],
+      ["Charity work", "/clinics#charity"],
+    ],
+  },
+  {
+    label: "Sports Therapy",
+    href: "/sports-therapy",
+    links: [
+      ["Overview", "/sports-therapy#overview"],
+      ["Treatment", "/sports-therapy#treatment"],
+      ["Myofascial Release", "/sports-therapy#myofascial-release"],
+      ["What to expect", "/sports-therapy#what-to-expect"],
+      ["Kinesiology Taping", "/sports-therapy#kinesiology-taping"],
+      ["Workplace massage", "/sports-therapy#workplace"],
+      ["Treatment prices", "/sports-therapy#practical"],
     ],
   },
   { label: "About", href: "/about", links: [] },
@@ -51,7 +54,7 @@ const navGroups = [
 const crumbs = {
   pilates: ["Pilates", "/pilates"],
   clinics: ["Clinics", "/clinics"],
-  therapy: ["Sports Therapy", "/what-is-what-are-the-benifits"],
+  therapy: ["Sports Therapy", "/sports-therapy"],
   contact: ["Contact", "/contact"],
 };
 
@@ -119,19 +122,30 @@ function section(kicker, title, body, modifier = "") {
   </section>`;
 }
 
-function hero({ eyebrow, title, intro, parent, tone = "light" }) {
+function hero({ eyebrow, title, intro, parent, tone = "light", media }) {
   const crumb = parent
     ? `<a href="${parent[1]}">${parent[0]}</a><span aria-hidden="true">/</span>`
     : '<a href="/">Home</a><span aria-hidden="true">/</span>';
+  const inner = `<nav class="breadcrumbs" aria-label="Breadcrumb">${crumb}<span>${eyebrow}</span></nav>
+      <p class="section-kicker">${eyebrow}</p>
+      <h1>${title}</h1>
+      ${intro ? `<p class="page-hero__intro">${intro}</p>` : ""}`;
+  if (media) {
+    return `<section class="page-hero page-hero--${tone} page-hero--media">
+    <div class="section-shell page-hero__inner">
+      <div class="page-hero__content">
+        ${inner}
+      </div>
+      <figure class="page-hero__media page-hero__media--figure"><object class="page-hero__figure" type="image/svg+xml" data="${media.src}" aria-label="${media.alt}" tabindex="-1"></object></figure>
+    </div>
+  </section>`;
+  }
   return `<section class="page-hero page-hero--${tone}">
     <div class="page-hero__visual" aria-hidden="true">
       <span></span><span></span><span></span><i></i>
     </div>
     <div class="section-shell page-hero__inner">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">${crumb}<span>${eyebrow}</span></nav>
-      <p class="section-kicker">${eyebrow}</p>
-      <h1>${title}</h1>
-      <p class="page-hero__intro">${intro}</p>
+      ${inner}
     </div>
   </section>`;
 }
@@ -158,10 +172,10 @@ const pilatesHub = page(
   <section class="card-section"><div class="section-shell">
     <header class="section-intro" data-reveal><p class="section-kicker">Ways to practise</p><h2>Choose the setting that<br><em>works for you.</em></h2></header>
     ${cards([
-      { title: "Individual Pilates", text: "One-to-one or duet sessions designed around your posture, goals and medical history.", href: "/individual-pilates", icon: "control" },
-      { title: "Small groups", text: "Attentive, welcoming classes with an initial one-to-one assessment before joining.", href: "/small-group-pilates-timetable", icon: "movement" },
-      { title: "Pre & postnatal", text: "Supportive movement for pregnancy and a careful return after birth.", href: "/blank", icon: "hands" },
-      { title: "For golfers", text: "Build rotation, balance, flexibility and control to support your game.", href: "/pilates-for-golfers", icon: "assess" },
+      { title: "Individual Pilates", text: "One-to-one or duet sessions designed around your posture, goals and medical history.", href: "/pilates#individual", icon: "control" },
+      { title: "Small groups", text: "Attentive, welcoming classes with an initial one-to-one assessment before joining.", href: "/pilates#small-group", icon: "movement" },
+      { title: "Pre & postnatal", text: "Supportive movement for pregnancy and a careful return after birth.", href: "/pilates#pre-postnatal", icon: "hands" },
+      { title: "For golfers", text: "Build rotation, balance, flexibility and control to support your game.", href: "/pilates#golfers", icon: "assess" },
     ])}
   </div></section>
   ${band("Control. Strength. Balance.", "What Pilates can develop", [
@@ -192,8 +206,8 @@ const studio = page(
   )}
   ${cards([
     { title: "Sports Therapy", text: "Assessment-led, hands-on care and practical rehabilitation.", href: "/what-is-what-are-the-benifits", icon: "hands" },
-    { title: "Individual Pilates", text: "Focused sessions adapted to you and your goals.", href: "/individual-pilates", icon: "control" },
-    { title: "Small groups", text: "Close guidance in a welcoming small-class setting.", href: "/small-group-pilates-timetable", icon: "movement" },
+    { title: "Individual Pilates", text: "Focused sessions adapted to you and your goals.", href: "/pilates#individual", icon: "control" },
+    { title: "Small groups", text: "Close guidance in a welcoming small-class setting.", href: "/pilates#small-group", icon: "movement" },
   ], "editorial-cards--contained")}${cta("Find your place to begin.")}`,
 );
 
@@ -341,7 +355,7 @@ const clinics = page(
   `<section class="location-section"><div class="section-shell">
     <header class="section-intro" data-reveal><p class="section-kicker">Where to find us</p><h2>Three places.<br><em>One personal approach.</em></h2></header>
     <div class="location-grid">
-      <article data-reveal><span>01</span><h3>Studham Pilates Studio</h3><p>Studham, near Whipsnade</p><p>Sports Therapy, individual Pilates and small-group Pilates in a calm private studio.</p><a href="/blank-1" class="text-link">Studio details <span>→</span></a></article>
+      <article data-reveal><span>01</span><h3>Studham Pilates Studio</h3><p>Studham, near Whipsnade</p><p>Sports Therapy, individual Pilates and small-group Pilates in a calm private studio.</p><a href="/pilates#studio" class="text-link">Studio details <span>→</span></a></article>
       <article data-reveal><span>02</span><h3>Berkhamsted Physiotherapy & Sports Injury Clinic</h3><address>36A Lower Kings Road<br>Berkhamsted, Hertfordshire<br>HP4 2AA</address><a href="https://www.google.com/maps/search/?api=1&query=36A+Lower+Kings+Road+Berkhamsted+HP4+2AA" class="text-link" target="_blank" rel="noreferrer">Open map <span>↗</span></a></article>
       <article data-reveal><span>03</span><h3>Sportspace Berkhamsted</h3><address>Lagley Meadow<br>Douglas Gardens<br>Berkhamsted, Hertfordshire<br>HP4 3QQ</address><a href="https://www.google.com/maps/search/?api=1&query=Sportspace+Berkhamsted+HP4+3QQ" class="text-link" target="_blank" rel="noreferrer">Open map <span>↗</span></a></article>
     </div>
@@ -785,36 +799,627 @@ const contact = page(
   </div></section>`,
 );
 
+function legacyImage(path, index, className = "") {
+  const image = legacyPages[path]?.images?.[index];
+  if (!image) return "";
+  return `<img class="${className}" src="${image.src}" alt="${escapeContent(image.alt)}" loading="${path === "/pilates" && index === 1 ? "eager" : "lazy"}">`;
+}
+
+function buildPilatesContinuousPage() {
+  return {
+    title: "NJH Pilates",
+    description:
+      "Individual and small-group Pilates in Studham, including pre and postnatal Pilates and Pilates for golfers.",
+    canonical: "/pilates",
+    html: `<div class="pilates-longform">
+      <section class="pilates-hero" id="overview" aria-labelledby="pilates-title">
+        <div class="section-shell pilates-hero__grid">
+          <div class="pilates-hero__content">
+            <p class="section-kicker">Pilates · Studham near Whipsnade</p>
+            <h1 id="pilates-title">Move with<br><em>purpose.</em></h1>
+            <p class="pilates-hero__intro">Pilates uses slow, precise, controlled exercises to strengthen deep postural muscles, in turn stabilising and supporting the body.</p>
+            <a class="pilates-arrow-link" href="#approach">Discover the approach <span>↓</span></a>
+          </div>
+          <figure class="pilates-hero__media pilates-hero__media--figure"><object class="pilates-hero__figure" type="image/svg+xml" data="/images/pilates-figure-animated.svg" aria-label="Animated line drawing of a figure in a Pilates pose within orbiting rings" tabindex="-1"></object></figure>
+          <nav class="pilates-section-index" aria-label="On this page">
+            <a href="#studio"><span>01</span> Studio</a>
+            <a href="#individual"><span>02</span> Individual</a>
+            <a href="#small-group"><span>03</span> Small groups</a>
+            <a href="#pre-postnatal"><span>04</span> Pre/Postnatal</a>
+            <a href="#golfers"><span>05</span> Golfers</a>
+          </nav>
+        </div>
+      </section>
+
+      <section class="pilates-approach" id="approach" aria-labelledby="approach-title">
+        <div class="section-shell">
+          <header class="pilates-approach__head" data-reveal>
+            <p class="section-kicker">The Pilates approach</p>
+            <h2 id="approach-title">Awareness is the greatest<br><em>agent for change.</em></h2>
+            <p class="pilates-approach__intro">The benefits of Pilates are understanding how to correct poor posture, improve strength and range of movement around the joint, and promote and maintain a healthy back.</p>
+          </header>
+          <ol class="pilates-approach__steps" data-reveal>
+            <li class="pilates-approach__step">
+              <span class="pilates-approach__num">01</span>
+              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.2" r="2.1"/><path d="M12 6.5v7"/><path d="M8.5 9.2h7"/><path d="M12 13.5 9.2 21"/><path d="M12 13.5 14.8 21"/></svg></span>
+              <strong>Improve posture</strong>
+            </li>
+            <li class="pilates-approach__step">
+              <span class="pilates-approach__num">02</span>
+              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 5.8v4.7c0 4.3 3 6.7 7 8.2 4-1.5 7-3.9 7-8.2V5.8L12 3Z"/><path d="M9.2 11.4 11.3 13.6 15 9.4"/></svg></span>
+              <strong>Core strength &amp; stability</strong>
+            </li>
+            <li class="pilates-approach__step">
+              <span class="pilates-approach__num">03</span>
+              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5c2.5-2.6 5.5-2.6 8 0s5.5 2.6 8 0"/><path d="M3 14.5c2.5-2.6 5.5-2.6 8 0s5.5 2.6 8 0"/></svg></span>
+              <strong>Release unwanted tension</strong>
+            </li>
+            <li class="pilates-approach__step">
+              <span class="pilates-approach__num">04</span>
+              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5h16"/><path d="M12 10.5V19"/><path d="M8.5 19h7"/><path d="M12 10.5 9 5h6l-3 5.5Z"/></svg></span>
+              <strong>Restore balance to muscles around the joint</strong>
+            </li>
+          </ol>
+          <figure class="pilates-approach__quote" data-reveal>
+            <blockquote>&ldquo;In 10 sessions you will feel the difference. In 20, you will see the difference. And in 30, you&rsquo;ll be on your way to having a whole new body.&rdquo;</blockquote>
+            <figcaption>Joseph Hubertus Pilates</figcaption>
+          </figure>
+          <p class="pilates-approach__credential-label" data-reveal>STOTT Pilates trained</p>
+        </div>
+      </section>
+
+      <section class="pilates-studio" id="studio" aria-labelledby="studio-title">
+        <div class="section-shell pilates-studio__intro">
+          <div data-reveal>
+            <p class="section-kicker">01 · The Studham studio</p>
+            <h2 id="studio-title">Space to switch off<br><em>and focus on you.</em></h2>
+          </div>
+          <div class="pilates-studio__copy" data-reveal>
+            <p>January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
+            <p>Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, Individual or Small Group Pilates sessions, this is a place to restore muscular wellbeing and improve posture.</p>
+            <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Call ${BUSINESS.phoneDisplay} <span>↗</span></a>
+          </div>
+        </div>
+        <div class="section-shell">
+          <div class="studio-carousel" data-studio-carousel data-reveal>
+            <div class="studio-carousel__stage" data-carousel-stage>
+              <button class="studio-carousel__nav studio-carousel__nav--prev" type="button" aria-label="Previous photo" data-carousel-prev><span aria-hidden="true">&#8249;</span></button>
+              <ul class="studio-carousel__track" role="list">
+                ${[
+                  "Light, private and considered",
+                  "Purposeful movement",
+                  "Studham, near Whipsnade",
+                  "Sports Therapy and Pilates",
+                ]
+                  .map(
+                    (caption, index) =>
+                      `<li class="studio-carousel__slide" data-carousel-slide data-caption="${escapeContent(caption)}">${legacyImage("/blank-1", index)}</li>`,
+                  )
+                  .join("")}
+              </ul>
+              <button class="studio-carousel__nav studio-carousel__nav--next" type="button" aria-label="Next photo" data-carousel-next><span aria-hidden="true">&#8250;</span></button>
+            </div>
+            <div class="studio-carousel__meta">
+              <p class="studio-carousel__index"><span data-carousel-current>01</span><span class="studio-carousel__index-sep">/</span><span data-carousel-total>04</span></p>
+              <p class="studio-carousel__caption" data-carousel-caption aria-live="polite">Light, private and considered</p>
+              <div class="studio-carousel__dots" data-carousel-dots role="tablist" aria-label="Choose studio photo"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pilates-feature pilates-feature--individual" id="individual" aria-labelledby="individual-title">
+        <div class="section-shell pilates-feature__grid">
+          <div class="pilates-orbit-figure" data-reveal>
+            <object class="pilates-orbit-figure__svg" type="image/svg+xml" data="/images/pilates-figure-meditation-animated.svg" aria-label="Animated line drawing of a person meditating within orbiting rings" tabindex="-1"></object>
+            <dl class="pilates-orbit-facts">
+              <div class="pilates-orbit-fact pilates-orbit-fact--format"><dt>Format</dt><dd>One-to-one or duet</dd></div>
+              <div class="pilates-orbit-fact pilates-orbit-fact--length"><dt>Length</dt><dd>One hour</dd></div>
+              <div class="pilates-orbit-fact pilates-orbit-fact--available"><dt>Available</dt><dd>Monday to Friday</dd></div>
+            </dl>
+          </div>
+          <div class="pilates-feature__content" data-reveal>
+            <p class="section-kicker">02 · Individual Pilates</p>
+            <h2 id="individual-title">Greater focus.<br><em>Clear progression.</em></h2>
+            <p class="pilates-feature__lead">One-to-one Pilates—or a duet session with a friend—tailored to suit your needs and objectives.</p>
+            <p>Your session focuses on restoring muscular balance, with specific exercises designed for your posture type or medical conditions such as osteoporosis, frozen shoulder, and neck, knee or lower-back issues.</p>
+            <a class="pilates-arrow-link" href="#contact">Discuss your requirements <span>→</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="pilates-feature pilates-feature--group" id="small-group" aria-labelledby="group-title">
+        <div class="pilates-orbit pilates-orbit--group" aria-hidden="true"><span></span><i></i></div>
+        <div class="section-shell">
+          <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
+            <p class="section-kicker">03 · Small Group Pilates</p>
+            <h2 id="group-title">Move together.<br><em>Stay individual.</em></h2>
+            <p>Class sizes are small to ensure close attention to posture and movement during each exercise where necessary.</p>
+          </header>
+          <div class="pilates-group-layout">
+            <div class="pilates-group-collage" data-reveal>
+              <figure><img src="/images/pilates-mat-stretch.jpg" alt="Precise, controlled Pilates movement on the mat" loading="lazy"><figcaption>Precise, controlled movement</figcaption></figure>
+              <figure><img src="/images/pilates-duet-ball.jpg" alt="Two people practising Pilates together with a ball" loading="lazy"><figcaption>Small group practice</figcaption></figure>
+              <figure><img src="/images/pilates-group-three.jpg" alt="A small group of clients together in the studio" loading="lazy"><figcaption>A welcoming community</figcaption></figure>
+              <figure><img src="/images/pilates-guidance.jpg" alt="Close, personal guidance during a Pilates session" loading="lazy"><figcaption>Close, personal attention</figcaption></figure>
+              <figure><img src="/images/legacy/pilates-studio-4.jpg" alt="The light, airy NJH studio in Studham" loading="lazy"><figcaption>The Studham studio</figcaption></figure>
+              <figure><img src="/images/pilates-stretch-light.jpg" alt="Pilates stretch in natural light" loading="lazy"><figcaption>Purposeful movement</figcaption></figure>
+            </div>
+            <div class="pilates-timetable" data-reveal>
+              <div class="pilates-detail-label"><span>Weekly timetable</span><small>Confirm availability before booking</small></div>
+              <div class="pilates-timetable__row"><strong>Monday</strong><p><span>6.30pm</span></p></div>
+              <div class="pilates-timetable__row"><strong>Tuesday</strong><p><span>8.30am <small>45 min</small></span><span>9.20am</span><span>11.30am</span></p></div>
+              <div class="pilates-timetable__row"><strong>Friday</strong><p><span>7.30am</span><span>9.30am</span></p></div>
+              <p class="pilates-timetable__note">Sessions are 55 minutes unless noted. An initial one-to-one assessment including postural analysis is required before joining Small Group Pilates.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pilates-dual" id="pre-postnatal" aria-labelledby="natal-title">
+        <div class="section-shell">
+          <header class="pilates-section-heading" data-reveal>
+            <p class="section-kicker">04 · Pre/Postnatal Pilates</p>
+            <h2 id="natal-title">Supported movement<br><em>through change.</em></h2>
+          </header>
+          <div class="pilates-dual__grid">
+            <article data-reveal>
+              <figure>${legacyImage("/blank", 0)}</figure>
+              <span>01 · Prenatal</span>
+              <h3>During pregnancy</h3>
+              <ul><li>Maintain fitness during pregnancy</li><li>Improve posture</li><li>Strengthen the pelvic floor</li><li>Release tension</li></ul>
+            </article>
+            <article data-reveal>
+              <figure>${legacyImage("/blank", 1)}</figure>
+              <span>02 · Postnatal</span>
+              <h3>After birth</h3>
+              <p>After the six-week GP check, or 8–12 weeks following a Caesarean section.</p>
+              <ul><li>Restore abdominal strength after birth</li><li>Improve conditions such as diastasis recti</li></ul>
+            </article>
+          </div>
+          <p class="pilates-dual__note" data-reveal>Available individually or for your own small group of NCT, prenatal or postnatal friends. Maximum 1:7 to ensure close attention and correction when necessary.</p>
+        </div>
+      </section>
+
+      <section class="pilates-golf" id="golfers" aria-labelledby="golf-title">
+        <div class="section-shell pilates-golf__grid">
+          <div class="pilates-golf__content" data-reveal>
+            <p class="section-kicker">05 · Pilates for Golfers</p>
+            <h2 id="golf-title">Movement from<br><em>the centre.</em></h2>
+            <p>For a golfer, muscle imbalances can affect the legs, hips, arms, shoulders and lower back. Pilates is based on movement from the centre of the body, as are most shots in golf.</p>
+            <p>Core strength can improve hip rotation, range of motion in the shoulders and back stability, leading to improved performance.</p>
+            <ul class="pilates-golf__benefits"><li>Improve balance and flexibility</li><li>Strengthen your core to avoid injury</li><li>Work on overall breathing and focus</li></ul>
+          </div>
+          <div class="pilates-golf__media" data-reveal>
+            <figure class="pilates-golf__anatomy">${legacyImage("/pilates-for-golfers", 0)}<figcaption>Anatomy of the movement</figcaption></figure>
+            <figure class="pilates-golf__swing">${legacyImage("/pilates-for-golfers", 1)}<figcaption>The swing sequence</figcaption></figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="pilates-practical" id="practical" aria-labelledby="practical-title">
+        <div class="section-shell">
+          <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
+            <p class="section-kicker">Practical details</p>
+            <h2 id="practical-title">Clear before<br><em>you begin.</em></h2>
+            <p>Timetable, prices and policies should be confirmed when booking.</p>
+          </header>
+          <div class="pilates-practical__grid">
+            <article data-reveal>
+              <span>01 · Pilates charges</span>
+              <div class="pilates-price"><p>One-to-one Pilates</p><strong>£85</strong></div>
+              <div class="pilates-price"><p>Duet with a friend or partner</p><strong>£95</strong></div>
+              <div class="pilates-price"><p>Initial 1:1 before Small Group Pilates</p><strong>£85</strong></div>
+              <div class="pilates-price"><p>Small Group Pilates session</p><strong>£21</strong></div>
+              <small>Small Group sessions are paid for in termly blocks.</small>
+            </article>
+            <article data-reveal>
+              <span>02 · Clinic policies</span>
+              <details><summary>Appointments and cancellation <b>+</b></summary><p>A charge is made for missed Soft Tissue, 1:1 or 2:1 Pilates appointments or non-attendance unless 24 hours notice is given. A 50% charge is required for less than 48 hours notice.</p></details>
+              <details><summary>Late arrival <b>+</b></summary><p>If you are late for your 1:1 or 2:1, the session still falls within the scheduled appointment time. If the practitioner misses a scheduled 1:1 appointment, you will receive a free session.</p></details>
+              <details><summary>Small Group blocks <b>+</b></summary><p>Small Group Pilates blocks are paid for in termly blocks. Once payment is received, your place is reserved for the entire block and no refunds are given.</p></details>
+              <details><summary>Clients under 16 <b>+</b></summary><p>Clients under 16 must be accompanied by a parent who will be required to sign a parental consent form.</p></details>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="pilates-retreats" id="retreats" aria-labelledby="retreats-title">
+        <div class="section-shell">
+          <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
+            <p class="section-kicker">Archive · Past events</p>
+            <h2 id="retreats-title">Time to move,<br><em>rest and reset.</em></h2>
+            <p>Previous NJH Pilates retreats in Sussex and Italy. These events took place in 2020 and 2021 and are shown as part of the NJH archive.</p>
+          </header>
+          <div class="pilates-retreats__grid">
+            <article data-reveal>
+              <figure>${legacyImage("/retreats", 0)}</figure>
+              <span>01 · Arundel · January 2020</span>
+              <h3>Brooklands Barn, Sussex</h3>
+              <p>A restored 19th-century barn with an indoor pool, outdoor barrel sauna, Pilates studio and treatment rooms. The retreat included two nights, meals and four Small Group Pilates sessions.</p>
+            </article>
+            <article data-reveal>
+              <figure>${legacyImage("/retreats", 1)}</figure>
+              <span>02 · Casperia · June 2021</span>
+              <h3>Forani Palace, Italy</h3>
+              <p>A 15th-century palazzo with daily Small Group Pilates, an outdoor pool, indoor cave studio and outdoor Pilates platform.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="pilates-contact" id="contact" aria-labelledby="pilates-contact-title">
+        <div class="pilates-orbit pilates-orbit--contact" aria-hidden="true"><span></span><i></i></div>
+        <div class="section-shell pilates-contact__grid">
+          <div data-reveal><p class="section-kicker">Start a conversation</p><h2 id="pilates-contact-title">Find the right place<br><em>to begin.</em></h2></div>
+          <div data-reveal><p>For further details or to discuss your specific requirements, contact Natasha Hadland.</p><a class="button-link" href="/contact">Send an enquiry <span>↗</span></a><a class="pilates-contact__phone" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div>
+        </div>
+      </section>
+    </div>`,
+  };
+}
+
+const pilatesContinuous = buildPilatesContinuousPage();
+
+function buildClinicsContinuousPage() {
+  const clinicTestimonials = [
+    testimonialData[0],
+    testimonialData[1],
+    testimonialData[2],
+    testimonialData[3],
+    testimonialData[4],
+    testimonialData[5],
+  ];
+
+  return {
+    title: "NJH Clinics",
+    description:
+      "NJH Sports Therapy and Pilates clinic locations, client testimonials, professional links and charity work.",
+    canonical: "/clinics",
+    html: `<div class="clinics-longform">
+      <section class="clinics-hero" id="overview" aria-labelledby="clinics-title">
+        <div class="section-shell clinics-hero__inner">
+          <div class="clinics-hero__grid">
+            <div class="clinics-hero__content">
+              <p class="section-kicker">NJH clinics · Berkhamsted</p>
+              <h1 id="clinics-title">Care, closer<br><em>to home.</em></h1>
+              <div class="clinics-hero__footer">
+                <p>Professional, personal Sports Therapy and Pilates care across two established Berkhamsted locations.</p>
+                <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Appointments · ${BUSINESS.phoneDisplay} <span>↗</span></a>
+              </div>
+            </div>
+            <figure class="clinics-hero__media clinics-hero__media--figure">
+              <object class="clinics-hero__figure" type="image/svg+xml" data="/images/clinics-asclepius-animated.svg" aria-label="Animated line drawing of the Rod of Asclepius within orbiting rings" tabindex="-1"></object>
+            </figure>
+          </div>
+          <nav class="clinics-index" aria-label="On this page">
+            <a href="#locations"><span>01</span>Locations</a>
+            <a href="#testimonials"><span>02</span>Testimonials</a>
+            <a href="#links"><span>03</span>Professional links</a>
+            <a href="#charity"><span>04</span>Charity work</a>
+          </nav>
+        </div>
+      </section>
+
+      <section class="clinics-locations" id="locations" aria-labelledby="locations-title">
+        <div class="section-shell">
+          <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
+            <p class="section-kicker">01 · Locations</p>
+            <h2 id="locations-title">Two places.<br><em>One personal approach.</em></h2>
+            <p>For an appointment, call Natasha on ${BUSINESS.phoneDisplay}.</p>
+          </header>
+          <div class="clinics-location-grid">
+            <article data-reveal><span>01 · Lower Kings Road</span><h3>Berkhamsted Physiotherapy<br>&amp; Sports Injury Clinic</h3><address>36A Lower Kings Road<br>Berkhamsted, Herts<br>HP4 2AA</address><div class="clinics-location-grid__mark" aria-hidden="true">36A</div></article>
+            <article data-reveal><span>02 · Douglas Gardens</span><h3>Sportspace<br>Berkhamsted</h3><address>Lagley Meadow<br>Douglas Gardens<br>Berkhamsted, Herts<br>HP4 3QQ</address><div class="clinics-location-grid__mark" aria-hidden="true">HP4</div></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="clinics-testimonials" id="testimonials" aria-labelledby="clinics-testimonials-title">
+        <div class="section-shell">
+          <header class="pilates-section-heading" data-reveal><p class="section-kicker">02 · Client testimonials</p><h2 id="clinics-testimonials-title">Movement stories,<br><em>in their words.</em></h2></header>
+          <div class="clinics-testimonial-grid">${clinicTestimonials
+            .map(
+              (item, index) => `<blockquote data-reveal>
+                <span>${String(index + 1).padStart(2, "0")} · ${item.type}</span>
+                <p>“${item.quote}”</p>
+                <footer>${item.by}</footer>
+              </blockquote>`,
+            )
+            .join("")}</div>
+        </div>
+      </section>
+
+      <section class="clinics-links" id="links" aria-labelledby="links-title">
+        <div class="section-shell">
+          <header class="pilates-section-heading pilates-section-heading--split" data-reveal><p class="section-kicker">03 · Professional links</p><h2 id="links-title">Training behind<br><em>the practice.</em></h2><p>Organisations connected to Natasha’s training in Sports Therapy and Pilates.</p></header>
+          <div class="clinics-links__grid">
+            <article data-reveal><span>01</span><figure>${legacyImage("/links", 0)}</figure><h3>London School of Sports Massage</h3></article>
+            <article data-reveal><span>02</span><figure>${legacyImage("/links", 1)}</figure><h3>Institute of Sport &amp; Remedial Massage</h3></article>
+            <a href="http://www.merrithew.com/stott-pilates/about" target="_blank" rel="noreferrer" data-reveal><span>03</span><figure>${legacyImage("/links", 2)}</figure><h3>Merrithew · STOTT Pilates</h3><b>↗</b></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="clinics-charity" id="charity" aria-labelledby="charity-title">
+        <div class="pilates-orbit clinics-charity__orbit" aria-hidden="true"><span></span><i></i></div>
+        <div class="section-shell clinics-charity__grid">
+          <div data-reveal><p class="section-kicker">04 · Charity work</p><h2 id="charity-title">Movement that<br><em>gives back.</em></h2></div>
+          <div data-reveal><p>NJH Sports Therapy &amp; Pilates is keen to help raise money for charities in the area, giving pre and post-event sports massage at triathlons, marathons and 10K runs where possible.</p><p>Please contact Natasha if you would like to discuss this further.</p><a class="button-link" href="/contact">Discuss an event <span>↗</span></a></div>
+        </div>
+      </section>
+    </div>`,
+  };
+}
+
+function buildSportsTherapyContinuousPage() {
+  const techniques = [
+    "Deep tissue massage",
+    "Muscle energy techniques (MET)",
+    "Soft Tissue Release (STR)",
+    "Deep friction techniques",
+    "Neuro Muscular Technique (NMT)",
+    "Connective tissue and myofascial work",
+    "Positional Release (PR)",
+    "Manual mobilisation for joints and soft tissue",
+  ];
+  const injuries = [
+    "Recurring postural pain",
+    "Lower-back pain and sciatica",
+    "Upper-back, neck, headache and whiplash concerns",
+    "Thoracic tightness and acute or chronic pain",
+    "Hip, groin, knee, ankle and upper-limb problems",
+    "Soft-tissue rehabilitation and joint stiffness",
+    "Muscular strains, ligament sprains and tendonitis",
+    "Scar restriction before and after surgery",
+  ];
+
+  return {
+    title: "NJH Sports Therapy",
+    description:
+      "Sports Therapy, soft-tissue treatment, myofascial release and kinesiology taping with NJH.",
+    canonical: "/sports-therapy",
+    html: `<div class="therapy-longform">
+      <section class="therapy-hero" id="overview" aria-labelledby="therapy-title">
+        <div class="section-shell therapy-hero__grid">
+          <div class="therapy-hero__content"><p class="section-kicker">NJH Sports Therapy</p><h1 id="therapy-title">Understand.<br><em>Treat.</em><br>Move forward.</h1><p>Sports Therapy provides relief from musculoskeletal pain and dysfunction through the use of various massage and soft-tissue techniques.</p><a class="pilates-arrow-link" href="#treatment">Explore treatment <span>↓</span></a></div>
+          <figure class="therapy-hero__media therapy-hero__media--figure"><object class="therapy-hero__figure" type="image/svg+xml" data="/images/njh-signature-motion-figure-animated.svg" aria-label="Animated line drawing of a figure within orbiting rings" tabindex="-1"></object></figure>
+        </div>
+        <nav class="section-shell therapy-index" aria-label="On this page"><a href="#treatment"><span>01</span>Treatment</a><a href="#myofascial-release"><span>02</span>Myofascial release</a><a href="#what-to-expect"><span>03</span>What to expect</a><a href="#kinesiology-taping"><span>04</span>Taping</a><a href="#workplace"><span>05</span>Workplace</a></nav>
+      </section>
+
+      <section class="therapy-benefits" id="approach" aria-labelledby="therapy-benefits-title">
+        <div class="section-shell"><header class="pilates-section-heading" data-reveal><p class="section-kicker">What are the benefits?</p><h2 id="therapy-benefits-title">Care for the whole picture,<br><em>not only the symptom.</em></h2></header>
+          <ol class="therapy-benefits__rail" data-reveal><li><span>01</span>Improve posture</li><li><span>02</span>Reduce tension and pain</li><li><span>03</span>Improve flexibility</li><li><span>04</span>Support recovery</li><li><span>05</span>Address scar restriction</li></ol>
+          <div class="therapy-benefits__conditions" data-reveal><p>Advanced techniques can help alleviate symptoms associated with a range of conditions.</p><ul><li>Frozen shoulder</li><li>Repetitive strain injury</li><li>Tension headaches</li><li>Migraines and sinusitis</li><li>Pregnancy-related issues</li><li>Carpal tunnel syndrome</li></ul></div>
+        </div>
+      </section>
+
+      <section class="therapy-treatment" id="treatment" aria-labelledby="treatment-title">
+        <div class="section-shell"><header class="pilates-section-heading pilates-section-heading--split" data-reveal><p class="section-kicker">01 · Treatment</p><h2 id="treatment-title">The right technique<br><em>for the person.</em></h2><p>Techniques are often combined with exercises to stretch and strengthen muscles at home.</p></header>
+          <div class="therapy-treatment__grid"><article data-reveal><span>Hands-on techniques</span><ol>${techniques.map((item, index) => `<li><b>${String(index + 1).padStart(2, "0")}</b>${item}</li>`).join("")}</ol></article><article data-reveal><span>Common concerns</span><ol>${injuries.map((item, index) => `<li><b>${String(index + 1).padStart(2, "0")}</b>${item}</li>`).join("")}</ol></article></div>
+          <p class="therapy-referrals" data-reveal>Professional referrals are welcomed from GPs, consultants, physiotherapists, osteopaths and podiatrists.</p>
+        </div>
+      </section>
+
+      <section class="therapy-fascia" id="myofascial-release" aria-labelledby="fascia-title">
+        <div class="therapy-fascia__threads" aria-hidden="true"></div>
+        <div class="section-shell therapy-fascia__grid"><div data-reveal><p class="section-kicker">02 · Myofascial release</p><h2 id="fascia-title">The tissue<br><em>of movement.</em></h2><p class="therapy-fascia__lead">Fascia is strong, flexible tissue surrounding muscles and bones. It spans the whole body as one connected material.</p></div><div data-reveal><p>In a healthy state, fascia is relaxed and supports posture, range of movement and flexibility. Physical trauma, inflammation, surgery or habitual poor posture can make it tight and restricted.</p><p>Myofascial Release uses slow, sustained pressure to relax deep tissue, improve movement and reduce tension. Pressure can range from very gentle touch to deeper work and should never be beyond your tolerance.</p><ul><li>Lower-back pain and headaches</li><li>Neck stiffness and shoulder injuries</li><li>Sports injuries and postural pain</li><li>Muscle spasms and recurring restriction</li><li>Improved joint movement and breathing</li></ul></div></div>
+      </section>
+
+      <section class="therapy-expect" id="what-to-expect" aria-labelledby="expect-title">
+        <div class="section-shell"><header class="pilates-section-heading pilates-section-heading--split" data-reveal><p class="section-kicker">03 · Your appointment</p><h2 id="expect-title">A clear start.<br><em>A personal plan.</em></h2><p>Every treatment is tailored to the individual client’s needs and reviewed through feedback.</p></header>
+          <ol class="therapy-steps"><li data-reveal><span>01</span><h3>Listen</h3><p>Take a brief medical history and understand your goals.</p></li><li data-reveal><span>02</span><h3>Assess</h3><p>Assess the injury or painful area, posture, joint and surrounding tissue.</p></li><li data-reveal><span>03</span><h3>Plan</h3><p>Discuss a treatment plan, which may include practical home exercises.</p></li></ol>
+          <div class="therapy-wear" data-reveal><span>What to wear</span><p>Wear loose, comfortable clothing or bring shorts where possible. Depending on the location of your injury, you may be asked to remove some clothing; treatment can be carried out through clothes if you prefer.</p></div>
+        </div>
+      </section>
+
+      <section class="therapy-taping" id="kinesiology-taping" aria-labelledby="taping-title">
+        <div class="section-shell therapy-taping__grid"><figure data-reveal>${legacyImage("/kinesiology-taping", 0)}<figcaption>Examples of kinesiology taping</figcaption></figure><div data-reveal><p class="section-kicker">04 · Kinesiology taping</p><h2 id="taping-title">Light-touch support<br><em>between sessions.</em></h2><p>Taping can aid pain relief, reduce swelling and support postural awareness. It can be included in an appointment or booked as a standalone 15–20 minute session.</p><div class="therapy-taping__types"><span>Symptom reduction</span><span>Oedema control</span><span>Postural control</span><span>Power taping</span></div></div></div>
+      </section>
+
+      <section class="therapy-workplace" id="workplace" aria-labelledby="workplace-title">
+        <div class="section-shell therapy-workplace__grid"><div data-reveal><p class="section-kicker">05 · Workplace massage</p><h2 id="workplace-title">Treatment that fits<br><em>the working day.</em></h2></div><div data-reveal><p>On-site massage treatments can be carried out in the privacy of a workplace meeting room or another quiet office area.</p><p>This offers a practical way to address injuries while continuing to fulfil busy work commitments, and gives employers an opportunity to support staff wellbeing.</p><a class="pilates-arrow-link" href="/contact">Discuss workplace treatment <span>→</span></a></div></div>
+      </section>
+
+      <section class="therapy-practical" id="practical" aria-labelledby="therapy-practical-title"><div class="section-shell"><header class="pilates-section-heading pilates-section-heading--split" data-reveal><p class="section-kicker">Treatment prices</p><h2 id="therapy-practical-title">Time for the work<br><em>you need.</em></h2><p>Appointment length is selected around the complexity of the presentation.</p></header><div class="therapy-prices" data-reveal><div><span>Up to 90 minutes</span><strong>£130</strong></div><div><span>Standard · up to 1 hour</span><strong>£85</strong></div><div><span>Up to 30 minutes</span><strong>£60</strong></div></div><p class="therapy-practical__note">Sunday and Bank Holiday appointments carry an additional £10 surcharge. Confirm current prices when booking.</p></div></section>
+
+      <section class="pilates-contact therapy-contact" id="contact" aria-labelledby="therapy-contact-title"><div class="pilates-orbit pilates-orbit--contact" aria-hidden="true"><span></span><i></i></div><div class="section-shell pilates-contact__grid"><div data-reveal><p class="section-kicker">Start a conversation</p><h2 id="therapy-contact-title">Tell us what you’d like<br><em>to move beyond.</em></h2></div><div data-reveal><p>Whatever your injury or postural pain, contact Natasha to discuss the right place to begin.</p><a class="button-link" href="/contact">Send an enquiry <span>↗</span></a><a class="pilates-contact__phone" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div></div></section>
+    </div>`,
+  };
+}
+
+const clinicsContinuous = buildClinicsContinuousPage();
+const sportsTherapyContinuous = buildSportsTherapyContinuousPage();
+
+function escapeContent(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+function formatLegacyText(value) {
+  return escapeContent(value)
+    .replace(
+      /(https?:\/\/[^\s]+)/g,
+      '<a href="$1" target="_blank" rel="noreferrer">$1</a>',
+    )
+    .replace(
+      /\b07881\s?821\s?901\b/g,
+      '<a href="tel:+447881821901">$&</a>',
+    )
+    .replaceAll("\n", "<br>");
+}
+
+function renderLegacyCopy(data) {
+  const headings = new Set(data.headings || []);
+  const blocks = data.copy.trim().split(/\n{2,}/);
+  const firstLine = blocks[0].split("\n")[0];
+  const heroTitle = data.heroTitle || firstLine;
+
+  if (firstLine === heroTitle) {
+    const remaining = blocks[0].split("\n").slice(1).join("\n").trim();
+    if (remaining) blocks[0] = remaining;
+    else blocks.shift();
+  }
+
+  const content = blocks
+    .map((block) => {
+      const trimmed = block.trim();
+      if (!trimmed) return "";
+      if (headings.has(trimmed)) {
+        return `<h2>${formatLegacyText(trimmed)}</h2>`;
+      }
+
+      const lines = trimmed.split("\n");
+      const bulletLines = lines.filter((line) =>
+        /^(?:•|- |\*)/.test(line.trim()),
+      );
+      if (bulletLines.length === lines.length) {
+        return `<ul>${lines
+          .map((line) =>
+            line
+              .trim()
+              .replace(/^•\s*/, "")
+              .replace(/^-\s+/, "")
+              .replace(/^\*\s*/, ""),
+          )
+          .map((line) => `<li>${formatLegacyText(line)}</li>`)
+          .join("")}</ul>`;
+      }
+
+      return `<p>${formatLegacyText(trimmed)}</p>`;
+    })
+    .join("\n");
+  const media = (data.images || [])
+    .map(
+      (image) =>
+        `<img src="${image.src}" alt="${escapeContent(image.alt)}" loading="lazy">`,
+    )
+    .join("");
+
+  return {
+    heroTitle,
+    html: `<section class="legacy-content">
+      <div class="section-shell legacy-content__inner">
+        ${
+          data.historical
+            ? '<p class="legacy-content__notice">Historical event information</p>'
+            : ""
+        }
+        ${media ? `<figure class="legacy-content__media legacy-content__media--${data.images.length}">${media}</figure>` : ""}
+        <div class="legacy-copy" data-reveal>${content}</div>
+      </div>
+    </section>`,
+  };
+}
+
+function createLegacyPage(path, data) {
+  const rendered = renderLegacyCopy(data);
+  const parent = data.parent ? crumbs[data.parent] : undefined;
+  const heroConfig = {
+    title: rendered.heroTitle,
+    description: `${rendered.heroTitle} information from NJH Sports Therapy & Pilates.`,
+    eyebrow: rendered.heroTitle,
+    intro: "",
+    parent,
+  };
+  if (path === "/about") {
+    heroConfig.eyebrow = "About NJH";
+    heroConfig.title = "Knowledge, attention<br><em>and genuine care.</em>";
+    heroConfig.intro =
+      "Natasha Hadland brings Sports Therapy and clinical Pilates together to help people understand their bodies and move with greater confidence.";
+    heroConfig.media = {
+      src: "/images/about-book-animated.svg",
+      alt: "Animated line drawing of an open book within orbiting rings",
+    };
+  }
+  const legacyPage = page(heroConfig, rendered.html);
+  if (path === "/about") {
+    legacyPage.title = "About Natasha Hadland";
+    legacyPage.description =
+      "Meet Natasha Hadland, Sports Therapist and certified STOTT Pilates instructor.";
+  }
+  if (path === "/price-list") legacyPage.canonical = "/prices";
+  return legacyPage;
+}
+
+const pilatesLegacyTargets = {
+  "/blank-1": "studio",
+  "/individual-pilates": "individual",
+  "/small-group-pilates-timetable": "small-group",
+  "/blank": "pre-postnatal",
+  "/pilates-for-golfers": "golfers",
+  "/clinic-policies": "practical",
+  "/retreats": "retreats",
+};
+
+const clinicsLegacyTargets = {
+  "/testimonial": "testimonials",
+  "/links": "links",
+  "/charity-work": "charity",
+};
+
+const therapyLegacyTargets = {
+  "/what-is-what-are-the-benifits": "overview",
+  "/treatment": "treatment",
+  "/myofascial-release": "myofascial-release",
+  "/what-to-expect": "what-to-expect",
+  "/kinesiology-taping": "kinesiology-taping",
+  "/office-based-sports-massage": "workplace",
+};
+
 const routes = {
-  "/pilates": pilatesHub,
-  "/blank-1": studio,
-  "/small-group-pilates-timetable": timetable,
-  "/individual-pilates": individual,
-  "/pilates-for-golfers": golfers,
-  "/blank": natal,
-  "/clinic-policies": policies,
-  "/clinics": clinics,
-  "/links": partnerLinks,
-  "/charity-work": charity,
-  "/testimonial": testimonials,
-  "/what-is-what-are-the-benifits": therapyHub,
-  "/treatment": treatment,
-  "/myofascial-release": fascia,
-  "/what-to-expect": expect,
-  "/kinesiology-taping": taping,
+  "/pilates": pilatesContinuous,
+  ...Object.fromEntries(
+    Object.entries(pilatesLegacyTargets).map(([path, scrollTarget]) => [
+      path,
+      { ...pilatesContinuous, scrollTarget },
+    ]),
+  ),
+  "/clinics": clinicsContinuous,
+  ...Object.fromEntries(
+    Object.entries(clinicsLegacyTargets).map(([path, scrollTarget]) => [
+      path,
+      { ...clinicsContinuous, scrollTarget },
+    ]),
+  ),
+  "/sports-therapy": sportsTherapyContinuous,
+  ...Object.fromEntries(
+    Object.entries(therapyLegacyTargets).map(([path, scrollTarget]) => [
+      path,
+      { ...sportsTherapyContinuous, scrollTarget },
+    ]),
+  ),
   "/about": about,
-  "/retreats": retreats,
-  "/office-based-sports-massage": workplaceMassage,
   "/prices": prices,
   "/price-list": { ...prices, canonical: "/prices" },
   "/contact": contact,
 };
 
+Object.entries(legacyPages).forEach(([path, data]) => {
+  if (
+    path === "/pilates" ||
+    path in pilatesLegacyTargets ||
+    path === "/clinics" ||
+    path in clinicsLegacyTargets ||
+    path in therapyLegacyTargets
+  ) {
+    return;
+  }
+  routes[path] = createLegacyPage(path, data);
+});
+
 function navigationMarkup(path) {
   return navGroups
     .map((group) => {
       const current =
-        path === group.href || group.links.some(([, href]) => path === href);
+        path === group.href ||
+        (group.href === "/pilates" && path in pilatesLegacyTargets) ||
+        (group.href === "/clinics" && path in clinicsLegacyTargets) ||
+        (group.href === "/sports-therapy" && path in therapyLegacyTargets) ||
+        group.links.some(([, href]) => path === href.split("#")[0]);
       if (!group.links.length) {
         return `<a href="${group.href}"${current ? ' aria-current="page"' : ""}>${group.label}</a>`;
       }
@@ -824,7 +1429,7 @@ function navigationMarkup(path) {
           <button type="button" aria-expanded="false" aria-label="Open ${group.label} menu"><span></span></button>
         </div>
         <div class="nav-group__menu">
-          ${group.links.map(([label, href]) => `<a href="${href}"${path === href ? ' aria-current="page"' : ""}>${label}</a>`).join("")}
+          ${group.links.map(([label, href]) => `<a href="${href}">${label}</a>`).join("")}
         </div>
       </div>`;
     })
@@ -853,18 +1458,21 @@ function updateMetadata(route, path) {
   canonical.href = `https://www.njhsportstherapy.co.uk${route?.canonical || path}`;
 }
 
-function hydrateShell(path) {
+function hydrateNavigation(path) {
   const navigation = document.querySelector(".site-nav");
   if (navigation) navigation.innerHTML = navigationMarkup(path);
+}
 
+function hydrateShell(path) {
+  hydrateNavigation(path);
   const footerGrid = document.querySelector(".site-footer__grid");
   if (footerGrid) {
     footerGrid.innerHTML = `<a class="wordmark site-footer__wordmark" href="/" aria-label="NJH home">
       <span class="wordmark__name">NJH</span><span class="wordmark__descriptor">Sports Therapy<br>& Pilates</span>
     </a>
-    <div><p class="site-footer__label">Treatment</p><a href="/what-is-what-are-the-benifits">Sports Therapy</a><a href="/treatment">Techniques</a><a href="/what-to-expect">Your appointment</a></div>
-    <div><p class="site-footer__label">Movement</p><a href="/pilates">Clinical Pilates</a><a href="/small-group-pilates-timetable">Timetable</a><a href="/prices">Prices</a></div>
-    <div><p class="site-footer__label">Practice</p><a href="/about">About Natasha</a><a href="/clinics">Locations</a><a href="/testimonial">Testimonials</a><a href="/contact">Contact</a></div>`;
+    <div><p class="site-footer__label">Treatment</p><a href="/sports-therapy">Sports Therapy</a><a href="/sports-therapy#treatment">Techniques</a><a href="/sports-therapy#what-to-expect">Your appointment</a></div>
+    <div><p class="site-footer__label">Movement</p><a href="/pilates">Clinical Pilates</a><a href="/pilates#small-group">Timetable</a><a href="/pilates#practical">Pilates prices</a></div>
+    <div><p class="site-footer__label">Practice</p><a href="/about">About Natasha</a><a href="/clinics">Locations</a><a href="/clinics#testimonials">Testimonials</a><a href="/contact">Contact</a></div>`;
   }
   const footerBottom = document.querySelector(".site-footer__bottom");
   if (footerBottom) {
@@ -877,6 +1485,8 @@ export function renderRoute() {
   const path = escapePath(window.location.pathname);
   const route = routes[path];
   if (path === "/") {
+    document.body.classList.add("has-expanded-nav");
+    hydrateNavigation(path);
     return { path, isHome: true };
   }
 
@@ -885,9 +1495,23 @@ export function renderRoute() {
   if (route && main) {
     main.innerHTML = route.html;
     document.body.classList.add("is-inner-page");
+    if (route.canonical === "/pilates") {
+      document.body.classList.add("is-pilates-page");
+    }
+    if (route.canonical === "/clinics") {
+      document.body.classList.add("is-clinics-page");
+    }
+    if (route.canonical === "/sports-therapy") {
+      document.body.classList.add("is-therapy-page");
+    }
     document.body.dataset.heroTone = route.tone || "light";
     updateMetadata(route, path);
-    return { path, isHome: false, route };
+    return {
+      path,
+      isHome: false,
+      route,
+      scrollTarget: route.scrollTarget || "",
+    };
   }
 
   if (main) {
@@ -909,7 +1533,135 @@ export function renderRoute() {
   return { path, isHome: false };
 }
 
+function initStudioCarousel() {
+  const carousel = document.querySelector("[data-studio-carousel]");
+  if (!carousel) return;
+
+  const stage = carousel.querySelector("[data-carousel-stage]");
+  const slides = [...carousel.querySelectorAll("[data-carousel-slide]")];
+  if (!slides.length) return;
+
+  const previousButton = carousel.querySelector("[data-carousel-prev]");
+  const nextButton = carousel.querySelector("[data-carousel-next]");
+  const currentLabel = carousel.querySelector("[data-carousel-current]");
+  const totalLabel = carousel.querySelector("[data-carousel-total]");
+  const captionLabel = carousel.querySelector("[data-carousel-caption]");
+  const dotsWrap = carousel.querySelector("[data-carousel-dots]");
+  const count = slides.length;
+  let active = 0;
+
+  if (totalLabel) totalLabel.textContent = String(count).padStart(2, "0");
+
+  const dots = slides.map((_, index) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "studio-carousel__dot";
+    dot.setAttribute("role", "tab");
+    dot.setAttribute("aria-label", `Show photo ${index + 1}`);
+    dot.addEventListener("click", () => go(index));
+    dotsWrap?.append(dot);
+    return dot;
+  });
+
+  function update() {
+    slides.forEach((slide, index) => {
+      let offset = index - active;
+      if (offset > count / 2) offset -= count;
+      if (offset < -count / 2) offset += count;
+      const distance = Math.abs(offset);
+      const direction = Math.sign(offset);
+
+      let translate;
+      let scale;
+      let opacity;
+      let blur;
+      let depth;
+      if (offset === 0) {
+        translate = 0;
+        scale = 1;
+        opacity = 1;
+        blur = 0;
+        depth = 30;
+      } else if (distance === 1) {
+        translate = direction * 56;
+        scale = 0.8;
+        opacity = 0.5;
+        blur = 1.4;
+        depth = 20;
+      } else {
+        translate = direction * 90;
+        scale = 0.62;
+        opacity = 0;
+        blur = 4;
+        depth = 5;
+      }
+
+      slide.style.transform = `translate(-50%, -50%) translateX(${translate}%) scale(${scale})`;
+      slide.style.opacity = String(opacity);
+      slide.style.filter = blur ? `blur(${blur}px)` : "none";
+      slide.style.zIndex = String(depth);
+      slide.style.pointerEvents =
+        offset === 0 ? "none" : opacity > 0 ? "auto" : "none";
+      slide.setAttribute("aria-hidden", offset === 0 ? "false" : "true");
+      slide.classList.toggle("is-active", offset === 0);
+    });
+
+    if (currentLabel) {
+      currentLabel.textContent = String(active + 1).padStart(2, "0");
+    }
+    if (captionLabel) {
+      captionLabel.textContent = slides[active].dataset.caption || "";
+    }
+    dots.forEach((dot, index) => {
+      const isActive = index === active;
+      dot.classList.toggle("is-active", isActive);
+      dot.setAttribute("aria-selected", String(isActive));
+    });
+  }
+
+  function go(index) {
+    active = ((index % count) + count) % count;
+    update();
+  }
+
+  previousButton?.addEventListener("click", () => go(active - 1));
+  nextButton?.addEventListener("click", () => go(active + 1));
+  slides.forEach((slide, index) =>
+    slide.addEventListener("click", () => {
+      if (index !== active) go(index);
+    }),
+  );
+
+  carousel.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      go(active - 1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      go(active + 1);
+    }
+  });
+
+  let startX = null;
+  let dragging = false;
+  stage?.addEventListener("pointerdown", (event) => {
+    startX = event.clientX;
+    dragging = true;
+  });
+  window.addEventListener("pointerup", (event) => {
+    if (!dragging || startX === null) return;
+    dragging = false;
+    const deltaX = event.clientX - startX;
+    startX = null;
+    if (Math.abs(deltaX) > 40) go(deltaX < 0 ? active + 1 : active - 1);
+  });
+
+  update();
+}
+
 export function initPageFeatures() {
+  initStudioCarousel();
+
   const form = document.querySelector("[data-enquiry-form]");
   if (!form) return;
 

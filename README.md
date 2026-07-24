@@ -13,7 +13,7 @@ Use `npm run build` for a production build and `npm run preview` to inspect it.
 
 ## Routes
 
-The site includes the homepage plus dedicated Pilates, clinic, Sports Therapy, About, testimonial, contact and pricing routes. Legacy paths such as `/blank`, `/blank-1`, `/what-is-what-are-the-benifits` and `/price-list` are retained so existing inbound links continue to work. `/price-list` uses `/prices` as its canonical URL.
+The site includes the homepage plus continuous Pilates, Clinics and Sports Therapy experiences, alongside About, contact and pricing routes. Their former subpage URLs redirect to matching anchored sections on `/pilates`, `/clinics` and `/sports-therapy`. Other legacy inbound paths remain available, and `/price-list` uses `/prices` as its canonical URL.
 
 This is a client-routed Vite site. `public/_redirects` configures Netlify-style static hosting to serve `index.html` for direct route requests. If the production host uses different rewrite syntax, configure an equivalent catch-all rewrite.
 

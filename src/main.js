@@ -78,7 +78,9 @@ const palettes = {
 const menuToggle = document.querySelector(".menu-toggle");
 const navigation = document.querySelector(".site-nav");
 const siteHeader = document.querySelector(".site-header");
-const hero = document.querySelector(".fibre-field, .page-hero");
+const hero = document.querySelector(
+  ".fibre-field, .page-hero, .pilates-hero, .clinics-hero, .therapy-hero",
+);
 const revealItems = [...document.querySelectorAll("[data-reveal]")];
 const testimonialSection = document.querySelector("[data-testimonials]");
 const testimonialQuotes = [
@@ -247,10 +249,27 @@ if (reducedMotion.matches || !("IntersectionObserver" in window)) {
 }
 
 const sectionLinks = [
-  ...(navigation?.querySelectorAll('a[href^="#"]') || []),
-];
+  ...(navigation?.querySelectorAll('a[href*="#"]') || []),
+].filter((link) => {
+  const url = new URL(link.href, window.location.href);
+  const continuousPath = document.body.classList.contains("is-pilates-page")
+    ? "/pilates"
+    : document.body.classList.contains("is-clinics-page")
+      ? "/clinics"
+      : document.body.classList.contains("is-therapy-page")
+        ? "/sports-therapy"
+        : "";
+  return (
+    url.hash &&
+    (url.pathname === window.location.pathname ||
+      (continuousPath && url.pathname === continuousPath))
+  );
+});
 const observedSections = sectionLinks
-  .map((link) => document.querySelector(link.getAttribute("href")))
+  .map((link) => {
+    const hash = new URL(link.href, window.location.href).hash;
+    return hash ? document.querySelector(hash) : null;
+  })
   .filter(Boolean);
 
 function updateActiveNavigation() {
@@ -262,9 +281,10 @@ function updateActiveNavigation() {
     .at(-1);
 
   sectionLinks.forEach((link) => {
+    const linkHash = new URL(link.href, window.location.href).hash;
     const active =
       activeSection &&
-      link.getAttribute("href") === `#${activeSection.getAttribute("id")}`;
+      linkHash === `#${activeSection.getAttribute("id")}`;
     if (active) link.setAttribute("aria-current", "location");
     else link.removeAttribute("aria-current");
   });
@@ -280,6 +300,53 @@ function updateHeader() {
 
 window.addEventListener("scroll", updateHeader, { passive: true });
 updateHeader();
+
+const legacyPilatesSections = {
+  "/blank-1": "studio",
+  "/individual-pilates": "individual",
+  "/small-group-pilates-timetable": "small-group",
+  "/blank": "pre-postnatal",
+  "/pilates-for-golfers": "golfers",
+  "/clinic-policies": "practical",
+  "/retreats": "retreats",
+};
+const legacyClinicsSections = {
+  "/testimonial": "testimonials",
+  "/links": "links",
+  "/charity-work": "charity",
+};
+const legacyTherapySections = {
+  "/what-is-what-are-the-benifits": "overview",
+  "/treatment": "treatment",
+  "/myofascial-release": "myofascial-release",
+  "/what-to-expect": "what-to-expect",
+  "/kinesiology-taping": "kinesiology-taping",
+  "/office-based-sports-massage": "workplace",
+};
+const initialSection =
+  routeState.scrollTarget ||
+  legacyPilatesSections[window.location.pathname] ||
+  legacyClinicsSections[window.location.pathname] ||
+  legacyTherapySections[window.location.pathname] ||
+  window.location.hash.replace(/^#/, "");
+if (initialSection) {
+  const scrollToInitialSection = () => {
+    const target = document.getElementById(initialSection);
+    if (!target) return;
+    target
+      .querySelectorAll("[data-reveal]")
+      .forEach((item) => item.classList.add("is-visible"));
+    target.scrollIntoView({ behavior: "instant", block: "start" });
+    updateHeader();
+  };
+  window.requestAnimationFrame(scrollToInitialSection);
+  window.setTimeout(scrollToInitialSection, 120);
+  window.addEventListener(
+    "load",
+    () => window.requestAnimationFrame(scrollToInitialSection),
+    { once: true },
+  );
+}
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
