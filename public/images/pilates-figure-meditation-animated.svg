@@ -87,7 +87,7 @@
   <!-- Figure line drawing, revealed top-to-bottom -->
   <image
     x="90" y="70" width="820" height="820"
-    href="pilates-figure-meditation-linework.png"
+    href="pilates-figure-meditation-linework.webp"
     preserveAspectRatio="xMidYMid meet"
     mask="url(#fig-reveal)"
   />

@@ -1,13 +1,13 @@
 import * as THREE from "three";
 
-const ORIGIN = new THREE.Vector3(0, -2.3, -0.4);
-const GLOBE_OFFSET = new THREE.Vector3(0, -2.5, -1.4);
-const GLOBE_ROTATION = new THREE.Euler(
-  THREE.MathUtils.degToRad(40),
-  THREE.MathUtils.degToRad(24),
-  THREE.MathUtils.degToRad(24),
-);
-const UPTIME_OFFSET = new THREE.Vector3(-1.6, 0, -9);
+/* Anatomical point-cloud states:
+   0 — fibre fan (soft-tissue fan, kept light; not used on the homepage)
+   1 — spine + orbit rings (behind the positioning section)
+   2 — muscle-fibre bundle (behind the qualifications section)
+   The forms echo the animated line-trace SVGs (orbit rings, spine, fascia). */
+
+const SPINE_GROUP_OFFSET = new THREE.Vector3(1.7, -0.15, -1);
+const FIBRE_GROUP_OFFSET = new THREE.Vector3(1.3, 0.2, -3);
 
 const lineVertexShader = `
   uniform float uTime;
@@ -166,134 +166,172 @@ function addDot(data, point, alpha, seed) {
   data.dotSeed.push(seed);
 }
 
-function buildPaymentMethods() {
+function buildFibreFan() {
   const data = createStateData();
   const random = seededRandom(84017);
-  const totalLines = 810;
-  const goldenRatio = (1 + Math.sqrt(5)) / 2;
+  const totalFibres = 140;
 
-  for (let index = 0; index < totalLines; index += 1) {
-    const azimuth = (2 * Math.PI * index) / goldenRatio;
-    const polar = Math.acos(1 - (2 * (index + 0.5)) / totalLines);
-    const direction = new THREE.Vector3(
-      Math.sin(polar) * Math.cos(azimuth),
-      Math.sin(polar) * Math.sin(azimuth),
-      Math.cos(polar),
+  for (let index = 0; index < totalFibres; index += 1) {
+    const angle = THREE.MathUtils.lerp(
+      Math.PI * 0.12,
+      Math.PI * 0.88,
+      index / (totalFibres - 1),
     );
-    const length = randomBetween(random, 2.75, 3.75);
-    const endpoint = direction.multiplyScalar(length).add(ORIGIN);
-    const alpha = randomBetween(random, 0.14, 0.55);
+    const inner = randomBetween(random, 1.1, 1.5);
+    const outer = inner + randomBetween(random, 1.2, 2.3);
+    const direction = new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0);
+    const start = direction
+      .clone()
+      .multiplyScalar(inner)
+      .add(new THREE.Vector3(0, -2.3, -0.6));
+    const end = direction
+      .clone()
+      .multiplyScalar(outer)
+      .add(new THREE.Vector3(0, -2.3, -0.6));
+    const alpha = randomBetween(random, 0.12, 0.45);
 
-    addPolyline(data, [ORIGIN, endpoint], alpha, random(), true);
-    addDot(data, endpoint, Math.min(1, alpha * 1.65), random());
+    addPolyline(data, [start, end], alpha, random(), true);
+    addDot(data, end, Math.min(0.9, alpha * 1.6), random());
   }
 
   return data;
 }
 
-function globeCurveLength(index, total) {
-  const maxProgress = 0.47;
-  const shortStart = 140;
-  const shortEnd = 216;
-  const ramp = 40;
-  let multiplier = 1;
-
-  if (index >= shortStart - ramp - 1 && index < shortStart) {
-    multiplier = THREE.MathUtils.lerp(
-      1,
-      0.38,
-      (index - (shortStart - ramp - 1)) / ramp,
-    );
-  } else if (index >= shortStart && index <= shortEnd) {
-    multiplier = 0.38;
-  } else if (index > shortEnd) {
-    multiplier = THREE.MathUtils.lerp(
-      0.38,
-      1,
-      (index - shortEnd) / (total - 4 - shortEnd),
-    );
-  }
-
-  return maxProgress * multiplier;
+function spinePoint(t) {
+  /* Gentle S-curve echoing lumbar/thoracic curvature. t in [0, 1]. */
+  return new THREE.Vector3(
+    0.34 * Math.sin(t * Math.PI * 1.15 + 0.3) - 0.12,
+    THREE.MathUtils.lerp(-2.3, 2.3, t),
+    0.22 * Math.cos(t * Math.PI * 0.9),
+  );
 }
 
-function buildPaymentsVolume() {
+function buildSpineOrbit() {
   const data = createStateData();
   const random = seededRandom(95284772);
-  const totalLines = 258;
-  const radius = 4;
 
-  for (let index = 0; index < totalLines; index += 1) {
-    const angle = THREE.MathUtils.degToRad((index / totalLines) * 360);
-    const maxLength = globeCurveLength(index, totalLines);
-    let regionStart = randomBetween(random, 0, 0.75);
-    let regionEnd = randomBetween(random, 0.25, 1);
+  /* Vertebral column: transverse bars wider in the lumbar region. */
+  const vertebrae = 24;
+  const spineCurve = [];
+  for (let index = 0; index < vertebrae; index += 1) {
+    const t = index / (vertebrae - 1);
+    const center = spinePoint(t);
+    spineCurve.push(center);
 
-    if (Math.abs(regionEnd - regionStart) < 0.3) {
-      regionEnd = regionStart < 0.5 ? regionStart + 0.3 : regionStart - 0.3;
+    const width = THREE.MathUtils.lerp(0.52, 0.26, t);
+    const left = center.clone().add(new THREE.Vector3(-width, 0, 0));
+    const right = center.clone().add(new THREE.Vector3(width, 0, 0));
+    const alpha = randomBetween(random, 0.4, 0.58);
+
+    addPolyline(data, [left, right], alpha, random(), true);
+    addDot(data, left, alpha * 1.35, random());
+    addDot(data, right, alpha * 1.35, random());
+    addDot(data, center, Math.min(0.95, alpha * 1.7), random());
+  }
+  addPolyline(data, spineCurve, 0.34, random(), true);
+
+  /* Orbit rings around the column — the animated-SVG motif in 3D. */
+  const rings = [
+    { radius: 2.05, tilt: 1.18, spin: 0, alpha: 0.17 },
+    { radius: 2.65, tilt: 1.26, spin: 0.55, alpha: 0.13 },
+    { radius: 3.3, tilt: 1.1, spin: 1.15, alpha: 0.1 },
+  ];
+  rings.forEach((ring) => {
+    const points = [];
+    for (let step = 0; step <= 72; step += 1) {
+      const theta = (step / 72) * Math.PI * 2;
+      const point = new THREE.Vector3(
+        ring.radius * Math.cos(theta),
+        0,
+        ring.radius * Math.sin(theta),
+      );
+      point.applyEuler(new THREE.Euler(ring.tilt, ring.spin, 0.16));
+      points.push(point);
     }
-    const start = regionStart * maxLength;
-    const end = regionEnd * maxLength;
+    addPolyline(data, points, ring.alpha, random(), false);
+    for (let markers = 0; markers < 4; markers += 1) {
+      addDot(
+        data,
+        points[Math.floor((markers / 4) * 72)],
+        randomBetween(random, 0.4, 0.62),
+        random(),
+      );
+    }
+  });
+
+  /* Faint depth scatter. */
+  for (let index = 0; index < 70; index += 1) {
+    const point = new THREE.Vector3(
+      randomBetween(random, -3.4, 3.4),
+      randomBetween(random, -3, 3),
+      randomBetween(random, -2.6, 0.6),
+    );
+    if (point.length() < 1.4) continue;
+    addDot(data, point, randomBetween(random, 0.07, 0.2), random());
+  }
+
+  return data;
+}
+
+function buildFibreBundle() {
+  const data = createStateData();
+  const random = seededRandom(331942);
+
+  /* Muscle-fibre fascicle: long fibres bowing outward around a belly,
+     receding into depth — soft tissue rendered in the site's line language. */
+  const fibres = 44;
+  const angle = THREE.MathUtils.degToRad(62);
+  const direction = new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0);
+  const perpendicular = new THREE.Vector3(-Math.sin(angle), Math.cos(angle), 0);
+  const length = 7.4;
+
+  for (let index = 0; index < fibres; index += 1) {
+    const spread =
+      THREE.MathUtils.lerp(-3.4, 3.4, index / (fibres - 1)) +
+      randomBetween(random, -0.07, 0.07);
+    const depth = -1 - Math.abs(spread) * 0.55 - randomBetween(random, 0, 1.1);
+    const belly = 0.34 * Math.max(0, 1 - Math.abs(spread) / 4.1);
+    const bow = Math.sign(spread || 1) * belly;
 
     const points = [];
-    for (let pointIndex = 0; pointIndex < 32; pointIndex += 1) {
-      const progress = pointIndex / 31;
-      const theta = Math.PI * THREE.MathUtils.lerp(start, end, progress);
-      const point = new THREE.Vector3(
-        radius * Math.sin(theta) * Math.cos(angle),
-        radius * Math.cos(theta),
-        radius * Math.sin(theta) * Math.sin(angle),
-      );
-      point.applyEuler(GLOBE_ROTATION).add(GLOBE_OFFSET);
+    const steps = 26;
+    for (let step = 0; step <= steps; step += 1) {
+      const t = step / steps - 0.5;
+      const point = direction
+        .clone()
+        .multiplyScalar(length * t)
+        .add(
+          perpendicular
+            .clone()
+            .multiplyScalar(spread + bow * Math.cos(t * Math.PI)),
+        );
+      point.z = depth;
       points.push(point);
     }
 
-    const alpha = randomBetween(random, 0.12, 0.5);
-    addPolyline(data, points, alpha, random(), false);
-    addDot(data, points.at(-1), Math.min(0.9, alpha * 1.8), random());
+    const depthFade = THREE.MathUtils.clamp(1 + (depth + 1) * 0.28, 0.35, 1);
+    const alpha =
+      (0.14 + 0.34 * Math.max(0, 1 - Math.abs(spread) / 4.4)) *
+      depthFade *
+      randomBetween(random, 0.7, 1);
+
+    addPolyline(data, points, alpha, random(), true);
+    addDot(data, points[0], Math.min(0.85, alpha * 1.55), random());
+    addDot(data, points.at(-1), Math.min(0.85, alpha * 1.55), random());
+    if (index % 4 === 0) {
+      addDot(
+        data,
+        points[Math.floor(steps / 2)],
+        Math.min(0.6, alpha * 1.2),
+        random(),
+      );
+    }
   }
 
   return data;
 }
 
-function uptimeWaveform(value) {
-  const roundness = 1.7;
-  const angle = value / roundness;
-  const sine = Math.sin(angle) * roundness;
-  const triangle = ((2 * Math.asin(Math.sin(angle))) / Math.PI) * roundness;
-  return sine * (1 - 0.00001) + triangle * 0.00001;
-}
-
-function buildUptime() {
-  const data = createStateData();
-  const random = seededRandom(331942);
-  const totalLines = 601;
-
-  for (let index = 0; index < totalLines; index += 1) {
-    const hiddenPreSlot = index === 0;
-    const progress = Math.max(0, index - 1) / (totalLines - 2);
-    const angle = (progress - 0.05) * Math.PI * 2 * 4;
-    const center = new THREE.Vector3(
-      progress * 6 + (17.5 / 2) * uptimeWaveform(angle) * 0.9,
-      -4.9 + progress * 15,
-      -progress * 20,
-    ).add(UPTIME_OFFSET);
-    const bottom = center.clone().add(new THREE.Vector3(0, -3, 0));
-    const top = center.clone().add(new THREE.Vector3(0, 3, 0));
-    const depthAlpha =
-      progress > 0.7 ? 0.03 : Math.max(0.06, 1 - progress / 0.7);
-    const alpha = hiddenPreSlot
-      ? 0
-      : depthAlpha * randomBetween(random, 0.25, 0.72);
-
-    addPolyline(data, [bottom, top], alpha, random(), true);
-    addDot(data, top, Math.min(0.8, alpha * 1.7), random());
-  }
-
-  return data;
-}
-
-const stateBuilders = [buildPaymentMethods, buildPaymentsVolume, buildUptime];
+const stateBuilders = [buildFibreFan, buildSpineOrbit, buildFibreBundle];
 
 function createLineMaterial(palette, resolution) {
   return new THREE.ShaderMaterial({
@@ -371,6 +409,8 @@ export class DataViz {
     this.states = stateBuilders.map((builder, index) =>
       this.createRenderableState(builder(), index),
     );
+    this.states[1].group.position.copy(SPINE_GROUP_OFFSET);
+    this.states[2].group.position.copy(FIBRE_GROUP_OFFSET);
     this.currentState = this.states[initialState];
     if (initialState === 0) this.currentState.group.scale.setScalar(0.7);
     this.scene.add(this.currentState.group);

@@ -1,0 +1,9 @@
+/* Self-hosted webfonts (no CDN — GDPR-safe).
+   Serif: STIX Two Text — scientific-publishing heritage, fits the anatomical/clinical brand.
+   Sans:  Hanken Grotesk (variable) — warm humanist grotesque for body/UI. */
+@import "@fontsource/stix-two-text/400.css";
+@import "@fontsource/stix-two-text/400-italic.css";
+@import "@fontsource/stix-two-text/500.css";
+@import "@fontsource/stix-two-text/600.css";
+@import "@fontsource/stix-two-text/600-italic.css";
+@import "@fontsource-variable/hanken-grotesk/index.css";

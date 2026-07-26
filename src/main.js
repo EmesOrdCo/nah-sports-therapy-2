@@ -1,3 +1,4 @@
+import "./fonts.css";
 import "./style.css";
 import { initPageFeatures, renderRoute } from "./site-content.js";
 
@@ -36,43 +37,14 @@ function dismissSiteLoader() {
 if (document.readyState === "complete") dismissSiteLoader();
 else window.addEventListener("load", dismissSiteLoader, { once: true });
 
-const palettes = {
-  "pre-dawn": {
-    label: "Pre-dawn",
-    top: "#d91aff",
-    bottom: "#0008ff",
-    stop: 0.75,
-  },
-  sunrise: {
-    label: "Sunrise",
-    top: "#ff29b0",
-    bottom: "#9435ed",
-    stop: 0.75,
-  },
-  daytime: {
-    label: "Daytime",
-    top: "#66c9ff",
-    bottom: "#0000db",
-    stop: 0.75,
-  },
-  dusk: {
-    label: "Dusk",
-    top: "#66c9ff",
-    bottom: "#0000ff",
-    stop: 0.75,
-  },
-  sunset: {
-    label: "Sunset",
-    top: "#f394ff",
-    bottom: "#5b24db",
-    stop: 0.75,
-  },
-  night: {
-    label: "Night",
-    top: "#ffffff",
-    bottom: "#ffffff",
-    stop: 0.66,
-  },
+/* Single brand palette for the anatomical visualizations:
+   bottom matches the animated line-art SVG stroke (#1b3a8f),
+   top lifts toward the signature brand blue for depth. */
+const vizPalette = {
+  label: "Clinical",
+  top: "#6f9bff",
+  bottom: "#1b3a8f",
+  stop: 0.75,
 };
 
 const menuToggle = document.querySelector(".menu-toggle");
@@ -104,7 +76,7 @@ if (visualizationCanvases.length) {
   import("./data-viz.js").then(({ DataViz }) => {
     visualizationCanvases.forEach((canvas) => {
       visualizations.push(
-        new DataViz(canvas, palettes.daytime, Number(canvas.dataset.vizState)),
+        new DataViz(canvas, vizPalette, Number(canvas.dataset.vizState)),
       );
     });
   });
@@ -235,17 +207,29 @@ reducedMotion.addEventListener("change", startTestimonialAutoplay);
 if (reducedMotion.matches || !("IntersectionObserver" in window)) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 } else {
+  let observerDelivered = false;
   const revealObserver = new IntersectionObserver(
     (entries, observer) => {
+      observerDelivered = true;
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
+        entry.target.classList.remove("pre-reveal");
         entry.target.classList.add("is-visible");
         observer.unobserve(entry.target);
       });
     },
     { threshold: 0.14, rootMargin: "0px 0px -7% 0px" },
   );
-  revealItems.forEach((item) => revealObserver.observe(item));
+  revealItems.forEach((item) => {
+    item.classList.add("pre-reveal");
+    revealObserver.observe(item);
+  });
+  // Safety net: a working observer always delivers an initial batch.
+  // If nothing arrived, assume it is broken and show everything.
+  window.setTimeout(() => {
+    if (observerDelivered) return;
+    revealItems.forEach((item) => item.classList.remove("pre-reveal"));
+  }, 3000);
 }
 
 const sectionLinks = [
@@ -333,9 +317,10 @@ if (initialSection) {
   const scrollToInitialSection = () => {
     const target = document.getElementById(initialSection);
     if (!target) return;
-    target
-      .querySelectorAll("[data-reveal]")
-      .forEach((item) => item.classList.add("is-visible"));
+    target.querySelectorAll("[data-reveal]").forEach((item) => {
+      item.classList.remove("pre-reveal");
+      item.classList.add("is-visible");
+    });
     target.scrollIntoView({ behavior: "instant", block: "start" });
     updateHeader();
   };

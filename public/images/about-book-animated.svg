@@ -83,7 +83,7 @@
   <!-- Open book, revealed top-to-bottom -->
   <image
     x="70" y="70" width="860" height="860"
-    href="about-book-linework.png"
+    href="about-book-linework.webp"
     preserveAspectRatio="xMidYMid meet"
     mask="url(#book-reveal)"
   />

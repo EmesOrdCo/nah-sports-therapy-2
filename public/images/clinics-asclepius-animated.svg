@@ -83,7 +83,7 @@
   <!-- Detailed Rod of Asclepius, revealed top-to-bottom -->
   <image
     x="193" y="40" width="613" height="920"
-    href="clinics-asclepius-linework.png"
+    href="clinics-asclepius-linework.webp"
     preserveAspectRatio="xMidYMid meet"
     mask="url(#asclepius-reveal)"
   />
