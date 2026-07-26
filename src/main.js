@@ -37,16 +37,6 @@ function dismissSiteLoader() {
 if (document.readyState === "complete") dismissSiteLoader();
 else window.addEventListener("load", dismissSiteLoader, { once: true });
 
-/* Single brand palette for the anatomical visualizations:
-   bottom matches the animated line-art SVG stroke (#1b3a8f),
-   top lifts toward the signature brand blue for depth. */
-const vizPalette = {
-  label: "Clinical",
-  top: "#6f9bff",
-  bottom: "#1b3a8f",
-  stop: 0.75,
-};
-
 const menuToggle = document.querySelector(".menu-toggle");
 const navigation = document.querySelector(".site-nav");
 const siteHeader = document.querySelector(".site-header");
@@ -54,37 +44,7 @@ const hero = document.querySelector(
   ".fibre-field, .page-hero, .pilates-hero, .clinics-hero, .therapy-hero",
 );
 const revealItems = [...document.querySelectorAll("[data-reveal]")];
-const testimonialSection = document.querySelector("[data-testimonials]");
-const testimonialQuotes = [
-  ...document.querySelectorAll("[data-testimonial-quote]"),
-];
-const testimonialNodes = [
-  ...document.querySelectorAll("[data-testimonial-node]"),
-];
-const testimonialPrevious = document.querySelector(
-  "[data-testimonial-previous]",
-);
-const testimonialNext = document.querySelector("[data-testimonial-next]");
-const testimonialCount = document.querySelector("[data-testimonial-count]");
-const testimonialCurrent = document.querySelector("[data-testimonial-current]");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const visualizations = [];
-const visualizationCanvases = [
-  ...document.querySelectorAll("[data-viz-state]"),
-];
-if (visualizationCanvases.length) {
-  import("./data-viz.js").then(({ DataViz }) => {
-    visualizationCanvases.forEach((canvas) => {
-      visualizations.push(
-        new DataViz(canvas, vizPalette, Number(canvas.dataset.vizState)),
-      );
-    });
-  });
-}
-
-let activeTestimonial = 0;
-let compassRotation = 35;
-let testimonialTimer;
 
 menuToggle?.addEventListener("click", () => {
   const open = menuToggle.getAttribute("aria-expanded") !== "true";
@@ -124,86 +84,6 @@ document.addEventListener("keydown", (event) => {
   });
 });
 
-function stopTestimonialAutoplay() {
-  window.clearInterval(testimonialTimer);
-  testimonialTimer = undefined;
-}
-
-function startTestimonialAutoplay() {
-  stopTestimonialAutoplay();
-  if (
-    reducedMotion.matches ||
-    document.hidden ||
-    testimonialSection?.matches(":hover") ||
-    testimonialSection?.contains(document.activeElement)
-  ) {
-    return;
-  }
-
-  testimonialTimer = window.setInterval(() => {
-    updateTestimonial(activeTestimonial + 1, false);
-  }, 7500);
-}
-
-function updateTestimonial(nextIndex, restartAutoplay = true) {
-  if (!testimonialQuotes.length) return;
-
-  const previousIndex = activeTestimonial;
-  activeTestimonial =
-    (nextIndex + testimonialQuotes.length) % testimonialQuotes.length;
-
-  if (nextIndex !== previousIndex) {
-    compassRotation += (nextIndex - previousIndex) * 120;
-  }
-
-  testimonialSection?.style.setProperty(
-    "--compass-angle",
-    `${compassRotation}deg`,
-  );
-
-  testimonialQuotes.forEach((quote, index) => {
-    const active = index === activeTestimonial;
-    quote.classList.remove("is-active");
-    quote.hidden = !active;
-    if (active) {
-      void quote.offsetWidth;
-      quote.classList.add("is-active");
-    }
-  });
-
-  testimonialNodes.forEach((node, index) => {
-    const active = index === activeTestimonial;
-    node.classList.toggle("is-active", active);
-    node.setAttribute("aria-pressed", String(active));
-  });
-
-  const currentLabel = String(activeTestimonial + 1).padStart(2, "0");
-  if (testimonialCount) testimonialCount.textContent = currentLabel;
-  if (testimonialCurrent) testimonialCurrent.textContent = currentLabel;
-
-  if (restartAutoplay) startTestimonialAutoplay();
-}
-
-testimonialPrevious?.addEventListener("click", () =>
-  updateTestimonial(activeTestimonial - 1),
-);
-testimonialNext?.addEventListener("click", () =>
-  updateTestimonial(activeTestimonial + 1),
-);
-testimonialNodes.forEach((node, index) => {
-  node.addEventListener("click", () => updateTestimonial(index));
-});
-
-testimonialSection?.addEventListener("pointerenter", stopTestimonialAutoplay);
-testimonialSection?.addEventListener("pointerleave", startTestimonialAutoplay);
-testimonialSection?.addEventListener("focusin", stopTestimonialAutoplay);
-testimonialSection?.addEventListener("focusout", (event) => {
-  if (!testimonialSection.contains(event.relatedTarget)) {
-    startTestimonialAutoplay();
-  }
-});
-reducedMotion.addEventListener("change", startTestimonialAutoplay);
-
 if (reducedMotion.matches || !("IntersectionObserver" in window)) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 } else {
@@ -218,7 +98,11 @@ if (reducedMotion.matches || !("IntersectionObserver" in window)) {
         observer.unobserve(entry.target);
       });
     },
-    { threshold: 0.14, rootMargin: "0px 0px -7% 0px" },
+    // Fire as soon as any part of the element is within 12% of the viewport
+    // bottom, so it is settling as it scrolls into the reading zone rather
+    // than animating once it is already in front of you. A percentage
+    // threshold would make tall elements (service cards) reveal very late.
+    { threshold: 0, rootMargin: "0px 0px 12% 0px" },
   );
   revealItems.forEach((item) => {
     item.classList.add("pre-reveal");
@@ -230,6 +114,34 @@ if (reducedMotion.matches || !("IntersectionObserver" in window)) {
     if (observerDelivered) return;
     revealItems.forEach((item) => item.classList.remove("pre-reveal"));
   }, 3000);
+}
+
+/* Draw the testimonial thread in step with scroll. The path uses
+   pathLength="1", so --thread-progress runs 1 (undrawn) to 0 (complete). */
+const voicesSection = document.querySelector(".voices");
+if (voicesSection && !reducedMotion.matches) {
+  let threadQueued = false;
+
+  const drawThread = () => {
+    threadQueued = false;
+    const rect = voicesSection.getBoundingClientRect();
+    // 0 as the band's top reaches the fold, 1 once its bottom does, so the
+    // line keeps pace with you the whole way down rather than finishing early.
+    const span = Math.max(rect.height * 0.92, 1);
+    const travelled = window.innerHeight - rect.top;
+    const progress = Math.min(Math.max(travelled / span, 0), 1);
+    voicesSection.style.setProperty("--thread-progress", String(1 - progress));
+  };
+
+  const queueThread = () => {
+    if (threadQueued) return;
+    threadQueued = true;
+    window.requestAnimationFrame(drawThread);
+  };
+
+  window.addEventListener("scroll", queueThread, { passive: true });
+  window.addEventListener("resize", queueThread, { passive: true });
+  drawThread();
 }
 
 const sectionLinks = [
@@ -333,16 +245,4 @@ if (initialSection) {
   );
 }
 
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    visualizations.forEach((visualization) => visualization.clock.stop());
-    stopTestimonialAutoplay();
-  } else {
-    visualizations.forEach((visualization) => visualization.clock.start());
-    startTestimonialAutoplay();
-  }
-});
-
-updateTestimonial(0, false);
-startTestimonialAutoplay();
 initPageFeatures();

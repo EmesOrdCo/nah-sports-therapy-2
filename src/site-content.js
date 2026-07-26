@@ -386,37 +386,37 @@ const testimonialData = [
   {
     type: "Sports Therapy & Pilates",
     quote:
-      "After almost three months of weekly classes and three Sports Therapy sessions, I was amazed at the range of pain-free movement I had. My core strength and mobility improved with every session.",
+      "After almost 3 months of weekly classes and 3 sports therapy sessions I am amazed at the range of pain free movement I now have.",
     by: "Sarah, manager",
   },
   {
     type: "Pilates",
     quote:
-      "The small group size and Natasha's clear instructions made all the difference. My general fitness has really improved and I would now find it difficult to miss my weekly class.",
+      "My general fitness level has really improved. Natasha is an excellent teacher and I would have no hesitation in recommending her.",
     by: "Nicola",
   },
   {
     type: "Sports Therapy",
     quote:
-      "The treatment hugely helped my long-standing shoulder injury, increasing my range and ease of movement. I can work better in the gym and play tennis without pain.",
+      "Her treatment hugely helped my long standing shoulder injury, increasing my range and ease of movement. I am now able to work better in the gym and play tennis without pain.",
     by: "Laura, physiotherapist",
   },
   {
     type: "Pilates",
     quote:
-      "Natasha understands her clients' needs and tailors their exercises around them. I come away feeling taller, stronger and straighter.",
+      "I come away feeling taller, stronger and straighter, sometimes I even have to adjust my rear-view mirror before driving off after a session to accommodate my new found height!",
     by: "Tessa, teacher",
   },
   {
     type: "Sports Therapy",
     quote:
-      "Through a variety of sports therapy techniques and dedicated strengthening and flexibility exercises, I was able to train harder than I had for years.",
+      "Natasha also takes the time to ensure you understand the treatment being performed and its intended outcome. I am pleased to say I am now pain free and I would recommend Natasha to anyone.",
     by: "Danny, chartered surveyor",
   },
   {
     type: "Rehabilitation",
     quote:
-      "Natasha assessed how my body functioned as a whole, treated the source of pain and gave me useful exercises to strengthen my core and improve movement.",
+      "Natasha quickly and expertly assessed my symptoms, looking at how my body functioned as a whole to treat the source of pain. Natasha also gave me some great follow up exercises to strengthen my core and improve my range of movement.",
     by: "Tom, competitive rower",
   },
 ];
@@ -805,7 +805,7 @@ function buildPilatesContinuousPage() {
             <p class="pilates-hero__intro">Pilates uses slow, precise, controlled exercises to strengthen deep postural muscles, in turn stabilising and supporting the body.</p>
             <a class="pilates-arrow-link" href="#approach">Discover the approach <span>↓</span></a>
           </div>
-          <figure class="pilates-hero__media pilates-hero__media--figure"><object class="pilates-hero__figure" type="image/svg+xml" data="/images/pilates-figure-animated.svg" aria-label="Animated line drawing of a figure in a Pilates pose within orbiting rings" tabindex="-1"></object></figure>
+          <figure class="pilates-hero__media pilates-hero__media--figure"><object class="pilates-hero__figure" type="image/svg+xml" data="/images/pilates-teaser-animated.svg" aria-label="Line drawing of a client holding the Pilates teaser position within measured rings" tabindex="-1"></object></figure>
           <nav class="pilates-section-index" aria-label="On this page">
             <a href="#studio"><span>01</span> Studio</a>
             <a href="#individual"><span>02</span> Individual</a>
@@ -853,48 +853,39 @@ function buildPilatesContinuousPage() {
       </section>
 
       <section class="pilates-studio" id="studio" aria-labelledby="studio-title">
-        <div class="section-shell pilates-studio__intro">
-          <div data-reveal>
-            <h2 id="studio-title">The Studham studio</h2>
-          </div>
+        <div class="section-shell pilates-studio__grid">
           <div class="pilates-studio__copy" data-reveal>
+            <h2 id="studio-title">The Studham studio</h2>
             <p>January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
             <p>Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, Individual or Small Group Pilates sessions, this is a place to restore muscular wellbeing and improve posture.</p>
-            <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Call ${BUSINESS.phoneDisplay} <span>↗</span></a>
+            <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Call ${BUSINESS.phoneDisplay} <span>&#8599;</span></a>
           </div>
-        </div>
-        <div class="section-shell">
-          <div class="studio-carousel" data-studio-carousel data-reveal>
-            <div class="studio-carousel__stage" data-carousel-stage>
-              <button class="studio-carousel__nav studio-carousel__nav--prev" type="button" aria-label="Previous photo" data-carousel-prev><span aria-hidden="true">&#8249;</span></button>
-              <ul class="studio-carousel__track" role="list">
-                ${[
-                  "Light, private and considered",
-                  "Purposeful movement",
-                  "Studham, near Whipsnade",
-                  "Sports Therapy and Pilates",
-                ]
-                  .map(
-                    (caption, index) =>
-                      `<li class="studio-carousel__slide" data-carousel-slide data-caption="${escapeContent(caption)}">${legacyImage("/blank-1", index)}</li>`,
-                  )
-                  .join("")}
-              </ul>
-              <button class="studio-carousel__nav studio-carousel__nav--next" type="button" aria-label="Next photo" data-carousel-next><span aria-hidden="true">&#8250;</span></button>
-            </div>
-            <div class="studio-carousel__meta">
-              <p class="studio-carousel__index"><span data-carousel-current>01</span><span class="studio-carousel__index-sep">/</span><span data-carousel-total>04</span></p>
-              <p class="studio-carousel__caption" data-carousel-caption aria-live="polite">Light, private and considered</p>
-              <div class="studio-carousel__dots" data-carousel-dots role="tablist" aria-label="Choose studio photo"></div>
-            </div>
-          </div>
+          <figure class="pilates-studio__shot" data-reveal>
+            <img src="/images/pilates-studio.webp" alt="The NJH Pilates studio in Studham" width="1200" height="900" loading="lazy">
+            <figcaption>Light, private and considered &middot; Studham, near Whipsnade</figcaption>
+          </figure>
         </div>
       </section>
 
       <section class="pilates-feature pilates-feature--individual" id="individual" aria-labelledby="individual-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-orbit-figure" data-reveal>
-            <object class="pilates-orbit-figure__svg" type="image/svg+xml" data="/images/pilates-figure-meditation-animated.svg" aria-label="Animated line drawing of a person meditating within orbiting rings" tabindex="-1"></object>
+            <div class="hero-orb hero-orb--inline">
+              <img class="hero-orb__photo" src="/images/pilates-duet-orb.webp" srcset="/images/pilates-duet-orb-450.webp 450w, /images/pilates-duet-orb.webp 900w" sizes="(max-width: 960px) 78vw, 34vw" alt="Two clients working through a teaser with a ball in a duet session" width="900" height="900" loading="lazy">
+              <svg class="hero-orb__rings" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                <circle class="hero-orb__ring hero-orb__ring--faint" cx="50" cy="50" r="49.3" />
+                <circle class="hero-orb__ring" cx="50" cy="50" r="45.6" />
+                <circle class="hero-orb__ring hero-orb__ring--inner" cx="50" cy="50" r="40.4" />
+                <g class="hero-orb__ticks">
+                  <line x1="50" y1="0.7" x2="50" y2="5.6" />
+                  <line x1="99.3" y1="50" x2="94.4" y2="50" />
+                  <line x1="50" y1="99.3" x2="50" y2="94.4" />
+                  <line x1="0.7" y1="50" x2="5.6" y2="50" />
+                </g>
+                <circle class="hero-orb__node" cx="50" cy="4.4" r="1.5" />
+                <circle class="hero-orb__node" cx="95.6" cy="50" r="1.5" />
+              </svg>
+            </div>
             <dl class="pilates-orbit-facts">
               <div class="pilates-orbit-fact pilates-orbit-fact--format"><dt>Format</dt><dd>One-to-one or duet</dd></div>
               <div class="pilates-orbit-fact pilates-orbit-fact--length"><dt>Length</dt><dd>One hour</dd></div>
@@ -918,14 +909,10 @@ function buildPilatesContinuousPage() {
             <p>Class sizes are small to ensure close attention to posture and movement during each exercise where necessary.</p>
           </header>
           <div class="pilates-group-layout">
-            <div class="pilates-group-collage" data-reveal>
-              <figure><img src="/images/pilates-mat-stretch.jpg" alt="Precise, controlled Pilates movement on the mat" loading="lazy"><figcaption>Precise, controlled movement</figcaption></figure>
-              <figure><img src="/images/pilates-duet-ball.jpg" alt="Two people practising Pilates together with a ball" loading="lazy"><figcaption>Small group practice</figcaption></figure>
-              <figure><img src="/images/pilates-group-three.jpg" alt="A small group of clients together in the studio" loading="lazy"><figcaption>A welcoming community</figcaption></figure>
-              <figure><img src="/images/pilates-guidance.jpg" alt="Close, personal guidance during a Pilates session" loading="lazy"><figcaption>Close, personal attention</figcaption></figure>
-              <figure><img src="/images/legacy/pilates-studio-4.jpg" alt="The light, airy NJH studio in Studham" loading="lazy"><figcaption>The Studham studio</figcaption></figure>
-              <figure><img src="/images/pilates-stretch-light.jpg" alt="Pilates stretch in natural light" loading="lazy"><figcaption>Purposeful movement</figcaption></figure>
-            </div>
+            <figure class="pilates-group-shot" data-reveal>
+              <img src="/images/legacy/pilates-studio-4.jpg" alt="The light, airy NJH studio in Studham" loading="lazy">
+              <figcaption>Close attention to posture, in a small group</figcaption>
+            </figure>
             <div class="pilates-timetable" data-reveal>
               <div class="pilates-detail-label"><span>Weekly timetable</span><small>Confirm availability before booking</small></div>
               <div class="pilates-timetable__row"><strong>Monday</strong><p><span>6.30pm</span></p></div>
@@ -1065,43 +1052,42 @@ function buildClinicsContinuousPage() {
               </div>
             </div>
             <figure class="clinics-hero__media clinics-hero__media--figure">
-              <object class="clinics-hero__figure" type="image/svg+xml" data="/images/clinics-asclepius-animated.svg" aria-label="Animated line drawing of the Rod of Asclepius within orbiting rings" tabindex="-1"></object>
+              <object class="clinics-hero__figure" type="image/svg+xml" data="/images/clinics-hands-animated.svg" aria-label="Line drawing of hands-on soft tissue treatment to the shoulder within measured rings" tabindex="-1"></object>
             </figure>
           </div>
-          <nav class="clinics-index" aria-label="On this page">
-            <a href="#locations"><span>01</span>Locations</a>
-            <a href="#testimonials"><span>02</span>Testimonials</a>
-            <a href="#links"><span>03</span>Professional links</a>
-            <a href="#charity"><span>04</span>Charity work</a>
-          </nav>
         </div>
       </section>
 
-      <section class="clinics-locations" id="locations" aria-labelledby="locations-title">
+      <section class="clinics-locations" id="locations" aria-label="Clinic locations">
         <div class="section-shell">
-          <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
-            <h2 id="locations-title">Two locations, one approach</h2>
-            <p>For an appointment, call Natasha on ${BUSINESS.phoneDisplay}.</p>
-          </header>
-          <div class="clinics-location-grid">
-            <article data-reveal><span>Lower Kings Road</span><h3>Berkhamsted Physiotherapy<br>&amp; Sports Injury Clinic</h3><address>36A Lower Kings Road<br>Berkhamsted, Herts<br>HP4 2AA</address><div class="clinics-location-grid__mark" aria-hidden="true">36A</div></article>
-            <article data-reveal><span>Douglas Gardens</span><h3>Sportspace<br>Berkhamsted</h3><address>Lagley Meadow<br>Douglas Gardens<br>Berkhamsted, Herts<br>HP4 3QQ</address><div class="clinics-location-grid__mark" aria-hidden="true">HP4</div></article>
-          </div>
+          <ol class="clinic-list">
+            <li data-reveal>
+              <h2>Berkhamsted Physiotherapy &amp; Sports Injury Clinic</h2>
+              <address>36A Lower Kings Road, Berkhamsted, Herts HP4 2AA</address>
+            </li>
+            <li data-reveal>
+              <h2>Sportspace Berkhamsted</h2>
+              <address>Lagley Meadow, Douglas Gardens, Berkhamsted, Herts HP4 3QQ</address>
+            </li>
+          </ol>
         </div>
       </section>
 
-      <section class="clinics-testimonials" id="testimonials" aria-labelledby="clinics-testimonials-title">
-        <div class="section-shell">
-          <header class="pilates-section-heading" data-reveal><h2 id="clinics-testimonials-title">Client testimonials</h2></header>
-          <div class="clinics-testimonial-grid">${clinicTestimonials
-            .map(
-              (item, index) => `<blockquote data-reveal>
-                <span>${String(index + 1).padStart(2, "0")} · ${item.type}</span>
-                <p>“${item.quote}”</p>
-                <footer>${item.by}</footer>
-              </blockquote>`,
-            )
-            .join("")}</div>
+      <section class="voices" id="testimonials" aria-labelledby="clinics-testimonials-title">
+        <svg class="voices__thread" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path class="voices__thread-line" d="M58 0 C 32 92, 30 182, 56 272 C 82 362, 80 452, 46 542 C 18 626, 22 716, 54 802 C 78 866, 76 936, 60 1000" pathLength="1" />
+        </svg>
+        <div class="voices__inner">
+          <h2 class="voices__title" id="clinics-testimonials-title">In clients&rsquo; own words</h2>
+          ${clinicTestimonials
+            .map((item, index) => {
+              const offset = ["", " voices__item--right", " voices__item--indent"][index % 3];
+              return `<figure class="voices__item${offset}" data-reveal>
+                <blockquote>&ldquo;${item.quote}&rdquo;</blockquote>
+                <figcaption>${item.by} &middot; ${item.type}</figcaption>
+              </figure>`;
+            })
+            .join("")}
         </div>
       </section>
 
@@ -1495,134 +1481,7 @@ export function renderRoute() {
   return { path, isHome: false };
 }
 
-function initStudioCarousel() {
-  const carousel = document.querySelector("[data-studio-carousel]");
-  if (!carousel) return;
-
-  const stage = carousel.querySelector("[data-carousel-stage]");
-  const slides = [...carousel.querySelectorAll("[data-carousel-slide]")];
-  if (!slides.length) return;
-
-  const previousButton = carousel.querySelector("[data-carousel-prev]");
-  const nextButton = carousel.querySelector("[data-carousel-next]");
-  const currentLabel = carousel.querySelector("[data-carousel-current]");
-  const totalLabel = carousel.querySelector("[data-carousel-total]");
-  const captionLabel = carousel.querySelector("[data-carousel-caption]");
-  const dotsWrap = carousel.querySelector("[data-carousel-dots]");
-  const count = slides.length;
-  let active = 0;
-
-  if (totalLabel) totalLabel.textContent = String(count).padStart(2, "0");
-
-  const dots = slides.map((_, index) => {
-    const dot = document.createElement("button");
-    dot.type = "button";
-    dot.className = "studio-carousel__dot";
-    dot.setAttribute("role", "tab");
-    dot.setAttribute("aria-label", `Show photo ${index + 1}`);
-    dot.addEventListener("click", () => go(index));
-    dotsWrap?.append(dot);
-    return dot;
-  });
-
-  function update() {
-    slides.forEach((slide, index) => {
-      let offset = index - active;
-      if (offset > count / 2) offset -= count;
-      if (offset < -count / 2) offset += count;
-      const distance = Math.abs(offset);
-      const direction = Math.sign(offset);
-
-      let translate;
-      let scale;
-      let opacity;
-      let blur;
-      let depth;
-      if (offset === 0) {
-        translate = 0;
-        scale = 1;
-        opacity = 1;
-        blur = 0;
-        depth = 30;
-      } else if (distance === 1) {
-        translate = direction * 56;
-        scale = 0.8;
-        opacity = 0.5;
-        blur = 1.4;
-        depth = 20;
-      } else {
-        translate = direction * 90;
-        scale = 0.62;
-        opacity = 0;
-        blur = 4;
-        depth = 5;
-      }
-
-      slide.style.transform = `translate(-50%, -50%) translateX(${translate}%) scale(${scale})`;
-      slide.style.opacity = String(opacity);
-      slide.style.filter = blur ? `blur(${blur}px)` : "none";
-      slide.style.zIndex = String(depth);
-      slide.style.pointerEvents =
-        offset === 0 ? "none" : opacity > 0 ? "auto" : "none";
-      slide.setAttribute("aria-hidden", offset === 0 ? "false" : "true");
-      slide.classList.toggle("is-active", offset === 0);
-    });
-
-    if (currentLabel) {
-      currentLabel.textContent = String(active + 1).padStart(2, "0");
-    }
-    if (captionLabel) {
-      captionLabel.textContent = slides[active].dataset.caption || "";
-    }
-    dots.forEach((dot, index) => {
-      const isActive = index === active;
-      dot.classList.toggle("is-active", isActive);
-      dot.setAttribute("aria-selected", String(isActive));
-    });
-  }
-
-  function go(index) {
-    active = ((index % count) + count) % count;
-    update();
-  }
-
-  previousButton?.addEventListener("click", () => go(active - 1));
-  nextButton?.addEventListener("click", () => go(active + 1));
-  slides.forEach((slide, index) =>
-    slide.addEventListener("click", () => {
-      if (index !== active) go(index);
-    }),
-  );
-
-  carousel.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      go(active - 1);
-    } else if (event.key === "ArrowRight") {
-      event.preventDefault();
-      go(active + 1);
-    }
-  });
-
-  let startX = null;
-  let dragging = false;
-  stage?.addEventListener("pointerdown", (event) => {
-    startX = event.clientX;
-    dragging = true;
-  });
-  window.addEventListener("pointerup", (event) => {
-    if (!dragging || startX === null) return;
-    dragging = false;
-    const deltaX = event.clientX - startX;
-    startX = null;
-    if (Math.abs(deltaX) > 40) go(deltaX < 0 ? active + 1 : active - 1);
-  });
-
-  update();
-}
-
 export function initPageFeatures() {
-  initStudioCarousel();
 
   const form = document.querySelector("[data-enquiry-form]");
   if (!form) return;

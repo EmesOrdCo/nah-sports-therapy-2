@@ -1,27 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="Line drawing of hands-on soft tissue treatment to the shoulder within measured rings">
   <style>
     .trace {
       fill: none;
-      stroke: #1b3a8f;
+      stroke: #2d2b74;
       stroke-linecap: round;
       stroke-dasharray: 1;
       stroke-dashoffset: 1;
       animation: trace var(--dur, 1.25s) cubic-bezier(.4, 0, .15, 1) var(--delay, 0s) forwards;
     }
 
-    .ring {
-      stroke-width: 2.4;
-      stroke-opacity: .5;
-    }
-
-    .ring--faint {
-      stroke-width: 1.6;
-      stroke-opacity: .28;
-    }
+    .ring { stroke-width: 2.4; stroke-opacity: .42; }
+    .ring--faint { stroke-width: 1.6; stroke-opacity: .22; }
 
     .guide {
       fill: none;
-      stroke: #1b3a8f;
+      stroke: #2d2b74;
       stroke-width: 2;
       stroke-linecap: round;
       stroke-dasharray: 0.5 15;
@@ -30,47 +23,32 @@
     }
 
     .node {
-      fill: #1b3a8f;
+      fill: #2d2b74;
       opacity: 0;
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: pop .5s cubic-bezier(.2, .8, .25, 1) var(--delay, 2s) forwards;
+      animation: pop .5s cubic-bezier(.2, .9, .3, 1.4) var(--delay, 2s) forwards;
     }
 
     .fig-wipe {
+      transform-origin: 50% 0;
       transform: scaleY(0);
-      transform-box: fill-box;
-      transform-origin: center top;
-      animation: wipe 1.35s cubic-bezier(.5, 0, .2, 1) .35s forwards;
+      animation: wipe 1.15s cubic-bezier(.4, 0, .15, 1) .55s forwards;
     }
 
-    @keyframes trace {
-      to { stroke-dashoffset: 0; }
-    }
-
-    @keyframes fade {
-      to { opacity: .32; }
-    }
-
-    @keyframes pop {
-      from { opacity: 0; transform: scale(.2); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes wipe {
-      to { transform: scaleY(1); }
-    }
+    @keyframes trace { to { stroke-dashoffset: 0; } }
+    @keyframes fade { to { opacity: .34; } }
+    @keyframes pop { to { opacity: .85; } }
+    @keyframes wipe { to { transform: scaleY(1); } }
 
     @media (prefers-reduced-motion: reduce) {
       .trace { animation: none; stroke-dashoffset: 0; }
-      .guide { animation: none; opacity: .32; }
-      .node { animation: none; opacity: 1; }
+      .guide { animation: none; opacity: .34; }
+      .node { animation: none; opacity: .85; }
       .fig-wipe { animation: none; transform: scaleY(1); }
     }
   </style>
 
   <defs>
-    <mask id="fig-reveal" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000">
+    <mask id="clinics-reveal" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000">
       <rect class="fig-wipe" x="0" y="0" width="1000" height="1000" fill="#fff" />
     </mask>
   </defs>
@@ -86,10 +64,10 @@
 
   <!-- Figure line drawing, revealed top-to-bottom -->
   <image
-    x="52" y="46" width="896" height="896"
-    href="pilates-figure-linework.webp"
+    x="98" y="98" width="804" height="804"
+    href="clinics-hands-linework.webp"
     preserveAspectRatio="xMidYMid meet"
-    mask="url(#fig-reveal)"
+    mask="url(#clinics-reveal)"
   />
 
   <!-- Nodes -->

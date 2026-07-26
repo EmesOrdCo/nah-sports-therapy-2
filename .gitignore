@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Working material: reference captures, retired assets, asset backups
+audit/
