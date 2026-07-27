@@ -1,0 +1,426 @@
+/* Variant D — Credentials. All rules scoped under .av-d.
+
+   Built mobile-first throughout: nine in ten of this client's visitors are on a
+   phone, so every layout below starts as a single full-width column and only
+   splits into tracks once there is width to spend. No grid here puts prose in a
+   track narrower than its longest word. */
+
+/* Shared section heading. One class rather than a growing selector list, so a
+   new section inherits the treatment instead of re-declaring it. */
+.av-d .av-d__title {
+  margin: 0 0 var(--space-l);
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+/* ---- Hero ----
+   Her statement of what she treats, signed. The name is the byline rather than
+   the headline: an anxious reader is searching for their own problem on the
+   page, not for a person's name. */
+
+.av-d .av-d__hero {
+  padding-top: var(--av-header-clear);
+  padding-bottom: var(--space-section);
+  background: var(--paper);
+}
+
+.av-d .av-d__hero h1 {
+  /* step-4, not step-5: "musculoskeletal" is fifteen characters and at step-5
+     it comes within a few pixels of the 375px viewport on its own line. */
+  max-width: 22ch;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-4);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+
+.av-d .av-d__hero-sub {
+  max-width: 44ch;
+  margin: var(--space-m) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step-1);
+  line-height: 1.45;
+}
+
+.av-d .av-d__signature {
+  display: inline-block;
+  margin: var(--space-m) 0 0;
+  padding-top: var(--space-xs);
+  border-top: 2px solid var(--brand);
+  color: var(--ink);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ---- Breadth ----
+   The one dark band. Accents here are --periwinkle; --brand is a light-surface
+   colour and does not survive on navy. */
+
+.av-d .av-d__breadth {
+  padding-block: var(--space-section);
+  background: var(--navy);
+}
+
+.av-d .av-d__breadth-grid {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.av-d .av-d__breadth-line {
+  max-width: 20ch;
+  margin: 0;
+  color: var(--surface);
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+.av-d .av-d__breadth-note {
+  max-width: 38ch;
+  margin: 0;
+  padding-top: var(--space-s);
+  border-top: 1px solid oklch(76.7% 0.096 275 / 0.34);
+  color: var(--periwinkle);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
+}
+
+@media (min-width: 900px) {
+  .av-d .av-d__breadth-grid {
+    align-items: end;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+  }
+
+  .av-d .av-d__breadth-line {
+    max-width: 18ch;
+    font-size: var(--step-4);
+  }
+}
+
+/* ---- Qualifications ----
+   The centrepiece of this variant, so each one is a panel with room around it
+   rather than a line in a list. The panel is a single column at every width:
+   the page this replaced set `grid-template-columns: 90px 1fr` and dropped the
+   qualification title into the 90px track, where it wrapped one word per line.
+   Splitting happens between panels, never inside one. */
+
+.av-d .av-d__quals {
+  padding-block: var(--space-section);
+  background: var(--paper);
+}
+
+.av-d .av-d__qual-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-s);
+  list-style: none;
+}
+
+.av-d .av-d__qual {
+  padding: var(--space-m);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.av-d .av-d__qual h3 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-head);
+}
+
+/* The awarding body is the part a sceptical reader actually checks, so it gets
+   its own ruled compartment instead of trailing the title as small print. */
+.av-d .av-d__qual-meta {
+  margin-top: var(--space-s);
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--line);
+}
+
+.av-d .av-d__awarding {
+  margin: 0;
+  color: var(--brand);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.av-d .av-d__note {
+  max-width: 44ch;
+  margin: var(--space-2xs) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.55;
+}
+
+@media (min-width: 760px) {
+  .av-d .av-d__qual-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-m);
+  }
+
+  .av-d .av-d__qual {
+    padding: var(--space-m) var(--space-m) var(--space-l);
+  }
+}
+
+/* ---- Professional bodies ----
+   All three marks are 70px tall in their originals, so locking a shared render
+   height and letting width run keeps them optically level — a shared box would
+   shrink the 416px-wide Merrithew logo to nothing. */
+
+.av-d .av-d__affil {
+  padding-block: var(--space-section);
+  background: var(--surface);
+}
+
+.av-d .av-d__mark-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-s);
+  list-style: none;
+}
+
+.av-d .av-d__mark {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-m);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  align-items: center;
+  background: var(--paper);
+  gap: var(--space-s);
+  text-align: center;
+}
+
+.av-d .av-d__mark img {
+  width: auto;
+  max-width: 100%;
+  height: 34px;
+  object-fit: contain;
+}
+
+.av-d .av-d__mark span {
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.4;
+}
+
+/* Fallback lockup for a body with no mark on file — set in the display serif
+   so the plate still reads as a badge rather than as a missing image. */
+.av-d .av-d__mark--text span {
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  line-height: var(--lh-head);
+}
+
+/* Settle the strip in sequence; the reveal observer unobserves after firing,
+   so the delay never replays on the way back up. */
+.av-d .av-d__mark:nth-child(2) {
+  transition-delay: 90ms;
+}
+
+.av-d .av-d__mark:nth-child(3) {
+  transition-delay: 180ms;
+}
+
+@media (min-width: 760px) {
+  .av-d .av-d__mark-list {
+    align-items: stretch;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---- Story ----
+   Context, not the lead, and the portrait is sized to match that: capped at
+   220px on a phone so it sits with the prose as a reference rather than
+   opening the section with a face. */
+
+.av-d .av-d__story {
+  padding-block: var(--space-section);
+  background: var(--paper);
+}
+
+.av-d .av-d__story-grid {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.av-d .av-d__portrait {
+  overflow: hidden;
+  width: 100%;
+  max-width: 220px;
+  margin: 0;
+  border-radius: var(--radius-card);
+  aspect-ratio: 3 / 4;
+  background: var(--surface-2);
+}
+
+.av-d .av-d__prose p {
+  max-width: 62ch;
+  margin: 0 0 var(--space-s);
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
+}
+
+.av-d .av-d__prose p:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 900px) {
+  .av-d .av-d__story-grid {
+    align-items: start;
+    grid-template-columns: minmax(200px, 26%) minmax(0, 1fr);
+    gap: clamp(2.5rem, 5vw, 5rem);
+  }
+
+  .av-d .av-d__portrait {
+    max-width: none;
+  }
+}
+
+/* ---- Voices ---- */
+
+.av-d .av-d__voices {
+  padding-block: var(--space-section);
+  background: var(--surface);
+}
+
+.av-d .av-d__voice-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-l);
+  list-style: none;
+}
+
+.av-d .av-d__voice-list figure {
+  margin: 0;
+}
+
+.av-d .av-d__voice-list blockquote {
+  margin: 0;
+  padding-left: var(--space-s);
+  border-left: 2px solid var(--brand);
+}
+
+.av-d .av-d__voice-list blockquote p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.av-d .av-d__voice-list figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: var(--space-s);
+  padding-left: calc(var(--space-s) + 2px);
+  color: var(--ink);
+  font-size: var(--step-00);
+  gap: 8px;
+  letter-spacing: 0.02em;
+}
+
+.av-d .av-d__voice-list figcaption span {
+  color: var(--ink-soft);
+}
+
+.av-d .av-d__voice-list figcaption span::before {
+  margin-right: 8px;
+  content: "·";
+}
+
+@media (min-width: 900px) {
+  .av-d .av-d__voice-list {
+    align-items: start;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+
+/* ---- Where I work ---- */
+
+.av-d .av-d__where {
+  padding-block: var(--space-section);
+  background: var(--paper);
+}
+
+.av-d .av-d__where-list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.av-d .av-d__where-list a {
+  /* minmax(0, 1fr) rather than 1fr: the arrow must never take width from the
+     address when a clinic name is long. */
+  display: grid;
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding-block: var(--space-m);
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+  gap: var(--space-s);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.av-d .av-d__where-list a:hover {
+  color: var(--brand);
+}
+
+.av-d .av-d__where-copy {
+  display: block;
+}
+
+.av-d .av-d__where-name {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  letter-spacing: -0.02em;
+  line-height: var(--lh-head);
+}
+
+.av-d .av-d__where-lines {
+  display: block;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.6;
+}
+
+.av-d .av-d__where-arrow {
+  color: var(--brand);
+  font-size: var(--step-1);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.av-d .av-d__where-list a:hover .av-d__where-arrow {
+  transform: translate(2px, -2px);
+}

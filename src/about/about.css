@@ -1,0 +1,31 @@
+/* About page — shared shell.
+
+   The review switcher that used to live here is gone now that a direction is
+   chosen. What remains is the header-clearance token every section depends on
+   and the portrait treatment. */
+
+.about-variant {
+  /* The site header is `position: absolute; top: 0` and overlays the page — it
+     is 78px tall on mobile and taller on desktop. The first section MUST start
+     below it or the breadcrumb slides under the logo. */
+  --av-header-clear: clamp(112px, 13vw, 172px);
+}
+
+/* The portrait carries a slight warm cast from the original photograph. A
+   whisper of cooling keeps it sitting with the navy palette without reading
+   as a filter. */
+.about-variant img.av-portrait {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: saturate(0.94) contrast(1.02);
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-variant * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

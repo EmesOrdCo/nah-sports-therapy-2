@@ -1,5 +1,6 @@
 import "./fonts.css";
 import "./style.css";
+import "./about/about.css";
 import { initPageFeatures, renderRoute } from "./site-content.js";
 
 const routeState = renderRoute();

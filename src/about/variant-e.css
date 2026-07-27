@@ -1,0 +1,507 @@
+/* Variant E — In her words. All rules scoped under .av-e.
+
+   The whole design is one typographic contrast: questions in the sans at
+   heading weight, her answers in the serif behind a hairline, indented like
+   a transcript. No panels, no cards — the Q/A rhythm is the layout. */
+
+/* ---- Interview ----
+   Her introduction and her portrait live in the same column, in the same
+   section as the conversation — the page opens straight into her talking
+   rather than behind a separate hero band. */
+
+.av-e .av-e__interview {
+  padding-top: var(--av-header-clear);
+  padding-bottom: var(--space-section);
+}
+
+/* The global .breadcrumbs bottom margin (~90px) was tuned for a full-bleed
+   hero. Inside this column it just opens a hole above her name. Scoped, so it
+   cannot leak to the other pages that still want the original. */
+.av-e .av-e__aside .breadcrumbs {
+  margin-bottom: var(--space-m);
+}
+
+.av-e .av-e__aside h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  /* One step down from a poster hero: this page is a conversation, and the
+     framing line under it needs room to be read. */
+  font-size: var(--step-4);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+}
+
+.av-e .av-e__framing {
+  max-width: 38ch;
+  margin: var(--space-s) 0 var(--space-m);
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+  line-height: 1.55;
+}
+
+.av-e .av-e__grid {
+  display: grid;
+  gap: var(--space-l);
+}
+
+/* ---- Portrait ---- */
+
+.av-e .av-e__portrait-figure {
+  margin: 0;
+}
+
+/* The img is height:100% / object-fit:cover (see about.css), so the frame
+   has to be the thing that owns the ratio. Shorter on phones — a full-width
+   3:4 crop at 375px is 500px of portrait before a single word is read. */
+.av-e .av-e__portrait {
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  aspect-ratio: 4 / 5;
+  background: var(--surface-2);
+}
+
+.av-e .av-e__speaker {
+  display: grid;
+  margin-top: var(--space-xs);
+  gap: 2px;
+}
+
+.av-e .av-e__speaker-name {
+  color: var(--ink);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.av-e .av-e__speaker-role {
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+
+/* ---- The conversation ---- */
+
+.av-e .av-e__qa {
+  margin: 0;
+}
+
+.av-e .av-e__pair + .av-e__pair {
+  margin-top: var(--space-l);
+}
+
+.av-e .av-e__q {
+  max-width: 26ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+/* A <dd> carries a 40px UA margin-inline-start. Reset it, then reintroduce
+   the indent as a deliberate rule-and-inset so her answers read as a spoken
+   column rather than as list items hanging off a heading. */
+.av-e .av-e__a {
+  margin: var(--space-xs) 0 0;
+  padding-left: var(--space-s);
+  border-left: 1px solid var(--line);
+}
+
+.av-e .av-e__a p {
+  max-width: 58ch;
+  margin: 0 0 var(--space-xs);
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+.av-e .av-e__a p:last-child {
+  margin-bottom: 0;
+}
+
+/* One answer is allowed to become display type — the reason she does the job
+   at all. It is the same serif as every other answer, just let off the leash,
+   so the escalation reads as emphasis rather than as a different component. */
+.av-e .av-e__pair--emphasis .av-e__a {
+  border-left-color: var(--brand);
+}
+
+.av-e .av-e__pair--emphasis .av-e__a p {
+  max-width: 20ch;
+  color: var(--ink);
+  font-size: var(--step-3);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+/* ---- The statement ----
+   One dark block carrying the quote and the credentials together. The quote is
+   the only place on the page where the subject changes from her to you, and
+   the qualifications sitting under it on the same navy makes them read as part
+   of that statement rather than as an admin list in a separate band. */
+
+.av-e .av-e__statement {
+  padding-block: var(--space-section);
+  background: var(--navy);
+  color: var(--surface);
+}
+
+.av-e .av-e__statement-grid {
+  display: grid;
+  gap: var(--space-l);
+}
+
+.av-e .av-e__statement blockquote {
+  margin: 0;
+}
+
+/* Measure on the paragraph, not the blockquote — `ch` resolves against the
+   element's own font, and the blockquote inherits the 16px sans while this is
+   set in serif at display size. Capping the wrapper squeezed the quote into a
+   270px column and turned the band into a tall thin ladder of words. */
+.av-e .av-e__statement blockquote p {
+  max-width: 26ch;
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.av-e .av-e__statement h2 {
+  margin: 0 0 var(--space-s);
+  color: var(--periwinkle);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.av-e .av-e__quals {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid oklch(76.7% 0.096 275 / 0.3);
+  gap: 0;
+  list-style: none;
+}
+
+.av-e .av-e__quals li {
+  display: grid;
+  padding-block: var(--space-s);
+  border-bottom: 1px solid oklch(76.7% 0.096 275 / 0.3);
+  gap: 2px;
+}
+
+/* Sans, not serif: these are records, not speech, and the switch keeps them
+   from being mistaken for another of her sentences. */
+.av-e .av-e__qual-name {
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.av-e .av-e__qual-body {
+  color: var(--periwinkle);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+
+/* ---- Locations, inside the closing answer ---- */
+
+.av-e .av-e__places {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.av-e .av-e__places li + li {
+  border-top: 1px solid var(--line);
+}
+
+.av-e .av-e__places a {
+  display: block;
+  padding-block: var(--space-xs);
+  color: var(--ink);
+  text-decoration: none;
+  transition: color var(--dur-fast, 180ms) var(--ease-out);
+}
+
+.av-e .av-e__places li:first-child a {
+  padding-top: 0;
+}
+
+.av-e .av-e__places a:hover {
+  color: var(--brand);
+}
+
+.av-e .av-e__place-name {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.av-e .av-e__place-lines {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  line-height: 1.6;
+}
+
+/* ---- Practical half ---- */
+
+.av-e .av-e__practical {
+  padding-block: var(--space-section);
+}
+
+.av-e .av-e__practical-head {
+  margin-bottom: var(--space-m);
+}
+
+.av-e .av-e__practical-head h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+}
+
+.av-e .av-e__practical-head p {
+  max-width: 46ch;
+  margin: var(--space-xs) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
+}
+
+/* The index is what makes this half an FAQ rather than more prose: you can
+   see every question at once and jump. Generated from the same array as the
+   list itself, so the two cannot drift apart. */
+.av-e .av-e__index ul {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.av-e .av-e__index li {
+  border-bottom: 1px solid var(--line);
+}
+
+.av-e .av-e__index a {
+  display: block;
+  padding-block: 10px;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.45;
+  text-decoration: none;
+  transition: color var(--dur-fast, 180ms) var(--ease-out);
+}
+
+.av-e .av-e__index a:hover {
+  color: var(--brand);
+}
+
+/* Anchored questions must clear the fixed header when jumped to. */
+.av-e .av-e__qa--practical .av-e__pair {
+  scroll-margin-top: clamp(90px, 12vw, 120px);
+}
+
+/* ---- Steps, prices and contact inside answers ---- */
+
+.av-e .av-e__steps {
+  margin: var(--space-xs) 0 var(--space-s);
+  padding: 0;
+  list-style: none;
+}
+
+.av-e .av-e__steps li {
+  position: relative;
+  padding-left: var(--space-s);
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+.av-e .av-e__steps li::before {
+  position: absolute;
+  top: 0.72em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--brand);
+  content: "";
+}
+
+.av-e .av-e__prices {
+  margin: var(--space-xs) 0 var(--space-s);
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.av-e .av-e__prices li {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 10px;
+  border-bottom: 1px solid var(--line);
+  gap: var(--space-s);
+}
+
+.av-e .av-e__prices span {
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  line-height: 1.4;
+}
+
+.av-e .av-e__prices strong {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.av-e .av-e__price-note {
+  color: var(--ink-soft);
+  font-family: var(--font-sans) !important;
+  font-size: var(--step-00) !important;
+  line-height: 1.5 !important;
+}
+
+.av-e .av-e__inline-link {
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.av-e .av-e__inline-link:hover {
+  text-decoration: underline;
+}
+
+.av-e .av-e__contact {
+  margin: var(--space-xs) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.av-e .av-e__contact a {
+  display: inline-block;
+  padding-block: 4px;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.av-e .av-e__contact a:hover {
+  text-decoration: underline;
+}
+
+/* ---- Desktop: her face holds still while she talks ---- */
+
+@media (min-width: 900px) {
+  .av-e .av-e__grid {
+    /* align-items:start is load-bearing, not cosmetic: a stretched grid item
+       is as tall as its row, which leaves sticky nothing to slide within. */
+    align-items: start;
+    grid-template-columns: minmax(250px, 32%) 1fr;
+    gap: clamp(2.5rem, 6vw, 6rem);
+  }
+
+  .av-e .av-e__practical-side,
+  .av-e .av-e__aside {
+    top: clamp(2rem, 5vw, 4rem);
+  }
+
+  /* The sticky column now carries her name and the framing line as well as the
+     portrait, so the portrait has to give ground: without this cap the column
+     is taller than the viewport on a laptop and sticky has nothing to do. The
+     image is object-fit:cover, so clamping the frame crops rather than
+     squashes. */
+  .av-e .av-e__portrait {
+    max-height: min(34vh, 400px);
+    aspect-ratio: 3 / 4;
+  }
+
+  .av-e .av-e__pair + .av-e__pair {
+    margin-top: clamp(3rem, 5vw, 4.5rem);
+  }
+
+  .av-e .av-e__a {
+    padding-left: var(--space-m);
+  }
+
+  /* The practical half rhymes with the interview half: a narrow column that
+     holds still on the left, the reading column on the right. */
+  .av-e .av-e__grid--practical {
+    grid-template-columns: minmax(200px, 26%) 1fr;
+  }
+
+  .av-e .av-e__qa--practical .av-e__pair + .av-e__pair {
+    margin-top: clamp(2.5rem, 4vw, 3.5rem);
+  }
+
+  .av-e .av-e__statement blockquote p {
+    font-size: var(--step-3);
+  }
+
+  /* Quote and credentials sit side by side. The quals go back to a single
+     column here — they are in a half-width track now, and two columns inside
+     it would put the awarding body under a title it does not belong to. */
+  .av-e .av-e__statement-grid {
+    align-items: start;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2.5rem, 6vw, 5.5rem);
+  }
+
+  /* The quote is already capped at 26ch; inside a half-width track that cap is
+     wider than the column, so the column does the constraining. */
+  .av-e .av-e__statement blockquote p {
+    max-width: none;
+  }
+}
+
+/* Sticky is only switched on where the standing column actually fits. On a
+   short laptop (1366×768 leaves ~660px of viewport) a column taller than the
+   window scrolls almost the whole way up before it pins, which reads as a
+   glitch rather than as a design. Below this height it simply scrolls. */
+@media (min-width: 900px) and (min-height: 820px) {
+  .av-e .av-e__aside,
+  .av-e .av-e__practical-side {
+    position: sticky;
+  }
+}
+
+/* The index is the expendable part of the standing column: on mid-height
+   screens keep the heading pinned and let the links go. */
+@media (min-width: 900px) and (min-height: 700px) {
+  .av-e .av-e__practical-side {
+    position: sticky;
+  }
+}

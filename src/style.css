@@ -54,9 +54,20 @@
   --page-gutter: clamp(24px, 5vw, 76px);
   --measure: 68ch;
 
+  /* Hero ring figure width. The Sports Therapy hero sets the reference: its
+     figure fills a column that tracks the shell and is then scaled 1.85, so
+     the ring it draws works out at 44.2vw − 92px, flattening near 618px once
+     the 1440px shell stops growing. The Pilates and Clinics figures are
+     square SVGs whose outer ring is 0.904 of the viewBox, so dividing that
+     diameter by 0.904 gives the width that renders the same circle. The svh
+     term is the guard: without it the matched figure is tall enough to push
+     those two heroes past the fold on a short screen. */
+  --hero-figure: min(calc(48.9vw - 101.7px), 683px, calc(100svh - 260px));
+
   /* ---- Radius / elevation ---- */
   --radius-sm: 2px;
   --radius-md: 6px;
+  --radius-card: 14px;   /* contained blocks — cards, panels, notes */
   --shadow-sm: 0 1px 2px oklch(23.2% 0.055 268 / 0.06);
 
   /* ---- Z-index scale ---- */
@@ -4371,9 +4382,9 @@ body[data-hero-tone="dark"]
   overflow: visible;
 }
 
-/* Capped and un-scaled to match the Pilates hero figure. It was width:100% +
-   scale(1.12), which rendered 717px tall inside a 640px row and pushed the
-   whole hero past the viewport. */
+/* Un-scaled. It was width:100% + scale(1.12), which rendered 717px tall
+   inside a 640px row and pushed the whole hero past the viewport. Widened to
+   match the Sports Therapy ring above 960px — see --hero-figure. */
 .clinics-hero__figure {
   width: min(100%, 470px);
   aspect-ratio: 1;
@@ -4524,7 +4535,10 @@ body[data-hero-tone="dark"]
 .therapy-hero h1 {
   margin: 28px 0 0;
   font-size: var(--step-5);
-  line-height: 0.79;
+  /* 0.79 made the line box shorter than the font size, so descenders
+     collided with the ascenders below at every width the heading wrapped. */
+  line-height: 0.95;
+  text-wrap: balance;
 }
 
 .therapy-hero__content > p:not(.section-kicker) {
@@ -5133,6 +5147,19 @@ body[data-hero-tone="dark"]
   pointer-events: none;
 }
 
+/* Above 960px all three heroes are two columns, so the Pilates and Clinics
+   rings can be matched to the Sports Therapy one (see --hero-figure). Below
+   it they stack and the Sports Therapy figure bleeds well past its box, so
+   there is no size there worth matching — those two stay contained. The
+   figure runs a few px wider than its column at some widths; the media box
+   is overflow:visible and the hero clips, so it spills rather than squashes. */
+@media (min-width: 961px) {
+  .pilates-hero__figure,
+  .clinics-hero__figure {
+    width: var(--hero-figure);
+  }
+}
+
 /* ============================================================
    Clinics — page rhythm
    Was var(--space-section) on every section, the same flat cadence
@@ -5283,7 +5310,10 @@ body[data-hero-tone="dark"]
 .therapy-hero h1 {
   margin: 28px 0 0;
   font-size: var(--step-5);
-  line-height: 0.79;
+  /* 0.79 made the line box shorter than the font size, so descenders
+     collided with the ascenders below at every width the heading wrapped. */
+  line-height: 0.95;
+  text-wrap: balance;
 }
 .therapy-hero__content > p:not(.section-kicker) {
   max-width: 530px;
@@ -5353,114 +5383,330 @@ body[data-hero-tone="dark"]
 .therapy-index span {
   color: var(--brand);
 }
-.therapy-benefits, .therapy-treatment, .therapy-expect, .therapy-practical {
+/* ============================================================
+   Sports Therapy — contained-block system (variants A/B/C)
+   Cards, pills and section fills give each group a visible edge,
+   so information reads as discrete objects rather than one run of
+   ruled text. Colours, fonts and copy are unchanged.
+   ============================================================ */
+
+.st-section {
   padding-block: var(--space-section);
-  background: #fff;
+  background: var(--paper);
 }
-.therapy-benefits__rail {
-  display: grid;
-  padding: 0;
-  margin: clamp(80px, 10vw, 145px) 0 0;
-  grid-template-columns: repeat(5, 1fr);
-  border-top: 1px solid var(--line);
-  list-style: none;
-}
-.therapy-benefits__rail li {
-  min-height: 180px;
-  padding: 28px 24px;
-  border-bottom: 1px solid var(--line);
-  font-family: var(--font-serif);
-  font-size: clamp(22px, 1.9vw, 31px);
-  line-height: 1.08;
-}
-.therapy-benefits__rail li + li {
-  border-left: 1px solid var(--line);
-}
-.therapy-benefits__rail span {
-  display: block;
-  margin-bottom: 55px;
-  color: var(--brand);
-  font-family: var(--font-sans);
-  font-size: 8px;
-  letter-spacing: 0.13em;
-}
-.therapy-benefits__conditions {
-  display: grid;
-  margin-top: clamp(70px, 9vw, 130px);
-  grid-template-columns: 0.72fr 1.28fr;
-  gap: clamp(60px, 10vw, 150px);
-  align-items: start;
-}
-.therapy-benefits__conditions > p {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-size: clamp(29px, 3vw, 48px);
-  line-height: 1.2;
-  letter-spacing: -0.035em;
-}
-.therapy-benefits__conditions ul, .therapy-fascia ul {
-  padding: 0;
-  margin: 0;
-  border-top: 1px solid var(--line);
-  list-style: none;
-}
-.therapy-benefits__conditions li, .therapy-fascia li {
-  padding: 18px 0;
-  border-bottom: 1px solid var(--line);
-  color: var(--ink-soft);
-}
-.therapy-treatment {
+.st-section--tint {
   background: var(--surface);
 }
-.therapy-treatment__grid {
-  display: grid;
-  margin-top: clamp(80px, 10vw, 145px);
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(55px, 9vw, 140px);
-}
-.therapy-treatment__grid article > span {
-  display: block;
-  padding-bottom: 22px;
-  border-bottom: 1px solid var(--line);
-  color: var(--brand);
-  font-size: 9px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-.therapy-treatment__grid ol {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-.therapy-treatment__grid li {
-  display: grid;
-  min-height: 78px;
-  padding: 18px 0;
-  grid-template-columns: 44px 1fr;
-  border-bottom: 1px solid var(--line);
-  align-items: center;
-  color: var(--ink-soft);
-  line-height: 1.5;
-}
-.therapy-treatment__grid li b {
-  color: var(--brand);
-  font-size: 8px;
-  font-weight: 400;
-}
-.therapy-referrals {
-  max-width: 920px;
-  margin: 80px 0 0 auto;
-  font-family: var(--font-serif);
-  font-size: clamp(25px, 2.6vw, 42px);
-  line-height: 1.22;
-}
-.therapy-fascia {
+.st-section--dark {
   position: relative;
-  padding-block: var(--space-section);
   overflow: hidden;
   color: var(--surface);
-  background: var(--ink);
+  background: var(--navy);
 }
+.st-section--dark h2,
+.st-section--dark h3 {
+  color: var(--surface);
+}
+.st-section--dark .st-head > p,
+.st-section--dark .st-lead,
+.st-section--dark p {
+  color: rgba(242, 246, 255, 0.74);
+}
+.st-section--dark .st-eyebrow {
+  color: var(--periwinkle);
+}
+.st-section > .section-shell {
+  position: relative;
+}
+
+/* ---- Section heading ---- */
+
+.st-head {
+  display: grid;
+  margin-bottom: clamp(28px, 3.4vw, 44px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 72px);
+  align-items: end;
+}
+.st-head h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+}
+.st-head > p {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: var(--lh-body);
+}
+
+.st-eyebrow {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--brand);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+/* ---- Cards ---- */
+
+.st-grid {
+  display: grid;
+  gap: clamp(16px, 1.8vw, 24px);
+}
+.st-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.st-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+/* Workplace + prices share one band so neither carries a half-empty row.
+   The cards stretch to a common height (grid's default), and the workplace
+   link drops to the foot of its card so the two bottom edges read as one
+   line rather than as one card with a gap parked under its last element. */
+.st-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 24px);
+}
+.st-pair .st-card {
+  display: flex;
+  flex-direction: column;
+}
+.st-pair .st-card .pilates-arrow-link {
+  align-self: start;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.st-card {
+  padding: clamp(22px, 2.4vw, 34px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+}
+.st-section--tint .st-card {
+  background: var(--paper);
+}
+.st-card h2,
+.st-card h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+}
+.st-card > p {
+  margin: 0 0 16px;
+  color: var(--ink-soft);
+  line-height: var(--lh-body);
+}
+.st-card > p:last-child {
+  margin-bottom: 0;
+}
+.st-card--step b {
+  display: block;
+  margin-bottom: 18px;
+  color: var(--brand);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.11em;
+}
+.st-card--step h3 {
+  font-size: var(--step-2);
+}
+.st-card--step p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: var(--lh-body);
+}
+.st-card--onDark {
+  border-color: rgba(242, 246, 255, 0.16);
+  background: rgba(242, 246, 255, 0.05);
+}
+
+/* ---- Ruled rows: the divider-line list, contained inside a card ---- */
+
+.st-rows {
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+.st-rows li {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+.st-rows--price li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.st-rows--price strong {
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  color: var(--ink);
+}
+.st-rows--price li.is-featured strong {
+  color: var(--brand);
+}
+.st-rows--onDark {
+  border-top-color: rgba(242, 246, 255, 0.16);
+}
+.st-rows--onDark li {
+  border-bottom-color: rgba(242, 246, 255, 0.16);
+  color: rgba(242, 246, 255, 0.8);
+}
+.st-card > .st-rows:last-child li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+
+/* ---- Notes ---- */
+
+.st-note {
+  padding: clamp(20px, 2.2vw, 28px);
+  margin-top: clamp(20px, 2.4vw, 32px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+.st-note p {
+  max-width: 70ch;
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: var(--lh-body);
+}
+.st-note--dark {
+  border-color: transparent;
+  background: var(--navy);
+}
+.st-note--dark p {
+  color: rgba(242, 246, 255, 0.78);
+}
+.st-note--dark .st-eyebrow {
+  color: var(--periwinkle);
+}
+
+.st-footnote {
+  margin: clamp(18px, 2vw, 26px) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+}
+.st-footnote--onDark {
+  color: rgba(242, 246, 255, 0.6);
+}
+
+/* ---- Split (image + copy) ---- */
+
+.st-split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+}
+.st-split--text {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: start;
+}
+.st-split--text h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+}
+.st-split--text .st-lead {
+  margin: 18px 0 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  line-height: 1.35;
+}
+.st-split--text p {
+  line-height: var(--lh-body);
+}
+.st-taping-figure {
+  padding: clamp(16px, 2vw, 26px);
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+}
+.st-taping-figure img {
+  width: 100%;
+  border-radius: calc(var(--radius-card) - 8px);
+}
+.st-taping-figure figcaption {
+  padding-top: 14px;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+
+
+
+/* ---- Prices ---- */
+
+.st-price {
+  padding: clamp(22px, 2.4vw, 32px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+}
+.st-price span {
+  display: block;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+.st-price strong {
+  display: block;
+  margin-top: 14px;
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+}
+.st-price.is-featured {
+  border-color: color-mix(in oklch, var(--brand) 40%, transparent);
+  background: color-mix(in oklch, var(--brand) 5%, var(--paper));
+}
+.st-price.is-featured strong {
+  color: var(--brand);
+}
+
+/* ---- Dark-section overrides ----
+   The component rules above set --ink-soft at the same specificity as the
+   .st-section--dark defaults and come later in the file, so on navy they won
+   and put L43% text on an L21% ground (~2.2:1). These reclaim it. ---- */
+
+.st-section--dark .st-card > p,
+.st-section--dark .st-note p,
+.st-section--dark .st-rows li {
+  color: rgba(242, 246, 255, 0.78);
+}
+.st-section--dark .st-footnote {
+  color: rgba(242, 246, 255, 0.6);
+}
+
+/* ---- Review-only variant switcher ---- */
+
+
+/* ---- Retained from the original page ---- */
+
 .therapy-fascia__threads {
   position: absolute;
   top: -35%;
@@ -5469,6 +5715,7 @@ body[data-hero-tone="dark"]
   aspect-ratio: 1;
   border: 1px solid rgba(137, 170, 255, 0.18);
   border-radius: 45% 55% 63% 37% / 56% 38% 62% 44%;
+  pointer-events: none;
 }
 .therapy-fascia__threads::before, .therapy-fascia__threads::after {
   position: absolute;
@@ -5480,282 +5727,73 @@ body[data-hero-tone="dark"]
 .therapy-fascia__threads::after {
   inset: 34%;
 }
-.therapy-fascia__grid {
-  position: relative;
-  display: grid;
-  grid-template-columns: 0.82fr 1.18fr;
-  gap: clamp(70px, 11vw, 180px);
-}
-.therapy-fascia .section-kicker {
-  color: var(--periwinkle);
-}
-.therapy-fascia h2 {
-  margin: 30px 0 0;
-  font-size: var(--step-5);
-  line-height: var(--lh-tight);
-}
-.therapy-fascia h2 em {
-  color: var(--periwinkle);
-}
-.therapy-fascia__lead {
-  margin-top: 55px;
-  color: rgba(242, 246, 255, 0.76);
-  font-family: var(--font-serif);
-  font-size: clamp(24px, 2.4vw, 38px);
-  line-height: 1.25;
-}
-.therapy-fascia__grid > div:last-child > p {
-  color: rgba(242, 246, 255, 0.7);
-  line-height: 1.75;
-}
-.therapy-fascia ul {
-  margin-top: 45px;
-  border-top-color: rgba(255, 255, 255, 0.16);
-}
-.therapy-fascia li {
-  border-bottom-color: rgba(255, 255, 255, 0.16);
-  color: rgba(242, 246, 255, 0.76);
-}
-.therapy-steps {
-  display: grid;
-  padding: 0;
-  margin: clamp(80px, 10vw, 145px) 0 0;
-  grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--line);
-  list-style: none;
-}
-.therapy-steps li {
-  min-height: 350px;
-  padding: 32px clamp(25px, 3vw, 48px);
-  border-bottom: 1px solid var(--line);
-}
-.therapy-steps li + li {
-  border-left: 1px solid var(--line);
-}
-.therapy-steps span {
-  color: var(--brand);
-  font-size: 9px;
-}
-.therapy-steps h3 {
-  margin: 90px 0 25px;
-  font-size: clamp(34px, 3.4vw, 55px);
-}
-.therapy-steps p, .therapy-wear p {
-  color: var(--ink-soft);
-  line-height: 1.7;
-}
-.therapy-wear {
-  display: grid;
-  padding-top: 40px;
-  margin-top: 80px;
-  grid-template-columns: 0.48fr 1.52fr;
-  gap: 50px;
-  border-top: 1px solid var(--line);
-}
-.therapy-wear span {
-  color: var(--brand);
-  font-size: 9px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-.therapy-wear p {
-  max-width: 760px;
-  margin: 0;
-}
-.therapy-taping {
-  padding-block: var(--space-section);
-  background: var(--surface-2);
-}
-.therapy-taping__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(350px, 1.08fr);
-  gap: clamp(70px, 10vw, 160px);
-  align-items: center;
-}
-.therapy-taping figure {
-  padding: clamp(20px, 3vw, 45px);
-  background: #fff;
-  box-shadow: 0 30px 80px rgba(16, 27, 57, 0.08);
-}
-.therapy-taping figure img {
-  width: 100%;
-}
-.therapy-taping figcaption {
-  padding-top: 18px;
-  color: var(--ink-soft);
-  font-size: 8px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.therapy-taping h2 {
-  margin: 30px 0 45px;
-  font-size: var(--step-4);
-  line-height: var(--lh-tight);
-}
-.therapy-taping__grid > div > p:not(.section-kicker) {
-  color: var(--ink-soft);
-  line-height: 1.75;
-}
-.therapy-taping__types {
-  display: grid;
-  margin-top: 45px;
-  grid-template-columns: 1fr 1fr;
-  border-top: 1px solid var(--line);
-}
-.therapy-taping__types span {
-  padding: 22px 0;
-  border-bottom: 1px solid var(--line);
-  color: var(--brand);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.therapy-taping__types span:nth-child(even) {
-  padding-left: 25px;
-  border-left: 1px solid var(--line);
-}
-.therapy-workplace {
-  padding-block: var(--space-section);
-  background: #fff;
-}
-.therapy-workplace__grid {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: clamp(70px, 11vw, 180px);
-  align-items: end;
-}
-.therapy-workplace h2 {
-  margin: 30px 0 0;
-  font-size: var(--step-5);
-  line-height: var(--lh-tight);
-}
-.therapy-workplace__grid > div:last-child p {
-  color: var(--ink-soft);
-  line-height: 1.75;
-}
-.therapy-workplace .pilates-arrow-link {
-  margin-top: 26px;
-}
-.therapy-practical {
-  background: var(--surface-2);
-}
-.therapy-prices {
-  display: grid;
-  margin-top: clamp(80px, 10vw, 140px);
-  grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--line);
-}
-.therapy-prices > div {
-  min-height: 210px;
-  padding: 32px clamp(24px, 3vw, 45px);
-  border-bottom: 1px solid var(--line);
-}
-.therapy-prices > div + div {
-  border-left: 1px solid var(--line);
-}
-.therapy-prices span {
-  display: block;
-  color: var(--ink-soft);
-  line-height: 1.5;
-}
-.therapy-prices strong {
-  display: block;
-  margin-top: 75px;
-  font-family: var(--font-serif);
-  font-size: clamp(40px, 4vw, 62px);
-  font-weight: 400;
-}
-.therapy-practical__note {
-  margin: 35px 0 0;
-  color: var(--ink-soft);
-  font-size: 12px;
-}
 .therapy-contact {
   background: var(--navy);
 }
 
+/* ---- Responsive ---- */
+
+@media (min-width: 1100px) {
+  .therapy-hero h1 {
+    line-height: 0.88;
+  }
+}
+
 @media (max-width: 960px) {
-.therapy-hero__grid, .therapy-fascia__grid, .therapy-taping__grid, .therapy-workplace__grid {
+  .therapy-hero__grid {
     grid-template-columns: 1fr;
   }
-.therapy-hero__media {
+  .therapy-hero__media {
     height: 620px;
   }
-.therapy-benefits__rail {
-    grid-template-columns: repeat(3, 1fr);
+  .st-head {
+    grid-template-columns: 1fr;
+    align-items: start;
   }
-.therapy-benefits__rail li:nth-child(4) {
-    border-left: 0;
+  .st-grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .st-split,
+  .st-split--text {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-.therapy-hero {
+  .therapy-hero {
     min-height: auto;
     padding-top: 130px;
   }
-.therapy-index {
+  .therapy-hero h1 {
+    font-size: var(--step-4);
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+  .therapy-hero__content > p:not(.section-kicker) {
+    margin: 28px 0 26px;
+  }
+  .therapy-hero__media {
+    height: 420px;
+  }
+  .therapy-index {
     grid-template-columns: repeat(4, 1fr);
   }
-.therapy-index a {
+  .therapy-index a {
     justify-content: center;
     font-size: 0;
   }
-.therapy-index a span {
+  .therapy-index a span {
     font-size: 9px;
   }
-.therapy-index a:last-child {
+  .therapy-index a:last-child {
     display: none;
   }
-.therapy-treatment__grid, .therapy-benefits__conditions, .therapy-steps, .therapy-prices {
+  .st-grid--2,
+  .st-grid--3,
+  .st-pair {
     grid-template-columns: 1fr;
   }
-.therapy-fascia h2, .therapy-workplace h2 {
-    font-size: var(--step-4);
-  }
-.therapy-hero h1 {
-    font-size: var(--step-4);
-  }
-.therapy-hero__media {
-    height: 480px;
-  }
-.therapy-benefits__rail {
-    grid-template-columns: 1fr;
-  }
-.therapy-benefits__rail li, .therapy-benefits__rail li + li {
-    min-height: 100px;
-    border-left: 0;
-  }
-.therapy-benefits__rail span {
-    margin-bottom: 25px;
-  }
-.therapy-treatment__grid {
-    gap: 70px;
-  }
-.therapy-steps li, .therapy-steps li + li {
-    min-height: 250px;
-    padding-inline: 0;
-    border-left: 0;
-  }
-.therapy-steps h3 {
-    margin-top: 55px;
-  }
-.therapy-wear {
-    grid-template-columns: 1fr;
-  }
-.therapy-taping__types {
-    grid-template-columns: 1fr;
-  }
-.therapy-taping__types span:nth-child(even) {
-    padding-left: 0;
-    border-left: 0;
-  }
-.therapy-prices > div, .therapy-prices > div + div {
-    min-height: 150px;
-    padding-inline: 0;
-    border-left: 0;
-  }
-.therapy-prices strong {
-    margin-top: 35px;
-  }
+}
+
+@media (prefers-reduced-motion: reduce) {
 }

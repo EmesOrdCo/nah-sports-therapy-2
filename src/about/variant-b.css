@@ -1,0 +1,314 @@
+/* Variant B — The letter. All rules scoped under .av-b. */
+
+/* One column of prose at a book measure, plus a margin wide enough to hang the
+   credentials in from 1000px up. The letter and the "Where I work" postscript
+   are both sized off these two numbers so their edges line up down the page. */
+.av-b {
+  --av-b-measure: 40rem;
+  --av-b-margin: 14rem;
+  --av-b-gutter: clamp(2rem, 4vw, 4rem);
+  --av-b-width: calc(
+    var(--av-b-margin) + var(--av-b-gutter) + var(--av-b-measure)
+  );
+}
+
+/* ---- The letter ---- */
+
+.av-b .av-b__letter {
+  padding-top: var(--av-header-clear);
+  padding-bottom: var(--space-section);
+}
+
+.av-b .av-b__sheet {
+  max-width: var(--av-b-measure);
+  margin-inline: auto;
+}
+
+/* The global breadcrumb rule reserves up to 92px because it was written for a
+   full-bleed page hero. This page opens with a name on paper, and that much air
+   above it reads as an accident rather than as composition. */
+.av-b .breadcrumbs {
+  margin-bottom: var(--space-m);
+}
+
+.av-b .av-b__head h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-4);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+
+.av-b .av-b__lede {
+  max-width: 34ch;
+  margin: var(--space-s) 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  line-height: 1.45;
+}
+
+.av-b .av-b__body {
+  margin-top: var(--space-l);
+}
+
+/* Serif body copy is the whole idea of this variant, so it gets what is usually
+   reserved for headings: the strong ink, and leading loose enough to read three
+   hundred words without effort. Everything else on the page is quieter than
+   this. */
+.av-b .av-b__prose p {
+  margin: 0 0 var(--space-s);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.75;
+}
+
+.av-b .av-b__prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* Without this the floated portrait can push the credentials note up beside
+   itself on short viewports. */
+.av-b .av-b__body::after {
+  display: block;
+  clear: both;
+  content: "";
+}
+
+.av-b .av-b__portrait {
+  overflow: hidden;
+  width: min(56%, 220px);
+  margin: 0 0 var(--space-s);
+  border-radius: var(--radius-card);
+  aspect-ratio: 3 / 4;
+  background: var(--surface-2);
+}
+
+@media (min-width: 720px) {
+  .av-b .av-b__portrait {
+    float: right;
+    width: clamp(180px, 30%, 240px);
+    /* The 6px nudge sets the top of the image against the x-height of the first
+       line rather than against its ascenders. */
+    margin: 6px 0 var(--space-s) var(--space-m);
+  }
+}
+
+/* ---- Coda: the one display line, the close, the signature ---- */
+
+.av-b .av-b__coda {
+  margin-top: var(--space-l);
+}
+
+/* A single sentence set large, to break the column once and to answer the
+   question most first-time visitors are actually asking. */
+.av-b .av-b__line {
+  max-width: 28ch;
+  margin: 0 0 var(--space-l);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+.av-b .av-b__signoff {
+  margin: var(--space-l) 0 0;
+}
+
+.av-b .av-b__signoff-name {
+  display: block;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+}
+
+.av-b .av-b__signoff-full {
+  display: block;
+  margin-top: var(--space-2xs);
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---- Credentials, as a note ----
+
+   Deliberately the quietest block on the page: small sans, muted ink, one
+   hairline and no box. Variant A argues the qualifications; here the story does
+   that and these are left to be checked. q.note is dropped because the London
+   School of Sports Massage line already appears in the letter, and saying the
+   same thing twice on one page is what makes a page sound like marketing. */
+
+.av-b .av-b__aside {
+  margin-top: var(--space-l);
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--line);
+}
+
+.av-b .av-b__aside h2 {
+  margin: 0 0 var(--space-s);
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.av-b .av-b__qual-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-s);
+  list-style: none;
+}
+
+.av-b .av-b__qual-list h3 {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+
+.av-b .av-b__qual-list p {
+  margin: 2px 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+
+/* Two up on tablets, where a single column of four short entries leaves an
+   awkward run of white to the right of them. */
+@media (min-width: 620px) {
+  .av-b .av-b__qual-list {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-m);
+  }
+}
+
+/* ---- Wide: the note leaves the flow and hangs in the margin ---- */
+
+@media (min-width: 1000px) {
+  .av-b .av-b__sheet {
+    display: grid;
+    max-width: var(--av-b-width);
+    grid-template-columns: var(--av-b-margin) minmax(0, 1fr);
+    column-gap: var(--av-b-gutter);
+  }
+
+  .av-b .av-b__head {
+    grid-area: 1 / 2;
+  }
+
+  .av-b .av-b__body {
+    grid-area: 2 / 2;
+  }
+
+  .av-b .av-b__coda {
+    grid-area: 3 / 2;
+  }
+
+  /* Spans the letter but sits at the bottom of it, so the note lands level with
+     the signature — a footnote, not a sidebar competing with the opening. */
+  .av-b .av-b__aside {
+    align-self: end;
+    grid-area: 2 / 1 / 4 / 2;
+    margin-top: 0;
+  }
+
+  .av-b .av-b__qual-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Where I work ---- */
+
+.av-b .av-b__where {
+  padding-bottom: var(--space-section);
+}
+
+.av-b .av-b__where-inner {
+  max-width: var(--av-b-measure);
+  margin-inline: auto;
+  padding-top: var(--space-l);
+  border-top: 1px solid var(--line);
+}
+
+.av-b .av-b__where h2 {
+  margin: 0 0 var(--space-m);
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+}
+
+.av-b .av-b__where-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-s);
+  list-style: none;
+}
+
+/* Rules instead of cards: each entry is separated by the same hairline weight
+   used everywhere else on the page, and the whole block is the link target. */
+.av-b .av-b__where-list a {
+  display: block;
+  height: 100%;
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.av-b .av-b__where-list a:hover {
+  border-color: var(--brand);
+}
+
+.av-b .av-b__where-list h3 {
+  margin: 0 0 4px;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-head);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.av-b .av-b__where-list a:hover h3 {
+  color: var(--brand);
+}
+
+.av-b .av-b__where-list p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.6;
+}
+
+@media (min-width: 1000px) {
+  .av-b .av-b__where-inner {
+    max-width: var(--av-b-width);
+  }
+
+  .av-b .av-b__where-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-m);
+  }
+}

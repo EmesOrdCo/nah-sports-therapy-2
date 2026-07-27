@@ -1,0 +1,304 @@
+/* Variant A — Portrait editorial. All rules scoped under .av-a. */
+
+/* ---- Hero ---- */
+
+.av-a .av-a__hero {
+  padding-top: var(--av-header-clear);
+  padding-bottom: var(--space-section);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--paper) 100%);
+}
+
+.av-a .av-a__hero-grid {
+  display: grid;
+  align-items: end;
+  gap: var(--space-l);
+}
+
+.av-a .av-a__hero-copy h1 {
+  margin: 0.25em 0 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-5);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+
+.av-a .av-a__lede {
+  max-width: 26ch;
+  margin: var(--space-m) 0 0;
+  color: var(--ink);
+  font-size: var(--step-1);
+  line-height: 1.4;
+}
+
+.av-a .av-a__sub {
+  max-width: 42ch;
+  margin: var(--space-s) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
+}
+
+.av-a .av-a__portrait {
+  overflow: hidden;
+  margin: 0;
+  border-radius: var(--radius-card);
+  aspect-ratio: 3 / 4;
+  background: var(--surface-2);
+}
+
+@media (min-width: 900px) {
+  .av-a .av-a__hero-grid {
+    grid-template-columns: 1fr minmax(320px, 42%);
+    gap: clamp(2.5rem, 5vw, 5rem);
+  }
+}
+
+/* ---- Story ---- */
+
+.av-a .av-a__story {
+  padding-block: var(--space-section);
+}
+
+.av-a .av-a__story-grid {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.av-a .av-a__prose p {
+  max-width: 62ch;
+  margin: 0 0 var(--space-s);
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
+}
+
+.av-a .av-a__prose p:last-child {
+  margin-bottom: 0;
+}
+
+.av-a .av-a__pull {
+  margin: var(--space-m) 0;
+  padding-left: clamp(1rem, 3vw, 2rem);
+  border-left: 2px solid var(--brand);
+}
+
+/* The measure belongs on the paragraph, not the blockquote: `ch` resolves
+   against the element's own font, and the blockquote inherits the 16px sans
+   while the quote is set in serif at --step-3. Capping the wrapper stranded
+   this at ~11 characters a line on a 375px screen. */
+.av-a .av-a__pull p {
+  max-width: 22ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+@media (min-width: 900px) {
+  .av-a .av-a__story-grid {
+    align-items: start;
+    grid-template-columns: 1fr auto 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .av-a .av-a__pull {
+    margin: 0;
+    align-self: center;
+  }
+
+  /* Same reason as above — the cap has to sit on the serif paragraph. */
+  .av-a .av-a__pull p {
+    max-width: 18ch;
+  }
+}
+
+/* ---- Qualifications ----
+   The old .credential-list assumed a leading number column and left the text
+   trapped in a 90px track. Here the awarding body carries the left column and
+   the qualification carries the right, so both have somewhere to go. */
+
+.av-a .av-a__quals {
+  padding-block: var(--space-section);
+  background: var(--surface);
+}
+
+.av-a .av-a__quals h2,
+.av-a .av-a__where h2 {
+  margin: 0 0 var(--space-l);
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+}
+
+.av-a .av-a__qual-list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.av-a .av-a__qual-list li {
+  display: grid;
+  padding-block: var(--space-m);
+  border-bottom: 1px solid var(--line);
+  gap: 4px;
+}
+
+.av-a .av-a__qual-list h3 {
+  max-width: 30ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-head);
+}
+
+.av-a .av-a__awarding {
+  margin: 0;
+  color: var(--brand);
+  font-size: var(--step-00);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.av-a .av-a__note {
+  max-width: 46ch;
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+
+@media (min-width: 760px) {
+  .av-a .av-a__qual-list li {
+    align-items: baseline;
+    grid-template-columns: minmax(140px, 22%) 1fr;
+    column-gap: var(--space-m);
+  }
+
+  .av-a .av-a__awarding {
+    grid-row: 1 / span 2;
+  }
+
+  .av-a .av-a__note {
+    grid-column: 2;
+  }
+}
+
+/* ---- Where I work ---- */
+
+.av-a .av-a__where {
+  padding-block: var(--space-section);
+}
+
+.av-a .av-a__where-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-s);
+  list-style: none;
+}
+
+.av-a .av-a__where-list a {
+  display: block;
+  height: 100%;
+  padding: var(--space-m);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color var(--dur-fast, 160ms) var(--ease-out),
+    background var(--dur-fast, 160ms) var(--ease-out);
+}
+
+.av-a .av-a__where-list a:hover {
+  border-color: var(--brand);
+  background: var(--surface);
+}
+
+.av-a .av-a__where-list h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-head);
+}
+
+.av-a .av-a__where-list p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.6;
+}
+
+@media (min-width: 760px) {
+  .av-a .av-a__where-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---- Voices ---- */
+
+.av-a .av-a__voices {
+  padding-block: var(--space-section);
+  background: var(--surface);
+}
+
+.av-a .av-a__voices-grid {
+  display: grid;
+  gap: var(--space-l);
+}
+
+.av-a .av-a__voices figure {
+  margin: 0;
+}
+
+.av-a .av-a__voices blockquote {
+  margin: 0;
+}
+
+.av-a .av-a__voices blockquote p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.av-a .av-a__voices figcaption {
+  display: flex;
+  margin-top: var(--space-s);
+  color: var(--ink);
+  font-size: var(--step-00);
+  gap: 8px;
+  letter-spacing: 0.02em;
+}
+
+.av-a .av-a__voices figcaption span {
+  color: var(--ink-soft);
+}
+
+.av-a .av-a__voices figcaption span::before {
+  margin-right: 8px;
+  content: "·";
+}
+
+@media (min-width: 760px) {
+  .av-a .av-a__voices-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+}

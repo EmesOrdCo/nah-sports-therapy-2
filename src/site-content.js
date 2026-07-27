@@ -1,4 +1,6 @@
 import { legacyPages } from "./legacy-content.js";
+import { buildAboutPage } from "./about/index.js";
+import { buildContactPage } from "./contact/index.js";
 
 const BUSINESS = {
   phoneDisplay: "07881 821 901",
@@ -748,43 +750,6 @@ const prices = page(
   )}${cta("Discuss the right appointment length.")}`,
 );
 
-const contact = page(
-  {
-    title: "Contact NJH Sports Therapy & Pilates",
-    description:
-      "Contact Natasha Hadland to discuss Sports Therapy or Pilates appointments.",
-    eyebrow: "Contact",
-    title: "Tell us how you'd like <em>to move</em>.",
-    intro:
-      "Share what you would like help with. Natasha will suggest the most suitable place to start.",
-    tone: "dark",
-  },
-  `<section class="contact-page"><div class="section-shell contact-page__grid">
-    <aside data-reveal>
-      <h2>A personal reply, without the jargon.</h2>
-      <dl>
-        <div><dt>Telephone</dt><dd><a href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></dd></div>
-        <div><dt>Email</dt><dd><a href="mailto:${BUSINESS.email}">${BUSINESS.email}</a></dd></div>
-        <div><dt>Locations</dt><dd><a href="/clinics">Studham & Berkhamsted</a></dd></div>
-      </dl>
-      <p class="contact-page__note">Please do not use this form for urgent medical help. Contact NHS 111 or emergency services where appropriate.</p>
-    </aside>
-    <form class="enquiry-form" data-enquiry-form novalidate data-reveal>
-      <div class="form-field"><label for="name">Name</label><input id="name" name="name" autocomplete="name" required><span class="form-error">Please enter your name.</span></div>
-      <div class="form-field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required><span class="form-error">Please enter a valid email.</span></div>
-      <div class="form-field"><label for="phone">Phone <small>optional</small></label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
-      <div class="form-field form-field--full"><label for="service">What can we help with?</label><select id="service" name="service" required><option value="">Choose a service</option><option>Sports Therapy</option><option>Individual Pilates</option><option>Small-group Pilates</option><option>Pre/Postnatal Pilates</option><option>Other / not sure</option></select><span class="form-error">Please choose an option.</span></div>
-      <div class="form-field"><label for="location">Preferred location</label><select id="location" name="location"><option>No preference</option><option>Studham</option><option>Berkhamsted</option></select></div>
-      <div class="form-field"><label for="contact-method">Preferred reply</label><select id="contact-method" name="preferredContact"><option>Email</option><option>Phone</option></select></div>
-      <div class="form-field form-field--full"><label for="message">Message</label><textarea id="message" name="message" rows="6" required></textarea><span class="form-error">Please tell us briefly how we can help.</span></div>
-      <div class="form-honeypot" aria-hidden="true"><label>Leave this field empty<input name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
-      <input type="hidden" name="_subject" value="New NJH website enquiry">
-      <div class="form-field form-field--full form-consent"><label><input type="checkbox" name="consent" required><span>I agree that NJH may use these details to respond to my enquiry.</span></label><span class="form-error">Please confirm before sending.</span></div>
-      <div class="form-submit form-field--full"><button type="submit">Send enquiry <span>↗</span></button><p data-form-status role="status" aria-live="polite"></p></div>
-    </form>
-  </div></section>`,
-);
-
 function legacyImage(path, index, className = "") {
   const image = legacyPages[path]?.images?.[index];
   if (!image) return "";
@@ -1113,8 +1078,14 @@ function buildClinicsContinuousPage() {
   };
 }
 
-function buildSportsTherapyContinuousPage() {
-  const techniques = [
+/* ============================================================
+   Sports Therapy page — three arrangement variants (A/B/C)
+   behind a review toggle. Same copy, colours, fonts and images
+   throughout; only the arrangement differs.
+   ============================================================ */
+
+const THERAPY = {
+  techniques: [
     "Deep tissue massage",
     "Muscle energy techniques (MET)",
     "Soft Tissue Release (STR)",
@@ -1123,8 +1094,8 @@ function buildSportsTherapyContinuousPage() {
     "Connective tissue and myofascial work",
     "Positional Release (PR)",
     "Manual mobilisation for joints and soft tissue",
-  ];
-  const injuries = [
+  ],
+  injuries: [
     "Recurring postural pain",
     "Lower-back pain and sciatica",
     "Upper-back, neck, headache and whiplash concerns",
@@ -1133,59 +1104,160 @@ function buildSportsTherapyContinuousPage() {
     "Soft-tissue rehabilitation and joint stiffness",
     "Muscular strains, ligament sprains and tendonitis",
     "Scar restriction before and after surgery",
-  ];
+  ],
+  outcomes: [
+    "Improve posture",
+    "Reduce tension and pain",
+    "Improve flexibility",
+    "Support recovery",
+    "Address scar restriction",
+  ],
+  conditions: [
+    "Frozen shoulder",
+    "Repetitive strain injury",
+    "Tension headaches",
+    "Migraines and sinusitis",
+    "Pregnancy-related issues",
+    "Carpal tunnel syndrome",
+  ],
+  fascia: [
+    "Lower-back pain and headaches",
+    "Neck stiffness and shoulder injuries",
+    "Sports injuries and postural pain",
+    "Muscle spasms and recurring restriction",
+    "Improved joint movement and breathing",
+  ],
+  steps: [
+    ["Listen", "Take a brief medical history and understand your goals."],
+    [
+      "Assess",
+      "Assess the injury or painful area, posture, joint and surrounding tissue.",
+    ],
+    [
+      "Plan",
+      "Discuss a treatment plan, which may include practical home exercises.",
+    ],
+  ],
+  taping: [
+    "Symptom reduction",
+    "Oedema control",
+    "Postural control",
+    "Power taping",
+  ],
+  prices: [
+    ["Up to 30 minutes", "£60", false],
+    ["Standard · up to 1 hour", "£85", true],
+    ["Up to 90 minutes", "£130", false],
+  ],
+};
 
+/* Ruled rows — the divider-line list motif, now inside a card so the group
+   still reads as a contained object rather than text loose on the page. */
+const rows = (items, modifier = "") =>
+  `<ul class="st-rows${modifier ? ` ${modifier}` : ""}">${items
+    .map((item) => `<li>${item}</li>`)
+    .join("")}</ul>`;
+
+const eyebrow = (text) => `<span class="st-eyebrow">${text}</span>`;
+
+/* Hero and contact are shared by all three variants — the hero is signed
+   off, so only its responsive type was touched (see .therapy-hero h1). */
+const therapyHero = () => `<section class="therapy-hero" id="overview" aria-labelledby="therapy-title">
+  <div class="section-shell therapy-hero__grid">
+    <div class="therapy-hero__content"><h1 id="therapy-title">Find what’s driving the pain, then treat it and rebuild.</h1><p>Sports Therapy provides relief from musculoskeletal pain and dysfunction through the use of various massage and soft-tissue techniques.</p><a class="pilates-arrow-link" href="#treatment">Explore treatment <span>↓</span></a></div>
+    <figure class="therapy-hero__media therapy-hero__media--figure"><object class="therapy-hero__figure" type="image/svg+xml" data="/images/njh-signature-motion-figure-animated.svg" aria-label="Animated line drawing of a figure within orbiting rings" tabindex="-1"></object></figure>
+  </div>
+  <nav class="section-shell therapy-index" aria-label="On this page"><a href="#treatment"><span>01</span>Treatment</a><a href="#myofascial-release"><span>02</span>Myofascial release</a><a href="#what-to-expect"><span>03</span>What to expect</a><a href="#kinesiology-taping"><span>04</span>Taping</a><a href="#workplace"><span>05</span>Workplace</a></nav>
+</section>`;
+
+const therapyContact = () => `<section class="pilates-contact therapy-contact" id="contact" aria-labelledby="therapy-contact-title"><div class="pilates-orbit pilates-orbit--contact" aria-hidden="true"><span></span><i></i></div><div class="section-shell pilates-contact__grid"><div data-reveal><h2 id="therapy-contact-title">Tell us what you’d like to move beyond.</h2></div><div data-reveal><p>Whatever your injury or postural pain, contact Natasha to discuss the right place to begin.</p><a class="button-link" href="/contact">Send an enquiry <span>↗</span></a><a class="pilates-contact__phone" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div></div></section>`;
+
+const tapingFigure = () =>
+  `<figure class="st-taping-figure" data-reveal>${legacyImage("/kinesiology-taping", 0)}<figcaption>Examples of kinesiology taping</figcaption></figure>`;
+
+/* ---------- Variant A — card grid ---------- */
+
+function therapyVariantA() {
+  const { techniques, injuries, outcomes, conditions, fascia, steps, taping, prices } =
+    THERAPY;
+  return `
+  <section class="st-section st-section--tint" id="approach" aria-labelledby="therapy-benefits-title">
+    <div class="section-shell">
+      <header class="st-head" data-reveal><h2 id="therapy-benefits-title">What sports therapy helps with</h2><p>Advanced techniques can help alleviate symptoms associated with a range of conditions.</p></header>
+      <div class="st-grid st-grid--2">
+        <article class="st-card" data-reveal>${eyebrow("Outcomes")}<h3>What improves</h3>${rows(outcomes)}</article>
+        <article class="st-card" data-reveal>${eyebrow("Conditions")}<h3>What it eases</h3>${rows(conditions)}</article>
+      </div>
+    </div>
+  </section>
+
+  <section class="st-section" id="treatment" aria-labelledby="treatment-title">
+    <div class="section-shell">
+      <header class="st-head" data-reveal><h2 id="treatment-title">Treatment techniques</h2><p>Techniques are often combined with exercises to stretch and strengthen muscles at home.</p></header>
+      <div class="st-grid st-grid--2">
+        <article class="st-card" data-reveal>${eyebrow("Hands-on techniques")}<h3>How treatment is delivered</h3>${rows(techniques)}</article>
+        <article class="st-card" data-reveal>${eyebrow("Common concerns")}<h3>What people come in with</h3>${rows(injuries)}</article>
+      </div>
+      <aside class="st-note" data-reveal><p>Professional referrals are welcomed from GPs, consultants, physiotherapists, osteopaths and podiatrists.</p></aside>
+    </div>
+  </section>
+
+  <section class="st-section st-section--dark" id="myofascial-release" aria-labelledby="fascia-title">
+    <div class="therapy-fascia__threads" aria-hidden="true"></div>
+    <div class="section-shell">
+      <header class="st-head" data-reveal><h2 id="fascia-title">Myofascial release</h2><p>Fascia is strong, flexible tissue surrounding muscles and bones. It spans the whole body as one connected material.</p></header>
+      <div class="st-grid st-grid--2">
+        <article class="st-card st-card--onDark" data-reveal><p>In a healthy state, fascia is relaxed and supports posture, range of movement and flexibility. Physical trauma, inflammation, surgery or habitual poor posture can make it tight and restricted.</p><p>Myofascial Release uses slow, sustained pressure to relax deep tissue, improve movement and reduce tension. Pressure can range from very gentle touch to deeper work and should never be beyond your tolerance.</p></article>
+        <article class="st-card st-card--onDark" data-reveal>${eyebrow("Where it helps")}${rows(fascia, "st-rows--onDark")}</article>
+      </div>
+    </div>
+  </section>
+
+  <section class="st-section st-section--tint" id="what-to-expect" aria-labelledby="expect-title">
+    <div class="section-shell">
+      <header class="st-head" data-reveal><h2 id="expect-title">What to expect</h2><p>Every treatment is tailored to the individual client’s needs and reviewed through feedback.</p></header>
+      <div class="st-grid st-grid--3">
+        ${steps
+          .map(
+            ([title, body], index) =>
+              `<article class="st-card st-card--step" data-reveal><b>0${index + 1}</b><h3>${title}</h3><p>${body}</p></article>`,
+          )
+          .join("")}
+      </div>
+      <aside class="st-note st-note--dark" data-reveal>${eyebrow("What to wear")}<p>Wear loose, comfortable clothing or bring shorts where possible. Depending on the location of your injury, you may be asked to remove some clothing; treatment can be carried out through clothes if you prefer.</p></aside>
+    </div>
+  </section>
+
+  <section class="st-section" id="kinesiology-taping" aria-labelledby="taping-title">
+    <div class="section-shell st-split">
+      ${tapingFigure()}
+      <div class="st-card" data-reveal><h2 id="taping-title">Kinesiology taping</h2><p>Taping can aid pain relief, reduce swelling and support postural awareness. It can be included in an appointment or booked as a standalone 15–20 minute session.</p>${rows(taping)}</div>
+    </div>
+  </section>
+
+  <div class="st-section st-section--tint">
+    <div class="section-shell st-pair">
+      <section class="st-card" id="workplace" aria-labelledby="workplace-title" data-reveal>${eyebrow("On site")}<h2 id="workplace-title">Workplace massage</h2><p>On-site massage treatments can be carried out in the privacy of a workplace meeting room or another quiet office area.</p><p>This offers a practical way to address injuries while continuing to fulfil busy work commitments, and gives employers an opportunity to support staff wellbeing.</p><a class="pilates-arrow-link" href="/contact">Discuss workplace treatment <span>→</span></a></section>
+      <section class="st-card" id="practical" aria-labelledby="therapy-practical-title" data-reveal>${eyebrow("Appointments")}<h2 id="therapy-practical-title">Treatment prices</h2><p>Appointment length is selected around the complexity of the presentation.</p><ul class="st-rows st-rows--price">${prices
+        .map(
+          ([label, amount, featured]) =>
+            `<li${featured ? ' class="is-featured"' : ""}><span>${label}</span><strong>${amount}</strong></li>`,
+        )
+        .join("")}</ul><p class="st-footnote">Sunday and Bank Holiday appointments carry an additional £10 surcharge. Confirm current prices when booking.</p></section>
+    </div>
+  </div>`;
+}
+
+function buildSportsTherapyContinuousPage() {
   return {
     title: "NJH Sports Therapy",
     description:
       "Sports Therapy, soft-tissue treatment, myofascial release and kinesiology taping with NJH.",
     canonical: "/sports-therapy",
     html: `<div class="therapy-longform">
-      <section class="therapy-hero" id="overview" aria-labelledby="therapy-title">
-        <div class="section-shell therapy-hero__grid">
-          <div class="therapy-hero__content"><h1 id="therapy-title">Find what’s driving the pain — then treat it and rebuild.</h1><p>Sports Therapy provides relief from musculoskeletal pain and dysfunction through the use of various massage and soft-tissue techniques.</p><a class="pilates-arrow-link" href="#treatment">Explore treatment <span>↓</span></a></div>
-          <figure class="therapy-hero__media therapy-hero__media--figure"><object class="therapy-hero__figure" type="image/svg+xml" data="/images/njh-signature-motion-figure-animated.svg" aria-label="Animated line drawing of a figure within orbiting rings" tabindex="-1"></object></figure>
-        </div>
-        <nav class="section-shell therapy-index" aria-label="On this page"><a href="#treatment"><span>01</span>Treatment</a><a href="#myofascial-release"><span>02</span>Myofascial release</a><a href="#what-to-expect"><span>03</span>What to expect</a><a href="#kinesiology-taping"><span>04</span>Taping</a><a href="#workplace"><span>05</span>Workplace</a></nav>
-      </section>
-
-      <section class="therapy-benefits" id="approach" aria-labelledby="therapy-benefits-title">
-        <div class="section-shell"><header class="pilates-section-heading" data-reveal><h2 id="therapy-benefits-title">What sports therapy helps with</h2></header>
-          <ol class="therapy-benefits__rail" data-reveal><li><span>01</span>Improve posture</li><li><span>02</span>Reduce tension and pain</li><li><span>03</span>Improve flexibility</li><li><span>04</span>Support recovery</li><li><span>05</span>Address scar restriction</li></ol>
-          <div class="therapy-benefits__conditions" data-reveal><p>Advanced techniques can help alleviate symptoms associated with a range of conditions.</p><ul><li>Frozen shoulder</li><li>Repetitive strain injury</li><li>Tension headaches</li><li>Migraines and sinusitis</li><li>Pregnancy-related issues</li><li>Carpal tunnel syndrome</li></ul></div>
-        </div>
-      </section>
-
-      <section class="therapy-treatment" id="treatment" aria-labelledby="treatment-title">
-        <div class="section-shell"><header class="pilates-section-heading pilates-section-heading--split" data-reveal><h2 id="treatment-title">Treatment techniques</h2><p>Techniques are often combined with exercises to stretch and strengthen muscles at home.</p></header>
-          <div class="therapy-treatment__grid"><article data-reveal><span>Hands-on techniques</span><ol>${techniques.map((item, index) => `<li><b>${String(index + 1).padStart(2, "0")}</b>${item}</li>`).join("")}</ol></article><article data-reveal><span>Common concerns</span><ol>${injuries.map((item, index) => `<li><b>${String(index + 1).padStart(2, "0")}</b>${item}</li>`).join("")}</ol></article></div>
-          <p class="therapy-referrals" data-reveal>Professional referrals are welcomed from GPs, consultants, physiotherapists, osteopaths and podiatrists.</p>
-        </div>
-      </section>
-
-      <section class="therapy-fascia" id="myofascial-release" aria-labelledby="fascia-title">
-        <div class="therapy-fascia__threads" aria-hidden="true"></div>
-        <div class="section-shell therapy-fascia__grid"><div data-reveal><h2 id="fascia-title">Myofascial release</h2><p class="therapy-fascia__lead">Fascia is strong, flexible tissue surrounding muscles and bones. It spans the whole body as one connected material.</p></div><div data-reveal><p>In a healthy state, fascia is relaxed and supports posture, range of movement and flexibility. Physical trauma, inflammation, surgery or habitual poor posture can make it tight and restricted.</p><p>Myofascial Release uses slow, sustained pressure to relax deep tissue, improve movement and reduce tension. Pressure can range from very gentle touch to deeper work and should never be beyond your tolerance.</p><ul><li>Lower-back pain and headaches</li><li>Neck stiffness and shoulder injuries</li><li>Sports injuries and postural pain</li><li>Muscle spasms and recurring restriction</li><li>Improved joint movement and breathing</li></ul></div></div>
-      </section>
-
-      <section class="therapy-expect" id="what-to-expect" aria-labelledby="expect-title">
-        <div class="section-shell"><header class="pilates-section-heading pilates-section-heading--split" data-reveal><h2 id="expect-title">What to expect</h2><p>Every treatment is tailored to the individual client’s needs and reviewed through feedback.</p></header>
-          <ol class="therapy-steps"><li data-reveal><span>01</span><h3>Listen</h3><p>Take a brief medical history and understand your goals.</p></li><li data-reveal><span>02</span><h3>Assess</h3><p>Assess the injury or painful area, posture, joint and surrounding tissue.</p></li><li data-reveal><span>03</span><h3>Plan</h3><p>Discuss a treatment plan, which may include practical home exercises.</p></li></ol>
-          <div class="therapy-wear" data-reveal><span>What to wear</span><p>Wear loose, comfortable clothing or bring shorts where possible. Depending on the location of your injury, you may be asked to remove some clothing; treatment can be carried out through clothes if you prefer.</p></div>
-        </div>
-      </section>
-
-      <section class="therapy-taping" id="kinesiology-taping" aria-labelledby="taping-title">
-        <div class="section-shell therapy-taping__grid"><figure data-reveal>${legacyImage("/kinesiology-taping", 0)}<figcaption>Examples of kinesiology taping</figcaption></figure><div data-reveal><h2 id="taping-title">Kinesiology taping</h2><p>Taping can aid pain relief, reduce swelling and support postural awareness. It can be included in an appointment or booked as a standalone 15–20 minute session.</p><div class="therapy-taping__types"><span>Symptom reduction</span><span>Oedema control</span><span>Postural control</span><span>Power taping</span></div></div></div>
-      </section>
-
-      <section class="therapy-workplace" id="workplace" aria-labelledby="workplace-title">
-        <div class="section-shell therapy-workplace__grid"><div data-reveal><h2 id="workplace-title">Workplace massage</h2></div><div data-reveal><p>On-site massage treatments can be carried out in the privacy of a workplace meeting room or another quiet office area.</p><p>This offers a practical way to address injuries while continuing to fulfil busy work commitments, and gives employers an opportunity to support staff wellbeing.</p><a class="pilates-arrow-link" href="/contact">Discuss workplace treatment <span>→</span></a></div></div>
-      </section>
-
-      <section class="therapy-practical" id="practical" aria-labelledby="therapy-practical-title"><div class="section-shell"><header class="pilates-section-heading pilates-section-heading--split" data-reveal><h2 id="therapy-practical-title">Treatment prices</h2><p>Appointment length is selected around the complexity of the presentation.</p></header><div class="therapy-prices" data-reveal><div><span>Up to 90 minutes</span><strong>£130</strong></div><div><span>Standard · up to 1 hour</span><strong>£85</strong></div><div><span>Up to 30 minutes</span><strong>£60</strong></div></div><p class="therapy-practical__note">Sunday and Bank Holiday appointments carry an additional £10 surcharge. Confirm current prices when booking.</p></div></section>
-
-      <section class="pilates-contact therapy-contact" id="contact" aria-labelledby="therapy-contact-title"><div class="pilates-orbit pilates-orbit--contact" aria-hidden="true"><span></span><i></i></div><div class="section-shell pilates-contact__grid"><div data-reveal><h2 id="therapy-contact-title">Tell us what you’d like to move beyond.</h2></div><div data-reveal><p>Whatever your injury or postural pain, contact Natasha to discuss the right place to begin.</p><a class="button-link" href="/contact">Send an enquiry <span>↗</span></a><a class="pilates-contact__phone" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div></div></section>
+      ${therapyHero()}
+      ${therapyVariantA()}
+      ${therapyContact()}
     </div>`,
   };
 }
@@ -1338,10 +1410,10 @@ const routes = {
       { ...sportsTherapyContinuous, scrollTarget },
     ]),
   ),
-  "/about": about,
+  "/about": buildAboutPage(),
   "/prices": prices,
   "/price-list": { ...prices, canonical: "/prices" },
-  "/contact": contact,
+  "/contact": buildContactPage(),
 };
 
 Object.entries(legacyPages).forEach(([path, data]) => {
@@ -1385,11 +1457,13 @@ function navigationMarkup(path) {
 }
 
 function updateMetadata(route, path) {
-  const plainTitle = route?.title
+  // metaTitle is the document/SEO title; title is the on-page <h1>. Pages that
+  // only set title keep using it for both.
+  const plainTitle = (route?.metaTitle ?? route?.title)
     ?.replace(/<br\s*\/?>/gi, " ")
     .replace(/<[^>]+>/g, "");
   document.title = plainTitle
-    ? plainTitle.startsWith("NJH ") || plainTitle.includes("| NJH")
+    ? plainTitle.includes("NJH")
       ? plainTitle
       : `${plainTitle} | NJH`
     : "NJH Sports Therapy & Pilates";
@@ -1482,7 +1556,6 @@ export function renderRoute() {
 }
 
 export function initPageFeatures() {
-
   const form = document.querySelector("[data-enquiry-form]");
   if (!form) return;
 

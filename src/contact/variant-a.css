@@ -1,0 +1,217 @@
+/* Variant A — Reassurance. Everything scoped under .cv-a.
+
+   One continuous light field, no separate hero band. Mobile-first: a single
+   column reading intro → form → details. The two-column split and the
+   re-placement of the details under the intro only happen once there is room. */
+
+.cv-a__main {
+  padding-block: calc(var(--cv-header-h) + var(--space-m)) var(--space-section);
+  background: var(--paper);
+}
+
+.cv-a__grid {
+  display: grid;
+  gap: var(--space-l);
+}
+
+/* ---- Intro ---- */
+
+.cv-a__intro h1 {
+  max-width: 14ch;
+  margin-block: var(--space-s) 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-4);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+}
+
+.cv-a__lede {
+  max-width: 42ch;
+  margin-block: var(--space-s) 0;
+  color: var(--ink-soft);
+  font-size: var(--step-1);
+  line-height: var(--lh-body);
+}
+
+/* ---- Call strip ---- */
+
+.cv-a__call {
+  margin-block-start: var(--space-m);
+}
+
+.cv-a__call-btn {
+  display: flex;
+  min-height: 64px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14px 24px;
+  border-radius: var(--radius-card);
+  background: var(--brand);
+  color: #fff;
+  text-decoration: none;
+  transition:
+    background var(--dur-fast, 160ms) var(--ease-out),
+    transform var(--dur-fast, 160ms) var(--ease-out);
+}
+
+.cv-a__call-btn:hover,
+.cv-a__call-btn:focus-visible {
+  background: var(--brand-strong);
+}
+
+.cv-a__call-btn:active {
+  transform: translateY(1px);
+}
+
+.cv-a__call-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  opacity: 0.78;
+  text-transform: uppercase;
+}
+
+.cv-a__call-number {
+  font-size: var(--step-2);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  /* A phone number broken across two lines stops reading as a phone number. */
+  white-space: nowrap;
+}
+
+.cv-a__call-alt {
+  margin-block-start: var(--space-xs);
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+}
+
+/* ---- Details ---- */
+
+.cv-a__details {
+  padding-block-start: var(--space-m);
+  border-block-start: 1px solid var(--line);
+}
+
+.cv-a__details h3 {
+  margin: 0 0 var(--space-xs);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.cv-a__details h3 + * {
+  margin-block-end: var(--space-m);
+}
+
+.cv-a__email {
+  margin: 0;
+}
+
+.cv-a__email a {
+  color: var(--brand-strong);
+  font-size: var(--step-0);
+  overflow-wrap: anywhere;
+}
+
+.cv-a__places {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-s);
+  list-style: none;
+}
+
+.cv-a__places li {
+  display: grid;
+  gap: 2px;
+}
+
+.cv-a__places strong {
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.cv-a__places span {
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+
+.cv-a__safety {
+  margin-block: var(--space-m) 0;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.55;
+}
+
+/* ---- Form ---- */
+
+.cv-a__form {
+  align-content: start;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.cv-a__form-title {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  grid-column: 1 / -1;
+  letter-spacing: -0.01em;
+}
+
+.cv-a__form textarea::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.62;
+}
+
+@media (min-width: 900px) {
+  .cv-a__main {
+    padding-block: calc(var(--cv-header-h) + var(--space-l))
+      calc(var(--space-section) * 1.1);
+  }
+
+  /* The label-beside-number arrangement the old full-width hero could afford
+     does not fit this column, so the button stays stacked at every width and
+     hugs its content rather than stretching across the column. */
+  .cv-a__call-btn {
+    justify-self: start;
+  }
+
+  .cv-a__call {
+    display: grid;
+    justify-items: start;
+  }
+
+  /* DOM order is intro → form → details for the phone. Here the details go
+     back under the intro in column one, and the form spans both rows. */
+  .cv-a__grid {
+    align-items: start;
+    column-gap: var(--space-l);
+    row-gap: var(--space-m);
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+
+  .cv-a__intro {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .cv-a__details {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .cv-a__form {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}

@@ -1,0 +1,17 @@
+/* Contact page — shared shell only.
+
+   Everything specific to the page lives in variant-a.css, scoped under .cv-a.
+   Variants B and C, and the review switcher this file used to own, went when
+   A was chosen — including the switcher's bottom clearance, which without the
+   switcher is just a white band above the footer. */
+
+@import "./variant-a.css";
+
+.contact-variant {
+  /* .site-header is position:absolute and overlays the top of the page, so
+     the first section has to pad past it. Kept as a local custom property
+     rather than a global token: this must not become a new shared surface
+     while other sessions are editing style.css. Value mirrors .site-header's
+     own height. */
+  --cv-header-h: clamp(86px, 10vw, 118px);
+}
