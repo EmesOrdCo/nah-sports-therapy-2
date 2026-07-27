@@ -2,7 +2,9 @@ import "./fonts.css";
 import "./style.css";
 import "./about/about.css";
 import { initPageFeatures, renderRoute } from "./site-content.js";
+import { observeBase, routePath } from "./base-path.js";
 
+observeBase();
 const routeState = renderRoute();
 document.documentElement.classList.add("js");
 
@@ -158,8 +160,8 @@ const sectionLinks = [
         : "";
   return (
     url.hash &&
-    (url.pathname === window.location.pathname ||
-      (continuousPath && url.pathname === continuousPath))
+    (routePath(url.pathname) === routePath() ||
+      (continuousPath && routePath(url.pathname) === continuousPath))
   );
 });
 const observedSections = sectionLinks
@@ -222,9 +224,9 @@ const legacyTherapySections = {
 };
 const initialSection =
   routeState.scrollTarget ||
-  legacyPilatesSections[window.location.pathname] ||
-  legacyClinicsSections[window.location.pathname] ||
-  legacyTherapySections[window.location.pathname] ||
+  legacyPilatesSections[routePath()] ||
+  legacyClinicsSections[routePath()] ||
+  legacyTherapySections[routePath()] ||
   window.location.hash.replace(/^#/, "");
 if (initialSection) {
   const scrollToInitialSection = () => {

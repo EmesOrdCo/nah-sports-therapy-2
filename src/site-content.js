@@ -1,6 +1,7 @@
 import { legacyPages } from "./legacy-content.js";
 import { buildAboutPage } from "./about/index.js";
 import { buildContactPage } from "./contact/index.js";
+import { routePath } from "./base-path.js";
 
 const BUSINESS = {
   phoneDisplay: "07881 821 901",
@@ -1504,7 +1505,7 @@ function hydrateShell(path) {
 }
 
 export function renderRoute() {
-  const path = escapePath(window.location.pathname);
+  const path = escapePath(routePath());
   const route = routes[path];
   if (path === "/") {
     document.body.classList.add("has-expanded-nav");
