@@ -2,7 +2,7 @@
 // serves it from a subfolder. These helpers translate between the two at runtime,
 // so the content modules can keep writing plain absolute paths.
 
-// "/Physio-Website" in the Pages build, "" when served from a domain root.
+// "/njh-sports-therapy" in the Pages build, "" when served from a domain root.
 export const BASE = import.meta.env.BASE_URL.replace(/\/+$/, "");
 
 /** Strip the deploy base off a pathname so it can be matched against a route. */
