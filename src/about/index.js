@@ -1,10 +1,10 @@
 /* About page.
 
    Five arrangements were built for review (variant-a…variant-e). Dan chose
-   E — the interview — and the review switcher is gone, so `/about` now renders
-   E directly. variant-a…variant-d are still on disk for reference but are no
-   longer imported, which keeps them out of the bundle; delete them once E is
-   folded back into site-content.js as a plain page. */
+   E — the interview — so the switcher, the variant map and the other four
+   modules are gone and `/about` renders E directly. Variant E still owns its
+   whole page and scopes its CSS under .av-e; fold it back into site-content.js
+   as a plain page whenever the extra directory stops earning its keep. */
 
 import * as about from "./variant-e.js";
 
