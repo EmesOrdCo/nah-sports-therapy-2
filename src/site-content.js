@@ -2,6 +2,7 @@ import { legacyPages } from "./legacy-content.js";
 import { buildAboutPage } from "./about/index.js";
 import { buildContactPage } from "./contact/index.js";
 import { routePath } from "./base-path.js";
+import { REVIEWS, voicesItems, voicesSwitch } from "./reviews.js";
 
 const BUSINESS = {
   phoneDisplay: "07881 821 901",
@@ -24,7 +25,6 @@ const navGroups = [
       ["Pre & postnatal Pilates", "/pilates#pre-postnatal"],
       ["Pilates for golfers", "/pilates#golfers"],
       ["Practical details", "/pilates#practical"],
-      ["Pilates retreats", "/pilates#retreats"],
     ],
   },
   {
@@ -46,7 +46,6 @@ const navGroups = [
       ["Myofascial Release", "/sports-therapy#myofascial-release"],
       ["What to expect", "/sports-therapy#what-to-expect"],
       ["Kinesiology Taping", "/sports-therapy#kinesiology-taping"],
-      ["Workplace massage", "/sports-therapy#workplace"],
       ["Treatment prices", "/sports-therapy#practical"],
     ],
   },
@@ -328,27 +327,6 @@ const policies = page(
   </div></section>${cta("Have a question about a policy?")}`,
 );
 
-const clinics = page(
-  {
-    title: "Clinic Locations | NJH",
-    description:
-      "Find NJH Sports Therapy and Pilates locations in Studham and Berkhamsted.",
-    eyebrow: "Clinic locations",
-    title: "NJH clinics in Berkhamsted",
-    intro:
-      "Appointments are available in Studham and at established Berkhamsted locations. Contact Natasha to confirm the right setting for your session.",
-  },
-  `<section class="location-section"><div class="section-shell">
-    <header class="section-intro" data-reveal><h2>Where to find us</h2></header>
-    <div class="location-grid">
-      <article data-reveal><span>01</span><h3>Studham Pilates Studio</h3><p>Studham, near Whipsnade</p><p>Sports Therapy, individual Pilates and small-group Pilates in a calm private studio.</p><a href="/pilates#studio" class="text-link">Studio details <span>→</span></a></article>
-      <article data-reveal><span>02</span><h3>Berkhamsted Physiotherapy & Sports Injury Clinic</h3><address>36A Lower Kings Road<br>Berkhamsted, Hertfordshire<br>HP4 2AA</address><a href="https://www.google.com/maps/search/?api=1&query=36A+Lower+Kings+Road+Berkhamsted+HP4+2AA" class="text-link" target="_blank" rel="noreferrer">Open map <span>↗</span></a></article>
-      <article data-reveal><span>03</span><h3>Sportspace Berkhamsted</h3><address>Lagley Meadow<br>Douglas Gardens<br>Berkhamsted, Hertfordshire<br>HP4 3QQ</address><a href="https://www.google.com/maps/search/?api=1&query=Sportspace+Berkhamsted+HP4+3QQ" class="text-link" target="_blank" rel="noreferrer">Open map <span>↗</span></a></article>
-    </div>
-  </div></section>
-  <section class="contact-strip"><div class="section-shell"><p>For appointments, call Natasha</p><a href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div></section>${cta()}`,
-);
-
 const partnerLinks = page(
   {
     title: "Professional Links | NJH",
@@ -366,85 +344,6 @@ const partnerLinks = page(
   </div></section>${cta()}`,
 );
 
-const charity = page(
-  {
-    title: "Charity Work | NJH",
-    description:
-      "NJH supports local fundraising events with pre- and post-event sports massage.",
-    eyebrow: "Charity work",
-    title: "Charity work",
-    intro:
-      "NJH is pleased to support local charities and community events where time and availability allow.",
-    parent: crumbs.clinics,
-  },
-  `${section(
-    "Community support",
-    "Practical care for a good cause.",
-    `<p>NJH has helped local fundraising through pre- and post-event sports massage at triathlons, marathons and 10K events.</p>
-     <p>If you are organising a charity event and would like to discuss support, please get in touch with the event details, location and expected number of participants.</p>`,
-  )}${cta("Planning a charity event?", "Share the details and Natasha will let you know whether NJH can help.")}`,
-);
-
-const testimonialData = [
-  {
-    type: "Sports Therapy & Pilates",
-    quote:
-      "After almost 3 months of weekly classes and 3 sports therapy sessions I am amazed at the range of pain free movement I now have.",
-    by: "Sarah, manager",
-  },
-  {
-    type: "Pilates",
-    quote:
-      "My general fitness level has really improved. Natasha is an excellent teacher and I would have no hesitation in recommending her.",
-    by: "Nicola",
-  },
-  {
-    type: "Sports Therapy",
-    quote:
-      "Her treatment hugely helped my long standing shoulder injury, increasing my range and ease of movement. I am now able to work better in the gym and play tennis without pain.",
-    by: "Laura, physiotherapist",
-  },
-  {
-    type: "Pilates",
-    quote:
-      "I come away feeling taller, stronger and straighter, sometimes I even have to adjust my rear-view mirror before driving off after a session to accommodate my new found height!",
-    by: "Tessa, teacher",
-  },
-  {
-    type: "Sports Therapy",
-    quote:
-      "Natasha also takes the time to ensure you understand the treatment being performed and its intended outcome. I am pleased to say I am now pain free and I would recommend Natasha to anyone.",
-    by: "Danny, chartered surveyor",
-  },
-  {
-    type: "Rehabilitation",
-    quote:
-      "Natasha quickly and expertly assessed my symptoms, looking at how my body functioned as a whole to treat the source of pain. Natasha also gave me some great follow up exercises to strengthen my core and improve my range of movement.",
-    by: "Tom, competitive rower",
-  },
-];
-
-const testimonials = page(
-  {
-    title: "Client Testimonials | NJH",
-    description:
-      "Read what NJH Sports Therapy and Pilates clients say about their care and movement.",
-    eyebrow: "Testimonials",
-    title: "Client testimonials",
-    intro:
-      "Experiences from people who have used Sports Therapy, Pilates and rehabilitation support with NJH.",
-    parent: crumbs.clinics,
-    tone: "dark",
-  },
-  `<section class="testimonial-wall"><div class="section-shell">${testimonialData
-    .map(
-      (item, index) => `<blockquote data-reveal>
-      <span>${String(index + 1).padStart(2, "0")} / ${item.type}</span>
-      <p>“${item.quote}”</p><footer>${item.by}</footer>
-    </blockquote>`,
-    )
-    .join("")}</div></section>${cta("Ready to start your own progress?")}`,
-);
 
 const therapyHub = page(
   {
@@ -647,76 +546,6 @@ const about = page(
   ])}${cta("Start a conversation with Natasha.")}`,
 );
 
-const retreats = page(
-  {
-    title: "Pilates Retreats",
-    description:
-      "Past NJH Pilates retreats and how to register interest in future retreat dates.",
-    eyebrow: "Pilates retreats",
-    title: "Pilates retreats",
-    intro:
-      "NJH retreats have brought Pilates into calm, restorative settings in the UK and Italy.",
-    parent: crumbs.pilates,
-  },
-  `${section(
-    "Retreat experiences",
-    "Space for unhurried practice.",
-    `<p>Previous NJH retreats have combined attentive Pilates with time away from everyday routines, including events at Brooklands Barn and in Italy.</p>
-     <p>The dates shown on the former website were for past events and are no longer presented as current availability. Contact Natasha if you would like to register interest in any future retreat.</p>`,
-  )}
-  ${band("A retreat can offer", "Time away, thoughtfully used", [
-    "Longer, unhurried movement sessions",
-    "A calm setting away from daily demands",
-    "Individual attention within a shared experience",
-    "Time to rest and reconnect with your practice",
-  ])}${cta(
-    "Interested in a future retreat?",
-    "Send Natasha a note to register your interest and hear about any new dates.",
-  )}`,
-);
-
-const workplaceMassage = page(
-  {
-    title: "Workplace Sports Massage",
-    description:
-      "On-site Sports Therapy massage appointments for offices and workplace teams.",
-    eyebrow: "Workplace massage",
-    title: "Workplace massage",
-    intro:
-      "Private, on-site soft-tissue appointments for organisations that want to make practical wellbeing support easier to access.",
-    parent: crumbs.therapy,
-  },
-  `${section(
-    "On-site appointments",
-    "Personal care in the workplace.",
-    `<p>Busy schedules can make it difficult to attend a clinic. Where suitable, NJH can provide treatments in a private meeting room or another quiet, appropriate space within the workplace.</p>
-     <p>Sessions can help employees address muscular tension or existing concerns without a separate journey during the working day. Availability, room requirements, timings and fees are agreed with the organisation in advance.</p>`,
-  )}
-  ${cards(
-    [
-      {
-        title: "Private",
-        text: "Appointments take place in a quiet, appropriate room supplied by the workplace.",
-        icon: "hands",
-      },
-      {
-        title: "Convenient",
-        text: "A practical format designed around the working day and agreed appointment slots.",
-        icon: "control",
-      },
-      {
-        title: "Tailored",
-        text: "Treatment remains individual and assessment-led, even within a workplace programme.",
-        icon: "assess",
-      },
-    ],
-    "editorial-cards--contained",
-  )}${cta(
-    "Discuss workplace appointments.",
-    "Share your team size, location and preferred format so Natasha can advise what is practical.",
-  )}`,
-);
-
 const prices = page(
   {
     title: "Prices | NJH",
@@ -739,7 +568,7 @@ const prices = page(
       <div class="price-row"><span>One-to-one, 1 hour</span><strong>£85</strong></div>
       <div class="price-row"><span>Duet, shared with a friend or partner</span><strong>£95</strong></div>
       <div class="price-row"><span>Initial assessment before small group</span><strong>£85</strong></div>
-      <div class="price-row"><span>Small-group session</span><strong>£21</strong></div>
+      <div class="price-row"><span>Small-group session</span><strong>£22</strong></div>
       <small>Small-group classes are paid in termly blocks and are non-refundable once your place is reserved.</small>
     </article>
   </div></section>
@@ -822,13 +651,13 @@ function buildPilatesContinuousPage() {
         <div class="section-shell pilates-studio__grid">
           <div class="pilates-studio__copy" data-reveal>
             <h2 id="studio-title">The Studham studio</h2>
-            <p>January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
+            <p>After working in physio clinics for many years, January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
             <p>Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, Individual or Small Group Pilates sessions, this is a place to restore muscular wellbeing and improve posture.</p>
             <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Call ${BUSINESS.phoneDisplay} <span>&#8599;</span></a>
           </div>
           <figure class="pilates-studio__shot" data-reveal>
             <img src="/images/pilates-studio.webp" alt="The NJH Pilates studio in Studham" width="1200" height="900" loading="lazy">
-            <figcaption>Light, private and considered &middot; Studham, near Whipsnade</figcaption>
+            <figcaption>Light, private, considered &middot; Studham, near Whipsnade</figcaption>
           </figure>
         </div>
       </section>
@@ -872,7 +701,7 @@ function buildPilatesContinuousPage() {
         <div class="section-shell">
           <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
             <h2 id="group-title">Small group Pilates</h2>
-            <p>Class sizes are small to ensure close attention to posture and movement during each exercise where necessary.</p>
+            <p>Class sizes are small to ensure close attention to posture and movement during each exercise where necessary. Sessions focus on precise, controlled movement to improve your joint range of movement and help you feel stronger.</p>
           </header>
           <div class="pilates-group-layout">
             <figure class="pilates-group-shot" data-reveal>
@@ -907,7 +736,7 @@ function buildPilatesContinuousPage() {
               <span>Postnatal</span>
               <h3>After birth</h3>
               <p>After the six-week GP check, or 8–12 weeks following a Caesarean section.</p>
-              <ul><li>Restore abdominal strength after birth</li><li>Improve conditions such as diastasis recti</li></ul>
+              <ul><li>Restore abdominal strength after birth</li><li>Strengthen the pelvic floor</li><li>Improve conditions such as diastasis recti</li></ul>
             </article>
           </div>
           <p class="pilates-dual__note" data-reveal>Available individually or for your own small group of NCT, prenatal or postnatal friends. Maximum 1:7 to ensure close attention and correction when necessary.</p>
@@ -941,7 +770,7 @@ function buildPilatesContinuousPage() {
               <div class="pilates-price"><p>One-to-one Pilates</p><strong>£85</strong></div>
               <div class="pilates-price"><p>Duet with a friend or partner</p><strong>£95</strong></div>
               <div class="pilates-price"><p>Initial 1:1 before Small Group Pilates</p><strong>£85</strong></div>
-              <div class="pilates-price"><p>Small Group Pilates session</p><strong>£21</strong></div>
+              <div class="pilates-price"><p>Small Group Pilates session</p><strong>£22</strong></div>
               <small>Small Group sessions are paid for in termly blocks.</small>
             </article>
             <article data-reveal>
@@ -950,29 +779,6 @@ function buildPilatesContinuousPage() {
               <details><summary>Late arrival <b>+</b></summary><p>If you are late for your 1:1 or 2:1, the session still falls within the scheduled appointment time. If the practitioner misses a scheduled 1:1 appointment, you will receive a free session.</p></details>
               <details><summary>Small Group blocks <b>+</b></summary><p>Small Group Pilates blocks are paid for in termly blocks. Once payment is received, your place is reserved for the entire block and no refunds are given.</p></details>
               <details><summary>Clients under 16 <b>+</b></summary><p>Clients under 16 must be accompanied by a parent who will be required to sign a parental consent form.</p></details>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="pilates-retreats" id="retreats" aria-labelledby="retreats-title">
-        <div class="section-shell">
-          <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
-            <h2 id="retreats-title">Retreats archive</h2>
-            <p>Previous NJH Pilates retreats in Sussex and Italy. These events took place in 2020 and 2021 and are shown as part of the NJH archive.</p>
-          </header>
-          <div class="pilates-retreats__grid">
-            <article data-reveal>
-              <figure>${legacyImage("/retreats", 0)}</figure>
-              <span>Arundel · January 2020</span>
-              <h3>Brooklands Barn, Sussex</h3>
-              <p>A restored 19th-century barn with an indoor pool, outdoor barrel sauna, Pilates studio and treatment rooms. The retreat included two nights, meals and four Small Group Pilates sessions.</p>
-            </article>
-            <article data-reveal>
-              <figure>${legacyImage("/retreats", 1)}</figure>
-              <span>Casperia · June 2021</span>
-              <h3>Forani Palace, Italy</h3>
-              <p>A 15th-century palazzo with daily Small Group Pilates, an outdoor pool, indoor cave studio and outdoor Pilates platform.</p>
             </article>
           </div>
         </div>
@@ -992,28 +798,19 @@ function buildPilatesContinuousPage() {
 const pilatesContinuous = buildPilatesContinuousPage();
 
 function buildClinicsContinuousPage() {
-  const clinicTestimonials = [
-    testimonialData[0],
-    testimonialData[1],
-    testimonialData[2],
-    testimonialData[3],
-    testimonialData[4],
-    testimonialData[5],
-  ];
-
   return {
     title: "NJH Clinics",
     description:
-      "NJH Sports Therapy and Pilates clinic locations, client testimonials, professional links and charity work.",
+      "The NJH Sports Therapy and Pilates studio in Studham, plus client testimonials, professional links and charity work.",
     canonical: "/clinics",
     html: `<div class="clinics-longform">
       <section class="clinics-hero" id="overview" aria-labelledby="clinics-title">
         <div class="section-shell clinics-hero__inner">
           <div class="clinics-hero__grid">
             <div class="clinics-hero__content">
-              <h1 id="clinics-title">NJH clinics in Berkhamsted.</h1>
+              <h1 id="clinics-title">The NJH clinic in Studham.</h1>
               <div class="clinics-hero__footer">
-                <p>Professional, personal Sports Therapy and Pilates care across two established Berkhamsted locations.</p>
+                <p>Professional, personal Sports Therapy and Pilates care from one private studio in Studham, near Whipsnade.</p>
                 <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Appointments · ${BUSINESS.phoneDisplay} <span>↗</span></a>
               </div>
             </div>
@@ -1024,36 +821,26 @@ function buildClinicsContinuousPage() {
         </div>
       </section>
 
-      <section class="clinics-locations" id="locations" aria-label="Clinic locations">
+      <section class="clinics-locations" id="locations" aria-label="Clinic location">
         <div class="section-shell">
           <ol class="clinic-list">
             <li data-reveal>
-              <h2>Berkhamsted Physiotherapy &amp; Sports Injury Clinic</h2>
-              <address>36A Lower Kings Road, Berkhamsted, Herts HP4 2AA</address>
-            </li>
-            <li data-reveal>
-              <h2>Sportspace Berkhamsted</h2>
-              <address>Lagley Meadow, Douglas Gardens, Berkhamsted, Herts HP4 3QQ</address>
+              <h2>The Studham studio</h2>
+              <address>Studham, near Whipsnade</address>
             </li>
           </ol>
+          <p class="clinic-list__note">Sports Therapy, individual Pilates and small-group Pilates, all in one private studio. Full directions are sent when your appointment is confirmed. <a href="/pilates#studio">Studio details</a></p>
         </div>
       </section>
 
-      <section class="voices" id="testimonials" aria-labelledby="clinics-testimonials-title">
+      <section class="voices voices--filterable" id="testimonials" aria-labelledby="clinics-testimonials-title">
         <svg class="voices__thread" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false">
           <path class="voices__thread-line" d="M58 0 C 32 92, 30 182, 56 272 C 82 362, 80 452, 46 542 C 18 626, 22 716, 54 802 C 78 866, 76 936, 60 1000" pathLength="1" />
         </svg>
         <div class="voices__inner">
           <h2 class="voices__title" id="clinics-testimonials-title">In clients&rsquo; own words</h2>
-          ${clinicTestimonials
-            .map((item, index) => {
-              const offset = ["", " voices__item--right", " voices__item--indent"][index % 3];
-              return `<figure class="voices__item${offset}" data-reveal>
-                <blockquote>&ldquo;${item.quote}&rdquo;</blockquote>
-                <figcaption>${item.by} &middot; ${item.type}</figcaption>
-              </figure>`;
-            })
-            .join("")}
+          ${voicesSwitch()}
+          <div class="voices__list" data-review-list>${voicesItems(REVIEWS)}</div>
         </div>
       </section>
 
@@ -1072,7 +859,7 @@ function buildClinicsContinuousPage() {
         <div class="pilates-orbit clinics-charity__orbit" aria-hidden="true"><span></span><i></i></div>
         <div class="section-shell clinics-charity__grid">
           <div data-reveal><h2 id="charity-title">Charity work</h2></div>
-          <div data-reveal><p>NJH Sports Therapy &amp; Pilates is keen to help raise money for charities in the area, giving pre and post-event sports massage at triathlons, marathons and 10K runs where possible.</p><p>Please contact Natasha if you would like to discuss this further.</p><a class="button-link" href="/contact">Discuss an event <span>↗</span></a></div>
+          <div data-reveal><p>NJH Sports Therapy &amp; Pilates is keen to help raise money for charities in the area. Where possible, Natasha donates a Pilates 1:1 or duet voucher as a silent auction or raffle prize.</p><p>Please contact Natasha if you would like to discuss this further.</p><a class="button-link" href="/contact">Get in touch <span>↗</span></a></div>
         </div>
       </section>
     </div>`,
@@ -1110,8 +897,9 @@ const THERAPY = {
     "Improve posture",
     "Reduce tension and pain",
     "Improve flexibility",
+    "Improve joint range of movement",
     "Support recovery",
-    "Address scar restriction",
+    "Release restriction of scar tissue",
   ],
   conditions: [
     "Frozen shoulder",
@@ -1126,6 +914,7 @@ const THERAPY = {
     "Neck stiffness and shoulder injuries",
     "Sports injuries and postural pain",
     "Muscle spasms and recurring restriction",
+    "Post-surgical scar tissue, including after breast cancer surgery",
     "Improved joint movement and breathing",
   ],
   steps: [
@@ -1168,7 +957,7 @@ const therapyHero = () => `<section class="therapy-hero" id="overview" aria-labe
     <div class="therapy-hero__content"><h1 id="therapy-title">Find what’s driving the pain, then treat it and rebuild.</h1><p>Sports Therapy provides relief from musculoskeletal pain and dysfunction through the use of various massage and soft-tissue techniques.</p><a class="pilates-arrow-link" href="#treatment">Explore treatment <span>↓</span></a></div>
     <figure class="therapy-hero__media therapy-hero__media--figure"><object class="therapy-hero__figure" type="image/svg+xml" data="/images/njh-signature-motion-figure-animated.svg" aria-label="Animated line drawing of a figure within orbiting rings" tabindex="-1"></object></figure>
   </div>
-  <nav class="section-shell therapy-index" aria-label="On this page"><a href="#treatment"><span>01</span>Treatment</a><a href="#myofascial-release"><span>02</span>Myofascial release</a><a href="#what-to-expect"><span>03</span>What to expect</a><a href="#kinesiology-taping"><span>04</span>Taping</a><a href="#workplace"><span>05</span>Workplace</a></nav>
+  <nav class="section-shell therapy-index" aria-label="On this page"><a href="#treatment"><span>01</span>Treatment</a><a href="#myofascial-release"><span>02</span>Myofascial release</a><a href="#what-to-expect"><span>03</span>What to expect</a><a href="#kinesiology-taping"><span>04</span>Taping</a></nav>
 </section>`;
 
 const therapyContact = () => `<section class="pilates-contact therapy-contact" id="contact" aria-labelledby="therapy-contact-title"><div class="pilates-orbit pilates-orbit--contact" aria-hidden="true"><span></span><i></i></div><div class="section-shell pilates-contact__grid"><div data-reveal><h2 id="therapy-contact-title">Tell us what you’d like to move beyond.</h2></div><div data-reveal><p>Whatever your injury or postural pain, contact Natasha to discuss the right place to begin.</p><a class="button-link" href="/contact">Send an enquiry <span>↗</span></a><a class="pilates-contact__phone" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div></div></section>`;
@@ -1237,8 +1026,7 @@ function therapyVariantA() {
   </section>
 
   <div class="st-section st-section--tint">
-    <div class="section-shell st-pair">
-      <section class="st-card" id="workplace" aria-labelledby="workplace-title" data-reveal>${eyebrow("On site")}<h2 id="workplace-title">Workplace massage</h2><p>On-site massage treatments can be carried out in the privacy of a workplace meeting room or another quiet office area.</p><p>This offers a practical way to address injuries while continuing to fulfil busy work commitments, and gives employers an opportunity to support staff wellbeing.</p><a class="pilates-arrow-link" href="/contact">Discuss workplace treatment <span>→</span></a></section>
+    <div class="section-shell">
       <section class="st-card" id="practical" aria-labelledby="therapy-practical-title" data-reveal>${eyebrow("Appointments")}<h2 id="therapy-practical-title">Treatment prices</h2><p>Appointment length is selected around the complexity of the presentation.</p><ul class="st-rows st-rows--price">${prices
         .map(
           ([label, amount, featured]) =>
@@ -1371,7 +1159,10 @@ const pilatesLegacyTargets = {
   "/blank": "pre-postnatal",
   "/pilates-for-golfers": "golfers",
   "/clinic-policies": "practical",
-  "/retreats": "retreats",
+  // Retreat content is archived, so there is no section to land on — the key
+  // stays so /retreats keeps resolving to /pilates instead of falling through
+  // to the legacy retreat page.
+  "/retreats": "",
 };
 
 const clinicsLegacyTargets = {
@@ -1386,7 +1177,9 @@ const therapyLegacyTargets = {
   "/myofascial-release": "myofascial-release",
   "/what-to-expect": "what-to-expect",
   "/kinesiology-taping": "kinesiology-taping",
-  "/office-based-sports-massage": "workplace",
+  // Workplace massage was removed — key retained for the same reason as
+  // "/retreats" above, so the legacy page is not resurrected.
+  "/office-based-sports-massage": "",
 };
 
 const routes = {

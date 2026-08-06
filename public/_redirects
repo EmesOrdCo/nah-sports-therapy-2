@@ -4,7 +4,7 @@
 /blank  /pilates#pre-postnatal  301
 /pilates-for-golfers  /pilates#golfers  301
 /clinic-policies  /pilates#practical  301
-/retreats  /pilates#retreats  301
+/retreats  /pilates  301
 /testimonial  /clinics#testimonials  301
 /links  /clinics#links  301
 /charity-work  /clinics#charity  301
@@ -13,5 +13,5 @@
 /myofascial-release  /sports-therapy#myofascial-release  301
 /what-to-expect  /sports-therapy#what-to-expect  301
 /kinesiology-taping  /sports-therapy#kinesiology-taping  301
-/office-based-sports-massage  /sports-therapy#workplace  301
+/office-based-sports-massage  /sports-therapy  301
 /*  /index.html  200

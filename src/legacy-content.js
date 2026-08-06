@@ -270,7 +270,7 @@ Small group Pilates blocks are paid for in termly blocks. Once payment is receiv
     parent: "clinics",
     copy: `Charity Work
 
-NJH Sports Therapy & Pilates is keen to help raise money for charities in the area, giving pre and post event sports massage at events such as triathlons, marathons and 10k runs where possible.
+NJH Sports Therapy & Pilates is keen to help raise money for charities in the area. Where possible, Natasha donates a Pilates 1:1 or duet voucher as a silent auction or raffle prize.
 
 Please contact Natasha if you would like to discuss this further.
 
@@ -278,29 +278,14 @@ Please see link for article featured in the Institute of Sport and Remedial Mass
   },
   "/clinics": {
     parent: "clinics",
-    headings: [
-      "Berkhamsted Physiotherapy\nand Sports Injury Clinic",
-      "Sportspace Berkhamsted",
-    ],
+    headings: ["The Studham studio"],
     copy: `Clinics - for an appointment call 07881 821 901
 
-Berkhamsted Physiotherapy
-and Sports Injury Clinic
+The Studham studio
 
-36A Lower Kings Road Berkhamsted Herts
-HP4 2AA
+Studham, near Whipsnade
 
-Location details
-
-Sportspace Berkhamsted
-
-Lagley Meadow
-Douglas Gardens
-Berkhamsted
-Herts
-HP4 3QQ
-
-Location Details`,
+Full directions are sent when your appointment is confirmed.`,
   },
   "/links": {
     parent: "clinics",

@@ -6,7 +6,6 @@ import {
   PRACTICE,
   PULLQUOTES,
   QUALIFICATIONS,
-  CHARITY,
   WHERE,
   PORTRAIT,
   FIRST_VISIT,
@@ -134,7 +133,7 @@ export function build() {
         </nav>
         <h1 data-reveal>${NAME}</h1>
         <p class="av-e__framing" data-reveal>
-          Sports Therapist and Certified STOTT Pilates instructor, Studham and Berkhamsted.
+          Sports Therapist and Certified STOTT Pilates instructor, Studham.
           Everything people ask before a first appointment, answered in her own words.
         </p>
         <figure class="av-e__portrait-figure" data-reveal>
@@ -165,7 +164,6 @@ export function build() {
         ${pair("What will you actually do?", paras(CARE[1]))}
         ${pair("What are we working towards?", paras(AIM[0], CARE[2]))}
         ${pair("Why do you do it?", paras(PULLQUOTES.passion), " av-e__pair--emphasis")}
-        ${pair("Do you do anything outside the clinic?", paras(CHARITY))}
       </dl>
     </div>
   </section>

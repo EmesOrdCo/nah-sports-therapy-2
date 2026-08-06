@@ -10,28 +10,16 @@ export const BUSINESS = {
   email: "njhsportstherapyandpilates@gmail.com",
 };
 
+/* The studio is also a private home, so it is named by village only — no
+   street address, postcode or map link. Directions go out with the booking
+   confirmation instead. */
 export const PLACES = [
   {
     name: "Studham Pilates Studio",
     lines: ["Studham, near Whipsnade"],
-    note: "Sports Therapy, individual and small-group Pilates.",
+    note: "Sports Therapy, individual and small-group Pilates. Full directions are sent when your appointment is confirmed.",
     href: "/pilates#studio",
     linkLabel: "Studio details",
-  },
-  {
-    name: "Berkhamsted Physiotherapy & Sports Injury Clinic",
-    lines: ["36A Lower Kings Road", "Berkhamsted, Hertfordshire", "HP4 2AA"],
-    map: "https://www.google.com/maps/search/?api=1&query=36A+Lower+Kings+Road+Berkhamsted+HP4+2AA",
-  },
-  {
-    name: "Sportspace Berkhamsted",
-    lines: [
-      "Lagley Meadow",
-      "Douglas Gardens",
-      "Berkhamsted, Hertfordshire",
-      "HP4 3QQ",
-    ],
-    map: "https://www.google.com/maps/search/?api=1&query=Sportspace+Berkhamsted+HP4+3QQ",
   },
 ];
 
@@ -78,7 +66,8 @@ export const SERVICES = [
   },
 ];
 
-export const LOCATION_OPTIONS = ["No preference", "Studham", "Berkhamsted"];
+/* No LOCATION_OPTIONS: with Studham the only location, a "preferred location"
+   field had nothing to choose between, so the form field was removed. */
 export const REPLY_OPTIONS = ["Email", "Phone"];
 
 export const SAFETY_NOTE =

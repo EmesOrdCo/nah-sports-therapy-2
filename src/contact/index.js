@@ -17,7 +17,7 @@ export function buildContactPage() {
   return {
     metaTitle: "Contact NJH Sports Therapy & Pilates",
     description:
-      "Contact Natasha Hadland to discuss Sports Therapy or Pilates appointments in Studham and Berkhamsted.",
+      "Contact Natasha Hadland to discuss Sports Therapy or Pilates appointments at the Studham studio.",
     canonical: "/contact",
     tone: contact.meta.tone || "light",
     html: `<div class="contact-variant cv-a">${contact.build()}</div>`,

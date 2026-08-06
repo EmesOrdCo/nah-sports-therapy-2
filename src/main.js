@@ -3,10 +3,47 @@ import "./style.css";
 import "./about/about.css";
 import { initPageFeatures, renderRoute } from "./site-content.js";
 import { observeBase, routePath } from "./base-path.js";
+import { FEATURED, reviewsFor, voicesItems } from "./reviews.js";
 
 observeBase();
 const routeState = renderRoute();
 document.documentElement.classList.add("js");
+
+/* The homepage ships its five featured quotes as static markup so they survive
+   without JS. When JS runs, replace them from reviews.js so there is only one
+   place to edit a review. Has to happen before revealItems is collected below,
+   or the new figures never get observed. */
+if (routeState.isHome) {
+  const inner = document.querySelector(".voices__inner");
+  if (inner) {
+    inner.querySelectorAll(".voices__item").forEach((item) => item.remove());
+    inner.insertAdjacentHTML("beforeend", voicesItems(FEATURED));
+  }
+}
+
+/* Service switch on the /clinics thread. Re-renders rather than hiding, because
+   the left / right / indent rhythm is positional — hiding items in place leaves
+   two right-aligned quotes together and the composition breaks. */
+const reviewList = document.querySelector("[data-review-list]");
+if (reviewList) {
+  const buttons = [...document.querySelectorAll("[data-review-filter]")];
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const filter = button.dataset.reviewFilter;
+      buttons.forEach((other) => {
+        const active = other === button;
+        other.classList.toggle("is-active", active);
+        other.setAttribute("aria-pressed", String(active));
+      });
+      // Rendered already revealed: these have not been through the observer,
+      // and a fade from nothing on every click would read as a page reload.
+      reviewList.innerHTML = voicesItems(reviewsFor(filter), { revealed: true });
+      // The thread is drawn from the band's height, which just changed.
+      window.dispatchEvent(new Event("resize"));
+    });
+  });
+}
 
 const siteLoader = document.querySelector(".site-loader");
 if (!routeState.isHome) {
@@ -207,7 +244,7 @@ const legacyPilatesSections = {
   "/blank": "pre-postnatal",
   "/pilates-for-golfers": "golfers",
   "/clinic-policies": "practical",
-  "/retreats": "retreats",
+  "/retreats": "",
 };
 const legacyClinicsSections = {
   "/testimonial": "testimonials",
@@ -220,7 +257,7 @@ const legacyTherapySections = {
   "/myofascial-release": "myofascial-release",
   "/what-to-expect": "what-to-expect",
   "/kinesiology-taping": "kinesiology-taping",
-  "/office-based-sports-massage": "workplace",
+  "/office-based-sports-massage": "",
 };
 const initialSection =
   routeState.scrollTarget ||

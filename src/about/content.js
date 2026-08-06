@@ -111,54 +111,18 @@ export const CHAPTERS = [
 ];
 
 export const CHARITY =
-  "NJH Sports Therapy &amp; Pilates is keen to help raise money for charities in the area, giving pre and post event sports massage at events such as triathlons, marathons and 10k runs where possible.";
+  "NJH Sports Therapy &amp; Pilates is keen to help raise money for charities in the area. Where possible, Natasha donates a Pilates 1:1 or duet voucher as a silent auction or raffle prize.";
 
+/* Named by village only — the studio is also a private home. See PLACES in
+   contact/content.js for the same rule. */
 export const WHERE = [
   {
     name: "The Studham studio",
     lines: ["A private studio near Whipsnade"],
     href: "/pilates#studio",
   },
-  {
-    name: "Berkhamsted Physiotherapy and Sports Injury Clinic",
-    lines: ["36A Lower Kings Road", "Berkhamsted, Herts HP4 2AA"],
-    href: "/clinics",
-  },
-  {
-    name: "Sportspace Berkhamsted",
-    lines: ["Lagley Meadow, Douglas Gardens", "Berkhamsted, Herts HP4 3QQ"],
-    href: "/clinics",
-  },
 ];
 
-/* Verbatim client words, trimmed only at sentence boundaries. Chosen because
-   each one is about Natasha rather than about a treatment. */
-export const VOICES = [
-  {
-    quote:
-      "I call Natasha my miracle worker. Not only has she released the muscles in my neck and shoulders so I no longer ache constantly, but she has also given me regained movement in my foot following a severely ruptured tendon.",
-    name: "Penny",
-    role: "Marketing Manager",
-  },
-  {
-    quote:
-      "Natasha is the best Pilates teacher I have had over many years — very professional and all exercises are personalised to suit. The facilities are excellent and the classes are very enjoyable.",
-    name: "Jill",
-    role: "‘ageing golfer’",
-  },
-  {
-    quote:
-      "Her attention to detail is second to none and she always manages to suit each exercise to everyone's individual needs, while ensuring proper discipline in the pilates groundwork.",
-    name: "Long-standing client",
-    role: "Sports Therapy & Pilates, three years",
-  },
-  {
-    quote:
-      "She understands her clients' needs and tailors their Pilates exercises to meet those needs. I come away feeling taller, stronger and straighter.",
-    name: "Pilates group member",
-    role: "Studham",
-  },
-];
 
 /* ---------------------------------------------------------------------------
    Practical content — the FAQ half of the page.
@@ -238,7 +202,7 @@ export const PRICE_SUMMARY = {
     { label: "Sports Therapy, up to 30 minutes", value: "£60" },
     { label: "Sports Therapy, up to 90 minutes", value: "£130" },
     { label: "One-to-one Pilates, 1 hour", value: "£85" },
-    { label: "Small group Pilates session", value: "£21" },
+    { label: "Small group Pilates session", value: "£22" },
   ],
   note: "Sunday and Bank Holiday appointments carry an additional £10 surcharge. Please confirm current prices when booking.",
 };

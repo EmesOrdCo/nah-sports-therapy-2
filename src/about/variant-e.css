@@ -150,7 +150,7 @@
 .av-e .av-e__statement {
   padding-block: var(--space-section);
   background: var(--navy);
-  color: var(--surface);
+  color: var(--on-dark);
 }
 
 .av-e .av-e__statement-grid {

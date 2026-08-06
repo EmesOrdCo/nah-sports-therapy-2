@@ -7,10 +7,13 @@
   --font-serif: "STIX Two Text", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --font-sans: "Hanken Grotesk Variable", "Hanken Grotesk", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
 
-  /* ---- Neutrals (cool navy-tinted) ---- */
-  --paper: oklch(99.2% 0.004 275);        /* body bg */
-  --surface: oklch(96.6% 0.010 275);      /* section tint */
-  --surface-2: oklch(96.4% 0.012 275);    /* deeper band */
+  /* ---- Neutrals (light surfaces white; ink stays cool navy-tinted) ---- */
+  --paper: oklch(100% 0 0);               /* body bg */
+  --surface: oklch(100% 0 0);             /* section band */
+  --surface-2: oklch(100% 0 0);           /* deeper band */
+  /* Was the old --surface value. Split out when the light surfaces went white,
+     so text and icons on the navy sections keep their soft off-white. */
+  --on-dark: oklch(96.6% 0.010 275);      /* light text ON DARK ONLY */
   --ink: oklch(23.2% 0.055 277);          /* headings / strong text */
   --ink-soft: oklch(43.5% 0.045 277);     /* secondary text */
   --line: oklch(23.2% 0.055 277 / 0.14);
@@ -201,13 +204,13 @@ a {
 
 .wordmark__mark {
   width: auto;
-  height: clamp(30px, 3vw, 42px);
+  height: clamp(33px, 3.35vw, 47px);
   flex: none;
 }
 
 .wordmark__name {
   font-family: var(--font-serif);
-  font-size: clamp(28px, 2.7vw, 41px);
+  font-size: clamp(31px, 3vw, 46px);
   font-weight: 600;
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-display);
@@ -216,7 +219,7 @@ a {
 .wordmark__descriptor {
   padding-left: 13px;
   border-left: 1px solid rgba(16, 27, 57, 0.26);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 600;
   line-height: 1.35;
   letter-spacing: 0.12em;
@@ -232,7 +235,7 @@ a {
 .site-nav a {
   position: relative;
   padding: 8px 0;
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 500;
   letter-spacing: 0.035em;
   text-decoration: none;
@@ -872,7 +875,7 @@ a {
   position: relative;
   overflow: hidden;
   padding-block: var(--space-section);
-  color: var(--surface);
+  color: var(--on-dark);
   background: var(--ink);
 }
 
@@ -1016,7 +1019,7 @@ a {
   position: fixed;
   height: 76px;
   color: var(--ink) !important;
-  background: rgba(251, 252, 255, 0.9);
+  background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 1px 0 var(--line);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
@@ -1083,7 +1086,7 @@ a {
     padding: 20px var(--page-gutter) 30px;
     gap: 4px;
     border-bottom: 1px solid var(--line);
-    background: rgba(251, 252, 255, 0.96);
+    background: rgba(255, 255, 255, 0.96);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -1174,12 +1177,12 @@ a {
   }
 
   .wordmark__name {
-    font-size: 28px;
+    font-size: 31px;
   }
 
   .wordmark__descriptor {
     padding-left: 9px;
-    font-size: 7px;
+    font-size: 8px;
   }
 
   .fibre-field {
@@ -1561,7 +1564,7 @@ a {
 }
 
 body[data-hero-tone="dark"] .site-header:not(.is-scrolled) {
-  color: var(--surface);
+  color: var(--on-dark);
   border-bottom-color: rgba(255, 255, 255, 0.16);
 }
 
@@ -1704,14 +1707,12 @@ body[data-hero-tone="dark"]
   min-height: min(780px, 86svh);
   padding: clamp(175px, 19vw, 250px) 0 clamp(100px, 11vw, 170px);
   overflow: hidden;
-  background:
-    radial-gradient(circle at 77% 62%, rgba(111, 177, 255, 0.27), transparent 30%),
-    linear-gradient(135deg, #fff 0%, var(--surface-2) 100%);
+  background: #fff;
   isolation: isolate;
 }
 
 .page-hero--dark {
-  color: var(--surface);
+  color: var(--on-dark);
   background:
     radial-gradient(circle at 76% 64%, rgba(76, 129, 255, 0.45), transparent 34%),
     var(--ink);
@@ -2070,7 +2071,7 @@ body[data-hero-tone="dark"]
 
 .content-band {
   padding-block: var(--space-section);
-  color: var(--surface);
+  color: var(--on-dark);
   background:
     radial-gradient(circle at 88% 80%, rgba(55, 110, 244, 0.5), transparent 38%),
     var(--ink);
@@ -2111,7 +2112,7 @@ body[data-hero-tone="dark"]
 
 .page-cta {
   padding-block: var(--space-section);
-  color: var(--surface);
+  color: var(--on-dark);
   background: var(--navy-deep);
 }
 
@@ -2288,7 +2289,7 @@ body[data-hero-tone="dark"]
 }
 
 .contact-strip {
-  color: var(--surface);
+  color: var(--on-dark);
   background: var(--brand);
 }
 
@@ -2683,7 +2684,7 @@ body[data-hero-tone="dark"]
 
   .is-inner-page .site-nav a,
   .has-expanded-nav .site-nav a {
-    font-size: 10px;
+    font-size: 11.5px;
   }
 }
 
@@ -3019,9 +3020,7 @@ body[data-hero-tone="dark"]
   min-height: max(760px, 100svh);
   padding: clamp(104px, 11vw, 138px) 0 clamp(28px, 4vh, 44px);
   overflow: hidden;
-  background:
-    radial-gradient(circle at 79% 35%, rgba(178, 207, 255, 0.34), transparent 30%),
-    linear-gradient(135deg, #fff 0%, var(--surface) 100%);
+  background: #fff;
   isolation: isolate;
 }
 
@@ -3813,7 +3812,7 @@ body[data-hero-tone="dark"]
 
 .pilates-golf {
   padding-block: var(--space-section);
-  color: var(--surface);
+  color: var(--on-dark);
   background: var(--navy);
 }
 
@@ -4017,7 +4016,7 @@ body[data-hero-tone="dark"]
   position: relative;
   padding-block: var(--space-section);
   overflow: hidden;
-  color: var(--surface);
+  color: var(--on-dark);
   background: var(--ink);
   isolation: isolate;
 }
@@ -4313,9 +4312,7 @@ body[data-hero-tone="dark"]
   min-height: max(720px, 100svh);
   padding: clamp(104px, 11vw, 138px) 0 clamp(28px, 4vh, 44px);
   overflow: hidden;
-  background:
-    radial-gradient(circle at 82% 52%, rgba(165, 199, 255, 0.28), transparent 42%),
-    var(--surface);
+  background: #fff;
   isolation: isolate;
 }
 
@@ -4464,7 +4461,7 @@ body[data-hero-tone="dark"]
   position: relative;
   padding-block: var(--space-section);
   overflow: hidden;
-  color: var(--surface);
+  color: var(--on-dark);
   background: var(--brand);
   isolation: isolate;
 }
@@ -4613,7 +4610,7 @@ body[data-hero-tone="dark"]
   position: relative;
   padding-block: var(--space-section);
   overflow: hidden;
-  color: var(--surface);
+  color: var(--on-dark);
   background: var(--ink);
 }
 
@@ -4887,6 +4884,65 @@ body[data-hero-tone="dark"]
   font-weight: 500;
   line-height: var(--lh-head);
   letter-spacing: var(--tracking-display);
+}
+
+/* The service switch. Set in the display serif at quote size so it reads as a
+   second line of the heading rather than as a control bolted on, and it takes
+   the same underline the main nav draws on its current item. The title steps
+   down its own margin when the switch follows it. */
+.voices--filterable .voices__title {
+  margin-bottom: clamp(26px, 3vw, 38px);
+}
+
+.voices__switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(20px, 2.6vw, 34px);
+  align-items: baseline;
+}
+
+.voices__switch-btn {
+  position: relative;
+  padding: 0 0 11px;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 1.9vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.voices__switch-btn::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1.5px;
+  background: var(--brand);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.voices__switch-btn:hover,
+.voices__switch-btn.is-active {
+  color: var(--ink);
+}
+
+.voices__switch-btn.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.voices__switch-rule {
+  height: 1px;
+  margin: 0 0 clamp(40px, 5vw, 64px);
+  border: 0;
+  background: var(--line);
 }
 
 .voices__item {
@@ -5195,9 +5251,11 @@ body[data-hero-tone="dark"]
    street in an eyebrow above the address that already said it.
    ============================================================ */
 
+/* auto-fit rather than a fixed 2 columns: Studham is currently the only
+   location, and a fixed pair left it half-width beside an empty column. */
 .clinic-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   grid-template-rows: auto auto;
   gap: clamp(32px, 5vw, 80px);
   margin: 0;
@@ -5362,7 +5420,7 @@ body[data-hero-tone="dark"]
 .therapy-index {
   display: grid;
   margin-top: 62px;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--line);
 }
 .therapy-index a {
@@ -5400,12 +5458,12 @@ body[data-hero-tone="dark"]
 .st-section--dark {
   position: relative;
   overflow: hidden;
-  color: var(--surface);
+  color: var(--on-dark);
   background: var(--navy);
 }
 .st-section--dark h2,
 .st-section--dark h3 {
-  color: var(--surface);
+  color: var(--on-dark);
 }
 .st-section--dark .st-head > p,
 .st-section--dark .st-lead,
@@ -5465,25 +5523,6 @@ body[data-hero-tone="dark"]
 .st-grid--3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-/* Workplace + prices share one band so neither carries a half-empty row.
-   The cards stretch to a common height (grid's default), and the workplace
-   link drops to the foot of its card so the two bottom edges read as one
-   line rather than as one card with a gap parked under its last element. */
-.st-pair {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 1.8vw, 24px);
-}
-.st-pair .st-card {
-  display: flex;
-  flex-direction: column;
-}
-.st-pair .st-card .pilates-arrow-link {
-  align-self: start;
-  margin-top: auto;
-  padding-top: 10px;
-}
-
 .st-card {
   padding: clamp(22px, 2.4vw, 34px);
   border: 1px solid var(--line);
@@ -5785,12 +5824,8 @@ body[data-hero-tone="dark"]
   .therapy-index a span {
     font-size: 9px;
   }
-  .therapy-index a:last-child {
-    display: none;
-  }
   .st-grid--2,
-  .st-grid--3,
-  .st-pair {
+  .st-grid--3 {
     grid-template-columns: 1fr;
   }
 }
