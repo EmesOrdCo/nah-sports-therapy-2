@@ -45,30 +45,48 @@ export const PULLQUOTES = {
 /* Exactly as listed on the live site. The fourth line reads "Certified STOTT
    Pilates Instructor / REPS registered Level 3" there; `body` is the awarding
    or registering organisation, `short` is for tight layouts. */
+/* `logo` is the awarding body's mark, for the drifting credentials strip — the
+   same four cards the home page carries. Width and height are the intrinsic
+   pixels of the raster files, so the row does not reflow as they arrive; the
+   two SVGs are sized by CSS and have none to give. */
 export const QUALIFICATIONS = [
   {
     title: "Diploma in Sport & Remedial Massage",
     short: "Sport & Remedial Massage",
     body: "London School of Sports Massage",
     note: "Pioneer and leader in Sport and Remedial Massage training since 1989.",
+    logo: {
+      src: "/images/logos/lssm.png",
+      alt: "London School of Sports Massage",
+      width: 140,
+      height: 125,
+    },
   },
   {
     title: "BTEC Level 5 Professional Diploma in Clinical Sport & Remedial Massage",
     short: "Clinical Sport & Remedial Massage",
     body: "BTEC Level 5",
     note: "",
+    logo: {
+      src: "/images/logos/pearson-btec.png",
+      alt: "Pearson BTEC",
+      width: 800,
+      height: 330,
+    },
   },
   {
     title: "VTCT Level 3 Diploma in Anatomy, Physiology and Pathology",
     short: "Anatomy, Physiology & Pathology",
     body: "VTCT Level 3",
     note: "",
+    logo: { src: "/images/logos/vtct-skills.svg", alt: "VTCT Skills" },
   },
   {
     title: "Certified STOTT Pilates Instructor",
     short: "STOTT Pilates Instructor",
     body: "Merrithew — REPS registered, Level 3",
     note: "",
+    logo: { src: "/images/logos/stott-pilates.svg", alt: "STOTT PILATES" },
   },
 ];
 

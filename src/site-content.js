@@ -133,12 +133,18 @@ function hero({
   const inner = `<nav class="breadcrumbs" aria-label="Breadcrumb">${crumb}<span>${eyebrow}</span></nav>
       <h1>${title}</h1>
       ${intro ? `<p class="page-hero__intro">${intro}</p>` : ""}`;
+  /* wave: true takes the artwork /testimonials opens with; a string names one
+     of the others — see --wave-art on .page-hero--wave. Only the compact head
+     carries it, which is the only head it has been drawn against. */
+  const waveClass = wave
+    ? ` page-hero--wave${typeof wave === "string" ? ` page-hero--wave-${wave}` : ""}`
+    : "";
   /* A page whose whole job is to hand you a wall of quotes cannot spend a
      screen and a half introducing itself. --compact drops the display size to
      --step-3h, puts the intro alongside the heading and loses the drifting rings,
      so the quotes are already in view when the page opens. */
   if (compact) {
-    return `<section class="page-hero page-hero--${tone} page-hero--compact${wave ? " page-hero--wave" : ""}">
+    return `<section class="page-hero page-hero--${tone} page-hero--compact${waveClass}">
     ${wave ? '<div class="page-hero__wave" aria-hidden="true"></div>' : ""}
     <div class="section-shell page-hero__inner">
       ${inner}
@@ -608,6 +614,8 @@ const prices = page(
     /* Same reasoning as /testimonials: the fees are the page. At the full hero
        height the first figure sat below the fold. */
     compact: true,
+    /* The line-wave, in the other cut of it. /testimonials keeps the first. */
+    wave: "crest",
   },
   /* Two columns carried by dot leaders from appointment to fee. Every string
      below is the one that was already here — the appointment lengths are
@@ -845,19 +853,38 @@ function buildStudioContinuousPage() {
       "The NJH Sports Therapy and Pilates studio in Studham, near Whipsnade.",
     canonical: "/studio",
     html: `<div class="clinics-longform">
+      <!-- The hero is footage of a room rather than a drawing of a treatment,
+           because the room is what the page is about. The clip is stock, not
+           Studham — swap public/videos/studio-tour.mp4 (and the still beside
+           it, which is frame one of that same clip) the day there is footage
+           of the real studio, and nothing else here has to change.
+
+           The still is the real fallback: it is what shows before the clip
+           buffers, when reduced motion is asked for, and if the file is
+           missing — so the hero is never a black rectangle. It is taken from
+           the clip's first frame so the hand-off is invisible; a photograph
+           of a different room would cross-fade like a bug. -->
       <section class="clinics-hero" id="overview" aria-labelledby="clinics-title">
+        <div class="clinics-hero__media" aria-hidden="true">
+          <img class="clinics-hero__still" src="/images/studio-hero-still-1600.webp" alt="" width="1600" height="900" fetchpriority="high" />
+          <video class="clinics-hero__reel" data-studio-reel muted loop playsinline preload="none" disablepictureinpicture tabindex="-1">
+            <!-- media on <source> is read once, when the element picks a file,
+                 and never re-evaluated on resize. That is the wrong behaviour
+                 for a responsive image and exactly the right one here: the
+                 narrow file exists so a phone on mobile data is not made to
+                 fetch 2.9MB of background loop, and a phone does not become a
+                 desktop mid-visit. -->
+            <source src="/videos/studio-tour-900.mp4" type="video/mp4" media="(max-width: 700px)" />
+            <source src="/videos/studio-tour.mp4" type="video/mp4" />
+          </video>
+          <div class="clinics-hero__scrim"></div>
+        </div>
         <div class="section-shell clinics-hero__inner">
-          <div class="clinics-hero__grid">
-            <div class="clinics-hero__content">
-              <h1 id="clinics-title">The NJH clinic in Studham.</h1>
-              <div class="clinics-hero__footer">
-                <p>Professional, personal Sports Therapy and Pilates care from one private studio in Studham, near Whipsnade.</p>
-                <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Appointments · ${BUSINESS.phoneDisplay} <span>↗</span></a>
-              </div>
-            </div>
-            <figure class="clinics-hero__media clinics-hero__media--figure">
-              <object class="clinics-hero__figure" type="image/svg+xml" data="/images/clinics-hands-animated.svg" aria-label="Line drawing of hands-on soft tissue treatment to the shoulder within measured rings" tabindex="-1"></object>
-            </figure>
+          <p class="clinics-hero__eyebrow"><i aria-hidden="true"></i>Studham studio</p>
+          <h1 id="clinics-title">The NJH clinic in Studham.</h1>
+          <div class="clinics-hero__footer">
+            <p>Professional, personal Sports Therapy and Pilates care from one private studio in Studham, near Whipsnade.</p>
+            <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Appointments · ${BUSINESS.phoneDisplay} <span>↗</span></a>
           </div>
         </div>
       </section>
@@ -1442,6 +1469,59 @@ export function renderRoute() {
   return { path, isHome: false };
 }
 
+/* The looping walkthrough behind the /studio hero.
+
+   The clip is not in the markup's load path — the <video> ships preload="none"
+   — so nothing is fetched until this decides to fetch it. Asked for reduced
+   motion, it never is: the poster still under it is the hero, and a few MB of
+   footage is not downloaded to sit paused on the first frame.
+
+   It also only runs while the hero is on screen. A muted background loop
+   decoding for the whole length of the page is a laptop fan for no reason. */
+function initStudioReel() {
+  const reel = document.querySelector("[data-studio-reel]");
+  if (!reel) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  // Set on the element as well as in markup: autoplay policies read the
+  // property, and a muted attribute that arrived via innerHTML is worth not
+  // relying on.
+  reel.muted = true;
+  reel.playsInline = true;
+
+  // Only reveal the video once it can actually play. Until then — and for
+  // good if the file is missing or the codec is refused — the still shows.
+  reel.addEventListener(
+    "canplay",
+    () => reel.classList.add("is-ready"),
+    { once: true },
+  );
+
+  reel.preload = "auto";
+  reel.load();
+
+  if (!("IntersectionObserver" in window)) {
+    reel.play().catch(() => {});
+    return;
+  }
+
+  new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Autoplay can still be refused (low power mode, data saver). The
+          // still is already behind it, so a rejected promise needs no
+          // handling beyond not throwing.
+          reel.play().catch(() => {});
+        } else {
+          reel.pause();
+        }
+      });
+    },
+    { threshold: 0.05 },
+  ).observe(reel);
+}
+
 /* The studio carousel on /studio. Slides are stacked on one spot and placed
    by offset from the active one, so the neighbours sit behind and to the side
    rather than running off in a strip — the arrangement reads as a set of
@@ -1585,7 +1665,9 @@ function initStudioCarousel() {
 }
 
 export function initPageFeatures() {
-  // Ahead of the form guard: /studio carries the carousel and no enquiry form.
+  // Ahead of the form guard: /studio carries the hero reel and the carousel,
+  // and no enquiry form.
+  initStudioReel();
   initStudioCarousel();
 
   const form = document.querySelector("[data-enquiry-form]");

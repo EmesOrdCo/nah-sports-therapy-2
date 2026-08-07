@@ -1,0 +1,372 @@
+/* Hero options for the /faq journey page — throwaway styles.
+
+   All five ride on the site's own tokens, and all five hand over to the same
+   first station so the only variable is the hero itself. */
+
+/* The shared handover: station one of the journey, exactly as it will be
+   built. Present in every option so each hero can be judged on what it leads
+   into rather than in isolation. */
+
+.hx-handover {
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.hx-handover--tight {
+  padding-top: 0;
+}
+
+.hx-station {
+  position: relative;
+  padding-left: 52px;
+}
+
+.hx-station::before {
+  position: absolute;
+  top: 6px;
+  bottom: -100px;
+  left: 13px;
+  width: 1px;
+  background: var(--line);
+  content: "";
+}
+
+.hx-marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  width: 27px;
+  height: 27px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #fff;
+  place-items: center;
+}
+
+.hx-marker span {
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.hx-station__label {
+  margin: 0;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hx-station__head h2 {
+  max-width: 18ch;
+  margin: 14px 0 0;
+  font-size: var(--step-3);
+  font-weight: 400;
+}
+
+.hx-qa {
+  margin: var(--space-m) 0 0;
+}
+
+.hx-qa dt {
+  max-width: 34ch;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-head);
+}
+
+.hx-qa dd {
+  margin: var(--space-xs) 0 0;
+}
+
+.hx-qa dd p {
+  max-width: 58ch;
+  margin: 0 0 var(--space-xs);
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+.hx-qa dd p:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 900px) {
+  .hx-station {
+    display: grid;
+    padding-left: 76px;
+    grid-template-columns: minmax(200px, 26%) 1fr;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .hx-qa {
+    margin-top: 0;
+  }
+}
+
+/* ================================================= A · The spine starts here
+
+   The hero says nothing about structure. The line does the work: it begins
+   below the intro and runs off the bottom edge into station one, so the page
+   is already in motion before the first scroll. */
+
+.hx-a {
+  min-height: 0;
+  padding-bottom: 0;
+}
+
+.hx-a .page-hero__intro {
+  margin-bottom: clamp(48px, 6vw, 84px);
+}
+
+.hx-a__spine {
+  position: relative;
+  width: 1px;
+  height: clamp(90px, 12vw, 150px);
+  margin-left: 13px;
+  background: linear-gradient(to bottom, transparent, var(--brand));
+}
+
+/* ============================================================ B · Stage strip
+
+   Five ruled cells across the foot of the hero. It is the contents index the
+   old page kept in a sidebar, moved to where it is read first. */
+
+.hx-b {
+  min-height: 0;
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.hx-b .page-hero__intro {
+  margin-bottom: clamp(52px, 7vw, 96px);
+}
+
+.hx-b__strip {
+  display: grid;
+  border-top: 1px solid var(--ink);
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.hx-b__strip a {
+  padding: 20px 24px 4px 0;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.hx-b__strip a + a {
+  padding-left: 24px;
+  border-left: 1px solid var(--line);
+}
+
+.hx-b__strip a:hover {
+  color: var(--brand);
+}
+
+.hx-b__n {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.hx-b__name {
+  display: block;
+  max-width: 12ch;
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* =========================================================== C · Answer first
+
+   No throat-clearing. The three questions people actually arrive with, each
+   answered in a line, before the journey starts underneath. */
+
+.hx-c {
+  min-height: 0;
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.hx-c h1 {
+  max-width: 16ch;
+  font-size: var(--step-4);
+}
+
+.hx-c__quick {
+  display: grid;
+  margin: clamp(42px, 5vw, 66px) 0 0;
+  border-top: 1px solid var(--ink);
+  gap: 0;
+}
+
+.hx-c__quick > div {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.hx-c__quick dt {
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hx-c__quick dd {
+  max-width: 46ch;
+  margin: 10px 0 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.5vw, 23px);
+  line-height: 1.45;
+}
+
+.hx-c__more {
+  margin: clamp(28px, 3vw, 42px) 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+}
+
+.hx-c__more span {
+  margin-left: 6px;
+  color: var(--brand);
+}
+
+@media (min-width: 900px) {
+  .hx-c__quick {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 clamp(2rem, 4vw, 4rem);
+  }
+
+  .hx-c__quick > div {
+    border-bottom: 0;
+  }
+}
+
+/* ============================================================== D · Dark run
+
+   Navy, with the line emerging in periwinkle and crossing into the white
+   page below. Adds identity, not information. */
+
+.hx-d {
+  min-height: 0;
+  padding-bottom: 0;
+}
+
+.hx-d .page-hero__intro {
+  margin-bottom: clamp(48px, 6vw, 84px);
+}
+
+.hx-d__spine {
+  position: relative;
+  z-index: 3;
+  width: 1px;
+  height: clamp(90px, 12vw, 150px);
+  margin-left: 13px;
+  background: linear-gradient(to bottom, transparent, var(--periwinkle));
+}
+
+/* The station below a dark hero sits on white, so the line has to change
+   colour as it crosses the seam rather than simply continuing. */
+.hx-d + .hx-handover .hx-station::before {
+  background: linear-gradient(to bottom, var(--brand-light), var(--line) 90px);
+}
+
+/* ========================================================= E · Spine + strip
+
+   A and B together. The line starts in the hero and passes through the stage
+   row, so the contents strip reads as the first thing on the journey rather
+   than as a separate navigation device. */
+
+.hx-e {
+  min-height: 0;
+  padding-bottom: 0;
+}
+
+.hx-e .page-hero__intro {
+  margin-bottom: clamp(44px, 6vw, 78px);
+}
+
+.hx-e__strip {
+  display: grid;
+  border-top: 1px solid var(--line);
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.hx-e__strip a {
+  position: relative;
+  padding: 26px 24px 4px 0;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.hx-e__strip a + a {
+  padding-left: 24px;
+}
+
+.hx-e__strip a:hover {
+  color: var(--brand);
+}
+
+/* The dot sits on the top rule, which is what makes the strip read as five
+   stops on a line rather than as five columns of a table. */
+.hx-e__dot {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.hx-e__strip a + a .hx-e__dot {
+  left: 24px;
+}
+
+.hx-e__strip a:first-child .hx-e__dot {
+  background: var(--brand);
+}
+
+.hx-e__n {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.hx-e__name {
+  display: block;
+  max-width: 12ch;
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.hx-e__spine {
+  width: 1px;
+  height: clamp(70px, 9vw, 110px);
+  margin-left: 3px;
+  background: var(--brand);
+}

@@ -4,84 +4,191 @@
    heading weight, her answers in the serif behind a hairline, indented like
    a transcript. No panels, no cards — the Q/A rhythm is the layout. */
 
-/* ---- Interview ----
-   Her introduction and her portrait live in the same column, in the same
-   section as the conversation — the page opens straight into her talking
-   rather than behind a separate hero band. */
+/* ---- Hero ----
+   Two columns on white. The words hold the shell's left line — the same line
+   every question below starts on — and the photograph runs off the right edge
+   of the window at the full height of the frame. Nothing else is in it: an
+   introduction, one hairline rule, one sentence, one link. */
 
-.av-e .av-e__interview {
+.av-e .av-e__hero {
+  /* The photograph bleeds to the right edge of the window. Clip rather than
+     hidden: `overflow: hidden` on an ancestor would kill position:sticky
+     elsewhere on the page, and clip does the same job without establishing a
+     scroll port. */
+  overflow-x: clip;
   padding-top: var(--av-header-clear);
-  padding-bottom: var(--space-section);
+  /* Short, because the credentials strip follows: its own top pad and a full
+     section interval here would open a hole between the two. The photograph's
+     bottom fade is already carrying some of this gap. */
+  padding-bottom: var(--space-l);
 }
 
 /* The global .breadcrumbs bottom margin (~90px) was tuned for a full-bleed
-   hero. Inside this column it just opens a hole above her name. Scoped, so it
+   hero. Above her name in this column it just opens a hole. Scoped, so it
    cannot leak to the other pages that still want the original. */
-.av-e .av-e__aside .breadcrumbs {
+.av-e .av-e__intro .breadcrumbs {
   margin-bottom: var(--space-m);
 }
 
-.av-e .av-e__aside h1 {
+/* The largest type on the site after the home page's own headline. Two short
+   words on two lines, so it can be set this big in a half-width column and
+   still keep her portrait beside it rather than under it. */
+.av-e .av-e__intro h1 {
   margin: 0;
   font-family: var(--font-serif);
-  /* One step down from a poster hero: this page is a conversation, and the
-     framing line under it needs room to be read. */
-  font-size: var(--step-4);
+  font-size: var(--step-4h);
   letter-spacing: var(--tracking-display);
-  line-height: var(--lh-tight);
+  line-height: 1.02;
+}
+
+/* The only mark in the hero that is neither type nor photograph. It separates
+   the name from the sentence without a panel, a card or a box. */
+.av-e .av-e__intro-rule {
+  display: block;
+  width: 54px;
+  height: 2px;
+  margin-top: var(--space-m);
+  background: var(--brand);
 }
 
 .av-e .av-e__framing {
-  max-width: 38ch;
-  margin: var(--space-s) 0 var(--space-m);
+  max-width: 34ch;
+  margin: var(--space-s) 0 0;
   color: var(--ink-soft);
   font-size: var(--step-0);
   line-height: 1.55;
 }
 
-.av-e .av-e__grid {
+/* The one call to action above the fold. A label over a hairline rather than a
+   filled button: the hero is a name, a photograph and a sentence, and a block
+   of brand fill would be the loudest thing in it by some distance. */
+.av-e .av-e__intro-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-top: var(--space-m);
+  padding-bottom: 10px;
+  gap: 12px;
+  color: var(--brand-strong);
+  font-family: var(--font-sans);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.av-e .av-e__intro-cta::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  content: "";
+  opacity: 0.38;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.av-e .av-e__intro-cta:hover::after,
+.av-e .av-e__intro-cta:focus-visible::after {
+  opacity: 1;
+}
+
+.av-e .av-e__intro-cta span {
+  font-size: 1.25em;
+  line-height: 1;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.av-e .av-e__intro-cta:hover span,
+.av-e .av-e__intro-cta:focus-visible span {
+  transform: translate(3px, -3px);
+}
+
+.av-e .av-e__hero-grid {
   display: grid;
   gap: var(--space-l);
 }
 
-/* ---- Portrait ---- */
+/* ---- Portrait ----
+   A plain rectangle running to the edge of the window. It was a masked organic
+   crest with a paler echo behind it; the picture now carries the hero on its
+   own, and a shape cut around her competes with the type for the one gesture
+   the page is allowed. */
 
 .av-e .av-e__portrait-figure {
   margin: 0;
+  /* Past 1440px the shell stops growing and centres, so the run to the window
+     edge is half the leftover rather than the gutter. */
+  margin-right: calc(-1 * max(var(--page-gutter), (100vw - 1440px) / 2));
 }
 
-/* The img is height:100% / object-fit:cover (see about.css), so the frame
-   has to be the thing that owns the ratio. Shorter on phones — a full-width
-   3:4 crop at 375px is 500px of portrait before a single word is read. */
 .av-e .av-e__portrait {
+  position: relative;
   overflow: hidden;
-  border-radius: var(--radius-card);
   aspect-ratio: 4 / 5;
-  background: var(--surface-2);
 }
 
-.av-e .av-e__speaker {
-  display: grid;
-  margin-top: var(--space-xs);
-  gap: 2px;
+/* The picture dissolves into the paper rather than sitting on it in a box: a
+   long fade off the left edge, where it meets the white the type is set on,
+   and a short one along the top and the foot. The right edge is left alone —
+   the window cuts that one.
+
+   Both fades are drawn as their own mask layer and then intersected. The
+   default composite is `add`, which unions two half-transparent layers into
+   something close to no fade at all, so the composite has to be stated: the
+   standard property for current browsers, the old WebKit one behind it for
+   Safari before 15.4. Nothing here is load-bearing — a browser that supports
+   neither shows the photograph as a plain rectangle. */
+.av-e .av-e__portrait {
+  -webkit-mask-image: var(--av-e-fade-x), var(--av-e-fade-y);
+  mask-image: var(--av-e-fade-x), var(--av-e-fade-y);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
-.av-e .av-e__speaker-name {
-  color: var(--ink);
-  font-size: var(--step-00);
-  font-weight: 600;
-  letter-spacing: 0.02em;
+/* Stopped rather than linear at both ends. A straight ramp reads as a grey
+   wash laid over the edge of the picture; easing the middle of the fade makes
+   it read as the picture running out. */
+.av-e {
+  --av-e-fade-x: linear-gradient(
+    to right,
+    transparent 0%,
+    rgb(0 0 0 / 0.18) 8%,
+    rgb(0 0 0 / 0.55) 15%,
+    rgb(0 0 0 / 0.86) 22%,
+    #000 30%
+  );
+  --av-e-fade-y: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(0 0 0 / 0.6) 4%,
+    #000 10%,
+    #000 90%,
+    rgb(0 0 0 / 0.6) 96%,
+    transparent 100%
+  );
 }
 
-.av-e .av-e__speaker-role {
-  color: var(--ink-soft);
-  font-size: var(--step-00);
-  line-height: 1.5;
+/* The frame is close to square once it runs to the window edge, and the source
+   is 3:4 — centred, cover crops straight through the top of her head. Hold the
+   crop high. */
+.av-e .av-e__portrait img {
+  object-position: 50% 12%;
 }
 
-/* ---- The conversation ---- */
+/* ---- The conversation ----
+   Now that her portrait has the hero to itself, the questions run as a single
+   measured column rather than beside a standing image. Held to the left of the
+   shell, on the same line her name starts on, so the page has one spine. */
+
+.av-e .av-e__interview {
+  padding-bottom: var(--space-section);
+}
 
 .av-e .av-e__qa {
+  max-width: 68ch;
   margin: 0;
 }
 
@@ -140,11 +247,66 @@
   text-wrap: balance;
 }
 
-/* ---- The statement ----
-   One dark block carrying the quote and the credentials together. The quote is
-   the only place on the page where the subject changes from her to you, and
-   the qualifications sitting under it on the same navy makes them read as part
-   of that statement rather than as an admin list in a separate band. */
+/* ---- The opening statement ----
+   The only place on the page where the subject changes from her to you, so it
+   gets the largest type in the running text and nothing beside it. Set on the
+   paper rather than in a band: it is her speaking, and the questions below it
+   are the same voice at reading size. */
+
+.av-e .av-e__opening {
+  padding-block: var(--space-l) var(--space-section);
+}
+
+.av-e .av-e__opening-quote {
+  margin: 0;
+}
+
+.av-e .av-e__opening-quote blockquote {
+  margin: 0;
+}
+
+/* Measure on the paragraph, not the blockquote — `ch` resolves against the
+   element's own font, and the blockquote inherits the 16px sans while this is
+   set in serif at display size. Capping the wrapper squeezes the quote into a
+   270px column and turns it into a tall thin ladder of words. */
+.av-e .av-e__opening-quote p {
+  max-width: 30ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-2h);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.32;
+  text-wrap: pretty;
+}
+
+/* The hairline rather than an em dash: the same mark the hero uses under her
+   name, shortened, so the attribution reads as part of the page's furniture
+   rather than as a line of dialogue. */
+.av-e .av-e__opening-quote figcaption {
+  display: flex;
+  margin-top: var(--space-m);
+  align-items: center;
+  gap: 14px;
+  color: var(--ink-soft);
+  font-size: var(--label-lg);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-lg-track);
+  text-transform: uppercase;
+}
+
+.av-e .av-e__opening-quote figcaption span {
+  width: 30px;
+  height: 1px;
+  flex: none;
+  background: var(--brand);
+}
+
+/* ---- The record ----
+   One dark block carrying the credentials in full. The strip under the hero is
+   the marks; this is what each of them is, and the navy is what stops an admin
+   list from reading as another of her answers. */
 
 .av-e .av-e__statement {
   padding-block: var(--space-section);
@@ -154,30 +316,11 @@
 
 .av-e .av-e__statement-grid {
   display: grid;
-  gap: var(--space-l);
-}
-
-.av-e .av-e__statement blockquote {
-  margin: 0;
-}
-
-/* Measure on the paragraph, not the blockquote — `ch` resolves against the
-   element's own font, and the blockquote inherits the 16px sans while this is
-   set in serif at display size. Capping the wrapper squeezed the quote into a
-   270px column and turned the band into a tall thin ladder of words. */
-.av-e .av-e__statement blockquote p {
-  max-width: 26ch;
-  margin: 0;
-  color: var(--on-dark);
-  font-family: var(--font-serif);
-  font-size: var(--step-2);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.3;
+  gap: var(--space-s);
 }
 
 .av-e .av-e__statement h2 {
-  margin: 0 0 var(--space-s);
+  margin: 0;
   color: var(--periwinkle);
   font-family: var(--font-sans);
   font-size: var(--label-lg);
@@ -289,29 +432,28 @@
   line-height: 1.6;
 }
 
-/* ---- Desktop: her face holds still while she talks ---- */
+/* ---- Desktop: the words beside the photograph ---- */
 
 @media (min-width: 900px) {
-  .av-e .av-e__grid {
-    /* align-items:start is load-bearing, not cosmetic: a stretched grid item
-       is as tall as its row, which leaves sticky nothing to slide within. */
-    align-items: start;
-    grid-template-columns: minmax(250px, 32%) 1fr;
-    gap: clamp(2.5rem, 6vw, 6rem);
+  .av-e .av-e__hero-grid {
+    /* Centred, not start-aligned: the text block is short and the picture is
+       tall, and hanging the words off the top of a 600px frame leaves the
+       column looking abandoned. */
+    align-items: center;
+    /* Close to an even split, type side ahead. The headline is the largest
+       thing on the page and the column has to hold "Natasha" on one line at
+       that size; the photograph takes what is left and then some, because it
+       carries on past the right edge of the shell. */
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 5vw, 5rem);
   }
 
-  .av-e .av-e__aside {
-    top: clamp(2rem, 5vw, 4rem);
-  }
-
-  /* The sticky column now carries her name and the framing line as well as the
-     portrait, so the portrait has to give ground: without this cap the column
-     is taller than the viewport on a laptop and sticky has nothing to do. The
-     image is object-fit:cover, so clamping the frame crops rather than
-     squashes. */
+  /* Height rather than ratio here: the frame runs to the window edge, so its
+     width is whatever is left over and a ratio would let it grow to any
+     height it liked on a wide monitor. */
   .av-e .av-e__portrait {
-    max-height: min(34vh, 400px);
-    aspect-ratio: 3 / 4;
+    aspect-ratio: auto;
+    height: min(78svh, 680px);
   }
 
   .av-e .av-e__pair + .av-e__pair {
@@ -322,23 +464,22 @@
     padding-left: var(--space-m);
   }
 
-  .av-e .av-e__statement blockquote p {
+  /* Display size, and a wider measure to go with it. The cap is set so the
+     quote runs to roughly the width of the answers below it — the page has one
+     spine, and a display quote that overhangs it reads as a different page.
+     It also stops a 228-character sentence from becoming a nine-line wall. */
+  .av-e .av-e__opening-quote p {
+    max-width: 32ch;
     font-size: var(--step-3);
   }
 
-  /* Quote and credentials sit side by side. The quals go back to a single
-     column here — they are in a half-width track now, and two columns inside
-     it would put the awarding body under a title it does not belong to. */
+  /* Label beside the record rather than above it, on the same split the
+     charity panel uses. The list stays one column: two would put an awarding
+     body under a title it does not belong to. */
   .av-e .av-e__statement-grid {
     align-items: start;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(2.5rem, 6vw, 5.5rem);
-  }
-
-  /* The quote is already capped at 26ch; inside a half-width track that cap is
-     wider than the column, so the column does the constraining. */
-  .av-e .av-e__statement blockquote p {
-    max-width: none;
+    grid-template-columns: minmax(180px, 0.85fr) minmax(0, 2.15fr);
+    gap: clamp(2rem, 5vw, 5rem);
   }
 
   /* Title beside the copy rather than above it. Below 900px they stack, which
@@ -347,15 +488,5 @@
     grid-template-columns: minmax(180px, 0.85fr) minmax(0, 2.15fr);
     align-items: start;
     gap: clamp(2rem, 5vw, 5rem);
-  }
-}
-
-/* Sticky is only switched on where the standing column actually fits. On a
-   short laptop (1366×768 leaves ~660px of viewport) a column taller than the
-   window scrolls almost the whole way up before it pins, which reads as a
-   glitch rather than as a design. Below this height it simply scrolls. */
-@media (min-width: 900px) and (min-height: 820px) {
-  .av-e .av-e__aside {
-    position: sticky;
   }
 }

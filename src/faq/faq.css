@@ -85,33 +85,9 @@
   text-align: center;
 }
 
-/* The foot of the sweep reaches the intro on this head, which the shared rule
-   never has to deal with. Same clearing the title gets, at the intro's size:
-   hairlines behind three lines of sans is the point at which a background stops
-   being one.
-
-   Only where the wave is the full artwork. The phone crop is half the opacity
-   and a third of the width of paper here, and a clearing wide enough for a
-   375px column takes the whole crop with it — what is left of the wave on a
-   phone is what falls either side of the title, and this would clear that
-   too. */
-@media (min-width: 701px) {
-  .faq-hero.page-hero--wave .page-hero__intro {
-    position: relative;
-  }
-
-  .faq-hero.page-hero--wave .page-hero__intro::before {
-    position: absolute;
-    z-index: -1;
-    inset: -0.9em -2.4em;
-    background: radial-gradient(
-      ellipse at center,
-      #fff 0 52%,
-      rgba(255, 255, 255, 0) 86%
-    );
-    content: "";
-  }
-}
+/* The clearing that keeps the sweep off this sentence is the shared one — see
+   .page-hero--wave .page-hero__intro. /prices needs it as well, so it lives
+   with the rest of the wave rather than here. */
 
 /* The drop out of the head into station one. It is a separate element rather
    than the journey line simply starting higher, because the hero and the

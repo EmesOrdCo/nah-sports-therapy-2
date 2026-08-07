@@ -25,3 +25,6 @@ dist-ssr
 
 # Working material: reference captures, retired assets, asset backups
 audit/
+
+# Generated sketch renders (100MB of PNGs); the scripts that make them are tracked
+sketches/out/

@@ -12,10 +12,17 @@ import {
 
 /* Variant E — In her words.
 
-   Who she is, where she trained, what she treats, why she does it. A
-   conversation, with her portrait held beside it, closing on the one sentence
-   from the old site that turns from her to you ("You don't have to be an
-   athlete…").
+   Who she is, where she trained, what she treats, why she does it. An
+   introduction and her portrait open the page together — two columns, the
+   words held on the shell's left line and the photograph running off the right
+   edge of the window — and the conversation runs beneath them, closing on the
+   one sentence from the old site that turns from her to you ("You don't have to
+   be an athlete…").
+
+   That sentence ("You don't have to be an athlete…") now opens the page as a
+   display quote between the credentials strip and the first question, rather
+   than closing it from inside the navy band. The band it came out of carries
+   the qualifications on their own.
 
    The practical half — what happens, what to wear, what it costs, the clinic
    policies, where to find her, how to book — used to run underneath this and
@@ -62,38 +69,83 @@ function pair(question, body, modifier = "") {
 
 export function build() {
   return `
-  <section class="av-e__interview">
-    <div class="section-shell av-e__grid">
-      <div class="av-e__aside">
+  <section class="av-e__hero">
+    <div class="section-shell av-e__hero-grid">
+      <div class="av-e__intro">
         <nav class="breadcrumbs" aria-label="Breadcrumb">
           <a href="/">Home</a><span aria-hidden="true">/</span><span>About</span>
         </nav>
-        <h1 data-reveal>${NAME}</h1>
+        <h1 data-reveal>Meet<br />Natasha</h1>
+        <span class="av-e__intro-rule" aria-hidden="true" data-reveal></span>
         <p class="av-e__framing" data-reveal>
-          Sports Therapist and Certified STOTT Pilates instructor, Studham.
-          Where she trained, what she treats and why she does it — in her own words.
+          ${NAME} is a Sports Therapist and Certified STOTT Pilates instructor
+          in Studham. Where she trained, what she treats and why she does it —
+          in her own words.
         </p>
-        <figure class="av-e__portrait-figure" data-reveal>
-          <div class="av-e__portrait">
-            <img
-              class="av-portrait"
-              src="${PORTRAIT.portrait900}"
-              srcset="${PORTRAIT.portrait540} 540w, ${PORTRAIT.portrait900} 900w"
-              sizes="(max-width: 899px) 100vw, 34vw"
-              width="900"
-              height="1200"
-              alt="${PORTRAIT.alt}"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-          <figcaption class="av-e__speaker">
-            <span class="av-e__speaker-name">${NAME}</span>
-            <span class="av-e__speaker-role">Sports Therapist &middot; Certified STOTT Pilates Instructor</span>
-          </figcaption>
-        </figure>
+        <a class="av-e__intro-cta" href="/contact" data-reveal>
+          Book an appointment <span aria-hidden="true">&#8599;</span>
+        </a>
       </div>
 
+      <figure class="av-e__portrait-figure" data-reveal>
+        <div class="av-e__portrait">
+          <img
+            class="av-portrait"
+            src="${PORTRAIT.portrait900}"
+            srcset="${PORTRAIT.portrait540} 540w, ${PORTRAIT.portrait900} 900w"
+            sizes="(max-width: 899px) 100vw, 52vw"
+            width="900"
+            height="1200"
+            alt="${PORTRAIT.alt}"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- The same drifting credentials strip the home page carries, on the same
+       .creds component and picked up by the same [data-creds-marquee] in
+       main.js. The cards are built from QUALIFICATIONS rather than retyped, so
+       the awarding bodies here and the list on the navy band below can never
+       disagree with each other. -->
+  <section class="creds section-shell" aria-labelledby="about-creds-title">
+    <h2 class="creds__title" id="about-creds-title">Qualifications &amp; training</h2>
+    <!-- tabindex is for the no-JS / reduced-motion fallback, where this is a
+         plain swipe track and none of the cards are focusable. The marquee
+         removes it once it takes over the scrolling. -->
+    <div class="creds__track" data-creds-marquee tabindex="0">
+      <ul class="creds__strip">
+        ${QUALIFICATIONS.map(
+          (q) => `<li data-reveal>
+            <img
+              src="${q.logo.src}"
+              alt="${q.logo.alt}"
+              ${q.logo.width ? `width="${q.logo.width}" height="${q.logo.height}"` : ""}
+              loading="lazy"
+            />
+            <span>${q.short}</span>
+          </li>`,
+        ).join("")}
+      </ul>
+    </div>
+  </section>
+
+  <!-- The one sentence on the page that turns from her to you. It used to
+       close the page from inside the navy band; standing on the paper before
+       the questions, it sets the terms for everything she says after it. -->
+  <section class="av-e__opening">
+    <div class="section-shell">
+      <figure class="av-e__opening-quote" data-reveal>
+        <blockquote><p>${ATHLETE_QUOTE}</p></blockquote>
+        <figcaption><span aria-hidden="true"></span>${NAME}</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="av-e__interview">
+    <div class="section-shell">
       <dl class="av-e__qa">
         ${pair("How did you get into this?", paras(STORY[0], TRAINING[0]))}
         ${pair("Where did you train?", paras(TRAINING[1], TRAINING[2]))}
@@ -105,20 +157,19 @@ export function build() {
     </div>
   </section>
 
-  <section class="av-e__statement">
+  <!-- The record: the strip under the hero is the marks, this is what they
+       are. Both are built from QUALIFICATIONS, so they cannot disagree. -->
+  <section class="av-e__statement" aria-labelledby="quals-title">
     <div class="section-shell av-e__statement-grid">
-      <blockquote data-reveal><p>${ATHLETE_QUOTE}</p></blockquote>
-      <div class="av-e__statement-quals">
-        <h2 data-reveal>Qualifications</h2>
-        <ul class="av-e__quals">
-          ${QUALIFICATIONS.map(
-            (q) => `<li data-reveal>
-              <span class="av-e__qual-name">${q.title}</span>
-              <span class="av-e__qual-body">${q.body}</span>
-            </li>`,
-          ).join("")}
-        </ul>
-      </div>
+      <h2 id="quals-title" data-reveal>Qualifications</h2>
+      <ul class="av-e__quals">
+        ${QUALIFICATIONS.map(
+          (q) => `<li data-reveal>
+            <span class="av-e__qual-name">${q.title}</span>
+            <span class="av-e__qual-body">${q.body}</span>
+          </li>`,
+        ).join("")}
+      </ul>
     </div>
   </section>
 

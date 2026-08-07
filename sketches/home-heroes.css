@@ -1,0 +1,425 @@
+/* Home hero options — throwaway styles.
+
+   Everything rides on the site's own tokens (--brand, --navy, --periwinkle,
+   the serif, the fluid steps), so what these captures show is the real design
+   system in a new arrangement, not a different one. */
+
+.hh {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 100svh;
+  align-items: center;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+/* ---- Shared media ---- */
+
+.hh-media {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+}
+
+.hh-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hh-scrim {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---- Shared type ---- */
+
+.hh-inner {
+  position: relative;
+  z-index: 2;
+  width: min(660px, 52vw);
+  padding-top: clamp(86px, 10vw, 118px);
+  margin-left: var(--page-gutter);
+}
+
+.hh-eyebrow {
+  display: flex;
+  margin: 0 0 clamp(20px, 2.6vh, 30px);
+  align-items: center;
+  gap: 14px;
+  color: var(--periwinkle);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.hh-eyebrow i {
+  width: 30px;
+  height: 1px;
+  flex: none;
+  background: currentColor;
+}
+
+.hh-eyebrow--ink {
+  color: var(--brand);
+}
+
+.hh-eyebrow--rules {
+  justify-content: center;
+}
+
+.hh-title {
+  max-width: 13ch;
+  margin: 0;
+  color: var(--on-dark);
+  font-family: var(--font-serif);
+  font-size: var(--step-5);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: var(--tracking-display);
+}
+
+.hh-title em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.hh-intro {
+  max-width: 46ch;
+  margin: clamp(22px, 3vh, 34px) 0 0;
+  color: rgb(255 255 255 / 0.8);
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.65;
+}
+
+/* ---- Shared actions ---- */
+
+.hh-actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: clamp(28px, 4vh, 44px);
+  gap: 14px;
+}
+
+.hh-btn {
+  display: inline-flex;
+  min-height: 56px;
+  padding: 0 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  /* Tracking adds a trailing space after the last letter, which reads as the
+     label sitting left of centre. Pull it back. */
+  text-indent: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hh-btn svg {
+  width: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+}
+
+.hh-btn--solid {
+  color: var(--on-dark);
+  background: var(--brand);
+}
+
+/* On a photograph. Hairline white rather than a filled second button, so the
+   two calls to action never compete. */
+.hh-btn--outline {
+  border-color: rgb(255 255 255 / 0.42);
+  color: var(--on-dark);
+}
+
+.hh-btn--outline-dark {
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+/* ---- Shared scroll cue ---- */
+
+.hh-scroll {
+  position: absolute;
+  z-index: 2;
+  bottom: 30px;
+  left: 50%;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  color: rgb(255 255 255 / 0.66);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+}
+
+.hh-scroll i {
+  width: 1px;
+  height: 46px;
+  background: linear-gradient(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0));
+}
+
+.hh-scroll--corner {
+  left: auto;
+  right: var(--page-gutter);
+  transform: none;
+}
+
+/* ------------------------------------------------------------- A · Cinematic */
+
+/* Two scrims, not one: a horizontal wedge that guarantees contrast under the
+   column of type, and a low vignette that keeps the scroll cue legible on a
+   photograph with a bright floor. */
+.hh-a .hh-scrim {
+  background:
+    linear-gradient(
+      100deg,
+      oklch(21.5% 0.055 277 / 0.92) 0%,
+      oklch(21.5% 0.055 277 / 0.74) 38%,
+      oklch(21.5% 0.055 277 / 0.28) 68%,
+      oklch(21.5% 0.055 277 / 0.12) 100%
+    ),
+    linear-gradient(
+      to top,
+      oklch(17.4% 0.048 275 / 0.55) 0%,
+      transparent 34%
+    );
+}
+
+/* ---------------------------------------------------------------- B · Centred */
+
+.hh-b .hh-scrim {
+  background:
+    radial-gradient(
+      120% 90% at 50% 46%,
+      oklch(21.5% 0.055 277 / 0.62) 0%,
+      oklch(17.4% 0.048 275 / 0.86) 100%
+    );
+}
+
+.hh-b .hh-inner {
+  width: min(920px, 82vw);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.hh-b .hh-title {
+  max-width: none;
+}
+
+.hh-b .hh-intro {
+  max-width: 54ch;
+  margin-inline: auto;
+}
+
+.hh-b .hh-actions {
+  justify-content: center;
+}
+
+/* ------------------------------------------------------------------ C · Split */
+
+.hh-c {
+  display: grid;
+  min-height: max(660px, 100svh);
+  align-items: stretch;
+  grid-template-columns: 1.02fr 1fr;
+}
+
+.hh-c__text {
+  display: grid;
+  padding:
+    clamp(120px, 13vw, 160px) clamp(40px, 4vw, 72px)
+    clamp(48px, 6vw, 80px) var(--page-gutter);
+  align-content: center;
+}
+
+.hh-c__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.hh-c__media .hh-photo {
+  position: absolute;
+  inset: 0;
+}
+
+.hh-c .hh-title,
+.hh-d .hh-title,
+.hh-e .hh-title {
+  max-width: 14ch;
+}
+
+.hh-c .hh-title {
+  color: var(--ink);
+}
+
+.hh-c .hh-title em {
+  color: var(--brand);
+}
+
+.hh-c .hh-intro {
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------------------------ D · Inset */
+
+.hh-d {
+  padding: clamp(96px, 11vw, 128px) var(--page-gutter) var(--space-l);
+  align-items: stretch;
+}
+
+.hh-d__plate {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: min(78svh, 760px);
+  align-items: flex-end;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+}
+
+.hh-d__plate .hh-photo {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+}
+
+.hh-d .hh-scrim {
+  background: linear-gradient(
+    76deg,
+    oklch(17.4% 0.048 275 / 0.9) 0%,
+    oklch(21.5% 0.055 277 / 0.66) 46%,
+    oklch(21.5% 0.055 277 / 0.16) 100%
+  );
+}
+
+.hh-d .hh-inner {
+  width: min(620px, 56%);
+  padding: 0 0 clamp(44px, 5vw, 66px);
+  margin-left: clamp(40px, 4.4vw, 64px);
+}
+
+.hh-d .hh-title {
+  font-size: var(--step-4);
+}
+
+.hh-scroll--inset {
+  right: clamp(40px, 4.4vw, 64px);
+  bottom: clamp(44px, 5vw, 66px);
+  left: auto;
+  transform: none;
+}
+
+/* ------------------------------------------------------------------- E · Card */
+
+.hh-e {
+  align-items: flex-end;
+  padding-bottom: clamp(56px, 7vw, 92px);
+}
+
+/* Centre would put it behind the card. */
+.hh-e .hh-scroll {
+  left: auto;
+  right: var(--page-gutter);
+  bottom: 44px;
+  transform: none;
+}
+
+.hh-e .hh-scrim {
+  background: linear-gradient(
+    to right,
+    oklch(17.4% 0.048 275 / 0.34) 0%,
+    transparent 58%
+  );
+}
+
+/* The card is the reason this option exists: the words never depend on what
+   the photograph happens to be doing behind them. */
+.hh-e__card {
+  position: relative;
+  z-index: 2;
+  width: min(660px, 56vw);
+  padding: clamp(40px, 4vw, 60px);
+  margin-left: var(--page-gutter);
+  background: var(--paper);
+  box-shadow: 0 40px 90px oklch(17.4% 0.048 275 / 0.28);
+}
+
+.hh-e__card .hh-title {
+  color: var(--ink);
+  font-size: var(--step-4);
+}
+
+.hh-e__card .hh-title em {
+  color: var(--brand);
+}
+
+.hh-e__card .hh-intro {
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------------- F · Duotone */
+
+/* colour + multiply over the navy, which flattens whatever hue the stock
+   frame arrived with (this one is shot against a green wall) into the brand. */
+.hh-f__tint {
+  position: absolute;
+  inset: 0;
+  background: var(--navy);
+  mix-blend-mode: color;
+}
+
+.hh-f .hh-scrim {
+  background:
+    linear-gradient(
+      98deg,
+      oklch(17.4% 0.048 275 / 0.9) 0%,
+      oklch(21.5% 0.055 277 / 0.7) 42%,
+      oklch(21.5% 0.055 277 / 0.34) 100%
+    ),
+    linear-gradient(to top, oklch(17.4% 0.048 275 / 0.92) 0%, transparent 30%);
+}
+
+.hh-f .hh-inner {
+  padding-bottom: 96px;
+}
+
+.hh-f__proof {
+  position: absolute;
+  z-index: 2;
+  right: var(--page-gutter);
+  bottom: 0;
+  left: var(--page-gutter);
+  display: flex;
+  padding: 22px 0;
+  margin: 0;
+  gap: clamp(24px, 4vw, 64px);
+  border-top: 1px solid rgb(255 255 255 / 0.16);
+  color: rgb(255 255 255 / 0.72);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.hh-f .hh-scroll--corner {
+  bottom: 78px;
+}

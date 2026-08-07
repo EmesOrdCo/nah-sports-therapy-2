@@ -1,0 +1,538 @@
+/* Hero options for /faq — the adventurous set. Throwaway styles.
+
+   Shares the handover styles in heroes.css; only the hero itself is defined
+   here. Load both. */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.breadcrumbs--dark {
+  color: rgba(245, 248, 255, 0.6);
+}
+
+/* =========================================================== F · Question wall
+
+   The questions are the hero. Set close, at a size that reads as a block of
+   texture before it resolves into ten separate lines — the density is the
+   point, because it says "your question is in here" faster than a headline
+   could. */
+
+.hxb-f {
+  min-height: 0;
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.hxb-f__wall {
+  max-width: 22ch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hxb-f__wall li {
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.6vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.18;
+  opacity: 0.42;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.hxb-f__wall li.is-lead {
+  color: var(--ink);
+  opacity: 1;
+}
+
+.hxb-f__wall li:hover {
+  opacity: 1;
+}
+
+.hxb-f__wall a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hxb-f__foot {
+  margin: clamp(34px, 4vw, 52px) 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+}
+
+.hxb-f__foot span {
+  margin-left: 6px;
+  color: var(--brand);
+}
+
+@media (min-width: 900px) {
+  .hxb-f__wall {
+    max-width: none;
+    columns: 2;
+    column-gap: clamp(3rem, 7vw, 7rem);
+  }
+
+  .hxb-f__wall li {
+    break-inside: avoid;
+    max-width: 20ch;
+    margin-bottom: 6px;
+  }
+}
+
+/* ========================================================= G · Ask me anything
+
+   Her portrait is bottom-anchored so she stands on the hero's baseline rather
+   than floating in it, and the journey line drops from under her quote. */
+
+.hxb-g {
+  min-height: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.hxb-g__grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-m);
+}
+
+.hxb-g h1 {
+  max-width: 14ch;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-4);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+}
+
+.hxb-g__voice {
+  max-width: 42ch;
+  margin: clamp(36px, 4vw, 54px) 0 0;
+  padding-left: var(--space-s);
+  border-left: 1px solid var(--brand);
+}
+
+.hxb-g__voice p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 1.4vw, 21px);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.hxb-g__voice footer {
+  margin-top: 14px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+}
+
+.hxb-g__voice footer span {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+.hxb-g__spine {
+  width: 1px;
+  height: clamp(60px, 8vw, 110px);
+  margin: clamp(34px, 4vw, 52px) 0 0 13px;
+  background: linear-gradient(to bottom, transparent, var(--brand));
+}
+
+.hxb-g__portrait {
+  margin: 0;
+  align-self: end;
+}
+
+.hxb-g__portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+}
+
+@media (min-width: 900px) {
+  .hxb-g__grid {
+    grid-template-columns: 1fr minmax(280px, 34%);
+    gap: clamp(3rem, 7vw, 7rem);
+    align-items: end;
+  }
+
+  /* The portrait runs to the very bottom edge of the hero, so the seam into
+     the white page cuts it rather than leaving it hovering. */
+  .hxb-g__portrait {
+    margin-bottom: calc(clamp(100px, 11vw, 170px) * -1);
+  }
+}
+
+/* ============================================================== H · The room
+
+   Full-bleed photograph, scrimmed hard enough that the type holds at AA and
+   the room still reads. The line leaves the photograph and continues in the
+   white page below, which is what stops the image being a lid. */
+
+.hxb-h {
+  min-height: 0;
+  padding-bottom: 0;
+  color: var(--on-dark);
+  background: var(--navy);
+}
+
+.hxb-h__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hxb-h__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hxb-h__media::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    oklch(17.4% 0.048 275 / 0.92) 0%,
+    oklch(17.4% 0.048 275 / 0.78) 42%,
+    oklch(17.4% 0.048 275 / 0.35) 100%
+  );
+  content: "";
+}
+
+.hxb-h h1 {
+  max-width: 16ch;
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-serif);
+  font-size: var(--step-4);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+}
+
+.hxb-h__intro {
+  max-width: 46ch;
+  margin: clamp(32px, 4vw, 48px) 0 0;
+  color: rgba(240, 245, 255, 0.72);
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.7;
+}
+
+.hxb-h__spine {
+  width: 1px;
+  height: clamp(70px, 9vw, 120px);
+  margin: clamp(40px, 5vw, 70px) 0 0 13px;
+  background: linear-gradient(to bottom, transparent, var(--periwinkle));
+}
+
+.hxb-h + .hx-handover .hx-station::before {
+  background: linear-gradient(to bottom, var(--brand-light), var(--line) 90px);
+}
+
+/* ============================================================= I · The route
+
+   A drawn line with five stops, labels alternating above and below. The curve
+   is doing the same job E's straight rule did, but it reads as a route rather
+   than as a table header. */
+
+.hxb-i {
+  min-height: 0;
+  padding-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.hxb-i h1 {
+  max-width: 20ch;
+  margin: 0 0 clamp(48px, 6vw, 80px);
+  font-size: var(--step-3);
+}
+
+.hxb-i__route {
+  position: relative;
+  height: 200px;
+}
+
+.hxb-i__route svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hxb-i__line {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.55;
+}
+
+.hxb-i__stops {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A stop is a zero-size anchor pinned to a vertex of the path; the dot is
+   centred on it and the label hangs off it. Giving the stop a real size would
+   push the dot off the curve by however tall the label happens to be. */
+.hxb-i__stop {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.hxb-i__dot {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--brand);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.hxb-i__stop--1 .hxb-i__dot {
+  background: var(--brand);
+}
+
+.hxb-i__stop a {
+  position: absolute;
+  top: 16px;
+  left: -2px;
+  width: 150px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+/* Stops above the line hang their label upward instead. */
+.hxb-i__stop--2 a,
+.hxb-i__stop--4 a {
+  top: auto;
+  bottom: 16px;
+}
+
+/* The last stop is at the right edge, so its label has to extend leftwards. */
+.hxb-i__stop--5 a {
+  left: auto;
+  right: -2px;
+  text-align: right;
+}
+
+.hxb-i__stop a:hover {
+  color: var(--brand);
+}
+
+.hxb-i__n {
+  display: block;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.hxb-i__name {
+  display: block;
+  margin-top: 6px;
+  max-width: 12ch;
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* Stops sit at the path's own vertices — the percentages track the control
+   points in the SVG, so moving the curve means moving these too. */
+.hxb-i__stop--1 { top: 54%; left: 0; }
+.hxb-i__stop--2 { top: 26%; left: 25%; }
+.hxb-i__stop--3 { top: 70%; left: 50%; }
+.hxb-i__stop--4 { top: 30%; left: 75%; }
+.hxb-i__stop--5 { top: 64%; left: 100%; }
+
+@media (max-width: 899px) {
+  .hxb-i__route {
+    height: auto;
+  }
+
+  .hxb-i__route svg {
+    display: none;
+  }
+
+  .hxb-i__stops {
+    position: static;
+    display: grid;
+    gap: 18px;
+    border-left: 1px solid var(--line);
+    padding-left: 20px;
+  }
+
+  .hxb-i__stop {
+    position: relative;
+    width: auto;
+    height: auto;
+    top: auto;
+    left: auto;
+  }
+
+  .hxb-i__stop a,
+  .hxb-i__stop--2 a,
+  .hxb-i__stop--4 a,
+  .hxb-i__stop--5 a {
+    position: static;
+    width: auto;
+    text-align: left;
+  }
+
+  .hxb-i__dot { top: 6px; left: -25px; }
+}
+
+/* ========================================================= J · The transcript
+
+   One exchange, set as it will appear all the way down the page. The reader
+   learns the format from the hero instead of being told about it. */
+
+.hxb-j {
+  min-height: 0;
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.hxb-j__exchange {
+  max-width: 62ch;
+}
+
+.hxb-j__who {
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hxb-j__who--her {
+  margin-top: clamp(38px, 4.5vw, 58px);
+  color: var(--brand);
+}
+
+.hxb-j__q {
+  max-width: 18ch;
+  margin: 16px 0 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-4);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+}
+
+.hxb-j__a {
+  margin-top: 16px;
+  padding-left: var(--space-s);
+  border-left: 1px solid var(--line);
+}
+
+.hxb-j__a p {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.5vw, 23px);
+  line-height: 1.55;
+}
+
+.hxb-j__foot {
+  margin: clamp(38px, 4.5vw, 58px) 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+}
+
+.hxb-j__foot span {
+  margin-left: 6px;
+  color: var(--brand);
+}
+
+/* ====================================================== K · The stages, huge
+
+   The contents row promoted to display type. Each stage is a word at h1
+   scale, stepped right as it descends so the block reads as a descent rather
+   than as a list. */
+
+.hxb-k {
+  min-height: 0;
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.hxb-k__stack {
+  display: grid;
+  margin: 0;
+  gap: 2px;
+}
+
+.hxb-k__word {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 6.4vw, 5rem);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.02;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.hxb-k__word:hover {
+  color: var(--brand);
+}
+
+.hxb-k__n {
+  flex: none;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.hxb-k__foot {
+  max-width: 52ch;
+  margin: clamp(40px, 5vw, 62px) 0 0;
+  color: var(--ink-soft);
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.7;
+}
+
+@media (min-width: 900px) {
+  .hxb-k__word--1 { margin-left: 0; }
+  .hxb-k__word--2 { margin-left: 5%; }
+  .hxb-k__word--3 { margin-left: 10%; }
+  .hxb-k__word--4 { margin-left: 15%; }
+  .hxb-k__word--5 { margin-left: 20%; }
+}

@@ -628,13 +628,15 @@ a {
   background: rgba(73, 107, 226, 0.09);
 }
 
-/* Offset by the header's own height rather than centred on the section, so
-   the column reads as centred in the space left under the bar. */
+/* Centred on the hero itself, not on the space left under the header. The bar
+   is transparent here, so the photograph runs behind it and the eye centres on
+   the frame rather than on the gap below the nav. The small offset is only
+   there to keep the eyebrow clear of the bar on a short window. */
 .home-hero__inner {
   position: relative;
   z-index: 2;
   width: min(660px, 52vw);
-  padding-top: clamp(86px, 10vw, 118px);
+  padding-top: clamp(16px, 2.4vh, 28px);
   margin-left: var(--page-gutter);
 }
 
@@ -1264,10 +1266,10 @@ a {
 
 /* ---- Header over a photographic hero ----
 
-   The home hero and the contact hero are both full-bleed photographs with the
-   bar sitting on them, so up there the header loses its white fill and reads
-   light. Scrolling past the hero hands it back to .is-scrolled above, which is
-   why every rule here is :not(.is-scrolled).
+   The home hero, the contact hero and the studio hero are all full-bleed
+   footage or photograph with the bar sitting on them, so up there the header
+   loses its white fill and reads light. Scrolling past the hero hands it back
+   to .is-scrolled above, which is why every rule here is :not(.is-scrolled).
 
    Keyed off the hero being in the document rather than a body class, because
    the router adds its classes after parse and this has to be right on the
@@ -1277,25 +1279,25 @@ a {
 
 /* The hairline is already off at the top for every page — see .site-header
    :not(.is-scrolled) up by the base rule. All this has to drop is the fill. */
-body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) {
+body:has(.home-hero, .cv__hero, .clinics-hero) .site-header:not(.is-scrolled) {
   background: none;
 }
 
 /* :not(.is-open) is the mobile menu. Open, the nav is a white panel dropped
    below the bar rather than links on the photograph, so it has to keep the
    ink it would have had — light links there are white on white. */
-body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .wordmark__name,
-body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .wordmark__descriptor,
-body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .site-nav:not(.is-open) a,
-body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .menu-toggle {
+body:has(.home-hero, .cv__hero, .clinics-hero) .site-header:not(.is-scrolled) .wordmark__name,
+body:has(.home-hero, .cv__hero, .clinics-hero) .site-header:not(.is-scrolled) .wordmark__descriptor,
+body:has(.home-hero, .cv__hero, .clinics-hero) .site-header:not(.is-scrolled) .site-nav:not(.is-open) a,
+body:has(.home-hero, .cv__hero, .clinics-hero) .site-header:not(.is-scrolled) .menu-toggle {
   color: var(--on-dark);
 }
 
-body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .wordmark__descriptor {
+body:has(.home-hero, .cv__hero, .clinics-hero) .site-header:not(.is-scrolled) .wordmark__descriptor {
   border-left-color: rgb(255 255 255 / 0.34);
 }
 
-body:has(.home-hero, .cv__hero)
+body:has(.home-hero, .cv__hero, .clinics-hero)
   .site-header:not(.is-scrolled)
   .site-nav:not(.is-open)
   a[aria-current] {
@@ -1305,7 +1307,7 @@ body:has(.home-hero, .cv__hero)
 /* The mark is a single solid indigo path, so knocking it to white is exact
    rather than approximate — and it costs nothing next to shipping and
    cache-busting a second copy of a 25KB asset. */
-body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .wordmark__mark {
+body:has(.home-hero, .cv__hero, .clinics-hero) .site-header:not(.is-scrolled) .wordmark__mark {
   filter: brightness(0) invert(1);
 }
 
@@ -1313,7 +1315,7 @@ body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .wordmark__mark {
    inherit the light treatment above — light links there are white on white.
    The chain has to repeat .site-nav:not(.is-open) to outweigh the two rules
    above rather than lose to them on specificity. */
-body:has(.home-hero, .cv__hero)
+body:has(.home-hero, .cv__hero, .clinics-hero)
   .site-header:not(.is-scrolled)
   .site-nav:not(.is-open)
   .nav-group__menu
@@ -1323,7 +1325,7 @@ body:has(.home-hero, .cv__hero)
 
 /* And the current page inside a panel takes the brand ink it takes everywhere
    else: periwinkle is pitched for navy and measures ~2.3:1 on this white. */
-body:has(.home-hero, .cv__hero)
+body:has(.home-hero, .cv__hero, .clinics-hero)
   .site-header:not(.is-scrolled)
   .site-nav:not(.is-open)
   .nav-group__menu
@@ -1534,7 +1536,7 @@ body:has(.home-hero, .cv__hero)
 
 @media (max-height: 720px) and (min-width: 641px) {
   .home-hero__inner {
-    padding-top: 96px;
+    padding-top: 20px;
   }
 
   .home-hero__eyebrow {
@@ -2141,6 +2143,14 @@ body:has(.home-hero, .cv__hero)
   --wave-w: 104vw;
   --wave-x: -6vw;
   --wave-h: calc(var(--wave-w) * 3 / 16);
+  /* Which sweep. Two are cut from the same stock set and trimmed to their
+     linework at the same 16:3, so a page picks one by name and every number
+     above and below goes on working. --wave-art is the whole of what changes.
+     See hero({ wave }) in site-content.js. */
+  --wave-art: image-set(
+    url("/images/hero-wave-1200.webp") 1x,
+    url("/images/hero-wave-2400.webp") 2x
+  );
 
   /* The header the wave has to start under, the wave, and a gap beneath it.
      The 0.94 is the top twentieth of the artwork, which is paper on every
@@ -2154,15 +2164,48 @@ body:has(.home-hero, .cv__hero)
   );
 }
 
+/* The other sweep, on /prices. Same stock set, same trim, and the same 16:3, so
+   nothing above changes: where the first is two long troughs, this one rises to
+   a single crest and falls away. The two heads are the same treatment, not the
+   same picture — which is the point of giving the second page one at all.
+
+   The artwork is mirrored in the file, not here: drawn as bought it carries its
+   densest passage at the right, which on this head is the corner the eye leaves
+   from, and the crest landed under the title instead of beside it. Flipped, it
+   arrives dense from the left and thins out across the page, which is the way
+   the first one runs and the reason the two read as a pair.
+
+   Cut from the 8000x2400 stock JPEG, which is grey lines on grey paper under a
+   watermark. Trimmed to the linework, mirrored, paper taken to white and the
+   lines to the house navy, at both densities:
+
+     magick src.jpg -crop 8000x1500+0+380 +repage -flop -colorspace Gray \
+       -level 0%,96.86% +level-colors "#3C3C6A",white \
+       -filter Lanczos -resize 2400x450! -quality 86 hero-wave-crest-2400.webp
+
+   The crop is what puts the art at 16:3 and leaves the watermark behind; the
+   level takes the stock's 247 paper to white. Anything cut this way drops
+   straight into --wave-art. */
+.page-hero--wave-crest {
+  --wave-art: image-set(
+    url("/images/hero-wave-crest-1200.webp") 1x,
+    url("/images/hero-wave-crest-2400.webp") 2x
+  );
+}
+
+/* This one is drawn with about twice the ink of the first — more lines, held
+   tighter — and at the shared opacity it stops being a background and starts
+   being the picture the page opens with. The figures are the page. */
+.page-hero--wave-crest .page-hero__wave {
+  opacity: 0.5;
+}
+
 .page-hero__wave {
   position: absolute;
   z-index: 0;
   inset: 0;
-  background: image-set(
-      url("/images/hero-wave-1200.webp") 1x,
-      url("/images/hero-wave-2400.webp") 2x
-    )
-    left var(--wave-x) bottom 10px / var(--wave-w) auto no-repeat;
+  background: var(--wave-art) left var(--wave-x) bottom 10px / var(--wave-w)
+    auto no-repeat;
   opacity: 0.72;
   mix-blend-mode: multiply;
   /* Idle at the sizes where the whole wave is in frame — the fade zones sit in
@@ -2240,6 +2283,34 @@ body:has(.home-hero, .cv__hero)
     rgba(255, 255, 255, 0) 82%
   );
   content: "";
+}
+
+/* And behind an intro, for the heads that carry one — /prices and /faq.
+   /testimonials has no intro, which is why the rule above was all this needed
+   to begin with. A little wider and softer than the title's: the sentence is
+   set at body size in the sans, so it needs less paper cleared but over more
+   of it.
+
+   Not below 700px, where the wave is a crop rather than the whole sweep. A
+   phone column is narrower than the clearing would be, so it would take the
+   crop with it — there the wave goes quieter and passes behind the words
+   instead. */
+@media (min-width: 701px) {
+  .page-hero--wave .page-hero__intro {
+    position: relative;
+  }
+
+  .page-hero--wave .page-hero__intro::before {
+    position: absolute;
+    z-index: -1;
+    inset: -0.9em -2.4em;
+    background: radial-gradient(
+      ellipse at center,
+      #fff 0 52%,
+      rgba(255, 255, 255, 0) 86%
+    );
+    content: "";
+  }
 }
 
 /* Rule, dot, rule — the mark that closes a compact head, opt-in per page.
@@ -4705,42 +4776,118 @@ body:has(.home-hero, .cv__hero)
   font-weight: 400;
 }
 
+/* ---- /studio hero ----
+   Footage of the room, not a drawing of a treatment: the page is about a
+   place, so the hero walks through one. Built on the home hero's terms —
+   full bleed behind the header, weighted scrim, a left column of light type
+   — because that is already this site's language for a hero the bar sits on,
+   and a second dialect of it would only drift.
+
+   The type is held at the foot rather than centred. A walkthrough is
+   constantly re-composing itself, and the one part of the frame that stays
+   quiet enough to read against is the floor. */
 .clinics-hero {
   position: relative;
-  min-height: max(720px, 100svh);
-  padding: clamp(104px, 11vw, 138px) 0 clamp(28px, 4vh, 44px);
+  display: flex;
+  min-height: max(680px, 100svh);
+  padding: clamp(104px, 11vw, 138px) 0 clamp(44px, 7vh, 84px);
+  flex-direction: column;
+  justify-content: flex-end;
   overflow: hidden;
-  background: #fff;
+  background: var(--navy);
   isolation: isolate;
 }
 
-/* The subtrahend must track the hero's actual padding, or the inner column
-   reserves more height than exists and the section overshoots the viewport. */
+.clinics-hero__media {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+}
+
+.clinics-hero__still,
+.clinics-hero__reel {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* The still is the load-bearing layer, not a placeholder: it is what shows
+   before the clip has buffered, when reduced motion is asked for, and if the
+   file is missing. The video is held at zero until it can actually play —
+   JS adds .is-ready on canplay — so a stalled clip never blanks the hero. */
+.clinics-hero__reel {
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out);
+}
+
+.clinics-hero__reel.is-ready {
+  opacity: 1;
+}
+
+/* Three layers, each answering something the footage will not promise. The
+   wedge guarantees contrast under the column of type wherever the shot
+   happens to be at that moment; the foot vignette holds the low-sitting type
+   over what is usually a bright floor; the head vignette is for the header,
+   which is white type all the way across a frame whose top edge is generally
+   a lit ceiling. The still hero on the home page can do without that last
+   one — its photograph never changes. This one's does, every frame.
+
+   The wedge falls off hard rather than tapering across the frame. The room
+   in the clip is close to white, and a gentle taper over a near-white room
+   does not read as shadow — it reads as fog, the whole hero going flat
+   lavender-grey. Held to the left half, the type gets its dark ground and
+   the room stays a bright room. */
+.clinics-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      100deg,
+      oklch(21.5% 0.055 277 / 0.9) 0%,
+      oklch(21.5% 0.055 277 / 0.8) 26%,
+      oklch(21.5% 0.055 277 / 0.4) 52%,
+      oklch(21.5% 0.055 277 / 0.06) 78%,
+      oklch(21.5% 0.055 277 / 0) 100%
+    ),
+    linear-gradient(to top, oklch(17.4% 0.048 275 / 0.4) 0%, transparent 34%),
+    linear-gradient(to bottom, oklch(17.4% 0.048 275 / 0.42) 0%, transparent 16%);
+}
+
 .clinics-hero__inner {
-  display: flex;
-  min-height: calc(max(720px, 100svh) - clamp(132px, 15vw, 182px));
-  flex-direction: column;
-}
-
-/* Matches the Pilates hero: the section fills the viewport exactly rather
-   than overshooting it, and the message column leads the illustration. */
-.clinics-hero__grid {
   position: relative;
-  display: grid;
-  flex: 1;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
-  gap: clamp(40px, 5vw, 84px);
-  align-items: center;
-}
-
-.clinics-hero__content {
+  z-index: 1;
   display: flex;
   flex-direction: column;
+}
+
+.clinics-hero__eyebrow {
+  display: flex;
+  margin: 0 0 clamp(18px, 2.4vh, 28px);
+  align-items: center;
+  gap: 14px;
+  color: var(--periwinkle);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
+  text-transform: uppercase;
+}
+
+.clinics-hero__eyebrow i {
+  width: 30px;
+  height: 1px;
+  flex: none;
+  background: currentColor;
 }
 
 .clinics-hero h1 {
   max-width: 16ch;
   margin: 0;
+  color: var(--on-dark);
   font-size: var(--step-4);
   line-height: var(--lh-head);
 }
@@ -4748,44 +4895,36 @@ body:has(.home-hero, .cv__hero)
 .clinics-hero__footer {
   display: grid;
   max-width: 560px;
-  margin-top: clamp(40px, 5vw, 72px);
+  margin-top: clamp(26px, 3.6vh, 44px);
   grid-template-columns: 1fr;
-  gap: 28px;
+  gap: 24px;
   align-items: start;
   justify-items: start;
 }
 
 .clinics-hero__footer p {
-  max-width: 520px;
+  max-width: 46ch;
   margin: 0;
-  color: var(--ink-soft);
-  font-size: var(--step-0);
+  color: var(--on-dark-soft);
+  font-size: var(--step-0s);
   line-height: 1.7;
 }
 
-.clinics-hero__media {
-  position: relative;
-  display: grid;
-  place-items: center;
-  height: min(72vw, 640px);
+/* The arrow link is pitched for ink on white everywhere else it appears. */
+.clinics-hero .pilates-arrow-link {
+  color: var(--on-dark);
 }
 
-.clinics-hero__media--figure {
-  margin: 0;
-  background: none;
-  box-shadow: none;
-  overflow: visible;
+.clinics-hero .pilates-arrow-link span {
+  color: var(--periwinkle);
 }
 
-/* Un-scaled. It was width:100% + scale(1.12), which rendered 717px tall
-   inside a 640px row and pushed the whole hero past the viewport. Widened to
-   match the Sports Therapy ring above 960px — see --hero-figure. */
-.clinics-hero__figure {
-  width: min(100%, 470px);
-  aspect-ratio: 1;
-  height: auto;
-  margin-inline: auto;
-  pointer-events: none;
+/* Asked for stillness, the clip is never fetched at all — see initStudioReel.
+   This is the belt to that braces: nothing here should fade or move. */
+@media (prefers-reduced-motion: reduce) {
+  .clinics-hero__reel {
+    transition: none;
+  }
 }
 
 .clinics-studio {
@@ -4952,17 +5091,8 @@ body:has(.home-hero, .cv__hero)
 }
 
 @media (max-width: 960px) {
-  .clinics-hero__grid, .therapy-hero__grid, .therapy-fascia__grid {
+  .therapy-hero__grid, .therapy-fascia__grid {
     grid-template-columns: 1fr;
-  }
-
-  .clinics-hero__grid {
-    gap: 20px;
-  }
-
-  .clinics-hero__media {
-    order: -1;
-    height: min(70vw, 440px);
   }
 
   .therapy-hero__media {
@@ -4971,10 +5101,17 @@ body:has(.home-hero, .cv__hero)
 }
 
 @media (max-width: 640px) {
-  .clinics-hero,
   .therapy-hero {
     min-height: auto;
     padding-top: 130px;
+  }
+
+  /* Unlike the heroes that collapse to auto here, this one is a frame: let it
+     shrink to its content and the footage becomes a letterbox strip. It keeps
+     a viewport-ish height and just gives back some of the head padding. */
+  .clinics-hero {
+    min-height: max(560px, 92svh);
+    padding-top: 122px;
   }
 
   .clinics-hero h1 {
@@ -5187,6 +5324,483 @@ body:has(.home-hero, .cv__hero)
 
   .story__list li {
     padding: 9px 0;
+  }
+}
+
+/* ============================================================
+   See the studio — the home page's look inside
+   A row of labels naming four views of the Studham studio, and
+   one photograph at full width underneath. The panels are stacked
+   on a single grid cell and switched by the [hidden] attribute
+   rather than faded through opacity: a panel that is invisible but
+   still in the layout is still read out, and four descriptions of
+   the same room announced at once is worse than no transition. The
+   arriving panel animates itself in instead, which is the same
+   softness without the three ghosts.
+   ============================================================ */
+.studio-look {
+  padding-block: var(--space-section);
+  background: var(--paper);
+}
+
+/* Narrower than the page shell on purpose. The band is a look through a door,
+   not another full-bleed chapter, and pulling it in off the gutters is what
+   sets it apart from the story panels directly above. */
+.studio-look__inner {
+  width: min(calc(100% - var(--page-gutter) * 2), 880px);
+}
+
+.studio-look__title {
+  /* In ems, so the two-line break holds wherever the fluid size lands. */
+  max-width: 13em;
+  margin: 0 auto;
+  font-family: var(--font-serif);
+  font-size: var(--step-3h);
+  font-style: italic;
+  font-weight: 400;
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* The labels sit edge to edge under the heading rather than clustered in the
+   middle: spread across the same width as the photograph, they read as an
+   index to it. */
+.studio-look__tabs {
+  display: flex;
+  margin-top: clamp(32px, 3.6vw, 56px);
+  gap: clamp(16px, 2vw, 30px);
+  justify-content: space-between;
+}
+
+.studio-look__tab {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  opacity: 0.42;
+  text-align: center;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+.studio-look__tab:hover {
+  color: var(--ink);
+  opacity: 0.8;
+}
+
+.studio-look__tab.is-active {
+  color: var(--ink);
+  font-weight: 600;
+  opacity: 1;
+}
+
+/* Centred over its own label, and drawn in currentColor so the selected tab's
+   icon comes up to full ink with its text rather than needing a state of its
+   own. Every tab carries one, so nothing shifts as the selection moves. */
+.studio-look__tab-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  margin: 0 auto 10px;
+  overflow: visible;
+}
+
+.studio-look__tab-label {
+  display: block;
+}
+
+.studio-look__stage {
+  display: grid;
+  overflow: hidden;
+  /* Explicit, or the max-height below is read as the constrained dimension and
+     the ratio takes the width down with it — the panel narrows away from the
+     labels instead of just cropping. */
+  width: 100%;
+  margin-top: clamp(20px, 2.2vw, 34px);
+  border-radius: clamp(14px, 1.4vw, 22px);
+  /* Letterboxed rather than 16:9 so the whole band — title through photograph
+     — clears a laptop fold without the page having to scroll through it. The
+     cap is what makes that a guarantee rather than a size that happens to work:
+     360px is the header, the title, the labels and the gaps between them, so
+     on a window too short for the ratio the photograph crops instead of the
+     band running off the bottom of the screen. */
+  aspect-ratio: 2 / 1;
+  max-height: max(260px, calc(100svh - 360px));
+  background: var(--surface-2);
+}
+
+.studio-look__view {
+  position: relative;
+  /* Stacked on one cell, so the stage keeps its height whichever is showing. */
+  margin: 0;
+  grid-area: 1 / 1;
+  /* A grid item's automatic minimum size is its content's, so without these
+     the photograph's own 4:3 pushes the panel past the stage's ratio and out
+     from under the rounded corners. */
+  min-width: 0;
+  min-height: 0;
+}
+
+.studio-look__view img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The room is at the far end of every one of these; the near floor is not
+     what the photograph is about. */
+  object-position: center 38%;
+}
+
+.studio-look__view.is-entering {
+  animation: studio-view-in var(--dur-slow) var(--ease-out) both;
+}
+
+@keyframes studio-view-in {
+  from {
+    opacity: 0;
+    transform: scale(1.014);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.studio-look__link {
+  width: fit-content;
+  margin: var(--space-m) auto 0;
+  display: flex;
+}
+
+@media (max-width: 860px) {
+  /* Wrapping a flex row leaves the second line ranged against the first's
+     widest label; on two columns the four line up as a block instead. */
+  .studio-look__tabs {
+    display: grid;
+    gap: 18px clamp(16px, 4vw, 32px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: center;
+  }
+
+  .studio-look__tab {
+    font-size: var(--step-0);
+  }
+
+  .studio-look__tab-icon {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 8px;
+  }
+
+  .studio-look__stage {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio-look__view.is-entering {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   The voice panel — Natasha's line under the studio
+   Two halves of one band, run to both edges with no padding of
+   its own: her words on navy, her portrait beside them. The
+   halves are two columns of one grid rather than a card with an
+   image floated into it, so the photograph crops to whatever the
+   sentence needs rather than the sentence being cut to fit a
+   fixed aspect. A min-height holds the band shallow — this is a
+   pause between the studio and the contact band, not a chapter,
+   and it should read in one glance.
+   ============================================================ */
+.voice-panel {
+  background: var(--paper);
+}
+
+.voice-panel__card {
+  display: grid;
+  min-height: clamp(400px, 44vw, 620px);
+  margin: 0;
+  overflow: hidden;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+/* The words start where the page's content starts. `50vw - 720px` is the
+   shell's own left edge once the 1440px cap bites; below that the plain
+   gutter wins, which is what every other section is using. */
+.voice-panel__words {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(34px, 4vw, 56px) clamp(26px, 3.4vw, 56px)
+    clamp(34px, 4vw, 56px) max(var(--page-gutter), calc(50vw - 720px));
+  background: var(--navy);
+  color: var(--on-dark);
+  justify-content: center;
+}
+
+/* The opening mark is decoration, not punctuation — the quote carries its own
+   quotation marks in the text it replaces, and a screen reader announcing a
+   lone double-quote before the sentence adds nothing. */
+.voice-panel__mark {
+  display: block;
+  margin-bottom: clamp(8px, 1vw, 14px);
+  color: var(--periwinkle);
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  line-height: 0.6;
+  opacity: 0.55;
+}
+
+.voice-panel__card blockquote {
+  margin: 0;
+}
+
+/* Measure on the paragraph rather than the blockquote, for the same reason as
+   /about's statement band: `ch` resolves against the element's own font, and
+   the blockquote is still inheriting the sans. */
+.voice-panel__card blockquote p {
+  max-width: 30ch;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-2h);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.24;
+  text-wrap: pretty;
+}
+
+.voice-panel__cite {
+  display: grid;
+  margin-top: clamp(20px, 2.4vw, 32px);
+  gap: 4px;
+}
+
+.voice-panel__cite::before {
+  content: "";
+  width: 30px;
+  height: 1px;
+  margin-bottom: clamp(14px, 1.6vw, 22px);
+  background: var(--periwinkle);
+  opacity: 0.6;
+}
+
+.voice-panel__name {
+  font-size: var(--step-0s);
+  font-weight: 500;
+  color: var(--on-dark);
+}
+
+.voice-panel__role {
+  color: var(--on-dark-quiet);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
+/* The photograph is taken out of flow inside its half. Left in flow its own
+   intrinsic height sets the grid row, which is the whole band's height — a
+   900px-wide image would make a 530px band 530px taller. Absolute means the
+   words and the min-height decide how tall the band is and the crop follows. */
+.voice-panel__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.voice-panel__media img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* She sits right of centre in the source, in front of the chart. Holding
+     the crop there keeps her whole rather than splitting her at the edge. */
+  object-fit: cover;
+  object-position: 62% 30%;
+  filter: saturate(0.62) contrast(1.02);
+}
+
+@media (max-width: 860px) {
+  .voice-panel__card {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Photograph first on a phone: her face, then her sentence, which is the
+     order the two halves read in side by side anyway. */
+  .voice-panel__media {
+    order: -1;
+    aspect-ratio: 3 / 2;
+  }
+
+  .voice-panel__words {
+    padding: clamp(34px, 8vw, 52px) var(--page-gutter);
+  }
+
+  .voice-panel__card blockquote p {
+    max-width: 34ch;
+    font-size: var(--step-1);
+  }
+}
+
+/* ============================================================
+   The voice run — client reviews under the quote panel
+   The qualifications strip's loop, with the card grown to hold
+   a sentence: same track, same bled edges, same fade, and the
+   same rule that a card is a fixed-width block so the repeat
+   the marquee measures is that block repeated.
+
+   Empty until main.js writes the cards from reviews.js. It hides
+   itself in the meantime rather than leaving a heading standing
+   over nothing.
+   ============================================================ */
+.voice-run {
+  padding-block: var(--space-section);
+  background: var(--paper);
+}
+
+.voice-run:not(:has(li)) {
+  display: none;
+}
+
+.voice-run__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-m);
+  margin-bottom: var(--space-m);
+}
+
+.voice-run__title {
+  margin: 0;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
+  text-transform: uppercase;
+}
+
+.voice-run__track {
+  --run-gap: clamp(16px, 2vw, 30px);
+  --run-fade: clamp(28px, 7vw, 110px);
+  margin-inline: calc(var(--page-gutter) * -1);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.voice-run__track::-webkit-scrollbar {
+  display: none;
+}
+
+.voice-run__track.is-drifting {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 var(--run-fade),
+    #000 calc(100% - var(--run-fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 var(--run-fade),
+    #000 calc(100% - var(--run-fade)),
+    transparent 100%
+  );
+}
+
+.voice-run__strip {
+  display: flex;
+  width: max-content;
+  margin: 0;
+  padding: 0 0 0 var(--page-gutter);
+  list-style: none;
+}
+
+.voice-run__track.is-drifting .voice-run__strip {
+  padding-left: 0;
+  animation: voice-run-drift var(--voice-run-duration, 40s) linear infinite;
+}
+
+.voice-run__track.is-drifting:hover .voice-run__strip,
+.voice-run__track.is-drifting:focus-within .voice-run__strip {
+  animation-play-state: paused;
+}
+
+@keyframes voice-run-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(calc(var(--voice-run-shift, 50%) * -1), 0, 0);
+  }
+}
+
+/* Taller than a qualification card, and deliberately so: this one has to hold
+   a full review without the type dropping to a size nobody reads in passing.
+   The margin carries the gutter rather than a flex `gap`, so every card is an
+   identical block — see the note on .creds__strip li. */
+.voice-run__strip li {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 clamp(260px, 25vw, 350px);
+  min-height: clamp(240px, 21vw, 290px);
+  padding: clamp(24px, 2.4vw, 34px) clamp(22px, 2.2vw, 32px);
+  margin-right: var(--run-gap);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+
+.voice-run__strip blockquote {
+  margin: 0;
+}
+
+.voice-run__strip blockquote p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  line-height: 1.42;
+  letter-spacing: -0.01em;
+}
+
+.voice-run__strip cite {
+  color: var(--brand);
+  font-size: var(--label);
+  font-style: normal;
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-run__strip {
+    animation: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .voice-run__head {
+    display: grid;
+    gap: 10px;
+    justify-items: start;
   }
 }
 
@@ -5493,8 +6107,11 @@ body:has(.home-hero, .cv__hero)
   list-style: none;
 }
 
-/* Half the track is an exact copy of the other half, so ending on -50% lands
-   on an identical frame and the loop has no seam. */
+/* The front half of the track is an exact copy of the back half, so ending on
+   the width of that half lands on an identical frame and the loop has no seam.
+   The distance is measured in JS and set as --creds-shift: a whole number of
+   cards, which -50% would only be if the two halves happened to be exactly
+   equal. The 50% fallback is for the frame before JS has measured. */
 .creds__track.is-drifting .creds__strip {
   padding-left: 0;
   animation: creds-drift var(--creds-duration, 30s) linear infinite;
@@ -5511,7 +6128,7 @@ body:has(.home-hero, .cv__hero)
   }
 
   to {
-    transform: translate3d(-50%, 0, 0);
+    transform: translate3d(calc(var(--creds-shift, 50%) * -1), 0, 0);
   }
 }
 
@@ -5519,9 +6136,10 @@ body:has(.home-hero, .cv__hero)
   display: flex;
   flex-direction: column;
   gap: 14px;
-  /* Fixed width, and the gap carried as a margin rather than the flex `gap`:
-     every card is then an identical block, which is what makes the halves
-     match. A shared `gap` would leave the seam one gap short. */
+  /* Fixed width, and the gutter carried as a margin rather than the flex
+     `gap`: every card is then an identical block, and the repeat that the
+     marquee measures is the same block repeated. (The narrow breakpoint below
+     does add a `gap` on top; the measurement accounts for it.) */
   flex: 0 0 clamp(190px, 20vw, 260px);
   margin-right: var(--creds-gap);
 }
@@ -5676,15 +6294,15 @@ body:has(.home-hero, .cv__hero)
   pointer-events: none;
 }
 
-/* Above 960px all three heroes are two columns, so the Pilates and Clinics
-   rings can be matched to the Sports Therapy one (see --hero-figure). Below
-   it they stack and the Sports Therapy figure bleeds well past its box, so
-   there is no size there worth matching — those two stay contained. The
-   figure runs a few px wider than its column at some widths; the media box
-   is overflow:visible and the hero clips, so it spills rather than squashes. */
+/* Above 960px the Pilates hero is two columns, so its ring can be matched to
+   the Sports Therapy one (see --hero-figure). Below that they stack and the
+   Sports Therapy figure bleeds well past its box, so there is no size there
+   worth matching — Pilates stays contained. The figure runs a few px wider
+   than its column at some widths; the media box is overflow:visible and the
+   hero clips, so it spills rather than squashes. (The Studio hero used to
+   join this rule. It is footage now, and has no ring.) */
 @media (min-width: 961px) {
-  .pilates-hero__figure,
-  .clinics-hero__figure {
+  .pilates-hero__figure {
     width: var(--hero-figure);
   }
 }

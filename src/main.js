@@ -7,11 +7,17 @@ import { initSmoothScroll } from "./smooth-scroll.js";
 import { initFaqJourney } from "./faq/index.js";
 import { initContactSelects } from "./contact/index.js";
 import { initVoicesWall } from "./voices-wall.js";
+import { REVIEWS } from "./reviews.js";
 import { driftColumns } from "./drift-columns.js";
 
 observeBase();
 const routeState = renderRoute();
 document.documentElement.classList.add("js");
+/* index.html carries the home page's markup, so the document is held hidden by
+   the inline head script until the route it was actually asked for is in place.
+   This runs in the same task as renderRoute() above: nothing paints in between,
+   so an inner page's first frame is its own content, never the home page's. */
+document.documentElement.classList.remove("is-booting");
 
 /* The /testimonials service switch used to live here. It has gone with the
    single-column thread: the wall gives each category its own column, so the
@@ -219,33 +225,61 @@ if (tapingBand) {
   });
 }
 
-/* Drift the qualifications past on a loop. The four are cloned until the track
-   is at least two viewports wide, which is what lets the CSS translate it by
-   half its width and land on an identical frame — the loop has no seam and
-   there is always another card arriving at the edge. */
-const credsTrack = document.querySelector("[data-creds-marquee]");
-const credsStrip = credsTrack?.querySelector(".creds__strip");
-if (credsTrack && credsStrip && !reducedMotion.matches) {
-  const credsSet = [...credsStrip.children];
-  // Slow enough to read a card as it goes by.
-  const credsSpeed = 42;
+/* Drift a strip of cards past on a loop. The set is cloned until the front
+   half of the track is wider than the window, and the CSS then translates the
+   strip by exactly that many card widths — landing on an identical frame, so
+   the loop has no seam and there is always another card arriving at the edge.
 
-  const buildCredsMarquee = () => {
-    credsStrip
-      .querySelectorAll("[data-creds-clone]")
+   The shift is handed to the CSS in pixels rather than left as -50%. A
+   percentage is only a whole number of cards if the two halves are exactly
+   equal, which quietly stops being true the moment the strip carries padding
+   or a flex gap that the repeat does not — and the symptom of being a few
+   pixels out is a strip that appears to run out and jump.
+
+   Two strips run this now — the qualifications and the client voices under
+   them — so `prefix` names the pair of custom properties each one writes, and
+   nothing else about them is shared. */
+function initMarquee({ track, strip, speed, prefix }) {
+  if (!track || !strip || reducedMotion.matches) return;
+  const set = [...strip.children];
+  if (!set.length) return;
+
+  /* One repeat measured from the cards themselves. scrollWidth would fold in
+     the strip's own padding — which the drifting state then removes — and on
+     the first build that inflated figure was enough to talk the loop into one
+     copy too few. Each card is a fixed-width block, so its stride is its box
+     plus the margin that carries the gutter plus any flex gap the breakpoint
+     has added: uniform down the whole repeated stream. */
+  const unit = () => {
+    const gap = Number.parseFloat(getComputedStyle(strip).columnGap) || 0;
+    return set.reduce((total, item) => {
+      const style = getComputedStyle(item);
+      const margin =
+        (Number.parseFloat(style.marginRight) || 0) +
+        (Number.parseFloat(style.marginLeft) || 0);
+      return total + item.getBoundingClientRect().width + margin + gap;
+    }, 0);
+  };
+
+  const build = () => {
+    strip
+      .querySelectorAll("[data-marquee-clone]")
       .forEach((clone) => clone.remove());
 
-    const setWidth = credsStrip.scrollWidth;
-    const trackWidth = credsTrack.clientWidth;
+    const setWidth = unit();
+    const trackWidth = track.clientWidth;
     if (!setWidth || !trackWidth) return;
 
-    // Each half has to cover the window on its own, or the tail of the loop
-    // would run out before the head comes back round.
-    const copies = Math.max(1, Math.ceil(trackWidth / setWidth));
+    /* The front half has to cover the window on its own or its tail runs out
+       before the head comes back round. One spare copy beyond that is the
+       margin for everything measurement cannot promise — a subpixel card
+       width, a scrollbar arriving, a font landing late — and one more set of
+       cards is a cheap price for a loop that cannot empty. */
+    const copies = Math.ceil(trackWidth / setWidth) + 1;
     for (let pass = 0; pass < copies * 2 - 1; pass += 1) {
-      credsSet.forEach((item) => {
+      set.forEach((item) => {
         const clone = item.cloneNode(true);
-        clone.dataset.credsClone = "";
+        clone.dataset.marqueeClone = "";
         clone.setAttribute("aria-hidden", "true");
         // The observer never sees a clone, so it must not be left holding the
         // reveal's opacity: 0.
@@ -258,31 +292,140 @@ if (credsTrack && credsStrip && !reducedMotion.matches) {
         clone
           .querySelectorAll("img")
           .forEach((image) => image.setAttribute("loading", "eager"));
-        credsStrip.append(clone);
+        strip.append(clone);
       });
     }
 
-    credsStrip.style.setProperty(
-      "--creds-duration",
-      `${(setWidth * copies) / credsSpeed}s`,
-    );
-    credsTrack.classList.add("is-drifting");
+    const shift = setWidth * copies;
+    strip.style.setProperty(`--${prefix}-shift`, `${shift}px`);
+    strip.style.setProperty(`--${prefix}-duration`, `${shift / speed}s`);
+    track.classList.add("is-drifting");
     // It scrolls itself now, so it is no longer a scroll container to tab into.
-    credsTrack.removeAttribute("tabindex");
+    track.removeAttribute("tabindex");
   };
 
-  buildCredsMarquee();
+  build();
 
-  let credsViewport = window.innerWidth;
-  let credsRebuild = 0;
-  window.addEventListener("resize", () => {
-    // Rebuilding restarts the loop, so only do it when the width really
-    // changed — mobile fires resize whenever the address bar hides — and only
-    // once the drag has settled, rather than on every pixel of it.
-    if (window.innerWidth === credsViewport) return;
-    credsViewport = window.innerWidth;
-    window.clearTimeout(credsRebuild);
-    credsRebuild = window.setTimeout(buildCredsMarquee, 200);
+  /* Rebuilding restarts the loop, so it is only worth doing when the width
+     really changed — mobile fires resize whenever the address bar hides — and
+     only once the drag has settled rather than on every pixel of it.
+
+     Watching the track rather than the window catches the cases a resize
+     event does not report at all: a card measured at zero because the section
+     was still laying out, or a scrollbar appearing and taking the window in
+     with it. Height is ignored, or appending the clones would retrigger this. */
+  let width = track.clientWidth;
+  let rebuild = 0;
+  const queueRebuild = () => {
+    const next = track.clientWidth;
+    if (Math.abs(next - width) < 1) return;
+    width = next;
+    window.clearTimeout(rebuild);
+    rebuild = window.setTimeout(build, 200);
+  };
+
+  if (typeof ResizeObserver === "function") {
+    new ResizeObserver(queueRebuild).observe(track);
+  }
+  window.addEventListener("resize", queueRebuild);
+  // A late webfont changes nothing about a fixed-width logo card, but it does
+  // reflow a card of text, and either may have been measured at zero before
+  // then. Cheap insurance, once.
+  document.fonts?.ready.then(() => {
+    if (!track.classList.contains("is-drifting")) build();
+  });
+}
+
+const credsTrack = document.querySelector("[data-creds-marquee]");
+initMarquee({
+  track: credsTrack,
+  strip: credsTrack?.querySelector(".creds__strip"),
+  // Slow enough to read a card as it goes by.
+  speed: 42,
+  prefix: "creds",
+});
+
+/* The client voices under the quote panel. The cards are written from
+   reviews.js rather than into index.html, so the home page and /testimonials
+   cannot drift apart — that file is the single source of truth for a review.
+   The shortest ones lead: these cards go past, and a review that needs a
+   second look is one the reader loses. The full set is a click away. */
+const voiceRunStrip = document.querySelector(".voice-run__strip");
+if (voiceRunStrip) {
+  const runReviews = REVIEWS.filter((review) => review.quote.length <= 190)
+    .slice(0, 9)
+    .map(
+      (review) => `<li>
+        <blockquote><p>${review.quote}</p></blockquote>
+        <cite>${review.name}</cite>
+      </li>`,
+    )
+    .join("");
+  voiceRunStrip.innerHTML = runReviews;
+
+  const voiceRunTrack = voiceRunStrip.closest("[data-voice-marquee]");
+  initMarquee({
+    track: voiceRunTrack,
+    strip: voiceRunStrip,
+    // Slower than the qualifications: these cards carry a sentence to read,
+    // not a logo to recognise.
+    speed: 30,
+    prefix: "voice-run",
+  });
+}
+
+/* "See the studio" on the home page: four labels over one photograph. A plain
+   tablist — the panels carry [hidden] rather than a transparent-but-present
+   state, so only the view you picked is in the accessibility tree, and the
+   arriving one animates itself in. Roving tabindex, so the row is one tab stop
+   and the arrows move within it. */
+const studioTabs = [...document.querySelectorAll(".studio-look__tab")];
+if (studioTabs.length) {
+  const studioViews = studioTabs.map((tab) =>
+    document.getElementById(tab.getAttribute("aria-controls")),
+  );
+
+  const showStudioView = (index, { focus = false } = {}) => {
+    studioTabs.forEach((tab, position) => {
+      const active = position === index;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", String(active));
+      // Only the selected label is a tab stop; the rest are reached with the
+      // arrow keys.
+      tab.tabIndex = active ? 0 : -1;
+
+      const view = studioViews[position];
+      if (!view) return;
+      view.hidden = !active;
+      view.classList.remove("is-entering");
+      if (active) {
+        // Restart the animation on a view that was already the last one shown:
+        // reading the layout between removing and adding the class is what
+        // makes the browser treat it as a new one rather than the same run.
+        void view.offsetWidth;
+        view.classList.add("is-entering");
+      }
+    });
+    if (focus) studioTabs[index].focus();
+  };
+
+  studioTabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => showStudioView(index));
+    tab.addEventListener("keydown", (event) => {
+      const step =
+        event.key === "ArrowRight" || event.key === "ArrowDown"
+          ? 1
+          : event.key === "ArrowLeft" || event.key === "ArrowUp"
+            ? -1
+            : 0;
+      let next = null;
+      if (step) next = (index + step + studioTabs.length) % studioTabs.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = studioTabs.length - 1;
+      if (next === null) return;
+      event.preventDefault();
+      showStudioView(next, { focus: true });
+    });
   });
 }
 
