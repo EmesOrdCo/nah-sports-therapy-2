@@ -1,8 +1,7 @@
 /* Single source of truth for client reviews.
  *
- * Every page that shows a review reads from here — the homepage thread, the
- * full set on /clinics, and the About page selection. Add a review once and it
- * appears everywhere, correctly attributed.
+ * Reviews are shown in one place — the /testimonials page — and read from here.
+ * Add a review once, in the order you want it to appear.
  *
  * The captions used to be inconsistent: some named a service, some named the
  * injury the client came in with, others gave a job title, a duration or a
@@ -25,41 +24,34 @@ export const SERVICE_LABELS = {
   [PILATES]: "Pilates",
 };
 
-/* `featured` marks the five that run on the homepage. Order here is the order
-   they appear; the homepage takes the featured ones in this same order. */
 export const REVIEWS = [
   {
     name: "Penny",
     services: [SPORTS_THERAPY, PILATES],
-    featured: true,
     quote:
       "I call Natasha my miracle worker. Not only has she released the muscles in my neck and shoulders so I no longer ache constantly, but she has also given me regained movement in my foot following a severely ruptured tendon.",
   },
   {
     name: "Sarah",
     services: [SPORTS_THERAPY, PILATES],
-    featured: true,
     quote:
       "After almost 3 months of weekly classes and 3 sports therapy sessions I am amazed at the range of pain free movement I now have.",
   },
   {
     name: "Laura",
     services: [SPORTS_THERAPY],
-    featured: true,
     quote:
       "Her treatment hugely helped my long standing shoulder injury, increasing my range and ease of movement. I am now able to work better in the gym and play tennis without pain.",
   },
   {
     name: "Tessa",
     services: [PILATES],
-    featured: true,
     quote:
       "I come away feeling taller, stronger and straighter, sometimes I even have to adjust my rear-view mirror before driving off after a session to accommodate my new found height!",
   },
   {
     name: "Kim",
     services: [SPORTS_THERAPY, PILATES],
-    featured: true,
     quote:
       "My lower back problems have more or less vanished and I am now comfortable at work and able to undertake other forms of exercise.",
   },
@@ -102,56 +94,213 @@ export const REVIEWS = [
     quote:
       "She understands her clients' needs and tailors their Pilates exercises to meet those needs. I come away feeling taller, stronger and straighter.",
   },
+
+  /* From here down: the Google reviews, in the order Google shows them, at
+   * their full length — these are the complete texts from behind Google's
+   * "More" link, not the collapsed previews.
+   *
+   * Three standing rules for anything added here:
+   *
+   *   - Captions are first names, the same as every review above. The
+   *     reviewers post under full names on Google; the wall does not.
+   *   - The practice's own replies are not carried across. The card is a quote
+   *     and a name, and a reply is a second voice the layout has no place for.
+   *   - Wording is the reviewer's. Spelling and punctuation are corrected to
+   *     UK house style and "Pilates" is capitalised; nothing is rewritten.
+   */
+  {
+    name: "David",
+    services: [PILATES],
+    quote:
+      "I came to Pilates later in life (!!), and Natasha gave me a couple of one-to-one lessons to help me get started. This gave me the confidence to join one of her regular classes. It has been a real eye-opening experience — in a very good way — and I've started using muscles that have clearly been dormant for a long time!! Natasha has been incredibly helpful, professional, and encouraging throughout, and I'm really enjoying this new experience. Thanks, Natasha!",
+  },
+  {
+    name: "Isabella",
+    services: [PILATES],
+    quote:
+      "This Pilates group helped me immensely with my mobility, flexibility and my strength. As a newbie to Pilates I initially felt apprehensive about first starting, however Natasha made me feel very welcome in the class and supported my every need. Natasha is very attentive, and makes sure that everyone is comfortable and helps to tailor each movement to each person's individual needs. The workout focuses on mobility, strength and flexibility, and I always leave the studio feeling refreshed. Natasha's Pilates class is something I look forward to each week!",
+  },
+  {
+    name: "Niki",
+    services: [PILATES],
+    quote:
+      "I have been doing Pilates with Natasha for many years. She is an excellent teacher who does one to one and small classes. She is attentive and knowledgeable to your individual needs. I have been up and down with back and hip issues and she has been marvellous with me, helping me to maintain and improve. I would highly recommend her if you're looking to improve flexibility and core strength with a more personal instructor.",
+  },
+  {
+    name: "Sudha",
+    services: [PILATES],
+    quote:
+      "I'm so grateful for Natasha's Pilates classes. Her teaching is clear, patient and incredibly attentive — she notices the small details, offers spot-on corrections, and provides options for every level. Both the group classes and 1-to-1s feel supportive and effective, with a welcoming atmosphere that helps you progress safely. A truly unique instructor who cares about each person in the room.",
+  },
+  {
+    name: "Katherine",
+    services: [PILATES],
+    quote:
+      "What a fantastic Pilates teacher Natasha is. I was a Pilates novice when I first started, and Natasha has been the best teacher I could have asked for. She has watched every movement to ensure I am doing the moves correctly. Nothing is too much trouble, and I have noticed significant improvement in my posture and the aches and pains I would have received daily before. I would highly recommend Natasha. Thank you so much.",
+  },
+  {
+    name: "Lotte",
+    services: [PILATES],
+    quote:
+      "Natasha is a fantastic Pilates teacher. The classes are small with a lovely atmosphere — guaranteed to leave feeling physically and mentally improved! I would recommend without hesitation.",
+  },
+  {
+    name: "Julia",
+    services: [PILATES],
+    quote:
+      "Natasha is a wonderful Pilates teacher. She is so calming and is very informative and watchful to make sure you are getting the full benefits from her Pilates classes. Her studio is spotlessly clean and comfortable. I can recommend Natasha's Pilates wholeheartedly.",
+  },
+  {
+    name: "Elizabeth",
+    services: [PILATES],
+    quote:
+      "I've been coming to Natasha's small group Pilates classes for over 5 years and they are fantastic — they have made such a difference and I have never felt fitter! Natasha tailors every lesson to the needs of each of us and, as the classes are so small, can easily focus on how we are doing. I can't recommend her highly enough! Thank you, Natasha.",
+  },
+  {
+    name: "Nadia",
+    services: [PILATES],
+    quote:
+      "Natasha has been amazing. Before starting Pilates I struggled a lot with my core strength and balance. I had a one on one session with Natasha and had tons of really helpful advice. She helped me understand the imbalances in my muscles and how to gain strength and prevent injury. I started Pilates 4 months ago and I can already see and feel a huge difference. Natasha is always kind and welcoming and makes sure that you are doing everything correctly, and creates a really safe and positive environment. Since starting Pilates, I have improved massively in my sport and have been selected for Team GB U17. I would thoroughly recommend Pilates with Natasha to any sports person as it has made a real difference to my performance.",
+  },
+  {
+    name: "Karen",
+    services: [PILATES],
+    quote:
+      "A fantastic Pilates studio with great equipment that made my 1:1 session fun and challenging. Natasha is incredibly knowledgeable and was able to adapt all the Pilates moves to help improve my body strength and spine stability. A very positive experience indeed.",
+  },
+  {
+    name: "Mark",
+    services: [PILATES],
+    quote:
+      "I have been having Pilates instruction from Natasha for about two years on a 1:1 basis. She is a fantastic instructor: I am constantly challenged by the classes which are varied every week and she is always encouraging and motivating. Highly recommended.",
+  },
+  {
+    name: "India",
+    services: [SPORTS_THERAPY],
+    quote:
+      "Before I saw Natasha I had back and shoulder pain and had seen several professionals but nothing was helping. In a few sessions of deep tissue massages Natasha has been able to release tension in my back and neck and got rid of my pain. Highly recommend!",
+  },
+  {
+    name: "Caroline",
+    services: [PILATES],
+    quote:
+      "I went to Natasha because she specialises in postpartum Pilates. Natasha was fantastic and guided me through specific Pilates exercises to help with my diastasis recti problem that occurred through pregnancy. She knew the very specific movements that would draw my stomach muscles back together (some exercises can make it worse). She was very gentle and patient with me and helped build up my core strength and ability. Thank you Natasha, I no longer suffer from diastasis recti and have my waistline back!",
+  },
+  /* Posted under the Google handle "MrMEC 1", which is not a name. Same
+     situation as the two above, and the same fix: a first name from NJH. */
+  {
+    name: "Pilates client",
+    services: [PILATES],
+    quote:
+      "Natasha takes the greatest care in making sure you are working safely and at the correct level. Natasha's classes are friendly and professional, I would recommend her to anyone who wants small class sizes and personal attention.",
+  },
+  {
+    name: "Eileen",
+    services: [PILATES],
+    quote:
+      "We cannot praise Natasha enough. Her classes are fabulous. We always feel so much better after each class. Everyone gets attention to their individual needs and Natasha's patience knows no bounds. The studio is bright and clean and there is sufficient apparatus for everyone.",
+  },
+  {
+    name: "Rob",
+    services: [SPORTS_THERAPY, PILATES],
+    quote:
+      "I have had several soft tissue treatments from Natasha, which have been extremely good in relieving pain and discomfort. I also attend her Pilates classes, where she is very attentive to all our different needs, and I'm feeling the benefit from the exercises.",
+  },
+  {
+    name: "Abbi",
+    services: [SPORTS_THERAPY],
+    quote:
+      "Great appointment today — went in very stiff and after Natasha's treatment feel a whole lot better!",
+  },
+  {
+    name: "Mark",
+    services: [SPORTS_THERAPY],
+    quote:
+      "Massive improvement to my long standing shoulder issue after just one session. Thanks Natasha, fabulous!",
+  },
+  /* Kim's review closes on Google with "I highly recommend NJH Pilates for
+     physio and pilates". That last line is dropped here and should stay
+     dropped: NJH is a sports therapy practice, and "physio" is short for a
+     title only registered physiotherapists may use. A client can call it what
+     they like in their own review; the practice's own site repeating it is a
+     different thing. Everything up to that point is hers, untouched. */
+  {
+    name: "Kim",
+    services: [SPORTS_THERAPY],
+    quote:
+      "I asked Natasha if she could help me as I had upper arm and shoulder pain and discomfort, plus some restricted movement. This occurred after a period of intensive training for my first triathlon. After one session of soft tissue work with Natasha, my full range of movement is back and all pain has gone. I'm very grateful to Natasha for getting me ready to tackle my event in just over a week's time.",
+  },
 ];
 
-export const FEATURED = REVIEWS.filter((review) => review.featured);
+/* The wall — three columns, each one a category, the outer two drifting down
+ * and the middle one up. The categories replaced the All / Sports Therapy /
+ * Pilates switch that used to sit above the quotes: with a column per category
+ * the switch was filtering a layout that had already done the filtering, and
+ * choosing "Pilates" left one column standing beside two empty ones.
+ *
+ * There are only two services, so the third column is the reviews that carry
+ * both. That is the only three-way split the tags support — a fourth kind of
+ * label is the thing the rule at the top of this file exists to prevent. Add a
+ * service here and the wall picks it up; the layout does not change.
+ */
+const both = (review) => review.services.length > 1;
+const only = (service) => (review) =>
+  review.services.includes(service) && !both(review);
 
-export function reviewsFor(filter) {
-  if (!filter || filter === "all") return REVIEWS;
-  return REVIEWS.filter((review) => review.services.includes(filter));
-}
+export const WALL_COLUMNS = [
+  {
+    label: SERVICE_LABELS[SPORTS_THERAPY],
+    direction: "down",
+    /* Pixels per second, and three different values. Matched speeds make the
+       columns read as one sheet sliding behind a window rather than as three
+       separate lists. Slow enough to finish a quote as it goes by. */
+    speed: 13,
+    list: REVIEWS.filter(only(SPORTS_THERAPY)),
+  },
+  {
+    label: "Both",
+    direction: "up",
+    speed: 11,
+    list: REVIEWS.filter(both),
+  },
+  {
+    label: SERVICE_LABELS[PILATES],
+    direction: "down",
+    speed: 12,
+    list: REVIEWS.filter(only(PILATES)),
+  },
+];
 
-export function countFor(filter) {
-  return reviewsFor(filter).length;
-}
+const card = (review) =>
+  `<figure class="voices__card">
+            <blockquote>&ldquo;${review.quote}&rdquo;</blockquote>
+            <figcaption>${review.name}</figcaption>
+          </figure>`;
 
-/* The three-beat stagger is positional, so it has to be recalculated from the
-   filtered list. Hiding items in place would leave two right-aligned quotes
-   next to each other and the composition falls apart. */
-const OFFSETS = ["", " voices__item--right", " voices__item--indent"];
+/* One copy of each list ships in the HTML. voices-wall.js clones it as many
+   times as the window is tall and drives the loop from there — how many copies
+   a seamless loop needs depends on the viewport, which is not something the
+   server knows. Without JS the three lists simply stand still at full height,
+   which is the same thing a phone gets.
 
-export function voicesItems(list, { revealed = false } = {}) {
-  return list
-    .map(
-      (review, index) =>
-        `<figure class="voices__item${OFFSETS[index % OFFSETS.length]}${
-          revealed ? " is-visible" : ""
-        }" data-reveal>
-          <blockquote>&ldquo;${review.quote}&rdquo;</blockquote>
-          <figcaption>${review.name}</figcaption>
-        </figure>`,
-    )
-    .join("");
-}
+   The gap between cards is carried as a margin rather than a flex `gap`, for
+   the same reason the credentials marquee does it: every card is then an
+   identical block, so one copy is exactly as tall as the next and the loop
+   wraps on an identical frame. A shared `gap` leaves the seam one gap short.
 
-/* Toggle 3 — the switch is set in the display serif at quote size, under the
-   section title. Active state reuses the underline the main nav draws. */
-export function voicesSwitch() {
-  const options = [
-    ["all", "All"],
-    [SPORTS_THERAPY, SERVICE_LABELS[SPORTS_THERAPY]],
-    [PILATES, SERVICE_LABELS[PILATES]],
-  ];
-
-  return `<div class="voices__switch" role="group" aria-label="Filter reviews by service">
-    ${options
-      .map(
-        ([value, label], index) =>
-          `<button type="button" class="voices__switch-btn${
-            index === 0 ? " is-active" : ""
-          }" data-review-filter="${value}" aria-pressed="${index === 0}">${label}</button>`,
-      )
-      .join("")}
-  </div>
-  <hr class="voices__switch-rule">`;
+   data-native-scroll is smooth-scroll.js's opt-out. Without it that module
+   swallows every wheel event on the page and eases the window instead, so a
+   stopped column could never be scrolled by hand — which is the whole point of
+   stopping it. */
+export function voicesColumns() {
+  return WALL_COLUMNS.map(
+    (column, index) => `<div class="voices__col voices__col--${column.direction}" data-drift-speed="${column.speed}">
+      <p class="voices__label" id="voices-label-${index}">${column.label}<i aria-hidden="true"></i></p>
+      <div class="voices__window" tabindex="0" role="group" aria-labelledby="voices-label-${index}" data-native-scroll>
+        <div class="voices__track">
+          ${column.list.map(card).join("\n          ")}
+        </div>
+      </div>
+    </div>`,
+  ).join("\n    ");
 }

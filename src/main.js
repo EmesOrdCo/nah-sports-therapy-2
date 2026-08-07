@@ -3,47 +3,20 @@ import "./style.css";
 import "./about/about.css";
 import { initPageFeatures, renderRoute } from "./site-content.js";
 import { observeBase, routePath } from "./base-path.js";
-import { FEATURED, reviewsFor, voicesItems } from "./reviews.js";
+import { initSmoothScroll } from "./smooth-scroll.js";
+import { initFaqJourney } from "./faq/index.js";
+import { initContactSelects } from "./contact/index.js";
+import { initVoicesWall } from "./voices-wall.js";
+import { driftColumns } from "./drift-columns.js";
 
 observeBase();
 const routeState = renderRoute();
 document.documentElement.classList.add("js");
 
-/* The homepage ships its five featured quotes as static markup so they survive
-   without JS. When JS runs, replace them from reviews.js so there is only one
-   place to edit a review. Has to happen before revealItems is collected below,
-   or the new figures never get observed. */
-if (routeState.isHome) {
-  const inner = document.querySelector(".voices__inner");
-  if (inner) {
-    inner.querySelectorAll(".voices__item").forEach((item) => item.remove());
-    inner.insertAdjacentHTML("beforeend", voicesItems(FEATURED));
-  }
-}
-
-/* Service switch on the /clinics thread. Re-renders rather than hiding, because
-   the left / right / indent rhythm is positional — hiding items in place leaves
-   two right-aligned quotes together and the composition breaks. */
-const reviewList = document.querySelector("[data-review-list]");
-if (reviewList) {
-  const buttons = [...document.querySelectorAll("[data-review-filter]")];
-
-  buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const filter = button.dataset.reviewFilter;
-      buttons.forEach((other) => {
-        const active = other === button;
-        other.classList.toggle("is-active", active);
-        other.setAttribute("aria-pressed", String(active));
-      });
-      // Rendered already revealed: these have not been through the observer,
-      // and a fade from nothing on every click would read as a page reload.
-      reviewList.innerHTML = voicesItems(reviewsFor(filter), { revealed: true });
-      // The thread is drawn from the band's height, which just changed.
-      window.dispatchEvent(new Event("resize"));
-    });
-  });
-}
+/* The /testimonials service switch used to live here. It has gone with the
+   single-column thread: the wall gives each category its own column, so the
+   switch was filtering a layout that had already done the filtering — and
+   picking one service left a column standing beside two empty ones. */
 
 const siteLoader = document.querySelector(".site-loader");
 if (!routeState.isHome) {
@@ -81,7 +54,7 @@ const menuToggle = document.querySelector(".menu-toggle");
 const navigation = document.querySelector(".site-nav");
 const siteHeader = document.querySelector(".site-header");
 const hero = document.querySelector(
-  ".fibre-field, .page-hero, .pilates-hero, .clinics-hero, .therapy-hero",
+  ".home-hero, .page-hero, .pilates-hero, .clinics-hero, .therapy-hero, .cv__hero",
 );
 const revealItems = [...document.querySelectorAll("[data-reveal]")];
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -156,32 +129,161 @@ if (reducedMotion.matches || !("IntersectionObserver" in window)) {
   }, 3000);
 }
 
-/* Draw the testimonial thread in step with scroll. The path uses
-   pathLength="1", so --thread-progress runs 1 (undrawn) to 0 (complete). */
-const voicesSection = document.querySelector(".voices");
-if (voicesSection && !reducedMotion.matches) {
-  let threadQueued = false;
+/* Follow the boundary between the home page's story chapters. A chapter stays
+   pinned while the next rises over it, so its own bottom edge is parked off at
+   the fold and the boundary you see is the arriving chapter's top edge. The CSS
+   cuts each pinned pair back to --seam and rounds that cut, which is what puts
+   the same corner on both sides of the line and carries it up the screen. */
+const storyChapters = [...document.querySelectorAll(".story__chapter")];
+if (storyChapters.length && !reducedMotion.matches) {
+  let seamQueued = false;
+  // The panels park under the header, so --seam is measured down from there
+  // rather than from the top of the page: it is an inset into the panel.
+  let panelTop = 0;
 
-  const drawThread = () => {
-    threadQueued = false;
-    const rect = voicesSection.getBoundingClientRect();
-    // 0 as the band's top reaches the fold, 1 once its bottom does, so the
-    // line keeps pace with you the whole way down rather than finishing early.
-    const span = Math.max(rect.height * 0.92, 1);
-    const travelled = window.innerHeight - rect.top;
-    const progress = Math.min(Math.max(travelled / span, 0), 1);
-    voicesSection.style.setProperty("--thread-progress", String(1 - progress));
+  const measurePanelTop = () => {
+    panelTop =
+      parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--header-scrolled",
+        ),
+      ) || 0;
   };
 
-  const queueThread = () => {
-    if (threadQueued) return;
-    threadQueued = true;
-    window.requestAnimationFrame(drawThread);
+  const drawSeams = () => {
+    seamQueued = false;
+    const fold = window.innerHeight;
+    const panel = fold - panelTop;
+
+    storyChapters.forEach((chapter, index) => {
+      // Only another chapter climbs over one. What follows the story is an
+      // ordinary section that pushes the last photograph up the page instead,
+      // so that pair's edges never move and the stylesheet keeps them.
+      const arriving = storyChapters[index + 1];
+      if (!arriving) return;
+      const top = arriving.getBoundingClientRect().top;
+      const seam = Math.min(Math.max(top - panelTop, 0), panel);
+      chapter.style.setProperty("--seam", `${seam}px`);
+      // A seam still at the foot of the panel is nothing arriving yet, and a
+      // rounded corner there would just be two notches sitting at the bottom
+      // of the screen. Under a pixel of it is the arriving chapter sitting
+      // exactly on the fold, off by a subpixel — not a boundary either.
+      chapter.style.setProperty(
+        "--seam-radius",
+        panel - seam > 1 ? "var(--story-radius)" : "0px",
+      );
+    });
   };
 
-  window.addEventListener("scroll", queueThread, { passive: true });
-  window.addEventListener("resize", queueThread, { passive: true });
-  drawThread();
+  const queueSeams = () => {
+    if (seamQueued) return;
+    seamQueued = true;
+    window.requestAnimationFrame(drawSeams);
+  };
+
+  window.addEventListener("scroll", queueSeams, { passive: true });
+  window.addEventListener(
+    "resize",
+    () => {
+      measurePanelTop();
+      queueSeams();
+    },
+    { passive: true },
+  );
+  measurePanelTop();
+  drawSeams();
+}
+
+/* The drawn S-curve thread that ran behind the quotes went with the single
+   column it was threading. Three columns each moving on their own already
+   carry the band; a line weaving behind them had nothing left to join up. */
+initVoicesWall();
+
+/* The taping band on /sports-therapy runs the same drift: photographs up the
+   left, down the right, the copy standing still between them. */
+const tapingBand = document.querySelector(".taping-band");
+if (tapingBand) {
+  const rebuildTaping = driftColumns(tapingBand, {
+    col: ".taping-band__col",
+    view: ".taping-band__window",
+    track: ".taping-band__track",
+    down: "taping-band__col--down",
+    speed: 15,
+  });
+  // Photographs are measured, not laid out from text metrics: a track measured
+  // before its images have decoded is the wrong height, and the loop wraps
+  // mid-shot. Each one that lands asks for a rebuild.
+  tapingBand.querySelectorAll("img").forEach((image) => {
+    if (image.complete) return;
+    image.addEventListener("load", () => rebuildTaping?.(), { once: true });
+  });
+}
+
+/* Drift the qualifications past on a loop. The four are cloned until the track
+   is at least two viewports wide, which is what lets the CSS translate it by
+   half its width and land on an identical frame — the loop has no seam and
+   there is always another card arriving at the edge. */
+const credsTrack = document.querySelector("[data-creds-marquee]");
+const credsStrip = credsTrack?.querySelector(".creds__strip");
+if (credsTrack && credsStrip && !reducedMotion.matches) {
+  const credsSet = [...credsStrip.children];
+  // Slow enough to read a card as it goes by.
+  const credsSpeed = 42;
+
+  const buildCredsMarquee = () => {
+    credsStrip
+      .querySelectorAll("[data-creds-clone]")
+      .forEach((clone) => clone.remove());
+
+    const setWidth = credsStrip.scrollWidth;
+    const trackWidth = credsTrack.clientWidth;
+    if (!setWidth || !trackWidth) return;
+
+    // Each half has to cover the window on its own, or the tail of the loop
+    // would run out before the head comes back round.
+    const copies = Math.max(1, Math.ceil(trackWidth / setWidth));
+    for (let pass = 0; pass < copies * 2 - 1; pass += 1) {
+      credsSet.forEach((item) => {
+        const clone = item.cloneNode(true);
+        clone.dataset.credsClone = "";
+        clone.setAttribute("aria-hidden", "true");
+        // The observer never sees a clone, so it must not be left holding the
+        // reveal's opacity: 0.
+        clone.removeAttribute("data-reveal");
+        clone.classList.remove("pre-reveal");
+        clone.classList.add("is-visible");
+        // Lazy loading is decided against the viewport, and a clone waiting
+        // off to the right may never be judged visible — the originals are
+        // already in cache, so there is nothing to defer.
+        clone
+          .querySelectorAll("img")
+          .forEach((image) => image.setAttribute("loading", "eager"));
+        credsStrip.append(clone);
+      });
+    }
+
+    credsStrip.style.setProperty(
+      "--creds-duration",
+      `${(setWidth * copies) / credsSpeed}s`,
+    );
+    credsTrack.classList.add("is-drifting");
+    // It scrolls itself now, so it is no longer a scroll container to tab into.
+    credsTrack.removeAttribute("tabindex");
+  };
+
+  buildCredsMarquee();
+
+  let credsViewport = window.innerWidth;
+  let credsRebuild = 0;
+  window.addEventListener("resize", () => {
+    // Rebuilding restarts the loop, so only do it when the width really
+    // changed — mobile fires resize whenever the address bar hides — and only
+    // once the drag has settled, rather than on every pixel of it.
+    if (window.innerWidth === credsViewport) return;
+    credsViewport = window.innerWidth;
+    window.clearTimeout(credsRebuild);
+    credsRebuild = window.setTimeout(buildCredsMarquee, 200);
+  });
 }
 
 const sectionLinks = [
@@ -190,8 +292,8 @@ const sectionLinks = [
   const url = new URL(link.href, window.location.href);
   const continuousPath = document.body.classList.contains("is-pilates-page")
     ? "/pilates"
-    : document.body.classList.contains("is-clinics-page")
-      ? "/clinics"
+    : document.body.classList.contains("is-studio-page")
+      ? "/studio"
       : document.body.classList.contains("is-therapy-page")
         ? "/sports-therapy"
         : "";
@@ -238,7 +340,6 @@ window.addEventListener("scroll", updateHeader, { passive: true });
 updateHeader();
 
 const legacyPilatesSections = {
-  "/blank-1": "studio",
   "/individual-pilates": "individual",
   "/small-group-pilates-timetable": "small-group",
   "/blank": "pre-postnatal",
@@ -246,9 +347,16 @@ const legacyPilatesSections = {
   "/clinic-policies": "practical",
   "/retreats": "",
 };
-const legacyClinicsSections = {
-  "/testimonial": "testimonials",
-  "/links": "links",
+// Mirrors studioLegacyTargets in site-content.js. "/blank-1" moved across from
+// the Pilates list when the studio section moved to /studio.
+const legacyStudioSections = {
+  "/links": "",
+  "/clinics": "",
+  "/blank-1": "studio",
+};
+// Charity work moved from /studio to /about, so its original URL scrolls into
+// the About page rather than the studio one.
+const legacyAboutSections = {
   "/charity-work": "charity",
 };
 const legacyTherapySections = {
@@ -262,7 +370,8 @@ const legacyTherapySections = {
 const initialSection =
   routeState.scrollTarget ||
   legacyPilatesSections[routePath()] ||
-  legacyClinicsSections[routePath()] ||
+  legacyStudioSections[routePath()] ||
+  legacyAboutSections[routePath()] ||
   legacyTherapySections[routePath()] ||
   window.location.hash.replace(/^#/, "");
 if (initialSection) {
@@ -285,4 +394,9 @@ if (initialSection) {
   );
 }
 
+initSmoothScroll();
 initPageFeatures();
+initFaqJourney();
+// After initPageFeatures: the contact page's submit listener has to run second
+// so it can put focus on a dropdown the shared handler could not reach.
+initContactSelects();

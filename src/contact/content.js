@@ -18,19 +18,16 @@ export const PLACES = [
     name: "Studham Pilates Studio",
     lines: ["Studham, near Whipsnade"],
     note: "Sports Therapy, individual and small-group Pilates. Full directions are sent when your appointment is confirmed.",
-    href: "/pilates#studio",
+    href: "/studio#studio",
     linkLabel: "Studio details",
   },
 ];
 
-/* CURRENTLY UNUSED — held, not dead.
-
-   The three things a nervous first-time client wants to know before they will
-   type anything into a form. These were variant A's left rail until Dan asked
-   for the headline and call button to take that column instead. Kept here
-   because the copy is client-facing and considered: if the page ever wants a
-   reassurance strip back (a compact row under the form is the obvious place),
-   this is it. Delete outright if that never happens.
+/* The three things a nervous first-time client wants to know before they will
+   type anything into a form. These were variant A's left rail, were held
+   unused through the two-door rebuild, and are now the third column beside the
+   form. The order is the order they are read in — it runs from what happens
+   next, to what you need before you write, to what writing commits you to.
 
    Deliberately not numbered — the overhaul removed 01/02/03 scaffolding. */
 export const REASSURANCE = [

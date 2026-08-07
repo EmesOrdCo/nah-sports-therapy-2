@@ -1,8 +1,9 @@
 import { legacyPages } from "./legacy-content.js";
 import { buildAboutPage } from "./about/index.js";
 import { buildContactPage } from "./contact/index.js";
+import { buildFaqPage } from "./faq/index.js";
 import { routePath } from "./base-path.js";
-import { REVIEWS, voicesItems, voicesSwitch } from "./reviews.js";
+import { voicesColumns } from "./reviews.js";
 
 const BUSINESS = {
   phoneDisplay: "07881 821 901",
@@ -19,7 +20,6 @@ const navGroups = [
     href: "/pilates",
     links: [
       ["Overview", "/pilates#overview"],
-      ["Studham studio", "/pilates#studio"],
       ["Individual Pilates", "/pilates#individual"],
       ["Small-group timetable", "/pilates#small-group"],
       ["Pre & postnatal Pilates", "/pilates#pre-postnatal"],
@@ -28,34 +28,42 @@ const navGroups = [
     ],
   },
   {
-    label: "Clinics",
-    href: "/clinics",
-    links: [
-      ["Locations", "/clinics#locations"],
-      ["Testimonials", "/clinics#testimonials"],
-      ["Professional links", "/clinics#links"],
-      ["Charity work", "/clinics#charity"],
-    ],
-  },
-  {
     label: "Sports Therapy",
     href: "/sports-therapy",
     links: [
       ["Overview", "/sports-therapy#overview"],
-      ["Treatment", "/sports-therapy#treatment"],
       ["Myofascial Release", "/sports-therapy#myofascial-release"],
+      ["Treatment", "/sports-therapy#treatment"],
       ["What to expect", "/sports-therapy#what-to-expect"],
       ["Kinesiology Taping", "/sports-therapy#kinesiology-taping"],
-      ["Treatment prices", "/sports-therapy#practical"],
+      ["Appointments", "/sports-therapy#practical"],
     ],
   },
+  // Renamed from "Clinics". There is one studio, not a set of clinics, and the
+  // studio copy that used to sit inside /pilates now lives here — so the page
+  // is named for the room it is entirely about.
+  // No submenu: the studio is one short page, so a dropdown of anchors into it
+  // was more chrome than the page has content.
+  { label: "Studio", href: "/studio", links: [] },
   { label: "About", href: "/about", links: [] },
-  { label: "Contact", href: "/contact", links: [["Prices", "/prices"]] },
+  // The practical questions used to sit under Natasha's story on /about. They
+  // are a reference, not a biography, so they have their own page — and the
+  // people who need them arrive looking for them rather than for her.
+  { label: "FAQ", href: "/faq", links: [] },
+  // Reviews used to run as a band on the homepage and again inside Clinics.
+  // They now have one page of their own, so there is a single place to read
+  // them and a single place to add one.
+  { label: "Testimonials", href: "/testimonials", links: [] },
+  // Every fee on the site lives here — the service pages describe the work and
+  // link across rather than carrying figures that then need updating in five
+  // places.
+  { label: "Prices", href: "/prices", links: [] },
+  { label: "Contact", href: "/contact", links: [] },
 ];
 
 const crumbs = {
   pilates: ["Pilates", "/pilates"],
-  clinics: ["Clinics", "/clinics"],
+  clinics: ["Studio", "/studio"],
   therapy: ["Sports Therapy", "/sports-therapy"],
   contact: ["Contact", "/contact"],
 };
@@ -108,13 +116,36 @@ function section(kicker, title, body, modifier = "") {
   </section>`;
 }
 
-function hero({ eyebrow, title, intro, parent, tone = "light", media }) {
+function hero({
+  eyebrow,
+  title,
+  intro,
+  parent,
+  tone = "light",
+  media,
+  compact,
+  ornament,
+  wave,
+}) {
   const crumb = parent
     ? `<a href="${parent[1]}">${parent[0]}</a><span aria-hidden="true">/</span>`
     : '<a href="/">Home</a><span aria-hidden="true">/</span>';
   const inner = `<nav class="breadcrumbs" aria-label="Breadcrumb">${crumb}<span>${eyebrow}</span></nav>
       <h1>${title}</h1>
       ${intro ? `<p class="page-hero__intro">${intro}</p>` : ""}`;
+  /* A page whose whole job is to hand you a wall of quotes cannot spend a
+     screen and a half introducing itself. --compact drops the display size to
+     --step-3h, puts the intro alongside the heading and loses the drifting rings,
+     so the quotes are already in view when the page opens. */
+  if (compact) {
+    return `<section class="page-hero page-hero--${tone} page-hero--compact${wave ? " page-hero--wave" : ""}">
+    ${wave ? '<div class="page-hero__wave" aria-hidden="true"></div>' : ""}
+    <div class="section-shell page-hero__inner">
+      ${inner}
+      ${ornament ? '<div class="page-hero__ornament" aria-hidden="true"></div>' : ""}
+    </div>
+  </section>`;
+  }
   if (media) {
     return `<section class="page-hero page-hero--${tone} page-hero--media">
     <div class="section-shell page-hero__inner">
@@ -327,24 +358,6 @@ const policies = page(
   </div></section>${cta("Have a question about a policy?")}`,
 );
 
-const partnerLinks = page(
-  {
-    title: "Professional Links | NJH",
-    description: "Training bodies and professional resources connected to NJH.",
-    eyebrow: "Professional links",
-    title: "Professional links",
-    intro:
-      "Organisations connected to Natasha's professional training in Sports Therapy, soft-tissue work and Pilates.",
-    parent: crumbs.clinics,
-  },
-  `<section class="resource-section"><div class="section-shell resource-list">
-    <a href="https://www.lssm.com/" target="_blank" rel="noreferrer" data-reveal><span>01</span><div><h2>London School of Sports Massage</h2><p>Professional training in sport and remedial massage.</p></div><b>↗</b></a>
-    <a href="https://www.theisrm.com/" target="_blank" rel="noreferrer" data-reveal><span>02</span><div><h2>Institute for Soft Tissue Therapists</h2><p>Professional membership and standards for soft-tissue practice.</p></div><b>↗</b></a>
-    <a href="https://www.merrithew.com/stott-pilates" target="_blank" rel="noreferrer" data-reveal><span>03</span><div><h2>Merrithew — STOTT PILATES</h2><p>Contemporary Pilates education and equipment.</p></div><b>↗</b></a>
-  </div></section>${cta()}`,
-);
-
-
 const therapyHub = page(
   {
     title: "Sports Therapy | NJH",
@@ -546,6 +559,43 @@ const about = page(
   ])}${cta("Start a conversation with Natasha.")}`,
 );
 
+/* Testimonials have one home. They used to run as a five-quote band on the
+   homepage and again in full inside Clinics, which meant two places to keep in
+   step and a set of reviews buried under a page about locations.
+
+   The staggered single-column thread they arrived as is now a wall: a column
+   per category, the outer two drifting down and the middle one up, all three
+   stopping the moment you reach for one. The hero is compact for the same
+   reason the wall exists — the quotes are the page, so they open in view. */
+const testimonials = page(
+  {
+    metaTitle: "Testimonials | NJH",
+    description:
+      "Reviews from NJH Sports Therapy and Pilates clients, by service.",
+    canonical: "/testimonials",
+    eyebrow: "Testimonials",
+    compact: true,
+    /* The full stop under the title, before the wall starts. /prices shares
+       this head and does not take it: that page runs straight into a list of
+       dot leaders, where another horizontal rule is one rule too many. */
+    ornament: true,
+    /* The line-wave behind the title. See .page-hero__wave. */
+    wave: true,
+    title: "In clients&rsquo; own words.",
+  },
+  `<section class="voices" aria-label="Client testimonials">
+    <div class="section-shell">
+      <div class="voices__columns">
+      ${voicesColumns()}
+      </div>
+    </div>
+  </section>
+  ${cta(
+    "Would you like to be next?",
+    "Tell Natasha what you would like help with and she will guide you towards the right place to start.",
+  )}`,
+);
+
 const prices = page(
   {
     title: "Prices | NJH",
@@ -555,28 +605,37 @@ const prices = page(
     title: "Prices",
     intro:
       "Appointment length is chosen around your needs. New or complex presentations may benefit from more assessment time.",
-    parent: crumbs.contact,
+    /* Same reasoning as /testimonials: the fees are the page. At the full hero
+       height the first figure sat below the fold. */
+    compact: true,
   },
-  `<section class="pricing-section"><div class="section-shell pricing-grid">
-    <article data-reveal><h2>Sports Therapy</h2>
-      <div class="price-row"><span>Up to 90 minutes</span><strong>£130</strong></div>
-      <div class="price-row"><span>Standard session, up to 1 hour</span><strong>£85</strong></div>
-      <div class="price-row"><span>Up to 30 minutes</span><strong>£60</strong></div>
-      <small>Sunday and Bank Holiday appointments carry a £10 surcharge.</small>
-    </article>
-    <article data-reveal><h2>Pilates</h2>
-      <div class="price-row"><span>One-to-one, 1 hour</span><strong>£85</strong></div>
-      <div class="price-row"><span>Duet, shared with a friend or partner</span><strong>£95</strong></div>
-      <div class="price-row"><span>Initial assessment before small group</span><strong>£85</strong></div>
-      <div class="price-row"><span>Small-group session</span><strong>£22</strong></div>
-      <small>Small-group classes are paid in termly blocks and are non-refundable once your place is reserved.</small>
-    </article>
+  /* Two columns carried by dot leaders from appointment to fee. Every string
+     below is the one that was already here — the appointment lengths are
+     reordered cheapest first, and nothing is added or dropped. */
+  `<section class="prices-page"><div class="section-shell prices-grid">
+    <div class="prices-group" data-reveal>
+      <h2 class="prices-group__title">Sports Therapy</h2>
+      <p class="prices-row"><span class="prices-row__label">Up to 30 minutes</span><span class="prices-row__lead"></span><span class="prices-row__fee">£60</span></p>
+      <p class="prices-row"><span class="prices-row__label">Standard session, up to 1 hour</span><span class="prices-row__lead"></span><span class="prices-row__fee">£85</span></p>
+      <p class="prices-row"><span class="prices-row__label">Up to 90 minutes</span><span class="prices-row__lead"></span><span class="prices-row__fee">£130</span></p>
+      <p class="prices-note">Sunday and Bank Holiday appointments carry a £10 surcharge.</p>
+      <a class="text-link" href="/sports-therapy">What treatment involves <span>→</span></a>
+    </div>
+    <div class="prices-group" data-reveal>
+      <h2 class="prices-group__title">Pilates</h2>
+      <p class="prices-row"><span class="prices-row__label">Small-group session</span><span class="prices-row__lead"></span><span class="prices-row__fee">£22</span></p>
+      <p class="prices-row"><span class="prices-row__label">One-to-one, 1 hour</span><span class="prices-row__lead"></span><span class="prices-row__fee">£85</span></p>
+      <p class="prices-row"><span class="prices-row__label">Initial assessment before small group</span><span class="prices-row__lead"></span><span class="prices-row__fee">£85</span></p>
+      <p class="prices-row"><span class="prices-row__label">Duet, shared with a friend or partner</span><span class="prices-row__lead"></span><span class="prices-row__fee">£95</span></p>
+      <p class="prices-note">Small-group classes are paid in termly blocks and are non-refundable once your place is reserved.</p>
+      <a class="text-link" href="/pilates">How Pilates sessions run <span>→</span></a>
+    </div>
   </div></section>
   ${section(
     "Appointment duration",
     "Enough time for the work required.",
     `<p>Most appointments last approximately one hour. A 30-minute session may be recommended where appropriate, while a new or more complex presentation may benefit from up to 90 minutes.</p><p>The recommended duration will be discussed before booking. Treatment may occasionally finish earlier to avoid over-treatment.</p>`,
-    "editorial-section--tint",
+    "editorial-section--tint editorial-section--middle",
   )}${cta("Discuss the right appointment length.")}`,
 );
 
@@ -601,20 +660,14 @@ function buildPilatesContinuousPage() {
             <a class="pilates-arrow-link" href="#approach">Discover the approach <span>↓</span></a>
           </div>
           <figure class="pilates-hero__media pilates-hero__media--figure"><object class="pilates-hero__figure" type="image/svg+xml" data="/images/pilates-teaser-animated.svg" aria-label="Line drawing of a client holding the Pilates teaser position within measured rings" tabindex="-1"></object></figure>
-          <nav class="pilates-section-index" aria-label="On this page">
-            <a href="#studio"><span>01</span> Studio</a>
-            <a href="#individual"><span>02</span> Individual</a>
-            <a href="#small-group"><span>03</span> Small groups</a>
-            <a href="#pre-postnatal"><span>04</span> Pre/Postnatal</a>
-            <a href="#golfers"><span>05</span> Golfers</a>
-          </nav>
         </div>
       </section>
 
       <section class="pilates-approach" id="approach" aria-labelledby="approach-title">
         <div class="section-shell">
           <header class="pilates-approach__head" data-reveal>
-            <h2 id="approach-title">Awareness is the greatest agent for change.</h2>
+            <h2 id="approach-title">&ldquo;In 10 sessions you will feel the difference. In 20, you will see the difference. And in 30, you&rsquo;ll be on your way to having a whole new body.&rdquo;</h2>
+            <p class="pilates-approach__cite">Joseph Hubertus Pilates</p>
             <p class="pilates-approach__intro">The benefits of Pilates are understanding how to correct poor posture, improve strength and range of movement around the joint, and promote and maintain a healthy back.</p>
           </header>
           <ol class="pilates-approach__steps" data-reveal>
@@ -640,27 +693,14 @@ function buildPilatesContinuousPage() {
             </li>
           </ol>
           <figure class="pilates-approach__quote" data-reveal>
-            <blockquote>&ldquo;In 10 sessions you will feel the difference. In 20, you will see the difference. And in 30, you&rsquo;ll be on your way to having a whole new body.&rdquo;</blockquote>
-            <figcaption>Joseph Hubertus Pilates</figcaption>
+            <blockquote>Awareness is the greatest agent for change.</blockquote>
           </figure>
           <p class="pilates-approach__credential-label" data-reveal>STOTT Pilates trained</p>
         </div>
       </section>
 
-      <section class="pilates-studio" id="studio" aria-labelledby="studio-title">
-        <div class="section-shell pilates-studio__grid">
-          <div class="pilates-studio__copy" data-reveal>
-            <h2 id="studio-title">The Studham studio</h2>
-            <p>After working in physio clinics for many years, January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
-            <p>Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, Individual or Small Group Pilates sessions, this is a place to restore muscular wellbeing and improve posture.</p>
-            <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Call ${BUSINESS.phoneDisplay} <span>&#8599;</span></a>
-          </div>
-          <figure class="pilates-studio__shot" data-reveal>
-            <img src="/images/pilates-studio.webp" alt="The NJH Pilates studio in Studham" width="1200" height="900" loading="lazy">
-            <figcaption>Light, private, considered &middot; Studham, near Whipsnade</figcaption>
-          </figure>
-        </div>
-      </section>
+      <!-- "The Studham studio" moved to /studio, which is now the one page
+           about the room. -->
 
       <section class="pilates-feature pilates-feature--individual" id="individual" aria-labelledby="individual-title">
         <div class="section-shell pilates-feature__grid">
@@ -697,24 +737,20 @@ function buildPilatesContinuousPage() {
       </section>
 
       <section class="pilates-feature pilates-feature--group" id="small-group" aria-labelledby="group-title">
-        <div class="pilates-orbit pilates-orbit--group" aria-hidden="true"><span></span><i></i></div>
         <div class="section-shell">
           <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
             <h2 id="group-title">Small group Pilates</h2>
             <p>Class sizes are small to ensure close attention to posture and movement during each exercise where necessary. Sessions focus on precise, controlled movement to improve your joint range of movement and help you feel stronger.</p>
           </header>
-          <div class="pilates-group-layout">
-            <figure class="pilates-group-shot" data-reveal>
-              <img src="/images/legacy/pilates-studio-4.jpg" alt="The light, airy NJH studio in Studham" loading="lazy">
-              <figcaption>Close attention to posture, in a small group</figcaption>
-            </figure>
-            <div class="pilates-timetable" data-reveal>
-              <div class="pilates-detail-label"><span>Weekly timetable</span><small>Confirm availability before booking</small></div>
-              <div class="pilates-timetable__row"><strong>Monday</strong><p><span>6.30pm</span></p></div>
-              <div class="pilates-timetable__row"><strong>Tuesday</strong><p><span>8.30am <small>45 min</small></span><span>9.20am</span><span>11.30am</span></p></div>
-              <div class="pilates-timetable__row"><strong>Friday</strong><p><span>7.30am</span><span>9.30am</span></p></div>
-              <p class="pilates-timetable__note">Sessions are 55 minutes unless noted. An initial one-to-one assessment including postural analysis is required before joining Small Group Pilates.</p>
-            </div>
+          <!-- The studio photograph that sat beside the timetable has gone; the
+               timetable itself is unchanged, it just runs the full measure now
+               rather than sitting in the narrower right-hand track. -->
+          <div class="pilates-timetable" data-reveal>
+            <div class="pilates-detail-label"><span>Weekly timetable</span><small>Confirm availability before booking</small></div>
+            <div class="pilates-timetable__row"><strong>Monday</strong><p><span>6.30pm</span></p></div>
+            <div class="pilates-timetable__row"><strong>Tuesday</strong><p><span>8.30am <small>45 min</small></span><span>9.20am</span><span>11.30am</span></p></div>
+            <div class="pilates-timetable__row"><strong>Friday</strong><p><span>7.30am</span><span>9.30am</span></p></div>
+            <p class="pilates-timetable__note">Sessions are 55 minutes unless noted. An initial one-to-one assessment including postural analysis is required before joining Small Group Pilates.</p>
           </div>
         </div>
       </section>
@@ -743,7 +779,12 @@ function buildPilatesContinuousPage() {
         </div>
       </section>
 
+      <!-- The two stock shots (anatomy diagram, swing sequence) are gone. The
+           section now carries a single photograph behind the copy, with a navy
+           wash that is near-solid on the left so the text stays legible and
+           clears to the right so the picture reads. -->
       <section class="pilates-golf" id="golfers" aria-labelledby="golf-title">
+        <div class="pilates-golf__backdrop" aria-hidden="true"></div>
         <div class="section-shell pilates-golf__grid">
           <div class="pilates-golf__content" data-reveal>
             <h2 id="golf-title">Pilates for golfers</h2>
@@ -751,28 +792,18 @@ function buildPilatesContinuousPage() {
             <p>Core strength can improve hip rotation, range of motion in the shoulders and back stability, leading to improved performance.</p>
             <ul class="pilates-golf__benefits"><li>Improve balance and flexibility</li><li>Strengthen your core to avoid injury</li><li>Work on overall breathing and focus</li></ul>
           </div>
-          <div class="pilates-golf__media" data-reveal>
-            <figure class="pilates-golf__anatomy">${legacyImage("/pilates-for-golfers", 0)}<figcaption>Anatomy of the movement</figcaption></figure>
-            <figure class="pilates-golf__swing">${legacyImage("/pilates-for-golfers", 1)}<figcaption>The swing sequence</figcaption></figure>
-          </div>
         </div>
       </section>
 
       <section class="pilates-practical" id="practical" aria-labelledby="practical-title">
         <div class="section-shell">
-          <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
-            <h2 id="practical-title">Prices &amp; practical details</h2>
-            <p>Timetable, prices and policies should be confirmed when booking.</p>
+          <header class="pilates-section-heading" data-reveal>
+            <h2 id="practical-title">Practical details</h2>
           </header>
+          <!-- Session fees came out; policies are the only card left, so the
+               grid is one column against the left edge rather than a lone
+               article floating in a two-column track. -->
           <div class="pilates-practical__grid">
-            <article data-reveal>
-              <span>Pilates charges</span>
-              <div class="pilates-price"><p>One-to-one Pilates</p><strong>£85</strong></div>
-              <div class="pilates-price"><p>Duet with a friend or partner</p><strong>£95</strong></div>
-              <div class="pilates-price"><p>Initial 1:1 before Small Group Pilates</p><strong>£85</strong></div>
-              <div class="pilates-price"><p>Small Group Pilates session</p><strong>£22</strong></div>
-              <small>Small Group sessions are paid for in termly blocks.</small>
-            </article>
             <article data-reveal>
               <span>Clinic policies</span>
               <details><summary>Appointments and cancellation <b>+</b></summary><p>A charge is made for missed Soft Tissue, 1:1 or 2:1 Pilates appointments or non-attendance unless 24 hours notice is given. A 50% charge is required for less than 48 hours notice.</p></details>
@@ -784,25 +815,35 @@ function buildPilatesContinuousPage() {
         </div>
       </section>
 
-      <section class="pilates-contact" id="contact" aria-labelledby="pilates-contact-title">
-        <div class="pilates-orbit pilates-orbit--contact" aria-hidden="true"><span></span><i></i></div>
-        <div class="section-shell pilates-contact__grid">
-          <div data-reveal><h2 id="pilates-contact-title">Find the right place to begin.</h2></div>
-          <div data-reveal><p>For further details or to discuss your specific requirements, contact Natasha Hadland.</p><a class="button-link" href="/contact">Send an enquiry <span>↗</span></a><a class="pilates-contact__phone" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div>
+      <!-- Same closing shape as the foot of /sports-therapy: one bordered card
+           on a tinted band, actions in a row. Copy is unchanged. -->
+      <div class="st-section st-section--tint">
+        <div class="section-shell">
+          <section class="st-card" id="contact" aria-labelledby="pilates-contact-title" data-reveal>
+            <h2 id="pilates-contact-title">Find the right place to begin.</h2>
+            <p>For further details or to discuss your specific requirements, contact Natasha Hadland.</p>
+            <div class="st-card__actions">
+              <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay} <span>↗</span></a>
+              <a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
     </div>`,
   };
 }
 
 const pilatesContinuous = buildPilatesContinuousPage();
 
-function buildClinicsContinuousPage() {
+/* Was /clinics. There has only ever been one location, and the studio copy
+   that used to sit halfway down /pilates now lives here, so the page is named
+   for its subject rather than for a set of clinics that does not exist. */
+function buildStudioContinuousPage() {
   return {
-    title: "NJH Clinics",
+    title: "NJH Studio",
     description:
-      "The NJH Sports Therapy and Pilates studio in Studham, plus client testimonials, professional links and charity work.",
-    canonical: "/clinics",
+      "The NJH Sports Therapy and Pilates studio in Studham, near Whipsnade.",
+    canonical: "/studio",
     html: `<div class="clinics-longform">
       <section class="clinics-hero" id="overview" aria-labelledby="clinics-title">
         <div class="section-shell clinics-hero__inner">
@@ -821,47 +862,50 @@ function buildClinicsContinuousPage() {
         </div>
       </section>
 
-      <section class="clinics-locations" id="locations" aria-label="Clinic location">
+      <section class="clinics-studio" id="studio" aria-labelledby="studio-title">
         <div class="section-shell">
-          <ol class="clinic-list">
-            <li data-reveal>
-              <h2>The Studham studio</h2>
-              <address>Studham, near Whipsnade</address>
-            </li>
-          </ol>
-          <p class="clinic-list__note">Sports Therapy, individual Pilates and small-group Pilates, all in one private studio. Full directions are sent when your appointment is confirmed. <a href="/pilates#studio">Studio details</a></p>
-        </div>
-      </section>
-
-      <section class="voices voices--filterable" id="testimonials" aria-labelledby="clinics-testimonials-title">
-        <svg class="voices__thread" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <path class="voices__thread-line" d="M58 0 C 32 92, 30 182, 56 272 C 82 362, 80 452, 46 542 C 18 626, 22 716, 54 802 C 78 866, 76 936, 60 1000" pathLength="1" />
-        </svg>
-        <div class="voices__inner">
-          <h2 class="voices__title" id="clinics-testimonials-title">In clients&rsquo; own words</h2>
-          ${voicesSwitch()}
-          <div class="voices__list" data-review-list>${voicesItems(REVIEWS)}</div>
-        </div>
-      </section>
-
-      <section class="clinics-links" id="links" aria-labelledby="links-title">
-        <div class="section-shell">
-          <header class="pilates-section-heading pilates-section-heading--split" data-reveal><h2 id="links-title">Professional links</h2><p>Organisations connected to Natasha’s training in Sports Therapy and Pilates.</p></header>
-          <div class="clinics-links__grid">
-            <article data-reveal><span>01</span><figure>${legacyImage("/links", 0)}</figure><h3>London School of Sports Massage</h3></article>
-            <article data-reveal><span>02</span><figure>${legacyImage("/links", 1)}</figure><h3>Institute of Sport &amp; Remedial Massage</h3></article>
-            <a href="http://www.merrithew.com/stott-pilates/about" target="_blank" rel="noreferrer" data-reveal><span>03</span><figure>${legacyImage("/links", 2)}</figure><h3>Merrithew · STOTT Pilates</h3><b>↗</b></a>
+          <header class="clinics-studio__head" data-reveal>
+            <h2 id="studio-title">The Studham studio</h2>
+          </header>
+          <div class="clinics-studio__story">
+            <div class="clinics-studio__copy" data-reveal>
+              <p>Sports Therapy, individual Pilates and small-group Pilates, all in one private studio. Full directions are sent when your appointment is confirmed.</p>
+              <p>After working in physio clinics for many years, January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
+              <p>Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, Individual or Small Group Pilates sessions, this is a place to restore muscular wellbeing and improve posture.</p>
+            </div>
+          </div>
+          <div class="clinics-studio__gallery" id="gallery">
+            <div class="clinics-studio__gallery-head" data-reveal>
+              <h3 class="clinics-studio__gallery-label">Inside the studio</h3>
+            </div>
+            <div class="studio-carousel" data-studio-carousel data-reveal>
+              <div class="studio-carousel__stage" data-carousel-stage>
+                <button class="studio-carousel__nav studio-carousel__nav--prev" type="button" aria-label="Previous photo" data-carousel-prev><span aria-hidden="true">&#8249;</span></button>
+                <ul class="studio-carousel__track" role="list">
+                  ${[
+                    "Light, private and considered",
+                    "Room to move",
+                    "Studham, near Whipsnade",
+                    "Sports Therapy and Pilates",
+                  ]
+                    .map(
+                      (caption, index) =>
+                        `<li class="studio-carousel__slide" data-carousel-slide data-caption="${escapeContent(caption)}">${legacyImage("/blank-1", index)}</li>`,
+                    )
+                    .join("")}
+                </ul>
+                <button class="studio-carousel__nav studio-carousel__nav--next" type="button" aria-label="Next photo" data-carousel-next><span aria-hidden="true">&#8250;</span></button>
+              </div>
+              <div class="studio-carousel__meta">
+                <p class="studio-carousel__index"><span data-carousel-current>01</span><span class="studio-carousel__index-sep">/</span><span data-carousel-total>04</span></p>
+                <p class="studio-carousel__caption" data-carousel-caption aria-live="polite">Light, private and considered</p>
+                <div class="studio-carousel__dots" data-carousel-dots role="tablist" aria-label="Choose studio photo"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="clinics-charity" id="charity" aria-labelledby="charity-title">
-        <div class="pilates-orbit clinics-charity__orbit" aria-hidden="true"><span></span><i></i></div>
-        <div class="section-shell clinics-charity__grid">
-          <div data-reveal><h2 id="charity-title">Charity work</h2></div>
-          <div data-reveal><p>NJH Sports Therapy &amp; Pilates is keen to help raise money for charities in the area. Where possible, Natasha donates a Pilates 1:1 or duet voucher as a silent auction or raffle prize.</p><p>Please contact Natasha if you would like to discuss this further.</p><a class="button-link" href="/contact">Get in touch <span>↗</span></a></div>
-        </div>
-      </section>
     </div>`,
   };
 }
@@ -934,11 +978,6 @@ const THERAPY = {
     "Postural control",
     "Power taping",
   ],
-  prices: [
-    ["Up to 30 minutes", "£60", false],
-    ["Standard · up to 1 hour", "£85", true],
-    ["Up to 90 minutes", "£130", false],
-  ],
 };
 
 /* Ruled rows — the divider-line list motif, now inside a card so the group
@@ -957,18 +996,45 @@ const therapyHero = () => `<section class="therapy-hero" id="overview" aria-labe
     <div class="therapy-hero__content"><h1 id="therapy-title">Find what’s driving the pain, then treat it and rebuild.</h1><p>Sports Therapy provides relief from musculoskeletal pain and dysfunction through the use of various massage and soft-tissue techniques.</p><a class="pilates-arrow-link" href="#treatment">Explore treatment <span>↓</span></a></div>
     <figure class="therapy-hero__media therapy-hero__media--figure"><object class="therapy-hero__figure" type="image/svg+xml" data="/images/njh-signature-motion-figure-animated.svg" aria-label="Animated line drawing of a figure within orbiting rings" tabindex="-1"></object></figure>
   </div>
-  <nav class="section-shell therapy-index" aria-label="On this page"><a href="#treatment"><span>01</span>Treatment</a><a href="#myofascial-release"><span>02</span>Myofascial release</a><a href="#what-to-expect"><span>03</span>What to expect</a><a href="#kinesiology-taping"><span>04</span>Taping</a></nav>
 </section>`;
 
-const therapyContact = () => `<section class="pilates-contact therapy-contact" id="contact" aria-labelledby="therapy-contact-title"><div class="pilates-orbit pilates-orbit--contact" aria-hidden="true"><span></span><i></i></div><div class="section-shell pilates-contact__grid"><div data-reveal><h2 id="therapy-contact-title">Tell us what you’d like to move beyond.</h2></div><div data-reveal><p>Whatever your injury or postural pain, contact Natasha to discuss the right place to begin.</p><a class="button-link" href="/contact">Send an enquiry <span>↗</span></a><a class="pilates-contact__phone" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div></div></section>`;
+/* Photographs for the taping band — Pexels stock, free for commercial use with
+   no attribution required, resized to 900px wide and 4:5 to match the frame.
+   Each column mixes a treatment-room shot with a close-up of the tape itself.
+   Swapping any of them is these two lists and nothing else: the band clones
+   whatever it is given, so the count can change too. */
+const TAPING_SHOTS_LEFT = [
+  "/images/taping/taping-6076134.webp",
+  "/images/taping/taping-8219157.webp",
+  "/images/taping/taping-6094040.webp",
+];
+const TAPING_SHOTS_RIGHT = [
+  "/images/taping/taping-6094397.webp",
+  "/images/taping/taping-7339489.webp",
+  "/images/taping/taping-6094047.webp",
+];
 
-const tapingFigure = () =>
-  `<figure class="st-taping-figure" data-reveal>${legacyImage("/kinesiology-taping", 0)}<figcaption>Examples of kinesiology taping</figcaption></figure>`;
+/* The band is decorative — the column beside it carries every word — so the
+   photographs are hidden from assistive tech rather than captioned six times
+   over, and the drift stops on hover or focus (see drift-columns.js). */
+const tapingColumn = (shots, direction, speed) =>
+  `<div class="taping-band__col taping-band__col--${direction}" data-drift-speed="${speed}" aria-hidden="true">
+        <div class="taping-band__window">
+          <div class="taping-band__track">
+            ${shots
+              .map(
+                (src) =>
+                  `<figure class="taping-band__shot"><img src="${src}" alt="" loading="lazy"></figure>`,
+              )
+              .join("\n            ")}
+          </div>
+        </div>
+      </div>`;
 
 /* ---------- Variant A — card grid ---------- */
 
 function therapyVariantA() {
-  const { techniques, injuries, outcomes, conditions, fascia, steps, taping, prices } =
+  const { techniques, injuries, outcomes, conditions, fascia, steps, taping } =
     THERAPY;
   return `
   <section class="st-section st-section--tint" id="approach" aria-labelledby="therapy-benefits-title">
@@ -981,31 +1047,36 @@ function therapyVariantA() {
     </div>
   </section>
 
-  <section class="st-section" id="treatment" aria-labelledby="treatment-title">
-    <div class="section-shell">
-      <header class="st-head" data-reveal><h2 id="treatment-title">Treatment techniques</h2><p>Techniques are often combined with exercises to stretch and strengthen muscles at home.</p></header>
-      <div class="st-grid st-grid--2">
-        <article class="st-card" data-reveal>${eyebrow("Hands-on techniques")}<h3>How treatment is delivered</h3>${rows(techniques)}</article>
-        <article class="st-card" data-reveal>${eyebrow("Common concerns")}<h3>What people come in with</h3>${rows(injuries)}</article>
-      </div>
-      <aside class="st-note" data-reveal><p>Professional referrals are welcomed from GPs, consultants, physiotherapists, osteopaths and podiatrists.</p></aside>
-    </div>
-  </section>
-
   <section class="st-section st-section--dark" id="myofascial-release" aria-labelledby="fascia-title">
-    <div class="therapy-fascia__threads" aria-hidden="true"></div>
     <div class="section-shell">
-      <header class="st-head" data-reveal><h2 id="fascia-title">Myofascial release</h2><p>Fascia is strong, flexible tissue surrounding muscles and bones. It spans the whole body as one connected material.</p></header>
+      <header class="st-head" data-reveal><h2 id="fascia-title">Myofascial release</h2></header>
       <div class="st-grid st-grid--2">
-        <article class="st-card st-card--onDark" data-reveal><p>In a healthy state, fascia is relaxed and supports posture, range of movement and flexibility. Physical trauma, inflammation, surgery or habitual poor posture can make it tight and restricted.</p><p>Myofascial Release uses slow, sustained pressure to relax deep tissue, improve movement and reduce tension. Pressure can range from very gentle touch to deeper work and should never be beyond your tolerance.</p></article>
+        <article class="st-card st-card--onDark" data-reveal><p>Fascia is strong, flexible tissue surrounding muscles and bones. It spans the whole body as one connected material.</p><p>In a healthy state, fascia is relaxed and supports posture, range of movement and flexibility. Physical trauma, inflammation, surgery or habitual poor posture can make it tight and restricted.</p><p>Myofascial Release uses slow, sustained pressure to relax deep tissue, improve movement and reduce tension. Pressure can range from very gentle touch to deeper work and should never be beyond your tolerance.</p></article>
         <article class="st-card st-card--onDark" data-reveal>${eyebrow("Where it helps")}${rows(fascia, "st-rows--onDark")}</article>
       </div>
     </div>
   </section>
 
+  <section class="st-section" id="treatment" aria-labelledby="treatment-title">
+    <div class="section-shell">
+      <header class="st-head" data-reveal><h2 id="treatment-title">Treatment techniques</h2><p>Techniques are often combined with exercises to stretch and strengthen muscles at home.</p></header>
+      <div class="st-index">
+        <section class="st-index__group" data-reveal aria-labelledby="treatment-delivery-title">
+          <div class="st-index__label">${eyebrow("Hands-on techniques")}<h3 id="treatment-delivery-title">How treatment is delivered</h3></div>
+          ${rows(techniques, "st-rows--split")}
+        </section>
+        <section class="st-index__group" data-reveal aria-labelledby="treatment-concerns-title">
+          <div class="st-index__label">${eyebrow("Common concerns")}<h3 id="treatment-concerns-title">What people come in with</h3></div>
+          ${rows(injuries, "st-rows--split")}
+        </section>
+      </div>
+      <aside class="st-note st-note--rule" data-reveal><p>Professional referrals are welcomed from GPs, consultants, physiotherapists, osteopaths and podiatrists.</p></aside>
+    </div>
+  </section>
+
   <section class="st-section st-section--tint" id="what-to-expect" aria-labelledby="expect-title">
     <div class="section-shell">
-      <header class="st-head" data-reveal><h2 id="expect-title">What to expect</h2><p>Every treatment is tailored to the individual client’s needs and reviewed through feedback.</p></header>
+      <header class="st-head" data-reveal><h2 id="expect-title">What to expect</h2></header>
       <div class="st-grid st-grid--3">
         ${steps
           .map(
@@ -1018,21 +1089,22 @@ function therapyVariantA() {
     </div>
   </section>
 
-  <section class="st-section" id="kinesiology-taping" aria-labelledby="taping-title">
-    <div class="section-shell st-split">
-      ${tapingFigure()}
-      <div class="st-card" data-reveal><h2 id="taping-title">Kinesiology taping</h2><p>Taping can aid pain relief, reduce swelling and support postural awareness. It can be included in an appointment or booked as a standalone 15–20 minute session.</p>${rows(taping)}</div>
+  <section class="st-section st-section--flush" id="kinesiology-taping" aria-labelledby="taping-title">
+    <div class="taping-band">
+      ${tapingColumn(TAPING_SHOTS_LEFT, "up", 16)}
+      <div class="taping-band__content" data-reveal>
+        ${eyebrow("Taping")}
+        <h2 id="taping-title">Kinesiology taping</h2>
+        <p>Taping can aid pain relief, reduce swelling and support postural awareness. It can be included in an appointment or booked as a standalone 15–20 minute session.</p>
+        ${rows(taping)}
+      </div>
+      ${tapingColumn(TAPING_SHOTS_RIGHT, "down", 14)}
     </div>
   </section>
 
   <div class="st-section st-section--tint">
     <div class="section-shell">
-      <section class="st-card" id="practical" aria-labelledby="therapy-practical-title" data-reveal>${eyebrow("Appointments")}<h2 id="therapy-practical-title">Treatment prices</h2><p>Appointment length is selected around the complexity of the presentation.</p><ul class="st-rows st-rows--price">${prices
-        .map(
-          ([label, amount, featured]) =>
-            `<li${featured ? ' class="is-featured"' : ""}><span>${label}</span><strong>${amount}</strong></li>`,
-        )
-        .join("")}</ul><p class="st-footnote">Sunday and Bank Holiday appointments carry an additional £10 surcharge. Confirm current prices when booking.</p></section>
+      <section class="st-card" id="practical" aria-labelledby="therapy-practical-title" data-reveal>${eyebrow("Appointments")}<h2 id="therapy-practical-title">Booking an appointment</h2><p>Appointment length is selected around the complexity of the presentation — 30 minutes where that is enough, up to 90 for a new or more involved case. The recommended duration is discussed before booking.</p><p class="st-footnote">Fees for every appointment length are listed on one page.</p><div class="st-card__actions"><a class="pilates-arrow-link" href="/prices">View prices <span>→</span></a><a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a></div></section>
     </div>
   </div>`;
 }
@@ -1046,13 +1118,15 @@ function buildSportsTherapyContinuousPage() {
     html: `<div class="therapy-longform">
       ${therapyHero()}
       ${therapyVariantA()}
-      ${therapyContact()}
     </div>`,
   };
 }
 
-const clinicsContinuous = buildClinicsContinuousPage();
+const studioContinuous = buildStudioContinuousPage();
 const sportsTherapyContinuous = buildSportsTherapyContinuousPage();
+// Built once rather than inline in `routes`, so /charity-work can spread the
+// same page object with a scroll target instead of rebuilding the markup.
+const aboutContinuous = buildAboutPage();
 
 function escapeContent(value) {
   return value
@@ -1153,7 +1227,8 @@ function createLegacyPage(path, data) {
 }
 
 const pilatesLegacyTargets = {
-  "/blank-1": "studio",
+  // "/blank-1" was the old studio page and now belongs to studioLegacyTargets,
+  // since the studio section left /pilates.
   "/individual-pilates": "individual",
   "/small-group-pilates-timetable": "small-group",
   "/blank": "pre-postnatal",
@@ -1165,10 +1240,17 @@ const pilatesLegacyTargets = {
   "/retreats": "",
 };
 
-const clinicsLegacyTargets = {
-  "/testimonial": "testimonials",
-  "/links": "links",
-  "/charity-work": "charity",
+const studioLegacyTargets = {
+  // Professional links were removed from the page — key retained for the same
+  // reason as "/retreats" above, so /links keeps resolving to /studio rather
+  // than falling through to the legacy links page.
+  "/links": "",
+  // The page was published at /clinics before it was renamed; the old URL keeps
+  // resolving here rather than 404ing for anyone holding a link to it.
+  "/clinics": "",
+  // The studio copy used to live on /pilates, so the old deep link lands on the
+  // section that now carries it.
+  "/blank-1": "studio",
 };
 
 const therapyLegacyTargets = {
@@ -1190,11 +1272,11 @@ const routes = {
       { ...pilatesContinuous, scrollTarget },
     ]),
   ),
-  "/clinics": clinicsContinuous,
+  "/studio": studioContinuous,
   ...Object.fromEntries(
-    Object.entries(clinicsLegacyTargets).map(([path, scrollTarget]) => [
+    Object.entries(studioLegacyTargets).map(([path, scrollTarget]) => [
       path,
-      { ...clinicsContinuous, scrollTarget },
+      { ...studioContinuous, scrollTarget },
     ]),
   ),
   "/sports-therapy": sportsTherapyContinuous,
@@ -1204,7 +1286,17 @@ const routes = {
       { ...sportsTherapyContinuous, scrollTarget },
     ]),
   ),
-  "/about": buildAboutPage(),
+  "/about": aboutContinuous,
+  // Charity work used to be its own page on the old site, and then a section at
+  // the foot of /studio. It now sits on /about, so the original URL follows it
+  // there rather than landing on a section that no longer exists.
+  "/charity-work": { ...aboutContinuous, scrollTarget: "charity" },
+  // The FAQ owns its own hero, so it is assembled by its module rather than
+  // through page() — same arrangement as About.
+  "/faq": buildFaqPage(),
+  "/testimonials": testimonials,
+  // The old site spelled it singular; keep that URL working.
+  "/testimonial": testimonials,
   "/prices": prices,
   "/price-list": { ...prices, canonical: "/prices" },
   "/contact": buildContactPage(),
@@ -1216,8 +1308,8 @@ Object.entries(legacyPages).forEach(([path, data]) => {
     routes[path] ||
     path === "/pilates" ||
     path in pilatesLegacyTargets ||
-    path === "/clinics" ||
-    path in clinicsLegacyTargets ||
+    path === "/studio" ||
+    path in studioLegacyTargets ||
     path in therapyLegacyTargets
   ) {
     return;
@@ -1226,20 +1318,21 @@ Object.entries(legacyPages).forEach(([path, data]) => {
 });
 
 function navigationMarkup(path) {
+  // Legacy and aliased URLs (/price-list, /individual-pilates, /testimonial…)
+  // carry the canonical of the page they actually render, so matching on that
+  // rather than the raw path marks the nav item on every route into a page.
+  const here = routes[path]?.canonical || path;
   return navGroups
     .map((group) => {
       const current =
-        path === group.href ||
-        (group.href === "/pilates" && path in pilatesLegacyTargets) ||
-        (group.href === "/clinics" && path in clinicsLegacyTargets) ||
-        (group.href === "/sports-therapy" && path in therapyLegacyTargets) ||
-        group.links.some(([, href]) => path === href.split("#")[0]);
+        here === group.href ||
+        group.links.some(([, href]) => here === href.split("#")[0]);
       if (!group.links.length) {
         return `<a href="${group.href}"${current ? ' aria-current="page"' : ""}>${group.label}</a>`;
       }
       return `<div class="nav-group${current ? " is-current" : ""}">
         <div class="nav-group__top">
-          <a href="${group.href}"${path === group.href ? ' aria-current="page"' : ""}>${group.label}</a>
+          <a href="${group.href}"${current ? ' aria-current="page"' : ""}>${group.label}</a>
           <button type="button" aria-expanded="false" aria-label="Open ${group.label} menu"><span></span></button>
         </div>
         <div class="nav-group__menu">
@@ -1287,8 +1380,8 @@ function hydrateShell(path) {
       <span class="wordmark__name">NJH</span><span class="wordmark__descriptor">Sports Therapy<br>& Pilates</span>
     </a>
     <div><p class="site-footer__label">Treatment</p><a href="/sports-therapy">Sports Therapy</a><a href="/sports-therapy#treatment">Techniques</a><a href="/sports-therapy#what-to-expect">Your appointment</a></div>
-    <div><p class="site-footer__label">Movement</p><a href="/pilates">Clinical Pilates</a><a href="/pilates#small-group">Timetable</a><a href="/pilates#practical">Pilates prices</a></div>
-    <div><p class="site-footer__label">Practice</p><a href="/about">About Natasha</a><a href="/clinics">Locations</a><a href="/clinics#testimonials">Testimonials</a><a href="/contact">Contact</a></div>`;
+    <div><p class="site-footer__label">Movement</p><a href="/pilates">Clinical Pilates</a><a href="/pilates#small-group">Timetable</a><a href="/pilates#practical">Practical details</a></div>
+    <div><p class="site-footer__label">Practice</p><a href="/about">About Natasha</a><a href="/faq">FAQ</a><a href="/studio">Studio</a><a href="/testimonials">Testimonials</a><a href="/prices">Prices</a><a href="/contact">Contact</a></div>`;
   }
   const footerBottom = document.querySelector(".site-footer__bottom");
   if (footerBottom) {
@@ -1314,8 +1407,8 @@ export function renderRoute() {
     if (route.canonical === "/pilates") {
       document.body.classList.add("is-pilates-page");
     }
-    if (route.canonical === "/clinics") {
-      document.body.classList.add("is-clinics-page");
+    if (route.canonical === "/studio") {
+      document.body.classList.add("is-studio-page");
     }
     if (route.canonical === "/sports-therapy") {
       document.body.classList.add("is-therapy-page");
@@ -1349,7 +1442,152 @@ export function renderRoute() {
   return { path, isHome: false };
 }
 
+/* The studio carousel on /studio. Slides are stacked on one spot and placed
+   by offset from the active one, so the neighbours sit behind and to the side
+   rather than running off in a strip — the arrangement reads as a set of
+   photographs on a table rather than a filmstrip. */
+function initStudioCarousel() {
+  const carousel = document.querySelector("[data-studio-carousel]");
+  if (!carousel) return;
+
+  const stage = carousel.querySelector("[data-carousel-stage]");
+  const slides = [...carousel.querySelectorAll("[data-carousel-slide]")];
+  if (!slides.length) return;
+
+  const previousButton = carousel.querySelector("[data-carousel-prev]");
+  const nextButton = carousel.querySelector("[data-carousel-next]");
+  const currentLabel = carousel.querySelector("[data-carousel-current]");
+  const totalLabel = carousel.querySelector("[data-carousel-total]");
+  const captionLabel = carousel.querySelector("[data-carousel-caption]");
+  const dotsWrap = carousel.querySelector("[data-carousel-dots]");
+  const count = slides.length;
+  let active = 0;
+
+  if (totalLabel) totalLabel.textContent = String(count).padStart(2, "0");
+
+  const dots = slides.map((_, index) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "studio-carousel__dot";
+    dot.setAttribute("role", "tab");
+    dot.setAttribute("aria-label", `Show photo ${index + 1}`);
+    dot.addEventListener("click", () => go(index));
+    dotsWrap?.append(dot);
+    return dot;
+  });
+
+  function update() {
+    slides.forEach((slide, index) => {
+      // Shortest way round the loop, so stepping past the last slide moves the
+      // first one in from the right rather than winding all the way back.
+      let offset = index - active;
+      if (offset > count / 2) offset -= count;
+      if (offset < -count / 2) offset += count;
+      const distance = Math.abs(offset);
+      const direction = Math.sign(offset);
+
+      // The neighbours tilt away from the centre — negative to the left,
+      // positive to the right — so the set reads as prints fanned on a table
+      // rather than a flat strip. The active print always sits square.
+      let translate;
+      let rotate;
+      let scale;
+      let opacity;
+      let blur;
+      let depth;
+      if (offset === 0) {
+        translate = 0;
+        rotate = 0;
+        scale = 1;
+        opacity = 1;
+        blur = 0;
+        depth = 30;
+      } else if (distance === 1) {
+        translate = direction * 56;
+        rotate = direction * 6;
+        scale = 0.8;
+        opacity = 0.5;
+        blur = 1.4;
+        depth = 20;
+      } else {
+        translate = direction * 90;
+        rotate = direction * 10;
+        scale = 0.62;
+        opacity = 0;
+        blur = 4;
+        depth = 5;
+      }
+
+      // Centring is the grid's job (place-self on the shared cell), so this
+      // only has to carry the offset. Rotate after the translate so each print
+      // turns about its own centre rather than swinging around the stage.
+      slide.style.transform = `translateX(${translate}%) rotate(${rotate}deg) scale(${scale})`;
+      slide.style.opacity = String(opacity);
+      slide.style.filter = blur ? `blur(${blur}px)` : "none";
+      slide.style.zIndex = String(depth);
+      slide.style.pointerEvents =
+        offset === 0 ? "none" : opacity > 0 ? "auto" : "none";
+      slide.setAttribute("aria-hidden", offset === 0 ? "false" : "true");
+      slide.classList.toggle("is-active", offset === 0);
+    });
+
+    if (currentLabel) {
+      currentLabel.textContent = String(active + 1).padStart(2, "0");
+    }
+    if (captionLabel) {
+      captionLabel.textContent = slides[active].dataset.caption || "";
+    }
+    dots.forEach((dot, index) => {
+      const isActive = index === active;
+      dot.classList.toggle("is-active", isActive);
+      dot.setAttribute("aria-selected", String(isActive));
+    });
+  }
+
+  function go(index) {
+    active = ((index % count) + count) % count;
+    update();
+  }
+
+  previousButton?.addEventListener("click", () => go(active - 1));
+  nextButton?.addEventListener("click", () => go(active + 1));
+  slides.forEach((slide, index) =>
+    slide.addEventListener("click", () => {
+      if (index !== active) go(index);
+    }),
+  );
+
+  carousel.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      go(active - 1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      go(active + 1);
+    }
+  });
+
+  let startX = null;
+  let dragging = false;
+  stage?.addEventListener("pointerdown", (event) => {
+    startX = event.clientX;
+    dragging = true;
+  });
+  window.addEventListener("pointerup", (event) => {
+    if (!dragging || startX === null) return;
+    dragging = false;
+    const deltaX = event.clientX - startX;
+    startX = null;
+    if (Math.abs(deltaX) > 40) go(deltaX < 0 ? active + 1 : active - 1);
+  });
+
+  update();
+}
+
 export function initPageFeatures() {
+  // Ahead of the form guard: /studio carries the carousel and no enquiry form.
+  initStudioCarousel();
+
   const form = document.querySelector("[data-enquiry-form]");
   if (!form) return;
 

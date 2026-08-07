@@ -1,0 +1,668 @@
+/* Contact page. Everything scoped under .cv.
+
+   A photographic hero with the two tiles laid over it, then a navy field
+   carrying the form in three columns: short fields, the message, and the three
+   reassurances. The navy under the photograph is --navy-deep, the footer's
+   ground rather than the lighter --navy of the Sports Therapy bands, so the
+   page runs into the footer as one unbroken surface.
+
+   Mobile-first: one column throughout, splitting into two and then three only
+   when there is room. Nothing is re-placed out of DOM order. */
+
+.cv {
+  /* .site-header is position:absolute and overlays the top of the page, so
+     the hero has to pad past it. Kept as a local custom property rather than a
+     global token: this must not become a new shared surface while other
+     sessions are editing style.css. Value mirrors .site-header's own height. */
+  --cv-header-h: clamp(86px, 10vw, 118px);
+  /* --danger is an L47% red built for white paper; on an L21% ground it comes
+     out at about 1.8:1. This is the same hue lifted to sit on navy instead. */
+  --cv-danger: oklch(78% 0.132 22);
+  /* Body copy on this ground. These were a local pair matching the
+     .st-section--dark bands by hand; they are now the shared on-dark tokens,
+     so the two dark surfaces cannot drift apart again. */
+  --cv-body: var(--on-dark-soft);
+  --cv-quiet: var(--on-dark-quiet);
+  /* Decorative separators. */
+  --cv-rule: rgb(242 246 255 / 0.22);
+  /* Edges that are the control: field boxes, the dropdown panel. These carry
+     meaning rather than rhythm, so they are held at 3:1 against the navy
+     (0.22 measures 1.9:1, a border you have to hunt for). */
+  --cv-edge: rgb(242 246 255 / 0.38);
+  /* Inside a field box, and the dropdown panel — the ground lifted just far
+     enough to read as a surface resting on the page rather than a hole cut
+     into it. Both track --navy-deep: the raised value keeps the same ~6-point
+     lightness step it had over the lighter --navy it used to sit on. */
+  --cv-inset: rgb(242 246 255 / 0.05);
+  --cv-raised: oklch(23.4% 0.052 277);
+
+  /* Native selects, the consent checkbox, autofill and the caret all pick
+     their colours from this. Without it a dark form gets a white dropdown and
+     a lilac autofill wash. */
+  color-scheme: dark;
+}
+
+/* rgb(20 113 213) against navy is a ring you have to look for. */
+.cv :focus-visible {
+  outline-color: var(--periwinkle-ice);
+}
+
+/* ---- Hero ---- */
+
+.cv__hero {
+  position: relative;
+  display: grid;
+  padding-block: calc(var(--cv-header-h) + var(--space-m)) var(--space-l);
+  align-content: end;
+  isolation: isolate;
+  background: var(--navy-deep);
+}
+
+.cv__hero-media {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+}
+
+.cv__hero-media img {
+  width: 100%;
+  height: 100%;
+  /* A wide band out of a 4:3 frame, so where it sits matters more than the crop
+     ratio. 58% holds the line where the wall meets the floor just below the
+     tiles, which keeps both the room's depth and the Joe Pilates print in shot;
+     higher and the band is all ceiling, lower and it is all floorboards.
+
+     Not mirrored. The previous stock photograph was flipped to move its subject
+     out from under the headline; this is a real room, and a flipped one would
+     put the door on the wrong side of it. */
+  object-fit: cover;
+  object-position: 50% 58%;
+}
+
+/* Scrims, each with one job: the first buys contrast for the headline and the
+   lede, the short top band darkens exactly the strip the header sits in
+   (because over this hero the bar goes transparent and its links are white),
+   and the last is a fade at the foot so the photograph lands in the navy below
+   without a seam.
+
+   They multiply. Anything like 70% on two of them leaves a navy rectangle with
+   a photograph filed somewhere behind it — which is what the first pass at
+   this did — so each is kept to the band it actually has to cover.
+
+   The type scrim runs vertically here and turns diagonal at 760px, the same
+   way .home-hero__scrim does and for the same reason: on one column the type
+   spans the full width, so a left-weighted wedge has nothing to fall back to.
+   The studio photograph made this necessary — the stock shot it replaced was
+   dark enough to carry white type unaided at any width. */
+.cv__hero-media::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--navy-deep) 74%, transparent) 0%,
+      color-mix(in oklab, var(--navy-deep) 64%, transparent) 58%,
+      color-mix(in oklab, var(--navy-deep) 40%, transparent) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--navy-deep) 58%, transparent) 0,
+      transparent calc(var(--cv-header-h) + 40px)
+    ),
+    linear-gradient(to bottom, transparent 72%, var(--navy-deep) 100%);
+}
+
+@media (min-width: 760px) {
+  /* Eased off at the open end since the photograph changed: the stock shot was
+     lit from one side and already dark on the right, where the studio is an
+     evenly lit cream room. At the old 16% the room came out a flat blue and
+     the point of showing it went with it. */
+  .cv__hero-media::after {
+    background:
+      linear-gradient(
+        100deg,
+        color-mix(in oklab, var(--navy-deep) 86%, transparent) 0%,
+        color-mix(in oklab, var(--navy-deep) 54%, transparent) 42%,
+        color-mix(in oklab, var(--navy-deep) 8%, transparent) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--navy-deep) 58%, transparent) 0,
+        transparent calc(var(--cv-header-h) + 40px)
+      ),
+      linear-gradient(to bottom, transparent 72%, var(--navy-deep) 100%);
+  }
+}
+
+.cv__hero-inner {
+  position: relative;
+  color: var(--on-dark);
+}
+
+/* The shared breadcrumb drops up to 92px before the headline, which is scaled
+   for a hero with nothing in it. This one has a picture to get on with. */
+.cv .breadcrumbs {
+  margin-block-end: var(--space-s);
+  color: var(--on-dark-quiet);
+}
+
+.cv__hero h1 {
+  max-width: 14ch;
+  margin: 0;
+  color: var(--on-dark);
+  font-family: var(--font-serif);
+  font-size: var(--step-4);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-tight);
+}
+
+.cv__lede {
+  max-width: 40ch;
+  margin-block: var(--space-xs) 0;
+  color: var(--on-dark-soft);
+  font-size: var(--step-1);
+  line-height: var(--lh-body);
+}
+
+/* ---- The two doors ---- */
+
+.cv__doors {
+  display: grid;
+  max-width: 720px;
+  margin-block-start: var(--space-m);
+  gap: var(--space-s);
+}
+
+.cv__door {
+  display: grid;
+  padding: var(--space-s);
+  align-content: start;
+  gap: 4px;
+  border-radius: var(--radius-card);
+  text-decoration: none;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.cv__door:active {
+  transform: translateY(1px);
+}
+
+.cv__door--call {
+  color: var(--navy-deep);
+  background: var(--periwinkle);
+}
+
+.cv__door--call:hover,
+.cv__door--call:focus-visible {
+  background: var(--periwinkle-ice);
+}
+
+/* White, not outlined: over a photograph an outlined tile reads as a hole in
+   the picture rather than a card resting on it. */
+.cv__door--write {
+  color: var(--navy-deep);
+  background: #fff;
+}
+
+.cv__door--write:hover,
+.cv__door--write:focus-visible {
+  background: var(--periwinkle-ice);
+}
+
+.cv__door-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  margin-block-end: var(--space-2xs);
+  place-items: center;
+  border-radius: 9px;
+  color: var(--brand-strong);
+  background: rgb(45 43 116 / 0.1);
+}
+
+.cv__icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* An h2 in one tile and a span in the other, so the type is set here rather
+   than inherited from the global heading rules. */
+.cv__door-value {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.15;
+  /* A phone number broken across two lines stops reading as a phone number. */
+  white-space: nowrap;
+}
+
+.cv__door-note {
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+
+/* ---- Body ---- */
+
+.cv__body {
+  padding-block: var(--space-l);
+  color: var(--on-dark);
+  background: var(--navy-deep);
+}
+
+.cv__body-grid {
+  display: grid;
+  gap: var(--space-l);
+}
+
+/* ---- Form ----
+
+   The shared rules in style.css draw this as a white card with a border and
+   underline fields. Here it is not a card at all, and the fields are boxes:
+   on a dark ground a hairline underline is most of a field missing. */
+
+.cv .enquiry-form {
+  padding: 0;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-m);
+  border: 0;
+  background: transparent;
+  /* The second tile links here, and an anchor jump that lands the first label
+     hard against the top of the viewport reads as a broken page. */
+  scroll-margin-block-start: var(--space-m);
+}
+
+.cv__fields,
+.cv__compose {
+  display: grid;
+  align-content: start;
+  gap: var(--space-s) var(--space-m);
+}
+
+.cv .form-field {
+  gap: 7px;
+}
+
+.cv .form-field label {
+  color: var(--periwinkle);
+}
+
+.cv .form-field label small {
+  color: var(--cv-quiet);
+  /* <small> is 0.83em by default, which turned this 10px label into 8.3px. */
+  font-size: var(--label-sm);
+}
+
+.cv .form-field input:not([type="checkbox"]),
+.cv .form-field select,
+.cv .form-field textarea,
+.cv-select__trigger {
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--cv-edge);
+  border-radius: var(--radius-md);
+  color: var(--on-dark);
+  background: var(--cv-inset);
+}
+
+.cv .form-field input:not([type="checkbox"]):focus,
+.cv .form-field select:focus,
+.cv .form-field textarea:focus,
+.cv-select__trigger:focus {
+  border-color: var(--periwinkle-ice);
+}
+
+.cv .form-field textarea {
+  min-height: 132px;
+}
+
+/* Was the message box's placeholder. A placeholder disappears the moment you
+   start typing, which is exactly when a prompt this long is still wanted. */
+.cv__hint {
+  margin: -2px 0 2px;
+  color: var(--cv-quiet);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+
+.cv .form-error {
+  color: var(--cv-danger);
+}
+
+.cv .enquiry-form.was-validated input:invalid,
+.cv .enquiry-form.was-validated select:invalid,
+.cv .enquiry-form.was-validated textarea:invalid {
+  border-color: var(--cv-danger);
+}
+
+/* A sentence, not an eyebrow — it has to be readable, not just legible. */
+.cv .form-consent > label {
+  color: var(--cv-body);
+}
+
+.cv .form-consent input {
+  accent-color: var(--periwinkle);
+}
+
+.cv .form-submit {
+  margin-block-start: var(--space-2xs);
+  gap: var(--space-s);
+}
+
+.cv .form-submit button {
+  min-width: 190px;
+  min-height: 54px;
+  border-radius: var(--radius-md);
+  color: var(--navy-deep);
+  background: var(--periwinkle);
+}
+
+.cv .form-submit button:hover,
+.cv .form-submit button:focus-visible {
+  background: var(--periwinkle-ice);
+}
+
+.cv .form-submit p {
+  color: var(--cv-body);
+}
+
+.cv .form-submit p a {
+  color: var(--periwinkle-ice);
+}
+
+/* ---- Custom select ----
+
+   The trigger is the field: same height, same box, same type, so a run of
+   Name / Email / Phone / What can we help with reads as four of one thing and
+   not three of one and one of another. Only the chevron says it opens.
+
+   Until initContactSelects() runs, the native <select> is what is here and it
+   is styled by the field rules above; .is-enhanced is what swaps them. */
+
+.cv-select {
+  position: relative;
+}
+
+.cv-select.is-enhanced select {
+  display: none;
+}
+
+.cv-select__trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  font: inherit;
+  text-align: start;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.cv-select__trigger:hover,
+.cv-select.is-open .cv-select__trigger {
+  border-color: var(--periwinkle);
+}
+
+.cv-select__value--empty {
+  color: var(--cv-quiet);
+}
+
+.cv-select__chevron {
+  width: 12px;
+  height: 8px;
+  flex: none;
+  color: var(--periwinkle);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.cv-select.is-open .cv-select__chevron {
+  transform: rotate(180deg);
+}
+
+.cv-select__list {
+  position: absolute;
+  z-index: var(--z-raised);
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  max-height: 258px;
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  border: 1px solid var(--cv-edge);
+  border-radius: var(--radius-md);
+  background: var(--cv-raised);
+  list-style: none;
+  /* A panel over a dark ground has nothing else to say it is in front. */
+  box-shadow: 0 16px 38px rgb(6 8 22 / 0.55);
+}
+
+.cv-select--up .cv-select__list {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+.cv-select__option {
+  display: flex;
+  padding: 10px 12px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-radius: var(--radius-sm);
+  color: var(--cv-body);
+  cursor: pointer;
+  font-size: var(--step-0);
+  line-height: 1.35;
+}
+
+/* Hover and keyboard land on the same highlight: with focus held on the
+   trigger, this row is the only thing telling you where you are. */
+.cv-select__option:hover,
+.cv-select__option.is-active {
+  color: var(--on-dark);
+  background: rgb(242 246 255 / 0.09);
+}
+
+.cv-select__option--empty {
+  color: var(--cv-quiet);
+}
+
+.cv-select__option.is-selected {
+  color: var(--periwinkle);
+}
+
+.cv-select__option.is-selected::after {
+  content: "✓";
+  font-size: var(--step-00);
+}
+
+/* The shared rule pairs the error with its select as siblings; here the select
+   is a child of the wrapper, so the pairing is made through the field. */
+.cv .enquiry-form.was-validated .form-field:has(select:invalid) .form-error {
+  display: block;
+}
+
+.cv .enquiry-form.was-validated
+  .cv-select:has(select:invalid)
+  .cv-select__trigger {
+  border-color: var(--cv-danger);
+}
+
+/* ---- Assurances ---- */
+
+.cv__assurances {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-m);
+  align-content: start;
+  list-style: none;
+}
+
+.cv__assurance {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-s);
+  align-items: start;
+}
+
+.cv__assurance-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--cv-rule);
+  border-radius: 50%;
+  color: var(--periwinkle);
+}
+
+.cv__assurance h3 {
+  margin: 0 0 4px;
+  color: var(--on-dark);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+
+.cv__assurance p {
+  margin: 0;
+  color: var(--cv-body);
+  font-size: var(--step-00);
+  line-height: 1.6;
+}
+
+/* ---- Details ---- */
+
+.cv__details {
+  display: grid;
+  margin-block-start: var(--space-l);
+  padding-block-start: var(--space-m);
+  gap: var(--space-s);
+  border-block-start: 1px solid var(--cv-rule);
+}
+
+.cv__details h3 {
+  margin: 0 0 var(--space-2xs);
+  color: var(--periwinkle);
+  font-family: var(--font-sans);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
+.cv__email {
+  margin: 0;
+}
+
+.cv__email a {
+  color: var(--periwinkle-ice);
+  font-size: var(--step-0);
+  overflow-wrap: anywhere;
+}
+
+.cv__places {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-s);
+  list-style: none;
+}
+
+.cv__places li {
+  display: grid;
+  gap: 2px;
+}
+
+.cv__places strong {
+  color: var(--on-dark);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.cv__places span {
+  color: var(--cv-body);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+
+.cv__safety {
+  margin: 0;
+  color: var(--cv-quiet);
+  font-size: var(--step-00);
+  line-height: 1.55;
+}
+
+@media (min-width: 620px) {
+  .cv__doors {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cv__fields {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 760px) {
+  .cv__hero {
+    min-height: min(62svh, 560px);
+  }
+
+  .cv__details {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.8fr) minmax(0, 1fr);
+    column-gap: var(--space-m);
+  }
+}
+
+@media (min-width: 1000px) {
+  .cv__hero {
+    padding-block: calc(var(--cv-header-h) + var(--space-l)) var(--space-l);
+  }
+
+  .cv__door {
+    padding: var(--space-m);
+  }
+
+  /* Three columns: the short fields, the message, the reassurances. The form
+     owns the first two and is a grid of its own, so the outer grid is a pair
+     and the run of five labels never ends up beside a lone empty cell. */
+  .cv__body-grid {
+    grid-template-columns: minmax(0, 2.3fr) minmax(0, 0.95fr);
+    column-gap: var(--space-l);
+  }
+
+  .cv .enquiry-form {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    column-gap: var(--space-l);
+  }
+
+  .cv__fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Five stacked fields are taller than a message box, a tick and a button, so
+     the writing area takes up the difference rather than leaving a hole under
+     the send button. The three rows are the message, the consent and the
+     submit — the honeypot is absolutely positioned and claims none. */
+  .cv__compose {
+    grid-template-rows: minmax(0, 1fr) auto auto;
+  }
+
+  .cv__message {
+    align-content: stretch;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+  }
+
+  .cv__message textarea {
+    height: 100%;
+  }
+}

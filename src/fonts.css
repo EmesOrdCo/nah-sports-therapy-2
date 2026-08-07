@@ -1,9 +1,15 @@
 /* Self-hosted webfonts (no CDN — GDPR-safe).
    Serif: STIX Two Text — scientific-publishing heritage, fits the anatomical/clinical brand.
    Sans:  Hanken Grotesk (variable) — warm humanist grotesque for body/UI. */
+/* 400 and 400-italic carry every heading and pull-quote on the site; 600 is
+   the wordmark alone. The 500 that used to sit between them went with the
+   heading weights: three serif weights were in play because the base rule said
+   600 and individual pages overrode it to 400 or 500, and once that settled on
+   400 nothing asked for 500 any more. font-synthesis: none in style.css means
+   an unloaded weight would show as a missing weight rather than a faked one,
+   so this is safe to notice if it ever comes back. */
 @import "@fontsource/stix-two-text/400.css";
 @import "@fontsource/stix-two-text/400-italic.css";
-@import "@fontsource/stix-two-text/500.css";
 @import "@fontsource/stix-two-text/600.css";
 @import "@fontsource/stix-two-text/600-italic.css";
 @import "@fontsource-variable/hanken-grotesk/index.css";

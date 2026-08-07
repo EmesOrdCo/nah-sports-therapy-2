@@ -1,0 +1,363 @@
+/* FAQ page — the journey. All rules scoped under .faq-hero / .faq-journey.
+
+   Carried over from the practical half of the About page, which is where
+   these questions used to live. Same typographic contrast as that page:
+   questions in the sans at heading weight, her answers in the serif. No
+   panels, no cards — the line and the Q/A rhythm are the layout.
+
+   ---- The spine axis ----
+
+   One number governs this page: the journey line runs down the left edge of
+   .section-shell, and everything round it is centred on that. The line is
+   1px at left:0, so its centre lands on 0.5px; the station markers are sized
+   odd and offset by half their width less half a pixel so their centres land
+   there too. Change the marker size and that offset has to move with it, or
+   the line will kink at every stop. */
+
+/* Condensed head. The questions are the page, and the full hero's 250px top
+   pad and --step-5 display line put the first of them off the bottom of the
+   screen. Two type steps down, and the crumb, title and intro pulled together. */
+.faq-hero {
+  min-height: 0;
+  padding: clamp(104px, 10vw, 132px) 0 0;
+}
+
+/* ---- The line-wave, shared with /testimonials ---- */
+
+/* /testimonials is the artwork's height and nothing else, so the wave hangs off
+   the bottom edge of that head. This one carries an intro and the drop line into
+   station one as well, and on the same bottom anchor the sweep lands under both
+   of them with the title it belongs to left in clear paper above. So it hangs
+   off the top instead, at the offset the compact head puts it at — down from the
+   bar by everything except the top sixteenth of the art, which is paper. Both
+   pages therefore cross the title at the same point in the sweep.
+
+   No min-height to go with it, which is the other half of what that page does.
+   This head is already taller than the art at every width the type is still
+   growing at, and past that the tail runs out of head — but the fade at the foot
+   of .page-hero__wave has taken it to nothing before the edge arrives, so what
+   is lost is lost softly. Setting the height instead would push the head past
+   its own content and break the drop line away from the journey it feeds.
+
+   Not on a phone: below 700px the shared rule swaps the whole wave for a crop
+   of it, and this file loads second, so the override has to stay above that
+   breakpoint or it would put the uncropped thread back. */
+@media (min-width: 701px) {
+  .faq-hero .page-hero__wave {
+    background-position: left var(--wave-x) top
+      calc(clamp(86px, 10vw, 118px) - var(--wave-h) * 0.06);
+  }
+}
+
+/* The phone crop still needs moving, for the same reason and by the same
+   amount. It is centred in the head, and this head is half as tall again as the
+   one that rule was written against — centred here puts the crop below the
+   title and behind the intro instead of around the title. Anchored under the
+   bar it lands where /testimonials has it. */
+@media (max-width: 700px) {
+  .faq-hero .page-hero__wave {
+    background-position: left 26% top clamp(96px, 26vw, 140px);
+    /* A phone column is narrower than the intro's clearing would be, so the
+       sweep passes through the sentence rather than around it — there is no
+       arrangement on a 375px head where it does not. It goes quieter instead,
+       far enough under the type that the words are read first and the wave is
+       what they are read on. */
+    opacity: 0.34;
+  }
+}
+
+.faq-hero .breadcrumbs {
+  margin-bottom: clamp(18px, 2.4vw, 30px);
+}
+
+/* Centred on the shell, the way the compact head on /prices sits. max-width is
+   released because the base rule caps h1 at 1120px inside a 1152px shell, which
+   would centre the line 16px off the page axis. */
+.faq-hero h1 {
+  max-width: none;
+  font-size: var(--step-3h);
+  text-align: center;
+}
+
+.faq-hero .page-hero__intro {
+  max-width: 60ch;
+  margin: clamp(14px, 1.6vw, 20px) auto clamp(28px, 3.4vw, 44px);
+  text-align: center;
+}
+
+/* The foot of the sweep reaches the intro on this head, which the shared rule
+   never has to deal with. Same clearing the title gets, at the intro's size:
+   hairlines behind three lines of sans is the point at which a background stops
+   being one.
+
+   Only where the wave is the full artwork. The phone crop is half the opacity
+   and a third of the width of paper here, and a clearing wide enough for a
+   375px column takes the whole crop with it — what is left of the wave on a
+   phone is what falls either side of the title, and this would clear that
+   too. */
+@media (min-width: 701px) {
+  .faq-hero.page-hero--wave .page-hero__intro {
+    position: relative;
+  }
+
+  .faq-hero.page-hero--wave .page-hero__intro::before {
+    position: absolute;
+    z-index: -1;
+    inset: -0.9em -2.4em;
+    background: radial-gradient(
+      ellipse at center,
+      #fff 0 52%,
+      rgba(255, 255, 255, 0) 86%
+    );
+    content: "";
+  }
+}
+
+/* The drop out of the head into station one. It is a separate element rather
+   than the journey line simply starting higher, because the hero and the
+   journey are different sections and the line has to cross the boundary
+   between them. */
+.faq-hero__spine {
+  width: 1px;
+  height: clamp(70px, 9vw, 110px);
+  background: var(--brand);
+}
+
+/* ---- The journey ---- */
+
+.faq-journey {
+  padding-bottom: var(--space-section);
+}
+
+.faq-journey__inner {
+  position: relative;
+}
+
+.faq-journey__spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: var(--line);
+}
+
+/* Drawn from scroll in faq.js. Scaling a 1px element is cheap and stays on
+   the compositor; animating height would relayout the column on every frame. */
+.faq-journey__spine-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--brand);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.faq-station {
+  position: relative;
+  padding-left: 52px;
+  /* Anchored stations must clear the fixed header when jumped to. */
+  scroll-margin-top: clamp(90px, 12vw, 120px);
+}
+
+.faq-station + .faq-station {
+  margin-top: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.faq-station__marker {
+  position: absolute;
+  top: 0;
+  left: -13px;
+  display: grid;
+  width: 27px;
+  height: 27px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #fff;
+  place-items: center;
+}
+
+.faq-station__marker span {
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--label);
+  font-weight: 600;
+}
+
+.faq-station__label {
+  margin: 0;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
+  text-transform: uppercase;
+}
+
+.faq-station__head h2 {
+  max-width: 18ch;
+  margin: 14px 0 0;
+  font-size: var(--step-3);
+}
+
+.faq-station__qa {
+  margin: var(--space-m) 0 0;
+}
+
+/* ---- Questions and answers ---- */
+
+.faq-pair + .faq-pair {
+  margin-top: var(--space-m);
+}
+
+.faq-q {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+/* A <dd> carries a 40px UA margin-inline-start. Reset it — the indent this
+   page needs is already supplied by the station's own left padding, and a
+   second one would step her answers away from their questions. */
+.faq-a {
+  margin: var(--space-xs) 0 0;
+}
+
+.faq-a p {
+  max-width: 58ch;
+  margin: 0 0 var(--space-xs);
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+.faq-a p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Steps, links and contact inside answers ---- */
+
+.faq-steps {
+  margin: var(--space-xs) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq-steps li {
+  position: relative;
+  padding-left: var(--space-s);
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+.faq-steps li::before {
+  position: absolute;
+  top: 0.72em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--brand);
+  content: "";
+}
+
+.faq-inline-link {
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.faq-inline-link:hover {
+  text-decoration: underline;
+}
+
+.faq-contact,
+.faq-places {
+  margin: var(--space-xs) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq-contact a {
+  display: inline-block;
+  padding-block: 4px;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.faq-contact a:hover {
+  text-decoration: underline;
+}
+
+/* ---- Locations, inside the closing station ---- */
+
+.faq-places li + li {
+  border-top: 1px solid var(--line);
+}
+
+.faq-places a {
+  display: block;
+  padding-block: var(--space-xs);
+  color: var(--ink);
+  text-decoration: none;
+  transition: color var(--dur-fast, 180ms) var(--ease-out);
+}
+
+.faq-places li:first-child a {
+  padding-top: 0;
+}
+
+.faq-places a:hover {
+  color: var(--brand);
+}
+
+.faq-place-name {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.faq-place-lines {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  line-height: 1.6;
+}
+
+/* ---- Desktop: the station heading stands beside its questions ---- */
+
+@media (min-width: 900px) {
+  .faq-station {
+    display: grid;
+    padding-left: 76px;
+    grid-template-columns: minmax(200px, 26%) 1fr;
+    gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .faq-station__qa {
+    margin-top: 0;
+  }
+
+  .faq-pair + .faq-pair {
+    margin-top: clamp(2.25rem, 3.5vw, 3.25rem);
+  }
+}

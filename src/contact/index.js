@@ -1,17 +1,19 @@
 /* Contact page.
 
    Three arrangements were built for review (variant-a…variant-c). Dan chose
-   A — Reassurance — so the switcher, the variant map and the other two modules
-   are gone and `/contact` renders A directly. Variant A still owns its whole
-   page and scopes its CSS under .cv-a; fold it back into site-content.js as a
-   plain page whenever the extra directory stops earning its keep.
+   A — Reassurance — and the other two went; A was then rebuilt as the two-door
+   navy page that lives in page.js, which is why there is no variant switcher
+   and no variant map left. The page owns its whole route and scopes its CSS
+   under .cv; fold it back into site-content.js as a plain page whenever the
+   extra directory stops earning its keep.
 
-   No init hook: variant A's progressive bits are CSS, and the form is a native
-   form, so the existing initPageFeatures() submit handler drives it. */
+   The form stays a native form — the existing initPageFeatures() submit
+   handler drives it — and the one init hook here only builds the custom
+   dropdowns over the two native selects, which keep working without it. */
 
-import "./contact.css";
+import * as contact from "./page.js";
 
-import * as contact from "./variant-a.js";
+export { initContactSelects } from "./page.js";
 
 export function buildContactPage() {
   return {
@@ -20,6 +22,6 @@ export function buildContactPage() {
       "Contact Natasha Hadland to discuss Sports Therapy or Pilates appointments at the Studham studio.",
     canonical: "/contact",
     tone: contact.meta.tone || "light",
-    html: `<div class="contact-variant cv-a">${contact.build()}</div>`,
+    html: `<div class="cv">${contact.build()}</div>`,
   };
 }

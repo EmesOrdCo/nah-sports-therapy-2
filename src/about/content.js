@@ -110,8 +110,15 @@ export const CHAPTERS = [
   },
 ];
 
-export const CHARITY =
-  "NJH Sports Therapy &amp; Pilates is keen to help raise money for charities in the area. Where possible, Natasha donates a Pilates 1:1 or duet voucher as a silent auction or raffle prize.";
+/* Moved here from the Studio page, where it was the closing act and read as
+   an afterthought. It is a fact about Natasha rather than about the room, so
+   it belongs beside her story. Wording is the client's, unchanged. */
+export const CHARITY = {
+  heading: "Charity work",
+  lead: "NJH Sports Therapy &amp; Pilates is keen to help raise money for charities in the area. Where possible, Natasha donates a Pilates 1:1 or duet voucher as a silent auction or raffle prize.",
+  tail: "Please contact Natasha if you would like to discuss this further.",
+  cta: "Get in touch",
+};
 
 /* Named by village only — the studio is also a private home. See PLACES in
    contact/content.js for the same rule. */
@@ -119,13 +126,15 @@ export const WHERE = [
   {
     name: "The Studham studio",
     lines: ["A private studio near Whipsnade"],
-    href: "/pilates#studio",
+    href: "/studio#studio",
   },
 ];
 
 
 /* ---------------------------------------------------------------------------
-   Practical content — the FAQ half of the page.
+   Practical content — now rendered on /faq rather than here (see faq/faq.js).
+   It stays in this file because this is where Natasha's wording lives, and
+   splitting her copy across two directories would give it two owners.
 
    All of this is lifted from the old site's own pages (/what-to-expect and
    /clinic-policies), still in her voice. Two sentences carried typos in the
@@ -192,20 +201,6 @@ export const POLICIES = [
     ],
   },
 ];
-
-/* Headline figures only, mirrored from the /prices page. Deliberately not the
-   full table — the full list lives in one place and this links to it, so there
-   is only ever one set of numbers to update. */
-export const PRICE_SUMMARY = {
-  rows: [
-    { label: "Sports Therapy, standard session up to 1 hour", value: "£85" },
-    { label: "Sports Therapy, up to 30 minutes", value: "£60" },
-    { label: "Sports Therapy, up to 90 minutes", value: "£130" },
-    { label: "One-to-one Pilates, 1 hour", value: "£85" },
-    { label: "Small group Pilates session", value: "£22" },
-  ],
-  note: "Sunday and Bank Holiday appointments carry an additional £10 surcharge. Please confirm current prices when booking.",
-};
 
 /* The portrait. Sourced from the practice's own Facebook page — Natasha in NJH
    kit in front of the muscular-system chart. Square original is 1536px. */

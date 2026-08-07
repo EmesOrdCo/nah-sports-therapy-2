@@ -14,6 +14,13 @@
   /* Was the old --surface value. Split out when the light surfaces went white,
      so text and icons on the navy sections keep their soft off-white. */
   --on-dark: oklch(96.6% 0.010 275);      /* light text ON DARK ONLY */
+  /* The two steps down from --on-dark. Twenty-six near-identical rgba
+     off-whites had grown up across the navy sections — rgba(242 246 255/.74),
+     /.78, /.68, rgba(243 247 255/.76), rgba(226 233 255/.68) and so on, all
+     reaching for one of these two. On dark, body copy is --soft and anything
+     subordinate to it is --quiet; nothing else. */
+  --on-dark-soft: oklch(96.6% 0.010 275 / 0.74);  /* body copy on navy */
+  --on-dark-quiet: oklch(96.6% 0.010 275 / 0.55); /* captions, meta, legal */
   --ink: oklch(23.2% 0.055 277);          /* headings / strong text */
   --ink-soft: oklch(43.5% 0.045 277);     /* secondary text */
   --line: oklch(23.2% 0.055 277 / 0.14);
@@ -32,18 +39,42 @@
   --xray-deep: oklch(66.4% 0.108 242);    /* #529BD0 — photo-matched: hero X-ray glow only */
   --xray-mid: oklch(76.7% 0.076 245);     /* #8BB9E1 — photo-matched: hero X-ray glow only */
 
-  /* ---- Fluid type scale ---- */
-  --step-00: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
-  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
-  --step-1: clamp(1.2rem, 1.1rem + 0.5vw, 1.44rem);
-  --step-2: clamp(1.5rem, 1.3rem + 1vw, 2rem);
-  --step-3: clamp(1.95rem, 1.55rem + 2vw, 2.75rem);
-  --step-4: clamp(2.2rem, 1.7rem + 2.8vw, 4.25rem);
-  --step-5: clamp(2.9rem, 1.9rem + 4.6vw, 5.5rem);
+  /* ---- Fluid type scale ----
+     The three added steps close gaps the original six left, which is what all
+     the bespoke clamps scattered through this file were filling in by hand.
+     Nothing sets a font-size outside this scale any more. */
+  --step-00: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);   /* 12.5 → 13.4 */
+  --step-0s: clamp(0.9rem, 0.85rem + 0.2vw, 1rem);       /* 14.4 → 16   */
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);      /* 16   → 18   */
+  --step-1: clamp(1.2rem, 1.1rem + 0.5vw, 1.44rem);      /* 19.2 → 23   */
+  --step-2: clamp(1.5rem, 1.3rem + 1vw, 2rem);           /* 24   → 32   */
+  --step-2h: clamp(1.75rem, 1.5rem + 1.25vw, 2.5rem);    /* 28   → 40   */
+  --step-3: clamp(1.95rem, 1.55rem + 2vw, 2.75rem);      /* 31.2 → 44   */
+  --step-3h: clamp(2.1rem, 1.65rem + 2.3vw, 3.125rem);   /* 33.6 → 50   */
+  --step-4: clamp(2.2rem, 1.7rem + 2.8vw, 4.25rem);      /* 35.2 → 68   */
+  --step-4h: clamp(2.375rem, 1.63rem + 3.19vw, 5.125rem);/* 38   → 82   */
+  --step-5: clamp(2.9rem, 1.9rem + 4.6vw, 5.5rem);       /* 46.4 → 88   */
   --lh-tight: 1.04;
   --lh-head: 1.12;
   --lh-body: 1.6;
   --tracking-display: -0.03em;
+
+  /* ---- Micro-labels ----
+     The uppercase, letterspaced type used for eyebrows, field labels,
+     breadcrumbs and captions. There were forty-five of these rules using six
+     sizes and twelve different letter-spacings; there are now three sizes,
+     each with one tracking, and two weights — 600 for a label that names
+     something, 500 for meta that sits quietly beside it. Colour follows the
+     surface: --brand / --periwinkle for a label, --ink-soft / --on-dark-quiet
+     for meta. */
+  --label-lg: 11px;
+  --label-lg-track: 0.18em;
+  --label: 10px;
+  --label-track: 0.14em;
+  --label-sm: 9px;
+  --label-sm-track: 0.12em;
+  --label-weight: 600;
+  --meta-weight: 500;
 
   /* ---- Spacing ---- */
   --space-2xs: clamp(0.5rem, 0.4rem + 0.3vw, 0.75rem);
@@ -67,6 +98,11 @@
      those two heroes past the fold on a short screen. */
   --hero-figure: min(calc(48.9vw - 101.7px), 683px, calc(100svh - 260px));
 
+  /* Height of the header once it has gone fixed, which is what it is doing
+     anywhere below the hero. Anything that has to sit under the bar rather
+     than behind it measures from here. */
+  --header-scrolled: 76px;
+
   /* ---- Radius / elevation ---- */
   --radius-sm: 2px;
   --radius-md: 6px;
@@ -82,6 +118,8 @@
   /* ---- Motion ---- */
   --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  /* Loader draw: leaves briskly, settles long — a pen stroke, not a slide. */
+  --ease-draw: cubic-bezier(0.4, 0, 0.15, 1);
   --dur-fast: 180ms;
   --dur-mid: 420ms;
   --dur-slow: 620ms;
@@ -105,12 +143,16 @@ body {
   background: var(--paper);
 }
 
+/* 400, not 600. The base was 600 and then overridden back to 400 in twenty-odd
+   places, so the weight a heading got depended on whether its page happened to
+   carry an override — 500 in two more. STIX at display size wants the regular;
+   the wordmark is the one deliberate exception and sets its own. */
 h1,
 h2,
 h3,
 h4 {
   font-family: var(--font-serif);
-  font-weight: 600;
+  font-weight: 400;
   line-height: var(--lh-head);
   letter-spacing: var(--tracking-display);
   text-wrap: balance;
@@ -152,7 +194,7 @@ p {
   display: grid;
   place-content: center;
   color: var(--ink);
-  background: #fff;
+  background: var(--paper);
   opacity: 1;
   transition:
     opacity var(--dur-mid) var(--ease-out),
@@ -165,11 +207,143 @@ p {
   pointer-events: none;
 }
 
+/* The viewBox runs from y=-26, not 0: the node's glow is a radius-26 circle
+   centred at y=12, so it reaches above the linework and an SVG viewport starting
+   at the ink would slice a flat edge across the top of it. */
 .site-loader__art {
   display: block;
   width: clamp(280px, 31vw, 430px);
-  aspect-ratio: 429 / 341;
-  border: 0;
+  height: auto;
+  fill: currentColor;
+}
+
+/* Each element of the mark is uncovered by a wipe running along the direction
+   that element is drawn in — the flow line downwards, each hand wrist to
+   fingertips, the wordmark left to right. The wipes are rotated into those
+   directions in the markup, so all four animate on their own +Y axis and the
+   travel distances below are just the ink's extent along it, plus the 30-unit
+   feather at either end. Nothing pops in at the end: the wipes finish past the
+   last of the ink, so there is no catch-all reveal to snap the remainder on. */
+.njh-wipe {
+  will-change: transform;
+}
+
+.njh-wipe--flow {
+  animation: njh-wipe-flow 0.95s 80ms var(--ease-draw) both;
+}
+
+.njh-wipe--upper {
+  animation: njh-wipe-upper 0.78s 500ms var(--ease-draw) both;
+}
+
+.njh-wipe--lower {
+  animation: njh-wipe-lower 0.78s 720ms var(--ease-draw) both;
+}
+
+.njh-wipe--word {
+  animation: njh-wipe-word 0.55s 1300ms var(--ease-draw) both;
+}
+
+@keyframes njh-wipe-flow {
+  from {
+    transform: translateY(-26px);
+  }
+  to {
+    transform: translateY(242px);
+  }
+}
+
+@keyframes njh-wipe-upper {
+  from {
+    transform: translateY(88px);
+  }
+  to {
+    transform: translateY(285px);
+  }
+}
+
+@keyframes njh-wipe-lower {
+  from {
+    transform: translateY(28px);
+  }
+  to {
+    transform: translateY(235px);
+  }
+}
+
+@keyframes njh-wipe-word {
+  from {
+    transform: translateY(102px);
+  }
+  to {
+    transform: translateY(236px);
+  }
+}
+
+/* The blue node at the head of the flow line. It keeps breathing after the
+   draw finishes, so a slow connection holds on a living mark, not a frozen one. */
+.njh-node {
+  transform-box: view-box;
+  transform-origin: 221px 12px;
+  animation: njh-node-in 0.55s 180ms var(--ease-draw) both;
+}
+
+.njh-node__core {
+  fill: var(--brand-strong);
+}
+
+.njh-node__halo {
+  animation: njh-node-breathe 3.2s 1s ease-in-out infinite;
+}
+
+.njh-node__stop {
+  stop-color: var(--brand-light);
+}
+
+.njh-node__stop--core {
+  stop-opacity: 0.55;
+}
+
+.njh-node__stop--mid {
+  stop-opacity: 0.22;
+}
+
+.njh-node__stop--edge {
+  stop-opacity: 0;
+}
+
+@keyframes njh-node-in {
+  from {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes njh-node-breathe {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .njh-wipe {
+    animation: none;
+    /* Past the far end of every wipe's travel, so the mark is simply present. */
+    transform: translateY(420px);
+  }
+
+  .njh-node,
+  .njh-node__halo {
+    animation: none;
+  }
 }
 
 button,
@@ -193,6 +367,19 @@ a {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+/* No rule under the bar until there is something to rule off. At the top the
+   header sits on the page rather than over it, so the hairline is drawing a
+   boundary that is not there yet — and on the photographic heroes it reads as
+   a seam laid across the picture. .is-scrolled brings it back, which is the
+   point at which content is passing underneath.
+
+   Colour rather than width, so the 1px stays in the box and the bar does not
+   change height as the line comes and goes. */
+.site-header:not(.is-scrolled) {
+  border-bottom-color: transparent;
 }
 
 .wordmark {
@@ -210,7 +397,7 @@ a {
 
 .wordmark__name {
   font-family: var(--font-serif);
-  font-size: clamp(31px, 3vw, 46px);
+  font-size: var(--step-3);
   font-weight: 600;
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-display);
@@ -219,10 +406,10 @@ a {
 .wordmark__descriptor {
   padding-left: 13px;
   border-left: 1px solid rgba(16, 27, 57, 0.26);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
   line-height: 1.35;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
@@ -235,7 +422,7 @@ a {
 .site-nav a {
   position: relative;
   padding: 8px 0;
-  font-size: 13.5px;
+  font-size: var(--step-00);
   font-weight: 500;
   letter-spacing: 0.035em;
   text-decoration: none;
@@ -254,11 +441,27 @@ a {
   transition: transform var(--dur-fast) ease;
 }
 
+/* "location" is the scrollspy marking a section you are level with; "page" is
+   the nav item for the page you are actually on. Both keep the rule underlined
+   rather than sweeping it in on hover. */
 .site-nav a:hover::after,
 .site-nav a:focus-visible::after,
-.site-nav a[aria-current="location"]::after {
+.site-nav a[aria-current]::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* The underline alone reads as a hover left behind, so the current page also
+   takes the brand ink and a slightly heavier rule. */
+.site-nav a[aria-current="page"],
+.nav-group.is-current > .nav-group__top > a {
+  color: var(--brand);
+}
+
+.site-nav a[aria-current="page"]::after,
+.nav-group.is-current > .nav-group__top > a::after {
+  height: 2px;
+  bottom: 1px;
 }
 
 .site-nav__contact {
@@ -281,64 +484,52 @@ a {
   display: none;
 }
 
-.fibre-field {
-  --glow-rgb: 64, 163, 246;
-  --accent-rgb: 20, 113, 213;
+/* ---- Home hero ----
+   A full-bleed photograph with the header sitting on it. The type is held in
+   a left column and the scrim is weighted to match, so contrast under the
+   words never depends on what the photograph happens to be doing. */
+
+.home-hero {
   position: relative;
+  display: flex;
   width: 100%;
   min-height: max(680px, 100svh);
+  align-items: center;
   isolation: isolate;
   overflow: hidden;
-  background: #fff;
-  touch-action: pan-x pan-y;
+  background: var(--navy);
 }
 
-.hero-illustration {
+.home-hero__media {
   position: absolute;
-  z-index: 1;
+  z-index: 0;
   inset: 0;
-  margin: 0;
   pointer-events: none;
 }
 
-.hero-illustration::after {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0.08) 38%,
-    transparent 62%
-  );
-  content: "";
-  pointer-events: none;
-}
-
-.hero-illustration__art {
+.home-hero__photo {
   display: block;
   width: 100%;
   height: 100%;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 22%,
-    #000 78%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 22%,
-    #000 78%,
-    transparent 100%
-  );
   object-fit: cover;
   object-position: center;
 }
 
-.fibre-field::before,
-.fibre-field::after {
-  display: none;
+/* Two layers doing separate jobs: the wedge guarantees contrast under the
+   column of type, the low vignette keeps the scroll cue legible over a
+   photograph with a bright floor. */
+.home-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      100deg,
+      oklch(21.5% 0.055 277 / 0.92) 0%,
+      oklch(21.5% 0.055 277 / 0.74) 38%,
+      oklch(21.5% 0.055 277 / 0.28) 68%,
+      oklch(21.5% 0.055 277 / 0.12) 100%
+    ),
+    linear-gradient(to top, oklch(17.4% 0.048 275 / 0.55) 0%, transparent 34%);
 }
 
 .fibre-field__glow {
@@ -426,7 +617,7 @@ a {
   color: var(--ink-soft);
   background: transparent;
   cursor: pointer;
-  font-size: 11px;
+  font-size: var(--step-00);
   text-align: left;
 }
 
@@ -437,59 +628,57 @@ a {
   background: rgba(73, 107, 226, 0.09);
 }
 
-.hero-content {
+/* Offset by the header's own height rather than centred on the section, so
+   the column reads as centred in the space left under the bar. */
+.home-hero__inner {
   position: relative;
-  z-index: 3;
-  width: min(610px, 48vw);
-  padding-top: clamp(178px, 21vh, 230px);
+  z-index: 2;
+  width: min(660px, 52vw);
+  padding-top: clamp(86px, 10vw, 118px);
   margin-left: var(--page-gutter);
-  pointer-events: none;
 }
 
-.hero-content__eyebrow {
+.home-hero__eyebrow {
   display: flex;
-  margin: 0 0 clamp(26px, 4vh, 46px);
+  margin: 0 0 clamp(20px, 2.6vh, 30px);
   align-items: center;
-  gap: 12px;
-  color: var(--ink-soft);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+  gap: 14px;
+  color: var(--periwinkle);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
   text-transform: uppercase;
 }
 
-.hero-content__eyebrow span {
-  width: 26px;
+.home-hero__eyebrow span {
+  width: 30px;
   height: 1px;
-  background: rgba(var(--glow-rgb), 0.9);
-  box-shadow: 0 0 8px rgba(var(--glow-rgb), 0.45);
-  transition: background var(--dur-mid) ease;
+  flex: none;
+  background: currentColor;
 }
 
-.hero-content h1 {
-  max-width: 15ch;
+.home-hero h1 {
+  max-width: 13ch;
   margin: 0;
+  color: var(--on-dark);
   font-family: var(--font-serif);
-  font-size: var(--step-4);
-  font-weight: 500;
-  line-height: var(--lh-head);
+  font-size: var(--step-5);
+  line-height: 1.02;
   letter-spacing: var(--tracking-display);
-  text-wrap: balance;
 }
 
-.hero-content h1 em {
-  color: rgb(var(--accent-rgb));
+.home-hero h1 em {
+  font-style: italic;
   font-weight: 400;
-  transition: color var(--dur-mid) ease;
 }
 
-.hero-content__intro {
-  max-width: 440px;
-  margin: clamp(36px, 5vh, 56px) 0 0 6px;
-  color: var(--ink-soft);
-  font-size: clamp(15px, 1.2vw, 18px);
+.home-hero__intro {
+  max-width: 46ch;
+  margin: clamp(22px, 3vh, 34px) 0 0;
+  color: var(--on-dark-soft);
+  font-size: var(--step-0s);
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
 /* ---- Buttons ---- */
@@ -502,7 +691,7 @@ a {
   padding: 0 26px;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  font-size: 14px;
+  font-size: var(--step-00);
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -539,48 +728,95 @@ a {
   background: var(--surface);
 }
 
-.hero-actions {
+/* The second call to action on a photograph. A hairline rather than a second
+   fill, so the two never compete for the same attention. */
+.btn--on-photo {
+  border-color: rgb(255 255 255 / 0.42);
+  color: var(--on-dark);
+}
+
+.btn--on-photo:hover {
+  border-color: var(--on-dark);
+  background: rgb(255 255 255 / 0.1);
+}
+
+/* Larger and tracked out — the hero is the one place on the site where the
+   buttons are the furthest thing from the reader's eye. */
+.btn--hero {
+  min-height: 56px;
+  padding: 0 30px;
+  gap: 12px;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  /* Tracking leaves a trailing space after the last letter, which reads as
+     the label sitting left of centre. Pull it back. */
+  text-indent: 0.12em;
+  text-transform: uppercase;
+}
+
+.btn--hero svg {
+  width: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.btn--hero:hover svg {
+  transform: translateX(4px);
+}
+
+.home-hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin: clamp(26px, 4vh, 42px) 0 0;
-  pointer-events: auto;
+  gap: 14px;
+  margin: clamp(28px, 4vh, 44px) 0 0;
 }
 
-.hero-content__link {
-  margin: clamp(26px, 4vh, 42px) 0 0 6px;
-  gap: 17px;
-  pointer-events: auto;
-}
-
-.hero-content__link svg {
-  width: 34px;
-  fill: none;
-  stroke: rgb(var(--accent-rgb));
-  stroke-width: 1.2;
-  transition:
-    stroke var(--dur-mid) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
-}
-
-.hero-content__link:hover svg {
-  transform: translateX(5px);
-}
-
-.hero-note {
+.home-hero__scroll {
   position: absolute;
-  z-index: 3;
-  right: var(--page-gutter);
-  bottom: 34px;
-  max-width: 250px;
-  margin: 0 54px 0 0;
-  color: rgba(16, 27, 57, 0.58);
-  font-size: 9px;
-  line-height: 1.5;
-  letter-spacing: 0.1em;
-  text-align: right;
+  z-index: 2;
+  bottom: 30px;
+  left: 50%;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  color: var(--on-dark-quiet);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
+  transform: translateX(-50%);
   pointer-events: none;
+}
+
+.home-hero__scroll i {
+  width: 1px;
+  height: 46px;
+  background: linear-gradient(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0));
+  transform-origin: top;
+  animation: hero-scroll-cue 2.4s var(--ease-out) infinite;
+}
+
+@keyframes hero-scroll-cue {
+  0%,
+  70%,
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  35% {
+    transform: scaleY(0.55);
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__scroll i {
+    animation: none;
+  }
 }
 
 .section-shell {
@@ -591,9 +827,9 @@ a {
 .section-kicker {
   margin: 0;
   color: var(--brand);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
   text-transform: uppercase;
 }
 
@@ -616,7 +852,6 @@ a {
 .section-heading h2, .contact h2 {
   margin: 0;
   font-family: var(--font-serif);
-  font-weight: 400;
   letter-spacing: var(--tracking-display);
 }
 
@@ -627,7 +862,7 @@ a {
 
 .clinic-options article > span {
   color: var(--brand);
-  font-size: 9px;
+  font-size: var(--label);
   letter-spacing: 0.15em;
 }
 
@@ -651,7 +886,6 @@ a {
   margin: 0;
   font-family: var(--font-serif);
   font-size: var(--step-5);
-  font-weight: 400;
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-display);
 }
@@ -665,7 +899,7 @@ a {
   max-width: 300px;
   margin: 0 0 7px;
   color: var(--ink-soft);
-  font-size: 14px;
+  font-size: var(--step-00);
   line-height: 1.65;
 }
 
@@ -722,7 +956,7 @@ a {
   max-width: 310px;
   margin: 0 0 7px;
   color: var(--ink-soft);
-  font-size: 15px;
+  font-size: var(--step-0s);
   line-height: 1.65;
 }
 
@@ -764,24 +998,23 @@ a {
 
 .service-list strong {
   color: var(--brand);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
 .service-list span {
   max-width: 300px;
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: var(--step-00);
   line-height: 1.5;
 }
 
 .text-link,
 /* min-height keeps these at a usable touch size; the visible mark is
    unchanged, the target just stops being 31px tall on a phone. */
-.pilates-arrow-link,
-.hero-content__link {
+.pilates-arrow-link {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
@@ -859,8 +1092,7 @@ a {
 .clinic-options h3 {
   margin: 70px 0 22px;
   font-family: var(--font-serif);
-  font-size: clamp(30px, 2.6vw, 46px);
-  font-weight: 400;
+  font-size: var(--step-2h);
   letter-spacing: -0.035em;
 }
 
@@ -919,7 +1151,7 @@ a {
 .contact__actions p {
   max-width: 450px;
   margin: 0;
-  color: rgba(242, 246, 255, 0.68);
+  color: var(--on-dark-soft);
   line-height: 1.7;
 }
 
@@ -974,27 +1206,28 @@ a {
 }
 
 .site-footer__grid a {
-  color: rgba(226, 233, 255, 0.68);
-  font-size: 12px;
+  color: var(--on-dark-soft);
+  font-size: var(--step-00);
   text-decoration: none;
 }
 
 .site-footer__grid a:hover {
-  color: #fff;
+  color: var(--on-dark);
 }
 
 .site-footer__label {
   margin: 0 0 12px;
-  color: #fff;
-  font-size: 9px;
-  letter-spacing: 0.15em;
+  color: var(--periwinkle);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
 .site-footer__note {
-  color: rgba(226, 233, 255, 0.76);
+  color: var(--on-dark-soft);
   font-family: var(--font-serif);
-  font-size: clamp(23px, 2vw, 32px);
+  font-size: var(--step-2);
   line-height: 1.2;
 }
 
@@ -1009,25 +1242,93 @@ a {
   justify-content: space-between;
   gap: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.14);
-  color: rgba(226, 233, 255, 0.42);
-  font-size: 9px;
-  letter-spacing: 0.08em;
+  color: var(--on-dark-quiet);
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-sm-track);
   text-transform: uppercase;
 }
 
 .site-header.is-scrolled {
   position: fixed;
-  height: 76px;
+  height: var(--header-scrolled);
   color: var(--ink) !important;
-  background: rgba(255, 255, 255, 0.9);
+  background: #fff;
   box-shadow: 0 1px 0 var(--line);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   animation: header-in 260ms ease both;
 }
 
 .site-header.is-scrolled .wordmark__descriptor {
   border-left-color: rgba(16, 27, 57, 0.26);
+}
+
+/* ---- Header over a photographic hero ----
+
+   The home hero and the contact hero are both full-bleed photographs with the
+   bar sitting on them, so up there the header loses its white fill and reads
+   light. Scrolling past the hero hands it back to .is-scrolled above, which is
+   why every rule here is :not(.is-scrolled).
+
+   Keyed off the hero being in the document rather than a body class, because
+   the router adds its classes after parse and this has to be right on the
+   first paint. Any future hero that wants this joins the :has() list — the
+   selectors below are the one definition of "header on a photograph", and
+   copying them into a page stylesheet is how the two drift apart. */
+
+/* The hairline is already off at the top for every page — see .site-header
+   :not(.is-scrolled) up by the base rule. All this has to drop is the fill. */
+body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) {
+  background: none;
+}
+
+/* :not(.is-open) is the mobile menu. Open, the nav is a white panel dropped
+   below the bar rather than links on the photograph, so it has to keep the
+   ink it would have had — light links there are white on white. */
+body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .wordmark__name,
+body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .wordmark__descriptor,
+body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .site-nav:not(.is-open) a,
+body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .menu-toggle {
+  color: var(--on-dark);
+}
+
+body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .wordmark__descriptor {
+  border-left-color: rgb(255 255 255 / 0.34);
+}
+
+body:has(.home-hero, .cv__hero)
+  .site-header:not(.is-scrolled)
+  .site-nav:not(.is-open)
+  a[aria-current] {
+  color: var(--periwinkle);
+}
+
+/* The mark is a single solid indigo path, so knocking it to white is exact
+   rather than approximate — and it costs nothing next to shipping and
+   cache-busting a second copy of a 25KB asset. */
+body:has(.home-hero, .cv__hero) .site-header:not(.is-scrolled) .wordmark__mark {
+  filter: brightness(0) invert(1);
+}
+
+/* The submenu panels keep their own white surface, so their links must not
+   inherit the light treatment above — light links there are white on white.
+   The chain has to repeat .site-nav:not(.is-open) to outweigh the two rules
+   above rather than lose to them on specificity. */
+body:has(.home-hero, .cv__hero)
+  .site-header:not(.is-scrolled)
+  .site-nav:not(.is-open)
+  .nav-group__menu
+  a {
+  color: var(--ink);
+}
+
+/* And the current page inside a panel takes the brand ink it takes everywhere
+   else: periwinkle is pitched for navy and measures ~2.3:1 on this white. */
+body:has(.home-hero, .cv__hero)
+  .site-header:not(.is-scrolled)
+  .site-nav:not(.is-open)
+  .nav-group__menu
+  a[aria-current] {
+  color: var(--brand);
 }
 
 @keyframes header-in {
@@ -1053,8 +1354,7 @@ a {
 /* Stagger grouped items so a row settles in sequence rather than snapping
    in as one block. Items are unobserved after revealing, so the delay
    never replays. */
-.creds__strip li:nth-child(2),
-.service-card:nth-child(2) {
+.creds__strip li:nth-child(2) {
   transition-delay: 80ms;
 }
 
@@ -1108,7 +1408,7 @@ a {
 
   .site-nav a {
     padding: 9px 0;
-    font-size: 14px;
+    font-size: var(--step-00);
   }
 
   .site-nav__contact {
@@ -1127,9 +1427,9 @@ a {
   }
 
   .menu-toggle__label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
+    font-size: var(--label);
+    font-weight: var(--label-weight);
+    letter-spacing: var(--label-track);
     text-transform: uppercase;
   }
 
@@ -1154,11 +1454,11 @@ a {
     transform: translateY(-3px) rotate(-45deg);
   }
 
-  .hero-content {
-    width: min(610px, 64vw);
+  .home-hero__inner {
+    width: min(620px, 68vw);
   }
 
-  .hero-content h1 {
+  .home-hero h1 {
     font-size: clamp(2.6rem, 1.6rem + 7vw, 4.6rem);
   }
 }
@@ -1176,85 +1476,81 @@ a {
     gap: 9px;
   }
 
-  .wordmark__name {
-    font-size: 31px;
-  }
-
   .wordmark__descriptor {
     padding-left: 9px;
-    font-size: 8px;
+    font-size: var(--label-sm);
   }
 
-  .fibre-field {
+  .home-hero {
     min-height: max(700px, 100svh);
   }
 
-  .fibre-field::before {
-    top: 40%;
-    left: 76%;
-    width: 96vw;
-    height: 96vw;
+  /* One column, and the scrim goes vertical — a left-weighted wedge has
+     nowhere to fall back to once the type spans the full width. */
+  .home-hero__scrim {
+    background: linear-gradient(
+      to top,
+      oklch(17.4% 0.048 275 / 0.94) 0%,
+      oklch(21.5% 0.055 277 / 0.82) 44%,
+      oklch(21.5% 0.055 277 / 0.6) 76%,
+      oklch(21.5% 0.055 277 / 0.42) 100%
+    );
   }
 
-  .hero-content {
+  .home-hero__inner {
     width: calc(100% - var(--page-gutter) * 2);
-    padding-top: clamp(135px, 19vh, 175px);
+    padding-top: clamp(96px, 15vh, 130px);
   }
 
-  .hero-content__eyebrow {
-    margin-bottom: 26px;
-    font-size: 8px;
+  .home-hero__eyebrow {
+    margin-bottom: 20px;
+    gap: 10px;
+    font-size: var(--label);
   }
 
-  .hero-content h1 {
+  .home-hero__eyebrow span {
+    width: 22px;
+  }
+
+  .home-hero h1 {
+    max-width: 11ch;
     font-size: var(--step-4);
     line-height: var(--lh-tight);
   }
 
-  .hero-content__intro {
-    max-width: 88%;
-    margin-top: 30px;
-    font-size: 14px;
+  .home-hero__intro {
+    max-width: 100%;
+    margin-top: 24px;
+    font-size: var(--step-00);
     line-height: 1.6;
   }
 
-  .hero-content__link {
-    margin-top: 24px;
-  }
-
-  .hero-note {
-    right: auto;
-    bottom: 26px;
-    left: var(--page-gutter);
-    max-width: 215px;
-    margin: 0;
-    text-align: left;
-  }
-
-  .time-control {
-    right: 25vw;
+  /* Full-width stacked buttons leave no room beside them, and the cue would
+     land on top of the second one. */
+  .home-hero__scroll {
+    display: none;
   }
 }
 
 @media (max-height: 720px) and (min-width: 641px) {
-  .hero-content {
-    padding-top: 145px;
+  .home-hero__inner {
+    padding-top: 96px;
   }
 
-  .hero-content__eyebrow {
-    margin-bottom: 24px;
+  .home-hero__eyebrow {
+    margin-bottom: 18px;
   }
 
-  .hero-content h1 {
-    font-size: var(--step-5);
+  .home-hero h1 {
+    font-size: var(--step-4);
   }
 
-  .hero-content__intro {
-    margin-top: 30px;
+  .home-hero__intro {
+    margin-top: 22px;
   }
 
-  .hero-content__link {
-    margin-top: 24px;
+  .home-hero__scroll {
+    display: none;
   }
 }
 
@@ -1540,7 +1836,7 @@ a {
 .nav-group__menu a {
   padding: 9px 0;
   border-bottom: 1px solid rgba(16, 27, 57, 0.09);
-  font-size: 11px;
+  font-size: var(--step-00);
 }
 
 .nav-group__menu a:last-child {
@@ -1563,16 +1859,8 @@ a {
   transform: scaleX(1);
 }
 
-body[data-hero-tone="dark"] .site-header:not(.is-scrolled) {
-  color: var(--on-dark);
-  border-bottom-color: rgba(255, 255, 255, 0.16);
-}
-
-body[data-hero-tone="dark"]
-  .site-header:not(.is-scrolled)
-  .wordmark__descriptor {
-  border-left-color: rgba(255, 255, 255, 0.3);
-}
+/* The header no longer sits on the hero — it is opaque white in both states,
+   so a dark hero tone must not flip the wordmark and links to white. */
 
 .is-inner-page main {
   min-height: 70vh;
@@ -1601,9 +1889,9 @@ body[data-hero-tone="dark"]
   grid-column: 1 / -1;
   border: 1px solid rgba(49, 86, 200, 0.28);
   color: var(--brand);
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
@@ -1648,7 +1936,6 @@ body[data-hero-tone="dark"]
   margin: var(--space-l) 0 24px;
   font-family: var(--font-serif);
   font-size: var(--step-3);
-  font-weight: 500;
   line-height: var(--lh-head);
   letter-spacing: var(--tracking-display);
 }
@@ -1728,14 +2015,15 @@ body[data-hero-tone="dark"]
   margin-bottom: clamp(52px, 7vw, 92px);
   align-items: center;
   gap: 10px;
-  color: rgba(16, 27, 57, 0.55);
-  font-size: 9px;
-  letter-spacing: 0.13em;
+  color: var(--ink-soft);
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-sm-track);
   text-transform: uppercase;
 }
 
 .page-hero--dark .breadcrumbs {
-  color: rgba(245, 248, 255, 0.55);
+  color: var(--on-dark-quiet);
 }
 
 .breadcrumbs a {
@@ -1755,7 +2043,6 @@ body[data-hero-tone="dark"]
   margin: 0;
   font-family: var(--font-serif);
   font-size: var(--step-5);
-  font-weight: 400;
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-display);
 }
@@ -1773,12 +2060,217 @@ body[data-hero-tone="dark"]
   max-width: 600px;
   margin: clamp(42px, 5vw, 66px) 0 0;
   color: var(--ink-soft);
-  font-size: clamp(17px, 1.35vw, 21px);
+  font-size: var(--step-1);
   line-height: 1.7;
 }
 
 .page-hero--dark .page-hero__intro {
-  color: rgba(240, 245, 255, 0.68);
+  color: var(--on-dark-soft);
+}
+
+/* Compact head — for pages where the content is the point and the title is
+   only a label for it. /testimonials is the case: at the full height above,
+   a 250px top pad and a --step-5 display line put the entire wall of quotes
+   below the fold on a page that exists to show them. A step and a half down, no
+   drifting rings, and the intro alongside the heading rather than under it.
+   /faq sets its own head but takes the same size, so the three read as one
+   kind of page. */
+.page-hero--compact {
+  min-height: 0;
+  padding: clamp(104px, 10vw, 132px) 0 clamp(22px, 2.4vw, 34px);
+}
+
+.page-hero--compact .page-hero__inner {
+  display: grid;
+  gap: clamp(12px, 1.6vw, 24px);
+  justify-items: center;
+}
+
+/* The row gap carries the space under the crumb. The block margin the full
+   hero uses is another 92px on top of it, which is most of what made the old
+   head tall. The crumb itself stays on the page edge — it is a utility strip,
+   not part of the centred composition. */
+.page-hero--compact .breadcrumbs {
+  margin-bottom: 0;
+  justify-self: start;
+}
+
+.page-hero--compact h1 {
+  margin: 0;
+  font-size: var(--step-3h);
+  text-align: center;
+}
+
+.page-hero--compact .page-hero__intro {
+  max-width: 60ch;
+  margin: 0;
+  font-size: var(--step-0);
+  text-align: center;
+}
+
+/* The line-wave behind a compact title, opt-in per page — /testimonials takes
+   it. The artwork is drawn in --brand on white and blended with multiply rather
+   than shipped with an alpha channel: the hero is white, so multiply drops the
+   paper and leaves the lines, and a flat WebP of a thousand hairlines is a
+   fraction of the weight the same thing costs with transparency.
+
+   The whole wave is in frame — no crop. Its height is therefore fixed by the
+   width it is drawn at, and the head has to be tall enough to hold it: --wave-w
+   drives both, and the head's min-height is the artwork's height plus the room
+   the title needs above it. The alternative — running the art wider than the
+   head and slicing it — was the first pass here, and a wave whose arcs leave
+   the frame mid-sweep never resolves into one shape.
+
+   16:3 is the source cropped to its linework rather than the file's own 10:3.
+   The stock canvas carries a third of a frame of empty paper, and that paper is
+   what decides how tall the head has to be to show the whole sweep — a taller
+   head on a page whose entire job is to open with the quotes already in view.
+   Trimming it is worth more here than anywhere the number would matter.
+
+   The art runs wider than the screen and is pulled left by --wave-x. The tail
+   at the left of the wave is the highest thing in it, and at 100vw it ran into
+   the underside of the header — which is opaque, so it cut the wave off on a
+   straight line rather than passing over it. Off the left edge it goes instead,
+   and the width makes up for what the shift takes off the right. Everything
+   still in frame clears the bar; the sweep is what is left, which is the part
+   that was doing the work.
+
+   The head is capped: past ~2800px it stops growing and the wave starts losing
+   its top and bottom instead, which is what the fade below is for. */
+.page-hero--wave {
+  --wave-w: 104vw;
+  --wave-x: -6vw;
+  --wave-h: calc(var(--wave-w) * 3 / 16);
+
+  /* The header the wave has to start under, the wave, and a gap beneath it.
+     The 0.94 is the top twentieth of the artwork, which is paper on every
+     column still in frame once --wave-x has taken the tail off the left — it
+     can sit behind the bar, and the head is that much shorter for it. Every
+     pixel here is a pixel of quotes pushed under the fold, which is the one
+     thing this head was made compact to avoid. */
+  min-height: min(
+    calc(clamp(86px, 10vw, 118px) + var(--wave-h) * 0.94 + 10px),
+    640px
+  );
+}
+
+.page-hero__wave {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: image-set(
+      url("/images/hero-wave-1200.webp") 1x,
+      url("/images/hero-wave-2400.webp") 2x
+    )
+    left var(--wave-x) bottom 10px / var(--wave-w) auto no-repeat;
+  opacity: 0.72;
+  mix-blend-mode: multiply;
+  /* Idle at the sizes where the whole wave is in frame — the fade zones sit in
+     the paper above and below it. It only does anything on the very wide
+     screens where the head has stopped growing and the art has not. */
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+}
+
+/* A phone is the one width where the whole wave is the wrong answer: drawn at
+   375px it is a 112px thread sitting above the title, too faint to be a
+   background and too thin to be a shape. Here it goes back to a crop — art
+   wider than the screen, looked at a third of the way along, which frames an
+   open trough rather than the dense crossing in the middle. The head keeps its
+   own height rather than taking one from the artwork. */
+@media (max-width: 700px) {
+  .page-hero--wave {
+    min-height: 0;
+  }
+
+  /* Cropped art needs a soft edge: cut square, a band of forty hairlines ends
+     on a ruled line, which is the one thing a background must not draw. */
+  .page-hero__wave {
+    background-position: 26% 50%;
+    background-size: 1150px auto;
+    opacity: 0.5;
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      transparent 0,
+      #000 22%,
+      #000 72%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      transparent 0,
+      #000 22%,
+      #000 72%,
+      transparent 100%
+    );
+  }
+}
+
+/* Where the wave passes behind the title it stops. The lines are hairlines and
+   the title is a serif display line — the two together turn the counters into
+   noise, which is exactly the point at which a background stops being one.
+
+   The clearing is a white radial painted over the wave and under the text,
+   anchored to the h1 itself rather than to a guessed spot in the hero, so it
+   stays on the words at any width or line count. Over the hero's white paper it
+   is invisible except for what it removes. */
+.page-hero--wave h1 {
+  position: relative;
+}
+
+.page-hero--wave h1::before {
+  position: absolute;
+  z-index: -1;
+  inset: -0.7em -2.2em;
+  background: radial-gradient(
+    ellipse at center,
+    #fff 0 46%,
+    rgba(255, 255, 255, 0) 82%
+  );
+  content: "";
+}
+
+/* Rule, dot, rule — the mark that closes a compact head, opt-in per page.
+   The gaps either side of the dot are the paper ring around it rather than
+   two shortened rules, so the dot stays centred on the line whatever the
+   line is doing at its ends. */
+.page-hero__ornament {
+  position: relative;
+  width: 84px;
+  height: 1px;
+  margin-top: clamp(8px, 1.2vw, 16px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--line) 18%,
+    var(--line) 82%,
+    transparent
+  );
+}
+
+.page-hero__ornament::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--brand) 46%, transparent);
+  box-shadow: 0 0 0 5px var(--paper);
+  transform: translate(-50%, -50%);
+  content: "";
 }
 
 .page-hero--media {
@@ -1930,6 +2422,19 @@ body[data-hero-tone="dark"]
   align-items: start;
 }
 
+/* A short title beside a two-paragraph column is left stranded at the top of
+   its own whitespace. --middle settles the copy against the middle of the
+   title instead. The 28px above every section heading exists to clear a
+   kicker; left in place it rides along as grid margin and throws the centring
+   out by half that, so it goes too. Collapses harmlessly to one column. */
+.editorial-section--middle .editorial-section__grid {
+  align-items: center;
+}
+
+.editorial-section--middle .section-head h2 {
+  margin-top: 0;
+}
+
 .editorial-section h2,
 .content-band h2,
 .section-intro h2,
@@ -1938,12 +2443,10 @@ body[data-hero-tone="dark"]
 .policy-section h2,
 .contact-page h2,
 .dual-list-section h2,
-.process-section h2,
-.pricing-section h2 {
+.process-section h2 {
   margin: 28px 0 0;
   font-family: var(--font-serif);
-  font-size: clamp(48px, 5vw, 82px);
-  font-weight: 400;
+  font-size: var(--step-4h);
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-display);
 }
@@ -1951,7 +2454,7 @@ body[data-hero-tone="dark"]
 .prose {
   max-width: 700px;
   color: var(--ink-soft);
-  font-size: clamp(16px, 1.25vw, 19px);
+  font-size: var(--step-0);
   line-height: 1.78;
 }
 
@@ -1978,15 +2481,17 @@ body[data-hero-tone="dark"]
 }
 
 .inline-contact span {
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  color: var(--brand);
   text-transform: uppercase;
 }
 
 .inline-contact a {
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: 28px;
+  font-size: var(--step-2);
 }
 
 .card-section,
@@ -2046,7 +2551,6 @@ body[data-hero-tone="dark"]
   margin: 0 0 18px;
   font-family: var(--font-serif);
   font-size: var(--step-2);
-  font-weight: 500;
   line-height: var(--lh-head);
   letter-spacing: var(--tracking-display);
 }
@@ -2093,7 +2597,7 @@ body[data-hero-tone="dark"]
   position: relative;
   padding: 20px 0 20px 32px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(243, 247, 255, 0.76);
+  color: var(--on-dark-soft);
   line-height: 1.55;
 }
 
@@ -2132,14 +2636,13 @@ body[data-hero-tone="dark"]
   margin: 30px 0 0;
   font-family: var(--font-serif);
   font-size: var(--step-5);
-  font-weight: 400;
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-display);
 }
 
 .page-cta__inner > div:last-child > p {
   margin: 0 0 35px;
-  color: rgba(242, 246, 255, 0.65);
+  color: var(--on-dark-soft);
   line-height: 1.7;
 }
 
@@ -2177,14 +2680,15 @@ body[data-hero-tone="dark"]
 
 .timetable strong {
   color: var(--brand);
-  font-size: 11px;
-  letter-spacing: 0.13em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
 .timetable span {
   font-family: var(--font-serif);
-  font-size: 27px;
+  font-size: var(--step-2);
 }
 
 .timetable small {
@@ -2192,8 +2696,9 @@ body[data-hero-tone="dark"]
   margin-top: 6px;
   color: var(--ink-soft);
   font-family: var(--font-sans);
-  font-size: 9px;
-  letter-spacing: 0.08em;
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-sm-track);
   text-transform: uppercase;
 }
 
@@ -2253,14 +2758,14 @@ body[data-hero-tone="dark"]
 .policy-list article > span,
 .process-list article > span {
   color: var(--brand);
-  font-size: 10px;
+  font-size: var(--label);
   letter-spacing: 0.14em;
 }
 
 .policy-list h2,
 .process-list h2 {
   margin: 0 0 20px;
-  font-size: clamp(34px, 3.5vw, 58px);
+  font-size: var(--step-3);
 }
 
 .policy-list p,
@@ -2302,14 +2807,16 @@ body[data-hero-tone="dark"]
 }
 
 .contact-strip p {
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  color: var(--brand);
   text-transform: uppercase;
 }
 
 .contact-strip a {
   font-family: var(--font-serif);
-  font-size: clamp(32px, 4vw, 60px);
+  font-size: var(--step-3);
 }
 
 .resource-list {
@@ -2329,14 +2836,13 @@ body[data-hero-tone="dark"]
 
 .resource-list > a > span {
   color: var(--brand);
-  font-size: 10px;
+  font-size: var(--label);
 }
 
 .resource-list h2 {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(30px, 3vw, 48px);
-  font-weight: 400;
+  font-size: var(--step-3);
   letter-spacing: -0.04em;
 }
 
@@ -2347,7 +2853,7 @@ body[data-hero-tone="dark"]
 
 .resource-list b {
   color: var(--brand);
-  font-size: 24px;
+  font-size: var(--step-1);
   font-weight: 400;
   transition: transform var(--dur-fast) ease;
 }
@@ -2381,15 +2887,16 @@ body[data-hero-tone="dark"]
 .testimonial-wall span,
 .testimonial-wall footer {
   color: var(--brand);
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
 .testimonial-wall blockquote p {
   margin: 55px 0 45px;
   font-family: var(--font-serif);
-  font-size: clamp(29px, 3vw, 48px);
+  font-size: var(--step-3);
   line-height: 1.12;
   letter-spacing: -0.035em;
 }
@@ -2438,64 +2945,85 @@ body[data-hero-tone="dark"]
 
 .credential-list span {
   color: var(--brand);
-  font-size: 10px;
+  font-size: var(--label);
 }
 
 .credential-list h3 {
   max-width: 900px;
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(26px, 3vw, 46px);
-  font-weight: 400;
+  font-size: var(--step-3);
   letter-spacing: -0.035em;
 }
 
-.pricing-section {
-  padding-block: var(--space-section);
+/* ---- Prices ----
+   An index rather than a table: dot leaders carry the eye from appointment to
+   fee, so the two columns need no boxes and no vertical rules. ---- */
+
+/* The compact head above already sits close to the fees, so the full section
+   pad on top would reopen the gap it was shortened to close. */
+.prices-page {
+  padding-block: clamp(38px, 4.4vw, 62px) var(--space-section);
   background: #fff;
 }
 
-.pricing-grid {
+.prices-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(50px, 8vw, 120px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(48px, 8vw, 120px);
 }
 
-.pricing-grid article {
-  padding: clamp(35px, 5vw, 70px);
-  border: 1px solid var(--line);
+.prices-group__title {
+  margin: 0 0 clamp(24px, 3vw, 38px);
+  padding-bottom: clamp(14px, 1.6vw, 20px);
+  border-bottom: 2px solid var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
 }
 
-.pricing-grid h2 {
-  margin-bottom: 65px;
-}
-
-.price-row {
+.prices-row {
   display: flex;
-  min-height: 84px;
-  padding: 22px 0;
-  align-items: center;
-  justify-content: space-between;
-  gap: 30px;
-  border-bottom: 1px solid var(--line);
+  margin: 0;
+  padding: clamp(14px, 1.6vw, 21px) 0;
+  align-items: baseline;
+  gap: 10px;
 }
 
-.price-row span {
+.prices-row__label {
   color: var(--ink-soft);
+  font-size: var(--step-0);
   line-height: 1.5;
 }
 
-.price-row strong {
-  font-family: var(--font-serif);
-  font-size: 28px;
-  font-weight: 400;
+/* The leader. A dotted rule stretched between the two fixed ends and pulled up
+   off the baseline so it runs through the x-height gap, not under the text. */
+.prices-row__lead {
+  flex: 1;
+  min-width: 24px;
+  border-bottom: 1px dotted color-mix(in oklch, var(--ink) 42%, transparent);
+  transform: translateY(-4px);
 }
 
-.pricing-grid article > small {
-  display: block;
-  margin-top: 30px;
+.prices-row__fee {
+  font-family: var(--font-serif);
+  font-size: var(--step-2h);
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+.prices-note {
+  max-width: 62ch;
+  margin: clamp(18px, 2vw, 26px) 0 0;
   color: var(--ink-soft);
+  font-size: var(--step-00);
   line-height: 1.6;
+}
+
+.prices-group .text-link {
+  display: inline-flex;
+  margin-top: clamp(18px, 2vw, 26px);
 }
 
 .contact-page {
@@ -2510,7 +3038,7 @@ body[data-hero-tone="dark"]
 }
 
 .contact-page h2 {
-  font-size: clamp(43px, 4.7vw, 72px);
+  font-size: var(--step-4h);
 }
 
 .contact-page dl {
@@ -2525,8 +3053,9 @@ body[data-hero-tone="dark"]
 .contact-page dt {
   margin-bottom: 8px;
   color: var(--brand);
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
@@ -2542,7 +3071,7 @@ body[data-hero-tone="dark"]
 .contact-page__note {
   margin-top: 40px;
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: var(--step-00);
   line-height: 1.6;
 }
 
@@ -2566,10 +3095,10 @@ body[data-hero-tone="dark"]
 }
 
 .form-field label {
-  color: var(--ink);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
@@ -2599,7 +3128,7 @@ body[data-hero-tone="dark"]
 .form-error {
   display: none;
   color: var(--danger);
-  font-size: 11px;
+  font-size: var(--step-00);
 }
 
 .enquiry-form.was-validated input:invalid,
@@ -2654,9 +3183,9 @@ body[data-hero-tone="dark"]
   color: #fff;
   background: var(--ink);
   cursor: pointer;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
@@ -2668,7 +3197,7 @@ body[data-hero-tone="dark"]
 .form-submit p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: var(--step-00);
   line-height: 1.5;
 }
 
@@ -2684,7 +3213,7 @@ body[data-hero-tone="dark"]
 
   .is-inner-page .site-nav a,
   .has-expanded-nav .site-nav a {
-    font-size: 11.5px;
+    font-size: var(--step-00);
   }
 }
 
@@ -2731,13 +3260,7 @@ body[data-hero-tone="dark"]
 
   .nav-group__menu a {
     padding: 8px 0;
-    font-size: 12px;
-  }
-
-  body[data-hero-tone="dark"]
-    .site-header:not(.is-scrolled)
-    .menu-toggle {
-    color: #fff;
+    font-size: var(--step-00);
   }
 }
 
@@ -2776,7 +3299,7 @@ body[data-hero-tone="dark"]
   }
 
   .testimonial-wall .section-shell,
-  .pricing-grid {
+  .prices-grid {
     grid-template-columns: 1fr;
   }
 
@@ -2807,6 +3330,18 @@ body[data-hero-tone="dark"]
     font-size: var(--step-4);
   }
 
+  /* The compact head opts out of the tall phone hero for the same reason it
+     opts out of the desktop one — and it has to be said again here, because
+     the two rules above sit later in the file and would otherwise win. */
+  .page-hero--compact {
+    min-height: 0;
+    padding-top: clamp(104px, 12vw, 118px);
+  }
+
+  .page-hero--compact h1 {
+    font-size: var(--step-3);
+  }
+
   .page-hero__visual {
     top: 36%;
     right: -56%;
@@ -2833,9 +3368,11 @@ body[data-hero-tone="dark"]
   .policy-section h2,
   .contact-page h2,
   .dual-list-section h2,
-  .process-section h2,
-  .pricing-section h2 {
-    font-size: clamp(43px, 13vw, 62px);
+  .process-section h2 {
+    /* Size comes from --step-4h, which already narrows to 38px by 375. The
+       13vw bump that used to live here pushed it back up to 49px and undid
+       the scale on exactly the widths that need it most. */
+    line-height: var(--lh-head);
   }
 
   .editorial-cards,
@@ -2901,9 +3438,23 @@ body[data-hero-tone="dark"]
     padding: 45px 0;
   }
 
-  .pricing-grid article,
   .enquiry-form {
     padding: 28px 22px;
+  }
+
+  /* At phone widths the longer labels wrap and squeeze the leader to a stub,
+     so the row stacks and the leader is dropped rather than left as a stump. */
+  .prices-row {
+    flex-wrap: wrap;
+    gap: 2px 10px;
+  }
+
+  .prices-row__label {
+    flex: 1 0 100%;
+  }
+
+  .prices-row__lead {
+    display: none;
   }
 
   .enquiry-form {
@@ -2940,11 +3491,10 @@ body[data-hero-tone="dark"]
 
 /* Continuous Pilates page */
 
-.is-pilates-page {
-  --pilates-ivory: var(--surface-2);
-  --pilates-blue: var(--brand);
-  --pilates-mist: var(--surface-2);
-}
+/* --pilates-ivory, --pilates-blue and --pilates-mist were page-scoped aliases
+   that had all collapsed onto shared tokens, so a reader had to follow two
+   hops to find out the Pilates page used the same blue as everywhere else.
+   Their call sites now name the token directly. */
 
 .pilates-longform {
   overflow: clip;
@@ -2965,7 +3515,7 @@ body[data-hero-tone="dark"]
 }
 
 .pilates-longform em {
-  color: var(--pilates-blue);
+  color: var(--brand);
   font-weight: 400;
 }
 
@@ -2973,7 +3523,6 @@ body[data-hero-tone="dark"]
 .pilates-longform h2,
 .pilates-longform h3 {
   font-family: var(--font-serif);
-  font-weight: 400;
   letter-spacing: var(--tracking-display);
 }
 
@@ -3069,7 +3618,7 @@ body[data-hero-tone="dark"]
   max-width: 490px;
   margin: clamp(42px, 5vw, 66px) 0 34px;
   color: var(--ink-soft);
-  font-size: clamp(16px, 1.25vw, 20px);
+  font-size: var(--step-0);
   line-height: 1.75;
 }
 
@@ -3138,48 +3687,13 @@ body[data-hero-tone="dark"]
   opacity: 0.8;
 }
 
-/* Was absolutely positioned at bottom:-42px, which drove its 1px top border
-   straight through the baseline of the hero CTA at every desktop height. */
-.pilates-section-index {
-  position: static;
-  z-index: 3;
-  display: grid;
-  grid-column: 1 / -1;
-  align-self: end;
-  margin-top: 0;
-  grid-template-columns: repeat(5, 1fr);
-  border-top: 1px solid var(--line);
-}
-
-.pilates-section-index a {
-  display: flex;
-  min-height: 70px;
-  align-items: center;
-  gap: 14px;
-  color: var(--ink-soft);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.pilates-section-index a + a {
-  padding-left: 25px;
-  border-left: 1px solid var(--line);
-}
-
-.pilates-section-index span {
-  color: var(--pilates-blue);
-  font-size: 8px;
-}
-
 .pilates-section-heading {
   position: relative;
   z-index: 2;
   max-width: 1080px;
 }
 
-.pilates-section-heading h2, .pilates-studio__copy h2, .pilates-feature__content h2, .pilates-golf__content h2, .pilates-contact h2 {
+.pilates-section-heading h2, .pilates-feature__content h2, .pilates-golf__content h2 {
   margin: 0;
   font-size: var(--step-3);
   line-height: var(--lh-head);
@@ -3231,11 +3745,22 @@ body[data-hero-tone="dark"]
   text-wrap: balance;
 }
 
+/* The heading is now Joseph Pilates' own words, so the attribution travels
+   with it. The pull-quote below carries the studio's line and is unsigned. */
+.pilates-approach__cite {
+  margin: clamp(18px, 2.2vw, 26px) 0 0;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
 .pilates-approach__intro {
   max-width: 640px;
   margin: clamp(24px, 3vw, 38px) auto 0;
   color: var(--ink-soft);
-  font-size: clamp(16px, 1.2vw, 19px);
+  font-size: var(--step-0);
   line-height: 1.7;
 }
 
@@ -3275,7 +3800,7 @@ body[data-hero-tone="dark"]
   left: 50%;
   width: 14px;
   height: 14px;
-  background: var(--pilates-blue);
+  background: var(--brand);
   border-radius: 50%;
   transform: translateX(-50%);
   box-shadow: 0 0 0 6px #fff;
@@ -3286,7 +3811,7 @@ body[data-hero-tone="dark"]
   font-size: var(--step-4);
   line-height: 1;
   letter-spacing: -0.02em;
-  color: rgba(16, 27, 57, 0.12);
+  color: color-mix(in oklch, var(--ink) 12%, transparent);
 }
 
 .pilates-approach__icon {
@@ -3295,7 +3820,7 @@ body[data-hero-tone="dark"]
   width: 44px;
   height: 44px;
   margin: 16px 0 14px;
-  color: var(--pilates-blue);
+  color: var(--brand);
 }
 
 .pilates-approach__icon svg {
@@ -3306,7 +3831,7 @@ body[data-hero-tone="dark"]
 .pilates-approach__step strong {
   max-width: 200px;
   font-family: var(--font-serif);
-  font-size: clamp(19px, 1.6vw, 26px);
+  font-size: var(--step-1);
   font-weight: 400;
   line-height: 1.14;
   letter-spacing: -0.03em;
@@ -3319,9 +3844,10 @@ body[data-hero-tone="dark"]
 .pilates-dual article > span,
 .pilates-retreats article > span,
 .pilates-practical article > span {
-  color: var(--pilates-blue);
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
@@ -3337,13 +3863,13 @@ body[data-hero-tone="dark"]
   width: 40px;
   height: 1px;
   margin: 0 auto clamp(28px, 4vw, 44px);
-  background: var(--pilates-blue);
+  background: var(--brand);
 }
 
 .pilates-approach__quote blockquote {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(24px, 2.6vw, 40px);
+  font-size: var(--step-2h);
   font-style: italic;
   line-height: 1.34;
   letter-spacing: -0.02em;
@@ -3352,44 +3878,21 @@ body[data-hero-tone="dark"]
 
 .pilates-approach__quote figcaption {
   margin-top: clamp(20px, 2.5vw, 30px);
-  color: var(--ink-soft);
-  font-size: 11px;
-  letter-spacing: 0.16em;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
 .pilates-approach__credential-label {
   margin: clamp(38px, 5vw, 58px) 0 0;
-  color: var(--pilates-blue);
-  font-size: 10px;
-  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-sm-track);
   text-align: center;
   text-transform: uppercase;
-}
-
-.pilates-studio {
-  padding-block: var(--space-section);
-  background: var(--pilates-ivory);
-}
-
-.pilates-studio__copy {
-  color: var(--ink-soft);
-  font-size: clamp(15px, 1.1vw, 18px);
-  line-height: 1.75;
-}
-
-.pilates-studio__copy h2 {
-  margin: 0 0 clamp(20px, 2.5vw, 32px);
-  color: var(--ink);
-}
-
-.pilates-studio__copy p {
-  margin: 0 0 1.35em;
-  max-width: 52ch;
-}
-
-.pilates-studio__copy .pilates-arrow-link {
-  margin-top: 14px;
 }
 
 .pilates-paths {
@@ -3415,23 +3918,24 @@ body[data-hero-tone="dark"]
 }
 
 .pilates-paths__list a > span {
-  color: var(--pilates-blue);
-  font-size: 10px;
+  color: var(--brand);
+  font-size: var(--label);
   letter-spacing: 0.13em;
 }
 
 .pilates-paths__list strong {
   font-family: var(--font-serif);
-  font-size: clamp(31px, 3vw, 48px);
+  font-size: var(--step-3);
   font-weight: 400;
   letter-spacing: -0.04em;
 }
 
 .pilates-paths__list i {
   color: var(--ink-soft);
-  font-size: 11px;
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
   font-style: normal;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--label-sm-track);
   text-transform: uppercase;
 }
 
@@ -3442,7 +3946,7 @@ body[data-hero-tone="dark"]
   place-items: center;
   border: 1px solid var(--line);
   border-radius: 50%;
-  color: var(--pilates-blue);
+  color: var(--brand);
   font-weight: 400;
   transition:
     color var(--dur-fast) var(--ease-out),
@@ -3452,7 +3956,7 @@ body[data-hero-tone="dark"]
 
 .pilates-paths__list a:hover b {
   color: #fff;
-  background: var(--pilates-blue);
+  background: var(--brand);
   transform: translateY(4px);
 }
 
@@ -3500,7 +4004,7 @@ body[data-hero-tone="dark"]
   margin: clamp(42px, 5vw, 70px) 0 24px;
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: clamp(26px, 2.5vw, 41px);
+  font-size: var(--step-2h);
   line-height: 1.2;
   letter-spacing: -0.03em;
 }
@@ -3524,16 +4028,17 @@ body[data-hero-tone="dark"]
 }
 
 .pilates-facts dt {
-  color: var(--pilates-blue);
-  font-size: 9px;
-  letter-spacing: 0.13em;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
 .pilates-facts dd {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 13px;
+  font-size: var(--step-00);
 }
 
 .pilates-orbit-figure {
@@ -3570,9 +4075,10 @@ body[data-hero-tone="dark"]
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--pilates-blue);
-  font-size: 9px;
-  letter-spacing: 0.16em;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
@@ -3580,7 +4086,7 @@ body[data-hero-tone="dark"]
   content: "";
   width: 7px;
   height: 7px;
-  background: var(--pilates-blue);
+  background: var(--brand);
   border-radius: 50%;
 }
 
@@ -3588,7 +4094,7 @@ body[data-hero-tone="dark"]
   margin: 0;
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: clamp(15px, 1.2vw, 19px);
+  font-size: var(--step-0);
   font-style: italic;
   line-height: 1.25;
 }
@@ -3618,27 +4124,19 @@ body[data-hero-tone="dark"]
   flex-direction: row-reverse;
 }
 
+/* The drifting ring that used to sit behind this section has gone with the
+   photograph, so there is nothing left to clip or stack against. */
 .pilates-feature--group {
-  overflow: hidden;
-  background: var(--pilates-mist);
-  isolation: isolate;
+  background: var(--surface-2);
   padding-bottom: clamp(80px, 9vw, 140px);
 }
 
-.pilates-orbit--group {
-  z-index: -1;
-  right: -21%;
-  bottom: -42%;
-  width: min(75vw, 1050px);
-  aspect-ratio: 1;
-}
-
-.pilates-group-layout {
-  display: grid;
-  margin-top: clamp(80px, 10vw, 140px);
-  grid-template-columns: 0.72fr 1.28fr;
-  gap: clamp(60px, 9vw, 140px);
-  align-items: start;
+/* Unchanged internally — it has simply moved out of the narrow right-hand
+   track the photograph left it in. The cap keeps it at roughly the width it
+   read at there, rather than stretching the day rows across the whole shell. */
+.pilates-timetable {
+  max-width: 1000px;
+  margin-top: clamp(56px, 6vw, 96px);
 }
 
 .pilates-detail-label {
@@ -3652,17 +4150,18 @@ body[data-hero-tone="dark"]
 }
 
 .pilates-detail-label span {
-  color: var(--pilates-blue);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.13em;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
 .pilates-detail-label small {
   color: var(--ink-soft);
-  font-size: 8px;
-  letter-spacing: 0.08em;
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-sm-track);
   text-transform: uppercase;
 }
 
@@ -3670,16 +4169,17 @@ body[data-hero-tone="dark"]
   display: grid;
   min-height: 115px;
   padding: 25px 0;
-  grid-template-columns: 0.55fr 1.45fr;
+  grid-template-columns: minmax(0, 215px) minmax(0, 1fr);
   gap: 30px;
   border-bottom: 1px solid var(--line);
   align-items: center;
 }
 
 .pilates-timetable__row strong {
-  color: var(--pilates-blue);
-  font-size: 10px;
-  letter-spacing: 0.13em;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
@@ -3693,7 +4193,7 @@ body[data-hero-tone="dark"]
 
 .pilates-timetable__row p > span {
   font-family: var(--font-serif);
-  font-size: clamp(25px, 2.2vw, 36px);
+  font-size: var(--step-2);
 }
 
 .pilates-timetable__row small {
@@ -3701,8 +4201,9 @@ body[data-hero-tone="dark"]
   margin-top: 5px;
   color: var(--ink-soft);
   font-family: var(--font-sans);
-  font-size: 8px;
-  letter-spacing: 0.08em;
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-sm-track);
   text-transform: uppercase;
 }
 
@@ -3710,7 +4211,7 @@ body[data-hero-tone="dark"]
   max-width: 650px;
   margin: 28px 0 0;
   color: var(--ink-soft);
-  font-size: 12px;
+  font-size: var(--step-00);
   line-height: 1.65;
 }
 
@@ -3793,7 +4294,7 @@ body[data-hero-tone="dark"]
   left: 2px;
   width: 6px;
   height: 6px;
-  border: 1px solid var(--pilates-blue);
+  border: 1px solid var(--brand);
   border-radius: 50%;
   content: "";
 }
@@ -3806,19 +4307,56 @@ body[data-hero-tone="dark"]
   padding-top: clamp(24px, 3vw, 36px);
   border-top: 1px solid var(--line);
   color: var(--ink-soft);
-  font-size: clamp(15px, 1.1vw, 18px);
+  font-size: var(--step-0s);
   line-height: 1.7;
 }
 
 .pilates-golf {
+  position: relative;
   padding-block: var(--space-section);
+  overflow: hidden;
   color: var(--on-dark);
   background: var(--navy);
+  isolation: isolate;
+}
+
+/* Photograph plus a left-to-right navy wash: near-solid behind the copy,
+   clearing across to the right so the picture comes through. The wash is the
+   ::after so the image can be swapped by changing one background-image. */
+.pilates-golf__backdrop {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: url("/images/golf-backdrop-1600.webp");
+  background-position: 72% center;
+  background-size: cover;
+}
+
+/* The 1600 crop is already soft at 2x on a wide desktop, and the band runs
+   the full viewport — but it sits under a heavy wash, so the larger file is
+   only worth loading where it is actually visible. */
+@media (min-width: 1100px) {
+  .pilates-golf__backdrop {
+    background-image: url("/images/golf-backdrop-2400.webp");
+  }
+}
+
+.pilates-golf__backdrop::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    oklch(17.4% 0.048 275) 0%,
+    oklch(19% 0.052 276 / 0.96) 34%,
+    oklch(21.5% 0.055 277 / 0.74) 62%,
+    oklch(21.5% 0.055 277 / 0.34) 100%
+  );
+  content: "";
 }
 
 .pilates-golf__grid {
   display: grid;
-  grid-template-columns: minmax(350px, 0.9fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 0.58fr) minmax(0, 0.42fr);
   gap: clamp(70px, 10vw, 155px);
   align-items: center;
 }
@@ -3833,7 +4371,7 @@ body[data-hero-tone="dark"]
 
 .pilates-golf__content > p {
   max-width: 640px;
-  color: rgba(243, 247, 255, 0.68);
+  color: var(--on-dark-soft);
   line-height: 1.75;
 }
 
@@ -3847,55 +4385,26 @@ body[data-hero-tone="dark"]
 
 .pilates-golf__benefits li {
   border-bottom-color: rgba(255, 255, 255, 0.15);
-  color: rgba(243, 247, 255, 0.78);
+  color: var(--on-dark-soft);
 }
 
 .pilates-golf__benefits li::before {
   border-color: var(--periwinkle);
 }
 
-.pilates-golf__media {
-  display: grid;
-  grid-template-columns: 0.78fr 1.22fr;
-  gap: 14px;
-  align-items: end;
-}
-
-.pilates-golf__media figure {
-  padding: clamp(16px, 2vw, 28px);
-  background: #fff;
-}
-
-.pilates-golf__media img {
-  width: 100%;
-  height: auto;
-  filter: saturate(0.75);
-}
-
-.pilates-golf__media figcaption {
-  margin-top: 17px;
-  color: var(--ink-soft);
-  font-size: 8px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-/* translateY(60px) pushed this card past its container's bottom edge, so
-   neither the tops nor the bottoms of the two golf cards lined up. */
-.pilates-golf__swing {
-  transform: none;
-}
-
 .pilates-practical {
   padding-block: var(--space-section);
-  background: var(--pilates-ivory);
+  background: var(--surface-2);
 }
 
+/* One column against the left edge — the fees card that used to fill the
+   second track has gone. Capped so the summary rows keep a readable measure
+   instead of running the full 1440px shell. */
 .pilates-practical__grid {
   display: grid;
-  margin-top: clamp(80px, 10vw, 140px);
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(55px, 9vw, 145px);
+  margin-top: clamp(48px, 5vw, 80px);
+  grid-template-columns: minmax(0, 820px);
+  justify-content: start;
 }
 
 .pilates-practical article {
@@ -3908,25 +4417,17 @@ body[data-hero-tone="dark"]
   border-bottom: 1px solid var(--line);
 }
 
-.pilates-price {
-  display: flex;
-  min-height: 86px;
-  padding-block: 20px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 30px;
-  border-bottom: 1px solid var(--line);
-}
-
-.pilates-price p {
-  margin: 0;
+/* The fees card carries copy where the price rows used to sit, so it needs the
+   same top breathing room the ruled rows gave it. */
+.pilates-practical__pointer {
+  margin: 24px 0 0;
+  max-width: 44ch;
   color: var(--ink-soft);
+  line-height: 1.6;
 }
 
-.pilates-price strong {
-  font-family: var(--font-serif);
-  font-size: 30px;
-  font-weight: 400;
+.pilates-practical .pilates-arrow-link {
+  margin-top: 28px;
 }
 
 .pilates-practical article > small {
@@ -3948,7 +4449,7 @@ body[data-hero-tone="dark"]
   gap: 30px;
   cursor: pointer;
   font-family: var(--font-serif);
-  font-size: clamp(20px, 1.8vw, 27px);
+  font-size: var(--step-1);
   list-style: none;
 }
 
@@ -3957,9 +4458,9 @@ body[data-hero-tone="dark"]
 }
 
 .pilates-practical summary b {
-  color: var(--pilates-blue);
+  color: var(--brand);
   font-family: var(--font-sans);
-  font-size: 18px;
+  font-size: var(--step-0);
   font-weight: 400;
   transition: transform var(--dur-fast) ease;
 }
@@ -4012,64 +4513,8 @@ body[data-hero-tone="dark"]
   filter: saturate(0.78);
 }
 
-.pilates-contact {
-  position: relative;
-  padding-block: var(--space-section);
-  overflow: hidden;
-  color: var(--on-dark);
-  background: var(--ink);
-  isolation: isolate;
-}
-
-.pilates-orbit--contact {
-  z-index: -1;
-  right: -16%;
-  bottom: -90%;
-  width: min(85vw, 1150px);
-  aspect-ratio: 1;
-  border-color: rgba(137, 170, 255, 0.2);
-}
-
-.pilates-orbit--contact::before,
-.pilates-orbit--contact::after,
-.pilates-orbit--contact span {
-  border-color: rgba(137, 170, 255, 0.16);
-}
-
-/* align-items:end pinned the closing headline to the bottom of its column
-   under ~182px of void, and rendered DOM child 1 below child 2. */
-.pilates-contact__grid {
-  display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  gap: clamp(48px, 7vw, 110px);
-  align-items: start;
-}
-
-.pilates-contact .section-kicker {
-  color: var(--periwinkle);
-}
-
-.pilates-contact h2 em {
-  color: var(--periwinkle);
-}
-
-.pilates-contact__grid > div:last-child > p {
-  max-width: 440px;
-  margin: 0 0 35px;
-  color: rgba(242, 246, 255, 0.68);
-  line-height: 1.7;
-}
-
-.pilates-contact__phone {
-  display: flex;
-  width: fit-content;
-  min-height: 44px;
-  align-items: center;
-  margin-top: 28px;
-  color: rgba(242, 246, 255, 0.68);
-  font-family: var(--font-serif);
-  font-size: clamp(24px, 2.3vw, 36px);
-}
+/* The navy closing band has gone: the page now ends on the same tinted
+   .st-card used at the foot of /sports-therapy. */
 
 @media (max-width: 1200px) {
   .pilates-hero__grid,
@@ -4085,11 +4530,6 @@ body[data-hero-tone="dark"]
   .pilates-section-heading--split > :last-child {
     grid-column: 2;
   }
-
-  .pilates-group-layout {
-    grid-template-columns: 0.62fr 1.38fr;
-    gap: 55px;
-  }
 }
 
 @media (max-width: 960px) {
@@ -4097,39 +4537,12 @@ body[data-hero-tone="dark"]
     padding-top: 135px;
   }
 
-  .pilates-hero__grid, .pilates-feature__grid, .pilates-golf__grid, .pilates-contact__grid {
+  .pilates-hero__grid, .pilates-feature__grid, .pilates-golf__grid {
     grid-template-columns: 1fr;
   }
 
   .pilates-hero__grid {
     min-height: auto;
-  }
-
-  .pilates-section-index {
-    position: static;
-    margin-top: 12px;
-    grid-column: 1;
-  }
-
-  .pilates-section-index a {
-    min-height: 58px;
-    justify-content: center;
-  }
-
-  /* font-size:0 hid every label, leaving the page's in-page nav as five
-     naked numerals on phones and tablets. */
-  .pilates-section-index a {
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    padding-inline: 4px;
-    font-size: 8px;
-    line-height: 1.25;
-    text-align: center;
-  }
-
-  .pilates-section-index a span {
-    font-size: 9px;
   }
 
   .pilates-approach__steps {
@@ -4164,17 +4577,18 @@ body[data-hero-tone="dark"]
     min-height: 540px;
   }
 
-  .pilates-group-layout,
   .pilates-practical__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .pilates-golf__media {
-    width: min(100%, 620px);
-  }
-
-  .pilates-golf__swing {
-    transform: translateY(30px);
+  /* Stacked, the copy sits over the whole photograph rather than the dark
+     left third of it, so the wash goes flat and opaque. */
+  .pilates-golf__backdrop::after {
+    background: linear-gradient(
+      180deg,
+      oklch(17.4% 0.048 275 / 0.94) 0%,
+      oklch(21.5% 0.055 277 / 0.9) 100%
+    );
   }
 }
 
@@ -4188,17 +4602,9 @@ body[data-hero-tone="dark"]
     font-size: var(--step-4);
   }
 
-  .pilates-section-index {
-    grid-template-columns: repeat(5, 1fr);
-  }
-
-  .pilates-section-index a + a {
-    padding-left: 0;
-  }
-
   /* h2 deliberately stays a step below the h1 at narrow widths; bumping it to
      --step-4 here made every section heading the same size as the page title. */
-  .pilates-section-heading h2, .pilates-studio__copy h2, .pilates-feature__content h2, .pilates-golf__content h2, .pilates-contact h2 {
+  .pilates-section-heading h2, .pilates-feature__content h2, .pilates-golf__content h2 {
     font-size: var(--step-3);
   }
 
@@ -4226,7 +4632,7 @@ body[data-hero-tone="dark"]
   }
 
   .pilates-paths__list strong {
-    font-size: 28px;
+    font-size: var(--step-2);
   }
 
   .pilates-feature__media {
@@ -4259,14 +4665,6 @@ body[data-hero-tone="dark"]
     border-left: 0;
   }
 
-  .pilates-golf__media {
-    grid-template-columns: 0.9fr 1.1fr;
-  }
-
-  .pilates-practical__grid {
-    gap: 75px;
-  }
-
   .pilates-retreats figure {
     height: 125vw;
   }
@@ -4278,7 +4676,8 @@ body[data-hero-tone="dark"]
   }
 }
 
-/* Continuous Clinics page */
+/* Continuous Studio page (published at /clinics until the rename; the class
+   prefix still reads clinics- throughout). */
 
 .clinics-longform,
 .therapy-longform {
@@ -4297,7 +4696,6 @@ body[data-hero-tone="dark"]
 .therapy-longform h2,
 .therapy-longform h3 {
   font-family: var(--font-serif);
-  font-weight: 400;
   letter-spacing: var(--tracking-display);
 }
 
@@ -4361,7 +4759,7 @@ body[data-hero-tone="dark"]
   max-width: 520px;
   margin: 0;
   color: var(--ink-soft);
-  font-size: clamp(16px, 1.2vw, 19px);
+  font-size: var(--step-0);
   line-height: 1.7;
 }
 
@@ -4390,125 +4788,9 @@ body[data-hero-tone="dark"]
   pointer-events: none;
 }
 
-.clinics-locations,
-.clinics-links {
+.clinics-studio {
   padding-block: var(--space-section);
   background: #fff;
-}
-
-.clinics-links__grid article > span, .clinics-links__grid a > span {
-  color: var(--brand);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.clinics-links {
-  background: var(--surface);
-}
-
-.clinics-links__grid {
-  display: grid;
-  margin-top: clamp(85px, 11vw, 150px);
-  grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--line);
-}
-
-.clinics-links__grid article,
-.clinics-links__grid > a {
-  position: relative;
-  min-height: 430px;
-  padding: 34px clamp(28px, 4vw, 55px) 45px;
-  border-bottom: 1px solid var(--line);
-  color: var(--ink);
-  text-decoration: none;
-}
-
-.clinics-links__grid > * + * {
-  border-left: 1px solid var(--line);
-}
-
-.clinics-links__grid figure {
-  display: flex;
-  height: 120px;
-  margin: 70px 0 45px;
-  align-items: center;
-}
-
-.clinics-links__grid img {
-  width: auto;
-  max-width: 100%;
-  max-height: 82px;
-  object-fit: contain;
-}
-
-.clinics-links__grid h3 {
-  margin: 0;
-  font-size: var(--step-1);
-  line-height: 1.05;
-}
-
-.clinics-links__grid b {
-  position: absolute;
-  right: 35px;
-  bottom: 35px;
-  color: var(--brand);
-  font-size: 24px;
-  font-weight: 400;
-}
-
-.clinics-charity {
-  position: relative;
-  padding-block: var(--space-section);
-  overflow: hidden;
-  color: var(--on-dark);
-  background: var(--brand);
-  isolation: isolate;
-}
-
-.clinics-charity__orbit {
-  z-index: -1;
-  right: -14%;
-  bottom: -85%;
-  width: min(88vw, 1200px);
-  aspect-ratio: 1;
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.clinics-charity__orbit::before,
-.clinics-charity__orbit::after,
-.clinics-charity__orbit span {
-  border-color: rgba(255, 255, 255, 0.14);
-}
-
-.clinics-charity__grid {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: clamp(70px, 11vw, 170px);
-  align-items: end;
-}
-
-.clinics-charity .section-kicker {
-  color: rgba(255, 255, 255, 0.68);
-}
-
-.clinics-charity h2 {
-  margin: 30px 0 0;
-  font-size: var(--step-3);
-  line-height: var(--lh-tight);
-}
-
-.clinics-charity h2 em {
-  color: #fff;
-}
-
-.clinics-charity__grid > div:last-child p {
-  color: rgba(255, 255, 255, 0.76);
-  line-height: 1.75;
-}
-
-.clinics-charity .button-link {
-  margin-top: 28px;
 }
 
 /* Continuous Sports Therapy page */
@@ -4516,7 +4798,9 @@ body[data-hero-tone="dark"]
 .therapy-hero {
   position: relative;
   min-height: max(760px, 100svh);
-  padding: clamp(110px, 11vw, 150px) 0 80px;
+  /* Sits just clear of the fixed header — the grid starts at the padding
+     edge, so this is what sets how high the h1 and figure sit. */
+  padding: clamp(74px, 7.5vw, 104px) 0 80px;
   overflow: hidden;
   background: var(--surface-2);
 }
@@ -4542,7 +4826,7 @@ body[data-hero-tone="dark"]
   max-width: 530px;
   margin: 48px 0 32px;
   color: var(--ink-soft);
-  font-size: clamp(16px, 1.2vw, 19px);
+  font-size: var(--step-0);
   line-height: 1.75;
 }
 
@@ -4581,10 +4865,11 @@ body[data-hero-tone="dark"]
   right: 22px;
   bottom: 20px;
   padding: 8px 10px;
-  color: #fff;
+  color: var(--on-dark);
   background: rgba(9, 18, 42, 0.72);
-  font-size: 8px;
-  letter-spacing: 0.12em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
@@ -4614,29 +4899,6 @@ body[data-hero-tone="dark"]
   background: var(--ink);
 }
 
-.therapy-fascia__threads {
-  position: absolute;
-  top: -35%;
-  right: -12%;
-  width: 70vw;
-  aspect-ratio: 1;
-  border: 1px solid rgba(137, 170, 255, 0.18);
-  border-radius: 45% 55% 63% 37% / 56% 38% 62% 44%;
-}
-
-.therapy-fascia__threads::before,
-.therapy-fascia__threads::after {
-  position: absolute;
-  inset: 17%;
-  border: 1px solid rgba(137, 170, 255, 0.14);
-  border-radius: inherit;
-  content: "";
-}
-
-.therapy-fascia__threads::after {
-  inset: 34%;
-}
-
 .therapy-fascia__grid {
   position: relative;
   display: grid;
@@ -4660,14 +4922,14 @@ body[data-hero-tone="dark"]
 
 .therapy-fascia__lead {
   margin-top: 55px;
-  color: rgba(242, 246, 255, 0.76);
+  color: var(--on-dark-soft);
   font-family: var(--font-serif);
-  font-size: clamp(24px, 2.4vw, 38px);
+  font-size: var(--step-2h);
   line-height: 1.25;
 }
 
 .therapy-fascia__grid > div:last-child > p {
-  color: rgba(242, 246, 255, 0.7);
+  color: var(--on-dark-soft);
   line-height: 1.75;
 }
 
@@ -4678,7 +4940,7 @@ body[data-hero-tone="dark"]
 
 .therapy-fascia li {
   border-bottom-color: rgba(255, 255, 255, 0.16);
-  color: rgba(242, 246, 255, 0.76);
+  color: var(--on-dark-soft);
 }
 
 .therapy-practical {
@@ -4690,7 +4952,7 @@ body[data-hero-tone="dark"]
 }
 
 @media (max-width: 960px) {
-  .clinics-hero__grid, .clinics-charity__grid, .therapy-hero__grid, .therapy-fascia__grid {
+  .clinics-hero__grid, .therapy-hero__grid, .therapy-fascia__grid {
     grid-template-columns: 1fr;
   }
 
@@ -4717,22 +4979,9 @@ body[data-hero-tone="dark"]
 
   .clinics-hero h1 {
     font-size: var(--step-4);
-  }.clinics-links__grid {
-    grid-template-columns: 1fr;
   }
 
-  .clinics-links__grid article,
-  .clinics-links__grid > a {
-    min-height: 340px;
-    padding-inline: 0;
-    border-left: 0;
-  }
-
-  .clinics-links__grid > * + * {
-    border-left: 0;
-  }
-
-  .clinics-charity h2, .therapy-fascia h2 {
+  .therapy-fascia h2 {
     font-size: var(--step-3);
   }
 
@@ -4746,256 +4995,430 @@ body[data-hero-tone="dark"]
 }
 
 /* ============================================================
-   Home — service cards
-   Two compact side-by-side cards replacing the old full-bleed
-   alternating rows. Stacks at 960px.
+   Home — the service story
+   Replaces the two side-by-side cards. Each service is a chapter:
+   copy pinned on one side, photograph full-bleed on the other,
+   both held while you read. Because every panel is opaque and
+   later chapters paint over earlier ones, the next photograph
+   rises up and layers over the one still pinned behind it rather
+   than the pair scrolling away together.
+   Stacks into ordinary blocks at 900px.
    ============================================================ */
 
-.services {
-  /* Reduced trailing padding: the tinted testimonial band below now supplies
-     the separation, so a second full section gap just reads as dead space. */
-  padding-block: var(--space-section) var(--space-l);
+.story {
+  --story-radius: clamp(14px, 1.4vw, 22px);
 }
 
-.service-cards {
+/* Every length here is one panel: the fold less the header, because a panel
+   parks under the bar rather than behind it. A chapter is two of them. One is
+   what the thing arriving over this pair takes to climb from the fold to that
+   parking spot; the other is slack in the box, because a sticky panel unpins
+   the moment its own bottom reaches the bottom of its chapter and without that
+   overhang this pair would slide away exactly when it should be sitting still
+   to be covered. The negative margin then laps each chapter back over its
+   predecessor's slack, which is both what puts two of them on screen at once
+   and what leaves no gap between one landing and the next setting off — the
+   reason nothing ever stalls. */
+.story__chapter {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(24px, 3.5vw, 56px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: calc(2 * (100vh - var(--header-scrolled)));
+  min-height: calc(2 * (100svh - var(--header-scrolled)));
+
+  /* How far down the fold the chapter arriving over this one has got, and
+     whether there is anything there to round against. JS keeps both current;
+     the defaults are a whole uncut panel, which is what a chapter sitting on
+     its own should be. */
+  --seam: 100%;
+  --seam-radius: 0px;
 }
 
-.service-card {
+.story__chapter + .story__chapter {
+  margin-top: calc(-1 * (100vh - var(--header-scrolled)));
+  margin-top: calc(-1 * (100svh - var(--header-scrolled)));
+}
+
+/* The contact band is an ordinary section, not another layer: it arrives below
+   the last photograph and carries it up the page rather than climbing over it.
+   So the last chapter drops the slack — it has nothing coming over it that it
+   needs to sit still for — and is one panel tall. That also lands its bottom
+   edge on the fold at the very moment the band reaches it, which is what keeps
+   the handover flush and keeps it moving. */
+.story__chapter:last-child {
+  min-height: calc(100vh - var(--header-scrolled));
+  min-height: calc(100svh - var(--header-scrolled));
+
+  /* Nothing climbs over this one, so its foot never moves off the panel and
+     the radius can just sit there — the band is welded to that edge and rides
+     up with it, which makes it a boundary like any other. JS leaves the last
+     chapter alone for this reason. */
+  --seam-radius: var(--story-radius);
+}
+
+.story__copy,
+.story__media {
+  position: sticky;
+  /* Parks against the underside of the bar, not the top of the page. */
+  top: var(--header-scrolled);
+  /* A stretched grid item fills the whole chapter, leaving sticky nothing
+     to travel through — the explicit height and start alignment are what
+     make the pin possible. */
+  align-self: start;
+  height: calc(100vh - var(--header-scrolled));
+  height: calc(100svh - var(--header-scrolled));
+
+  /* A pinned pair's own bottom edge is parked off at the fold, so the
+     boundary you actually see is wherever the arriving chapter's top edge
+     has reached. Cutting the panel back to that line puts both sides of the
+     boundary on it, and rounding the cut is what carries the corner up the
+     screen with it. The top corners are rounded for the same reason — that
+     is this chapter's own leading edge on the way up, and once parked it is
+     the edge that meets the bar. */
+  clip-path: inset(
+    0 0 calc(100% - var(--seam)) 0 round var(--story-radius) var(--story-radius)
+      var(--seam-radius) var(--seam-radius)
+  );
+}
+
+/* The photograph takes the left column and the copy the right, ordered here
+   rather than by moving the markup, so the heading still comes first for a
+   screen reader. Page gutter on the outside, the narrower gap inboard. */
+.story__copy {
+  order: 1;
   display: flex;
-  flex-direction: column;
-  gap: var(--space-s);
+  align-items: center;
+  padding: var(--space-l) var(--page-gutter) var(--space-l)
+    clamp(32px, 4.5vw, 72px);
+  /* Opaque, or the chapter it rises over reads through it. */
+  background: var(--paper);
 }
 
-.service-card__media {
-  margin: 0;
-  overflow: hidden;
-  border-radius: var(--radius-md);
-  background: var(--surface);
-}
-
-.service-card__media img {
-  display: block;
+.story__copy-inner {
   width: 100%;
-  /* height:auto is required — the HTML height attribute lands as a
-     presentational hint and would otherwise beat aspect-ratio. */
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  max-width: 46ch;
 }
 
-.service-card__body h2 {
-  margin: 0 0 var(--space-2xs);
-  font-family: var(--font-serif);
-  font-size: var(--step-2);
-  font-weight: 500;
-  line-height: var(--lh-head);
-  letter-spacing: var(--tracking-display);
-}
-
-.service-card__body > p {
+.story__index {
   margin: 0 0 var(--space-s);
-  max-width: 42ch;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.story__copy h2 {
+  margin: 0 0 var(--space-s);
+  font-size: var(--step-3);
+}
+
+.story__lede {
+  margin: 0 0 var(--space-m);
   color: var(--ink-soft);
-  line-height: var(--lh-body);
+  font-size: var(--step-1);
+  line-height: 1.45;
 }
 
-.service-card__list {
-  margin: 0 0 var(--space-s);
+.story__list {
+  margin: 0 0 var(--space-m);
   padding: 0;
   list-style: none;
   border-top: 1px solid var(--line);
 }
 
-.service-card__list li {
-  padding: 11px 0;
+.story__list li {
+  padding: 12px 0;
   border-bottom: 1px solid var(--line);
   color: var(--ink-soft);
-  font-size: 14px;
+  font-size: var(--step-00);
   line-height: 1.5;
 }
 
-.service-card__list strong {
+.story__list strong {
   display: block;
-  color: var(--ink);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
 }
 
-/* ============================================================
-   Home — client voices
-   Staggered pull-quotes, all visible at once. The rhythm comes
-   from indentation and the serif/caps type contrast, not boxes.
-   ============================================================ */
-
-.voices {
-  position: relative;
-  isolation: isolate;
+.story__media {
+  /* The UA figure margin would inset the photograph 40px from its column. */
+  margin: 0;
   overflow: hidden;
-  padding-block: var(--space-section);
-  border-block: 1px solid var(--line);
-  background: var(--surface);
+  background: var(--navy);
 }
 
-.voices__inner {
-  position: relative;
-  z-index: 1;
-  width: min(1024px, 100% - (var(--page-gutter) * 2));
-  margin-inline: auto;
-}
-
-/* A single drawn thread echoing the S-curve from the original NJH mark.
-   It weaves behind the staggered quotes so they read as points along one
-   line rather than as loose blocks. Drawn on scroll. */
-.voices__thread {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
+.story__media img {
+  display: block;
   width: 100%;
+  /* The panel is the frame and the photograph fills it; the HTML width and
+     height only hold the ratio until it loads. */
   height: 100%;
-  pointer-events: none;
+  object-fit: cover;
 }
 
-.voices__thread-line {
-  fill: none;
-  stroke: var(--brand);
-  stroke-width: 1.1;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-  opacity: 0.22;
-  stroke-dasharray: 1;
-  stroke-dashoffset: var(--thread-progress, 1);
+/* Both photographs are landscape, so a full-height panel crops them hard.
+   Hold each one on its subject: Natasha sits left of centre, and the studio
+   reads best off the window wall rather than the floor. */
+#sports-therapy .story__media img {
+  object-position: 40% center;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .voices__thread-line {
-    stroke-dashoffset: 0;
+#pilates .story__media img {
+  object-position: 48% 42%;
+}
+
+/* A short window still has to hold a whole chapter on the fold, so the copy
+   tightens instead of growing past its panel and being clipped by the one
+   that rises over it. */
+@media (min-width: 901px) and (max-height: 760px) {
+  .story__copy {
+    padding-block: var(--space-m);
+  }
+
+  .story__copy h2 {
+    font-size: var(--step-2);
+  }
+
+  .story__lede {
+    font-size: var(--step-0);
+  }
+
+  .story__list li {
+    padding: 9px 0;
   }
 }
 
-.voices__title {
-  margin: 0 0 clamp(48px, 6vw, 80px);
-  font-family: var(--font-serif);
-  font-size: var(--step-3);
-  font-weight: 500;
-  line-height: var(--lh-head);
-  letter-spacing: var(--tracking-display);
+/* ============================================================
+   Client voices — the /testimonials wall
+   A column per category: Sports Therapy, both, Pilates. The outer
+   two drift down and the middle one up, and all three stop the
+   moment the pointer or the keyboard reaches the band — you reach
+   for one quote, and two neighbours still sliding past is exactly
+   what makes it unreadable. Stopped, each column is a plain scroll
+   container and the reader takes over.
+
+   The drift itself lives in voices-wall.js, because it moves
+   scrollTop rather than a transform: see the note at the top of
+   that file. Everything here is the frame it runs inside, and the
+   .is-drifting class it sets once it has cloned enough copies to
+   loop. Without it — no JS, a phone, reduced motion — the three
+   lists simply stand at full height and the page scrolls them.
+
+   Replaces the staggered single-column thread. That version put
+   the rhythm in indentation and needed a service switch above it;
+   here the three columns are the categorisation, so the switch has
+   gone with them.
+   ============================================================ */
+
+.voices {
+  /* Barely any room at the top: the head above it already ends on a wave with
+     its own paper under it, and the space that gap used to hold is now part of
+     the picture rather than a margin. */
+  padding-block: clamp(6px, 0.7vw, 12px) var(--space-section);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
 }
 
-/* The service switch. Set in the display serif at quote size so it reads as a
-   second line of the heading rather than as a control bolted on, and it takes
-   the same underline the main nav draws on its current item. The title steps
-   down its own margin when the switch follows it. */
-.voices--filterable .voices__title {
-  margin-bottom: clamp(26px, 3vw, 38px);
+.voices__columns {
+  --voices-gap: clamp(14px, 1.5vw, 22px);
+
+  display: grid;
+  gap: clamp(16px, 1.8vw, 26px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.voices__switch {
+/* The band is a window, not a list. Without a fixed height the columns are
+   three lists that happen to be moving; with one they read as continuing past
+   the frame in both directions. */
+.voices__columns.is-drifting {
+  height: min(88svh, 980px);
+}
+
+.voices__col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.voices__label {
   display: flex;
   flex-wrap: wrap;
-  gap: clamp(20px, 2.6vw, 34px);
-  align-items: baseline;
-}
-
-.voices__switch-btn {
-  position: relative;
-  padding: 0 0 11px;
-  border: 0;
-  background: none;
-  color: var(--ink-soft);
-  cursor: pointer;
-  font-family: var(--font-serif);
-  font-size: clamp(1.05rem, 1.9vw, 1.35rem);
-  font-weight: 500;
-  letter-spacing: -0.012em;
-  transition: color var(--dur-fast) var(--ease-out);
-}
-
-.voices__switch-btn::after {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 1.5px;
-  background: var(--brand);
-  content: "";
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform var(--dur-fast) var(--ease-out);
-}
-
-.voices__switch-btn:hover,
-.voices__switch-btn.is-active {
-  color: var(--ink);
-}
-
-.voices__switch-btn.is-active::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-.voices__switch-rule {
-  height: 1px;
-  margin: 0 0 clamp(40px, 5vw, 64px);
-  border: 0;
-  background: var(--line);
-}
-
-.voices__item {
-  max-width: 576px;
-  margin: 0 0 clamp(40px, 5vw, 56px);
-}
-
-.voices__item:last-child {
-  margin-bottom: 0;
-}
-
-.voices__item blockquote {
   margin: 0 0 16px;
-  font-family: var(--font-serif);
-  font-size: clamp(1.2rem, 2.4vw, 1.6rem);
-  font-weight: 500;
-  line-height: 1.375;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
-}
-
-.voices__item figcaption {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--ink-soft);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  align-items: baseline;
+  /* Row gap stays 0 — the rule below carries its own margin, so the name and
+     anything sitting beside it are spaced independently of the drop to it. */
+  gap: 0 10px;
+  color: var(--brand);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
   text-transform: uppercase;
 }
 
-.voices__item figcaption::before {
+/* The rule under the column name. It runs the full width of the column, which
+   is what tells you where one column ends and the next begins — the quotes
+   below are cards on white with a hairline border, so nothing else in the band
+   draws that division.
+
+   It thickens and darkens left to right and finishes on a ball. The weight
+   arrives where the eye is already travelling, so it reads as a direction
+   without an arrowhead's full stop at the end of it.
+
+   width: 100% is what puts it on its own line: the label is a wrapping flex
+   row, so a full-width item takes a line of its own however long the name
+   beside it runs. */
+/* One end colour and one ball size for both halves. The ramp has to finish a
+   ball's width short of the right edge — that is where the ball's leading edge
+   sits — so that the line arrives at the ball already the ball's own colour
+   and the two read as a single stroke rather than a line and a dot. Sizing the
+   ball from the same custom property is what keeps that true if it changes. */
+.voices__label i {
+  --rule-end: var(--brand-strong);
+  --rule-ball: 9px;
+
+  position: relative;
+  width: 100%;
+  height: var(--rule-ball);
+  margin-top: 12px;
+}
+
+/* The taper is a clip on this pseudo-element rather than on the <i>, so the
+   ball below stays a circle — a clip on the parent would cut that too. */
+.voices__label i::before {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--rule-end) 10%, transparent),
+    var(--rule-end) calc(100% - var(--rule-ball))
+  );
+  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+  transform: translateY(-50%);
   content: "";
-  width: 11px;
-  height: 11px;
+}
+
+.voices__label i::after {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: var(--rule-ball);
+  height: var(--rule-ball);
+  border-radius: 50%;
+  background: var(--rule-end);
+  transform: translateY(-50%);
+  content: "";
+}
+
+.voices__window {
+  flex: 1;
+  min-height: 0;
+}
+
+.is-drifting .voices__window {
+  overflow-y: auto;
+  /* The drift is the affordance, and three permanent grey bars down a wall of
+     quotes are not. macOS and iOS overlay bars are hidden by this too, and they
+     were only ever visible mid-scroll. */
+  scrollbar-width: none;
+  /* The fade lives here rather than on the grid, so it softens the quotes
+     without touching the category labels sitting above them. */
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 9%,
+    #000 91%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 9%,
+    #000 91%,
+    transparent 100%
+  );
+}
+
+.is-drifting .voices__window::-webkit-scrollbar {
+  display: none;
+}
+
+/* The window takes focus so the wall can be stopped and read without a mouse:
+   focus pauses all three columns, and the arrow keys then scroll this one. */
+.voices__window:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 6px;
+}
+
+/* flow-root, so the last card's bottom margin is contained rather than
+   collapsing out through the track. Left to collapse, the track measures one
+   gap short of the list it holds, and voices-wall.js wraps the loop by that
+   measurement — so the column would jump a gap every time round. */
+.voices__track {
+  display: flow-root;
+}
+
+.voices__card {
+  /* The gap between cards is carried as a margin rather than the flex `gap`,
+     for the same reason the credentials marquee does it: every card is then an
+     identical block, so one copy of the list is exactly as tall as the next and
+     the loop wraps on an identical frame. */
+  margin: 0 0 var(--voices-gap);
+  padding: clamp(20px, 1.8vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--paper);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.voices__card:hover {
+  border-color: var(--brand);
+}
+
+.voices__card blockquote {
+  margin: 0 0 16px;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-0s);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+
+.voices__card figcaption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-soft);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
+.voices__card figcaption::before {
+  content: "";
+  width: 9px;
+  height: 9px;
   flex: none;
   border: 2px solid var(--brand);
   border-radius: 50%;
 }
 
-@media (min-width: 640px) {
-  .voices__item--right {
-    margin-left: auto;
-    text-align: right;
+/* A third of a phone screen is not a column. voices-wall.js leaves the wall
+   alone below this width, so the columns are already three static lists — they
+   just need to stack rather than sit side by side. */
+@media (max-width: 900px) {
+  .voices__columns {
+    display: block;
   }
 
-  .voices__item--right figcaption {
-    justify-content: flex-end;
-  }
-
-  .voices__item--indent {
-    margin-left: 96px;
+  .voices__col + .voices__col {
+    margin-top: clamp(34px, 6vw, 52px);
   }
 }
 
@@ -5005,32 +5428,108 @@ body[data-hero-tone="dark"]
    ============================================================ */
 
 .creds {
-  padding-block: var(--space-l);
-  border-bottom: 1px solid var(--line);
+  /* Extra room at the foot so the strip settles before the first pinned
+     chapter photograph rises up under it. */
+  padding-block: var(--space-l) var(--space-section);
 }
 
 .creds__title {
   margin: 0 0 var(--space-m);
-  color: var(--ink-soft);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  color: var(--brand);
+  /* An h2, so it inherits the serif — and was the only micro-label on the site
+     set in it. Labels are sans everywhere else. */
+  font-family: var(--font-sans);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
   text-transform: uppercase;
 }
 
+/* The credentials drift past on a loop. The window is bled to the page edges
+   so they arrive from off-screen rather than appearing at the gutter, and the
+   mask softens both ends so nothing pops in or out on a hard line. */
+.creds__track {
+  --creds-gap: clamp(20px, 3vw, 48px);
+  --creds-fade: clamp(28px, 7vw, 110px);
+  margin: 0 calc(var(--page-gutter) * -1) -20px;
+  /* Room underneath for the reveal's 18px lift, which an overflow container
+     would otherwise turn into a vertical scrollbar. */
+  padding-bottom: 20px;
+  /* Baseline before the marquee is built (and where it stays under reduced
+     motion): a plain horizontal swipe, so this never depends on JS. */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.creds__track::-webkit-scrollbar {
+  display: none;
+}
+
+.creds__track.is-drifting {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 var(--creds-fade),
+    #000 calc(100% - var(--creds-fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 var(--creds-fade),
+    #000 calc(100% - var(--creds-fade)),
+    transparent 100%
+  );
+}
+
 .creds__strip {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(20px, 3vw, 48px);
+  display: flex;
+  width: max-content;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 var(--page-gutter);
   list-style: none;
+}
+
+/* Half the track is an exact copy of the other half, so ending on -50% lands
+   on an identical frame and the loop has no seam. */
+.creds__track.is-drifting .creds__strip {
+  padding-left: 0;
+  animation: creds-drift var(--creds-duration, 30s) linear infinite;
+}
+
+.creds__track.is-drifting:hover .creds__strip,
+.creds__track.is-drifting:focus-within .creds__strip {
+  animation-play-state: paused;
+}
+
+@keyframes creds-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 .creds__strip li {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  /* Fixed width, and the gap carried as a margin rather than the flex `gap`:
+     every card is then an identical block, which is what makes the halves
+     match. A shared `gap` would leave the seam one gap short. */
+  flex: 0 0 clamp(190px, 20vw, 260px);
+  margin-right: var(--creds-gap);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creds__strip {
+    animation: none;
+  }
 }
 
 .creds__strip img {
@@ -5046,83 +5545,58 @@ body[data-hero-tone="dark"]
 
 .creds__strip span {
   color: var(--ink-soft);
-  font-size: clamp(13px, 1.05vw, 15px);
+  font-size: var(--step-0s);
   line-height: 1.45;
 }
 
-@media (max-width: 960px) {
-  .service-cards {
-    grid-template-columns: 1fr;
+/* Half a phone screen is not a column, and holding the page still while
+   full-screen panels slide over each other is exactly the kind of movement
+   the reduced-motion preference is asking us not to do. Either way the
+   pinning goes away and each chapter becomes a photograph with its copy
+   underneath. */
+@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  .story__chapter,
+  .story__chapter:last-child {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
   }
 
+  .story__chapter + .story__chapter {
+    margin-top: 0;
+  }
+
+  .story__copy,
+  .story__media {
+    position: static;
+    height: auto;
+    /* No seam travels here, so the rounding would just be a fixed corner on
+       the photograph. */
+    clip-path: none;
+  }
+
+  .story__media {
+    order: -1;
+  }
+
+  .story__media img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .story__copy {
+    padding: var(--space-l) var(--page-gutter);
+  }
+}
+
+@media (max-width: 960px) {
   .creds__strip {
-    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-m);
   }
 }
 
 @media (max-width: 640px) {
-  .hero-actions .btn {
+  .home-hero__actions .btn {
     flex: 1 1 auto;
-  }
-}
-
-/* ============================================================
-   Pilates — studio and small-group imagery
-   Replaces the four-slide carousel and the six-image collage,
-   both of which showed near-duplicate or generic stock.
-   ============================================================ */
-
-/* Scoped under .pilates-longform so it outranks the `figure { margin: 0 }`
-   reset — without this the studio heading and its photo had a 0px gap. */
-/* Studio: copy and photograph sit side by side, so the text column no longer
-   strands the heading opposite an empty half. */
-.pilates-studio__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  gap: clamp(32px, 5vw, 80px);
-  align-items: start;
-}
-
-.pilates-longform .pilates-studio__shot,
-.pilates-longform .pilates-group-shot {
-  margin: 0;
-}
-
-.pilates-studio__shot img,
-.pilates-group-shot img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: var(--radius-md);
-}
-
-@media (max-width: 860px) {
-  .pilates-studio__grid {
-    grid-template-columns: 1fr;
-    gap: clamp(28px, 6vw, 44px);
-  }
-}
-
-.pilates-studio__shot figcaption,
-.pilates-group-shot figcaption {
-  margin-top: 14px;
-  color: var(--ink-soft);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.pilates-studio__copy .pilates-arrow-link {
-  margin-top: var(--space-s);
-}
-
-@media (max-width: 960px) {
-  .pilates-studio__shot img {
-    aspect-ratio: 4 / 3;
   }
 }
 
@@ -5145,9 +5619,9 @@ body[data-hero-tone="dark"]
   --gap-act: var(--space-section);
 }
 
-/* Act break: orientation -> the place -> the offer */
-.pilates-approach,
-.pilates-studio {
+/* Act break: orientation -> the offer. The place used to sit between the two;
+   it is now its own page at /studio. */
+.pilates-approach {
   padding-block: var(--gap-act);
 }
 
@@ -5180,7 +5654,6 @@ body[data-hero-tone="dark"]
   background: var(--paper);
 }
 
-.pilates-studio,
 .pilates-practical {
   background: var(--surface);
 }
@@ -5217,114 +5690,275 @@ body[data-hero-tone="dark"]
 }
 
 /* ============================================================
-   Clinics — page rhythm
+   Studio — page rhythm
    Was var(--space-section) on every section, the same flat cadence
-   the Pilates page had. Locations and Testimonials are the two
-   halves of "where you'll be seen and what people say", so they
-   bind; Links and Charity are the closing act.
+   the Pilates page had. (Testimonials used to sit in the middle
+   here, and a charity paragraph closed the page — both have moved
+   out, so the tight binds they needed have gone with them.)
    ============================================================ */
 
+/* Tighter than the shared --space-section rhythm. The page is one act now —
+   the room — and at the site default it floated in far more air than it
+   needed. */
 .clinics-longform {
-  --gap-close: clamp(2.25rem, 1.7rem + 2.2vw, 4rem);
-  --gap-act: var(--space-section);
+  --gap-act: clamp(2.5rem, 1.9rem + 2.6vw, 4.75rem);
 }
 
-.clinics-locations {
-  padding-block: var(--gap-act) var(--gap-close);
-}
-
-/* The voices band carries its own padding and borders, so the section above
-   it closes tight rather than stacking a second full act gap. */
-.clinics-longform .voices {
-  margin-top: 0;
-}
-
-.clinics-links,
-.clinics-charity {
+.clinics-studio {
   padding-block: var(--gap-act);
 }
 
 /* ============================================================
-   Clinics — locations
-   A flowing list, not a divided grid. The old version enforced
-   610px-tall boxes with 115px above each name and repeated the
-   street in an eyebrow above the address that already said it.
+   Studio — the room
+   The address and the photographs used to be two sections with
+   a heading each — "The Studham studio" at one size over a
+   full-width rule, then "Inside the studio" at another, larger
+   size a few lines below. Two titles for one room. They are now
+   one act: a single title, and the photographs introduced by a
+   label rather than a competing heading.
    ============================================================ */
 
-/* auto-fit rather than a fixed 2 columns: Studham is currently the only
-   location, and a fixed pair left it half-width beside an empty column. */
-.clinic-list {
+/* The title, alone over the rule. The standfirst that used to sit beside it is
+   now the first of the three columns below, so the name has the row to itself. */
+.clinics-studio__head {
+  padding-bottom: clamp(22px, 2.8vw, 36px);
+  border-bottom: 1px solid var(--line);
+}
+
+/* --step-3 to match every other section heading on the site; it used to sit a
+   step below the heading that followed it. */
+.clinics-studio__head h2 {
+  margin: 0;
+  font-size: var(--step-3);
+}
+
+/* The copy that used to be the "The Studham studio" section on /pilates. It
+   sits under the title rather than carrying a heading of its own, so the page
+   still reads as one act about one room.
+
+   Three paragraphs, three columns, one row: the standfirst about what runs in
+   the room, then the two about the room itself. A single measure left half the
+   row empty, and the standfirst set beside the title made the title row do the
+   work this row should. auto-fit rather than a fixed repeat(3) so the columns
+   fold to two and then one on their own, without a breakpoint each. */
+.clinics-studio__story {
+  margin-top: clamp(28px, 3.5vw, 48px);
+}
+
+.clinics-studio__copy {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-  grid-template-rows: auto auto;
-  gap: clamp(32px, 5vw, 80px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  column-gap: clamp(20px, 4vw, 56px);
+  row-gap: 1.35em;
+  align-items: start;
+  color: var(--ink-soft);
+  font-size: var(--step-0s);
+  line-height: 1.75;
+}
+
+.clinics-studio__copy p {
+  margin: 0;
+}
+
+.clinics-studio__gallery {
+  margin-top: clamp(28px, 3.5vw, 48px);
+}
+
+/* A plate label for the photographs, not a second title. The compound selector
+   is needed to clear ".clinics-longform h3", which otherwise puts the display
+   serif and its negative tracking on a 10px uppercase label. */
+.clinics-longform .clinics-studio__gallery-label {
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
+
+/* ============================================================
+   Studio — carousel
+   The click-through treatment that used to carry the four
+   studio photographs on /pilates. Restored here because the
+   subject is the room itself, which is what this page is about.
+   Slides are stacked on one spot and offset by JS, so the two
+   neighbours sit behind and to the side of the active print.
+   ============================================================ */
+
+/* Full width of the shell. The old rule subtracted another page gutter, which
+   made sense when the carousel sat on its own but inside .section-shell it
+   double-inset the prints — they started 32px in from the title above them. */
+.studio-carousel {
+  width: 100%;
+  margin: clamp(24px, 3vw, 40px) auto 0;
+}
+
+/* No fixed height. The prints stack in one grid cell, so the stage comes out
+   exactly as tall as a print at every width. It used to carry a
+   clamp(300px, 42vw, 540px) guess at that height, which left ~70px of dead
+   space above and below the photo on a desktop and ~55px on a phone. */
+.studio-carousel__stage {
+  position: relative;
+}
+
+.studio-carousel__track {
+  display: grid;
+  grid-template-columns: 1fr;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* subgrid keeps the rule and the address on a shared baseline across both
-   columns even though one clinic name wraps to two lines and the other does not */
-.clinic-list li {
-  display: grid;
-  grid-row: span 2;
-  grid-template-rows: subgrid;
-  row-gap: 0;
-}
-
-@supports not (grid-template-rows: subgrid) {
-  .clinic-list li {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .clinic-list h2 {
-    flex: 1;
-  }
-}
-
-/* The rule sits under the clinic name, with its address beneath. */
-.clinic-list h2 {
-  margin: 0 0 clamp(14px, 1.6vw, 20px);
-  padding-bottom: clamp(14px, 1.6vw, 20px);
-  border-bottom: 1px solid var(--line);
-  font-family: var(--font-serif);
-  font-size: var(--step-2);
-  font-weight: 500;
-  line-height: var(--lh-head);
-  letter-spacing: var(--tracking-display);
-  text-wrap: balance;
-}
-
-.clinic-list address {
+.studio-carousel__slide {
+  grid-area: 1 / 1;
+  place-self: center;
+  width: min(60%, 640px);
   margin: 0;
-  color: var(--ink-soft);
-  font-size: clamp(15px, 1.1vw, 17px);
-  font-style: normal;
-  line-height: 1.7;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #e7e2d8;
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 0.6s ease,
+    filter 0.6s ease;
+  will-change: transform, opacity;
+  cursor: pointer;
 }
 
-.clinic-list__note {
-  margin: clamp(28px, 3.5vw, 44px) 0 0;
-  color: var(--ink-soft);
-  font-size: clamp(15px, 1.1vw, 17px);
+.studio-carousel__slide.is-active {
+  cursor: default;
+  box-shadow: 0 34px 90px rgba(16, 27, 57, 0.24);
 }
 
-.clinic-list__note a {
+.studio-carousel__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.74) contrast(0.97);
+  pointer-events: none;
+}
+
+.studio-carousel__nav {
+  position: absolute;
+  z-index: 40;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: clamp(44px, 4vw, 56px);
+  height: clamp(44px, 4vw, 56px);
+  padding: 0;
   color: var(--ink);
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 1px solid var(--line);
+  font-size: var(--step-1);
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
-.clinic-list__note a:hover {
-  border-bottom-color: var(--brand);
+.studio-carousel__nav:hover {
+  color: #fff;
+  background: var(--brand);
+  border-color: transparent;
 }
 
-@media (max-width: 720px) {
-  .clinic-list {
-    grid-template-columns: 1fr;
-    gap: clamp(28px, 6vw, 40px);
+.studio-carousel__nav--prev {
+  left: clamp(4px, 2vw, 24px);
+}
+
+.studio-carousel__nav--next {
+  right: clamp(4px, 2vw, 24px);
+}
+
+.studio-carousel__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: clamp(24px, 3vw, 40px);
+  text-align: center;
+}
+
+.studio-carousel__index {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
+.studio-carousel__index-sep {
+  opacity: 0.4;
+}
+
+.studio-carousel__caption {
+  margin: 12px 0 0;
+  color: var(--ink);
+  font-size: var(--step-1);
+  font-style: italic;
+}
+
+.studio-carousel__dots {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.studio-carousel__dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  background: rgba(16, 27, 57, 0.22);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.studio-carousel__dot:hover {
+  background: rgba(16, 27, 57, 0.42);
+}
+
+.studio-carousel__dot.is-active {
+  background: var(--brand);
+  transform: scale(1.25);
+}
+
+@media (max-width: 800px) {
+  .studio-carousel__slide {
+    width: min(72%, 520px);
+  }
+}
+
+/* The arrows go at this width and the slides are stepped through by
+   swiping or by the dots, both of which are already wired up. */
+@media (max-width: 600px) {
+  .studio-carousel__slide {
+    width: min(84%, 420px);
+    aspect-ratio: 4 / 3;
+  }
+
+  .studio-carousel__nav {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio-carousel__slide {
+    transition: none;
   }
 }
 
@@ -5342,7 +5976,6 @@ body[data-hero-tone="dark"]
 }
 .therapy-longform h1, .therapy-longform h2, .therapy-longform h3 {
   font-family: var(--font-serif);
-  font-weight: 400;
   letter-spacing: var(--tracking-display);
 }
 .therapy-longform em {
@@ -5354,7 +5987,9 @@ body[data-hero-tone="dark"]
 .therapy-hero {
   position: relative;
   min-height: max(760px, 100svh);
-  padding: clamp(110px, 11vw, 150px) 0 80px;
+  /* Sits just clear of the fixed header — the grid starts at the padding
+     edge, so this is what sets how high the h1 and figure sit. */
+  padding: clamp(74px, 7.5vw, 104px) 0 80px;
   overflow: hidden;
   background: var(--surface-2);
 }
@@ -5377,7 +6012,7 @@ body[data-hero-tone="dark"]
   max-width: 530px;
   margin: 48px 0 32px;
   color: var(--ink-soft);
-  font-size: clamp(16px, 1.2vw, 19px);
+  font-size: var(--step-0);
   line-height: 1.75;
 }
 .therapy-hero__media {
@@ -5411,35 +6046,12 @@ body[data-hero-tone="dark"]
   right: 22px;
   bottom: 20px;
   padding: 8px 10px;
-  color: #fff;
+  color: var(--on-dark);
   background: rgba(9, 18, 42, 0.72);
-  font-size: 8px;
-  letter-spacing: 0.12em;
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
   text-transform: uppercase;
-}
-.therapy-index {
-  display: grid;
-  margin-top: 62px;
-  grid-template-columns: repeat(4, 1fr);
-  border-top: 1px solid var(--line);
-}
-.therapy-index a {
-  display: flex;
-  min-height: 68px;
-  align-items: center;
-  gap: 12px;
-  color: var(--ink-soft);
-  font-size: 8px;
-  letter-spacing: 0.09em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-.therapy-index a + a {
-  padding-left: 20px;
-  border-left: 1px solid var(--line);
-}
-.therapy-index span {
-  color: var(--brand);
 }
 /* ============================================================
    Sports Therapy — contained-block system (variants A/B/C)
@@ -5468,7 +6080,7 @@ body[data-hero-tone="dark"]
 .st-section--dark .st-head > p,
 .st-section--dark .st-lead,
 .st-section--dark p {
-  color: rgba(242, 246, 255, 0.74);
+  color: var(--on-dark-soft);
 }
 .st-section--dark .st-eyebrow {
   color: var(--periwinkle);
@@ -5490,7 +6102,6 @@ body[data-hero-tone="dark"]
   margin: 0;
   font-family: var(--font-serif);
   font-size: var(--step-3);
-  font-weight: 400;
   line-height: var(--lh-head);
   letter-spacing: var(--tracking-display);
 }
@@ -5505,9 +6116,9 @@ body[data-hero-tone="dark"]
   display: block;
   margin-bottom: 10px;
   color: var(--brand);
-  font-size: var(--step-00);
-  font-weight: 600;
-  letter-spacing: 0.11em;
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
   text-transform: uppercase;
 }
 
@@ -5537,7 +6148,6 @@ body[data-hero-tone="dark"]
   margin: 0 0 14px;
   font-family: var(--font-serif);
   font-size: var(--step-2);
-  font-weight: 400;
   line-height: var(--lh-head);
   letter-spacing: var(--tracking-display);
 }
@@ -5584,33 +6194,53 @@ body[data-hero-tone="dark"]
   color: var(--ink-soft);
   line-height: 1.45;
 }
-.st-rows--price li {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-}
-.st-rows--price strong {
-  font-family: var(--font-serif);
-  font-size: var(--step-2);
-  font-weight: 400;
-  color: var(--ink);
-}
-.st-rows--price li.is-featured strong {
-  color: var(--brand);
-}
 .st-rows--onDark {
   border-top-color: rgba(242, 246, 255, 0.16);
 }
 .st-rows--onDark li {
   border-bottom-color: rgba(242, 246, 255, 0.16);
-  color: rgba(242, 246, 255, 0.8);
+  color: var(--on-dark-soft);
 }
 .st-card > .st-rows:last-child li:last-child {
   border-bottom: 0;
   padding-bottom: 0;
 }
 
+/* ---- Ruled index: card-free groups, label rail + two columns of rows.
+   Used by /sports-therapy#treatment, which sits directly below another
+   two-card grid — without the box chrome the two sections stop echoing
+   each other, and the long item strings get the full column width. ---- */
+
+.st-index__group {
+  display: grid;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  gap: clamp(22px, 3vw, 52px);
+  padding-top: clamp(20px, 2.4vw, 30px);
+  border-top: 1.5px solid var(--ink);
+}
+.st-index__group + .st-index__group {
+  margin-top: clamp(30px, 3.6vw, 48px);
+}
+.st-index__label h3 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+}
+/* Columns rather than a grid so the rows read down one column and back up
+   the next, and so the count can change without touching the CSS. */
+.st-rows--split {
+  columns: 2;
+  column-gap: clamp(24px, 3vw, 48px);
+  border-top: 0;
+}
+.st-rows--split li {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+  break-inside: avoid;
+}
 
 /* ---- Notes ---- */
 
@@ -5632,10 +6262,16 @@ body[data-hero-tone="dark"]
   background: var(--navy);
 }
 .st-note--dark p {
-  color: rgba(242, 246, 255, 0.78);
+  color: var(--on-dark-soft);
 }
 .st-note--dark .st-eyebrow {
   color: var(--periwinkle);
+}
+/* Square-cornered variant with a solid brand edge on the left — declared
+   after .st-note so it wins the border-radius and border-left. */
+.st-note--rule {
+  border-radius: 0;
+  border-left: 4px solid var(--brand-strong);
 }
 
 .st-footnote {
@@ -5644,7 +6280,35 @@ body[data-hero-tone="dark"]
   font-size: var(--step-00);
 }
 .st-footnote--onDark {
-  color: rgba(242, 246, 255, 0.6);
+  color: var(--on-dark-quiet);
+}
+
+.st-card .pilates-arrow-link {
+  margin-top: 22px;
+}
+
+.st-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 28px;
+  margin-top: clamp(26px, 3vw, 36px);
+}
+
+.st-card__actions .pilates-arrow-link {
+  margin-top: 0;
+}
+
+/* Ink variant of .button-link, for the light card surfaces. */
+.button-link--ink {
+  border-color: rgba(24, 32, 56, 0.32);
+  color: var(--navy-deep);
+}
+
+.button-link--ink:hover {
+  border-color: var(--navy-deep);
+  background: var(--navy-deep);
+  color: #fff;
 }
 
 /* ---- Split (image + copy) ---- */
@@ -5663,7 +6327,6 @@ body[data-hero-tone="dark"]
   margin: 0;
   font-family: var(--font-serif);
   font-size: var(--step-3);
-  font-weight: 400;
   line-height: var(--lh-head);
   letter-spacing: var(--tracking-display);
 }
@@ -5676,23 +6339,136 @@ body[data-hero-tone="dark"]
 .st-split--text p {
   line-height: var(--lh-body);
 }
-.st-taping-figure {
-  padding: clamp(16px, 2vw, 26px);
+/* ---- Taping band: two drifting photo columns either side of the copy.
+   The left column runs up, the right runs down, and both stop on hover or
+   focus. drift-columns.js adds .is-drifting once it has cloned enough copies
+   to loop — until then, and on a phone or with reduced motion, the band is
+   the copy with a plain grid of photographs under it. ---- */
+
+/* Full-bleed: no section shell, no gaps. The photographs run wall to wall and
+   the copy sits in the middle of them, so the band reads as one surface rather
+   than three columns with air between them. */
+.st-section--flush {
+  padding-block: 0;
+}
+
+.taping-band {
+  display: grid;
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 620px) minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.taping-band.is-drifting {
+  height: min(74svh, 720px);
+}
+
+.taping-band__col {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+}
+
+/* Without the drift there is nothing to stop three photographs standing at
+   their full height, so the column is cropped to the height the band would
+   have taken anyway. */
+.taping-band__window {
+  flex: 1;
+  min-height: 0;
+  max-height: min(74svh, 720px);
+  overflow: hidden;
+}
+
+.is-drifting .taping-band__window {
+  overflow-y: hidden;
+  /* Softens both ends, so the photographs read as continuing past the frame
+     rather than being cut off at it. */
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 12%,
+    #000 88%,
+    transparent 100%
+  );
+}
+
+/* flow-root, so the last shot's bottom margin is contained rather than
+   collapsing out through the track. Left to collapse, the track measures one
+   gap short of the list it holds, and the loop wraps by that measurement — so
+   the column would jump a gap every time round. */
+.taping-band__track {
+  display: flow-root;
+}
+
+/* Butted together, so each column is one continuous strip of photographs. */
+.taping-band__shot {
   margin: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.taping-band__shot img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.taping-band__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(28px, 4vw, 64px);
   background: var(--paper);
 }
-.st-taping-figure img {
-  width: 100%;
-  border-radius: calc(var(--radius-card) - 8px);
+
+.taping-band__content h2 {
+  margin: 0 0 14px;
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
 }
-.st-taping-figure figcaption {
-  padding-top: 14px;
+
+.taping-band__content > p {
+  margin: 0 0 16px;
   color: var(--ink-soft);
-  font-size: var(--step-00);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  line-height: var(--lh-body);
+}
+
+/* Below the width drift-columns.js works at, the columns stop being columns:
+   the copy leads and the photographs follow as one row underneath. */
+@media (max-width: 900px) {
+  .taping-band {
+    grid-template-columns: 1fr;
+  }
+  /* The drift is off at this width, but the class it leaves behind must not
+     take the band's height with it. */
+  .taping-band.is-drifting {
+    height: auto;
+  }
+  .is-drifting .taping-band__window {
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .taping-band__content {
+    order: -1;
+  }
+  .taping-band__window {
+    max-height: none;
+  }
+  .taping-band__track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 
@@ -5735,10 +6511,10 @@ body[data-hero-tone="dark"]
 .st-section--dark .st-card > p,
 .st-section--dark .st-note p,
 .st-section--dark .st-rows li {
-  color: rgba(242, 246, 255, 0.78);
+  color: var(--on-dark-soft);
 }
 .st-section--dark .st-footnote {
-  color: rgba(242, 246, 255, 0.6);
+  color: var(--on-dark-quiet);
 }
 
 /* ---- Review-only variant switcher ---- */
@@ -5746,26 +6522,6 @@ body[data-hero-tone="dark"]
 
 /* ---- Retained from the original page ---- */
 
-.therapy-fascia__threads {
-  position: absolute;
-  top: -35%;
-  right: -12%;
-  width: 70vw;
-  aspect-ratio: 1;
-  border: 1px solid rgba(137, 170, 255, 0.18);
-  border-radius: 45% 55% 63% 37% / 56% 38% 62% 44%;
-  pointer-events: none;
-}
-.therapy-fascia__threads::before, .therapy-fascia__threads::after {
-  position: absolute;
-  inset: 17%;
-  border: 1px solid rgba(137, 170, 255, 0.14);
-  border-radius: inherit;
-  content: "";
-}
-.therapy-fascia__threads::after {
-  inset: 34%;
-}
 .therapy-contact {
   background: var(--navy);
 }
@@ -5789,6 +6545,10 @@ body[data-hero-tone="dark"]
     grid-template-columns: 1fr;
     align-items: start;
   }
+  .st-index__group {
+    grid-template-columns: 1fr;
+    gap: clamp(14px, 2vw, 20px);
+  }
   .st-grid--3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -5799,9 +6559,12 @@ body[data-hero-tone="dark"]
 }
 
 @media (max-width: 640px) {
+  .st-rows--split {
+    columns: 1;
+  }
   .therapy-hero {
     min-height: auto;
-    padding-top: 130px;
+    padding-top: 96px;
   }
   .therapy-hero h1 {
     font-size: var(--step-4);
@@ -5813,16 +6576,6 @@ body[data-hero-tone="dark"]
   }
   .therapy-hero__media {
     height: 420px;
-  }
-  .therapy-index {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .therapy-index a {
-    justify-content: center;
-    font-size: 0;
-  }
-  .therapy-index a span {
-    font-size: 9px;
   }
   .st-grid--2,
   .st-grid--3 {
