@@ -15,14 +15,14 @@ import {
    Who she is, where she trained, what she treats, why she does it. An
    introduction and her portrait open the page together — two columns, the
    words held on the shell's left line and the photograph running off the right
-   edge of the window — and the conversation runs beneath them, closing on the
-   one sentence from the old site that turns from her to you ("You don't have to
-   be an athlete…").
+   edge of the window — then the marks she trained under drift past, and the
+   one sentence from the old site that turns from her to you ("You don't have
+   to be an athlete…") stands centred on the page before a word of the
+   conversation.
 
-   That sentence ("You don't have to be an athlete…") now opens the page as a
-   display quote between the credentials strip and the first question, rather
-   than closing it from inside the navy band. The band it came out of carries
-   the qualifications on their own.
+   That sentence used to close the page from inside a navy band, with the
+   qualifications listed beside it. The band has gone: the strip carries the
+   credentials now, and the sentence carries itself.
 
    The practical half — what happens, what to wear, what it costs, the clinic
    policies, where to find her, how to book — used to run underneath this and
@@ -154,22 +154,6 @@ export function build() {
         ${pair("What are we working towards?", paras(AIM[0], CARE[2]))}
         ${pair("Why do you do it?", paras(PULLQUOTES.passion), " av-e__pair--emphasis")}
       </dl>
-    </div>
-  </section>
-
-  <!-- The record: the strip under the hero is the marks, this is what they
-       are. Both are built from QUALIFICATIONS, so they cannot disagree. -->
-  <section class="av-e__statement" aria-labelledby="quals-title">
-    <div class="section-shell av-e__statement-grid">
-      <h2 id="quals-title" data-reveal>Qualifications</h2>
-      <ul class="av-e__quals">
-        ${QUALIFICATIONS.map(
-          (q) => `<li data-reveal>
-            <span class="av-e__qual-name">${q.title}</span>
-            <span class="av-e__qual-body">${q.body}</span>
-          </li>`,
-        ).join("")}
-      </ul>
     </div>
   </section>
 

@@ -631,8 +631,13 @@ a {
 /* Centred on the hero itself, not on the space left under the header. The bar
    is transparent here, so the photograph runs behind it and the eye centres on
    the frame rather than on the gap below the nav. The small offset is only
-   there to keep the eyebrow clear of the bar on a short window. */
-.home-hero__inner {
+   there to keep the eyebrow clear of the bar on a short window.
+
+   The studio hero lands its type in the same place, so it takes these rules
+   rather than a second copy of them — this block and its three breakpoint
+   overrides below are the one definition of "where a hero's type sits". */
+.home-hero__inner,
+.clinics-hero__inner {
   position: relative;
   z-index: 2;
   width: min(660px, 52vw);
@@ -1456,7 +1461,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     transform: translateY(-3px) rotate(-45deg);
   }
 
-  .home-hero__inner {
+  .home-hero__inner,
+  .clinics-hero__inner {
     width: min(620px, 68vw);
   }
 
@@ -1488,8 +1494,11 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   }
 
   /* One column, and the scrim goes vertical — a left-weighted wedge has
-     nowhere to fall back to once the type spans the full width. */
-  .home-hero__scrim {
+     nowhere to fall back to once the type spans the full width. The studio
+     hero puts its type in the same place at this width, so it needs the same
+     ground under it and takes this rule rather than a second reading of it. */
+  .home-hero__scrim,
+  .clinics-hero__scrim {
     background: linear-gradient(
       to top,
       oklch(17.4% 0.048 275 / 0.94) 0%,
@@ -1499,7 +1508,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     );
   }
 
-  .home-hero__inner {
+  .home-hero__inner,
+  .clinics-hero__inner {
     width: calc(100% - var(--page-gutter) * 2);
     padding-top: clamp(96px, 15vh, 130px);
   }
@@ -1535,7 +1545,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 }
 
 @media (max-height: 720px) and (min-width: 641px) {
-  .home-hero__inner {
+  .home-hero__inner,
+  .clinics-hero__inner {
     padding-top: 20px;
   }
 
@@ -4783,19 +4794,19 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    — because that is already this site's language for a hero the bar sits on,
    and a second dialect of it would only drift.
 
-   The type is held at the foot rather than centred. A walkthrough is
-   constantly re-composing itself, and the one part of the frame that stays
-   quiet enough to read against is the floor. */
+   The box is the home hero's, to the pixel — same height, same centring —
+   and the type block inside it shares that hero's positioning rules outright
+   rather than restating them (see .home-hero__inner). The two are meant to
+   be the same landing, so they resolve from one definition. */
 .clinics-hero {
   position: relative;
   display: flex;
+  width: 100%;
   min-height: max(680px, 100svh);
-  padding: clamp(104px, 11vw, 138px) 0 clamp(44px, 7vh, 84px);
-  flex-direction: column;
-  justify-content: flex-end;
+  align-items: center;
+  isolation: isolate;
   overflow: hidden;
   background: var(--navy);
-  isolation: isolate;
 }
 
 .clinics-hero__media {
@@ -4856,13 +4867,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     ),
     linear-gradient(to top, oklch(17.4% 0.048 275 / 0.4) 0%, transparent 34%),
     linear-gradient(to bottom, oklch(17.4% 0.048 275 / 0.42) 0%, transparent 16%);
-}
-
-.clinics-hero__inner {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .clinics-hero__eyebrow {
@@ -5106,17 +5110,11 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     padding-top: 130px;
   }
 
-  /* Unlike the heroes that collapse to auto here, this one is a frame: let it
-     shrink to its content and the footage becomes a letterbox strip. It keeps
-     a viewport-ish height and just gives back some of the head padding. */
-  .clinics-hero {
-    min-height: max(560px, 92svh);
-    padding-top: 122px;
-  }
-
-  .clinics-hero h1 {
-    font-size: var(--step-4);
-  }
+  /* The studio hero has nothing to say at this width. It does not collapse to
+     auto like the heroes either side of it — shrink a frame to its content and
+     the footage becomes a letterbox strip — and everything that does change is
+     the home hero's, taken from the shared rules further up: the full-viewport
+     box, the vertical scrim, and the type block's padding clear of the bar. */
 
   .therapy-fascia h2 {
     font-size: var(--step-3);
@@ -5425,7 +5423,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
      labels instead of just cropping. */
   width: 100%;
   margin-top: clamp(20px, 2.2vw, 34px);
-  border-radius: clamp(14px, 1.4vw, 22px);
+  border-radius: clamp(5px, 0.5vw, 8px);
   /* Letterboxed rather than 16:9 so the whole band — title through photograph
      — clears a laptop fold without the page having to scroll through it. The
      cap is what makes that a guarantee rather than a size that happens to work:
@@ -5673,26 +5671,24 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   display: none;
 }
 
-.voice-run__head {
+/* No heading over the run. The reviews announce themselves — a label reading
+   "in their words" over a row of quotes in quotation marks was naming what was
+   already in front of you, and it put a second uppercase micro-label within a
+   screen of the qualifications strip's. The link underneath is the only chrome
+   the section carries. */
+/* Same gap above as the section's own padding leaves below it, so the link
+   sits centred in its band of white rather than tucked up under the last
+   quote with the contact band a long way off beneath it. */
+.voice-run__link {
+  width: fit-content;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-m);
-  margin-bottom: var(--space-m);
+  margin: var(--space-section) auto 0;
 }
 
-.voice-run__title {
-  margin: 0;
-  color: var(--brand);
-  font-family: var(--font-sans);
-  font-size: var(--label-lg);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-lg-track);
-  text-transform: uppercase;
-}
-
+/* Wider than the qualifications' gutter: with no box around a card, the gap is
+   the only thing telling one review from the next. */
 .voice-run__track {
-  --run-gap: clamp(16px, 2vw, 30px);
+  --run-gap: clamp(26px, 3vw, 52px);
   --run-fade: clamp(28px, 7vw, 110px);
   margin-inline: calc(var(--page-gutter) * -1);
   overflow-x: auto;
@@ -5751,25 +5747,38 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   }
 }
 
-/* Taller than a qualification card, and deliberately so: this one has to hold
-   a full review without the type dropping to a size nobody reads in passing.
-   The margin carries the gutter rather than a flex `gap`, so every card is an
-   identical block — see the note on .creds__strip li. */
+/* A rule over each review rather than a box around it. The qualifications
+   strip above carries no cards at all, and an outlined card here read as a
+   component borrowed from a different site; a brand hairline separates just as
+   well and leaves the type sitting on the page.
+
+   Taller than a qualification card, deliberately: this one holds a full review
+   without the type dropping to a size nobody reads in passing. The margin
+   carries the gutter rather than a flex `gap`, so every card is an identical
+   block — see the note on .creds__strip li. */
 .voice-run__strip li {
   display: flex;
   flex-direction: column;
-  flex: 0 0 clamp(260px, 25vw, 350px);
-  min-height: clamp(240px, 21vw, 290px);
-  padding: clamp(24px, 2.4vw, 34px) clamp(22px, 2.2vw, 32px);
+  flex: 0 0 clamp(250px, 24vw, 330px);
+  min-height: clamp(230px, 20vw, 280px);
+  padding-top: clamp(18px, 1.8vw, 24px);
   margin-right: var(--run-gap);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  justify-content: space-between;
-  gap: var(--space-s);
+  border-top: 1px solid var(--brand);
+}
+
+/* Named, not implied: which half of the practice a review is about is the one
+   thing the quote itself does not always say. */
+.voice-run__service {
+  margin: 0 0 clamp(12px, 1.4vw, 18px);
+  color: var(--ink-soft);
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-sm-track);
+  text-transform: uppercase;
 }
 
 .voice-run__strip blockquote {
-  margin: 0;
+  margin: 0 0 var(--space-s);
 }
 
 .voice-run__strip blockquote p {
@@ -5777,17 +5786,19 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   color: var(--ink);
   font-family: var(--font-serif);
   font-size: var(--step-1);
-  line-height: 1.42;
+  line-height: 1.4;
   letter-spacing: -0.01em;
 }
 
+/* Serif and mixed case: this is a person, not a field label. The uppercase
+   micro-type above it is the category; making both the same turned the name
+   into a second piece of metadata. */
 .voice-run__strip cite {
+  margin-top: auto;
   color: var(--brand);
-  font-size: var(--label);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
   font-style: normal;
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-track);
-  text-transform: uppercase;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5796,13 +5807,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   }
 }
 
-@media (max-width: 700px) {
-  .voice-run__head {
-    display: grid;
-    gap: 10px;
-    justify-items: start;
-  }
-}
 
 /* ============================================================
    Client voices — the /testimonials wall

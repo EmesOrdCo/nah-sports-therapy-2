@@ -879,7 +879,7 @@ function buildStudioContinuousPage() {
           </video>
           <div class="clinics-hero__scrim"></div>
         </div>
-        <div class="section-shell clinics-hero__inner">
+        <div class="clinics-hero__inner">
           <p class="clinics-hero__eyebrow"><i aria-hidden="true"></i>Studham studio</p>
           <h1 id="clinics-title">The NJH clinic in Studham.</h1>
           <div class="clinics-hero__footer">

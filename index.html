@@ -391,11 +391,11 @@
                   aria-hidden="true"
                   focusable="false"
                 >
-                  <path d="M3.5 8.5v-5h5" />
-                  <path d="M20.5 8.5v-5h-5" />
-                  <path d="M3.5 15.5v5h5" />
-                  <path d="M20.5 15.5v5h-5" />
-                  <rect x="8.75" y="10.5" width="6.5" height="3" rx="1.5" />
+                  <path d="M3.5 8v-4.5h4.5" />
+                  <path d="M20.5 8v-4.5h-4.5" />
+                  <path d="M3.5 16v4.5h4.5" />
+                  <path d="M20.5 16v4.5h-4.5" />
+                  <rect x="6.5" y="10.6" width="11" height="2.8" rx="1.4" />
                 </svg>
                 <span class="studio-look__tab-label">Room to Move</span>
               </button>
@@ -472,10 +472,9 @@
                   aria-hidden="true"
                   focusable="false"
                 >
-                  <rect x="4.5" y="4.5" width="15" height="12" rx="1.2" />
-                  <path d="M12 4.5v12" />
-                  <path d="M4.5 10.5h15" />
-                  <path d="M3 19.5h18" />
+                  <rect x="4" y="4" width="16" height="16" rx="1.5" />
+                  <path d="M12 4v16" />
+                  <path d="M4 12h16" />
                 </svg>
                 <span class="studio-look__tab-label">Light and Quiet</span>
               </button>
@@ -607,19 +606,16 @@
            logo. The cards themselves are written by main.js from reviews.js;
            the track is empty here on purpose, so the home page and
            /testimonials can never quote different text. -->
-      <section class="voice-run" aria-labelledby="voice-run-title">
-        <div class="section-shell voice-run__head">
-          <h2 class="voice-run__title" id="voice-run-title">In their words</h2>
-          <a class="text-link voice-run__link" href="/testimonials"
-            >Read all testimonials <span>&#8594;</span></a
-          >
-        </div>
+      <section class="voice-run" aria-label="What clients say">
         <!-- tabindex is for the no-JS / reduced-motion fallback, where this is
              a plain swipe track and none of the cards are focusable. The
              marquee removes it once it takes over the scrolling. -->
         <div class="voice-run__track" data-voice-marquee tabindex="0">
           <ul class="voice-run__strip"></ul>
         </div>
+        <a class="text-link voice-run__link" href="/testimonials"
+          >Read all testimonials <span>&#8594;</span></a
+        >
       </section>
 
       <section class="contact" id="contact" aria-labelledby="contact-title">

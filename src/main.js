@@ -7,7 +7,7 @@ import { initSmoothScroll } from "./smooth-scroll.js";
 import { initFaqJourney } from "./faq/index.js";
 import { initContactSelects } from "./contact/index.js";
 import { initVoicesWall } from "./voices-wall.js";
-import { REVIEWS } from "./reviews.js";
+import { REVIEWS, SERVICE_LABELS } from "./reviews.js";
 import { driftColumns } from "./drift-columns.js";
 
 observeBase();
@@ -206,7 +206,12 @@ if (storyChapters.length && !reducedMotion.matches) {
 initVoicesWall();
 
 /* The taping band on /sports-therapy runs the same drift: photographs up the
-   left, down the right, the copy standing still between them. */
+   left, down the right, the copy standing still between them.
+
+   It does not stop for the pointer. The copy sits between the two columns, so
+   every reader who goes near the words crosses the band — and the wall of
+   photographs freezing as they arrive to read is the one thing the drift was
+   there to avoid. Nothing in the columns is to be read anyway. */
 const tapingBand = document.querySelector(".taping-band");
 if (tapingBand) {
   const rebuildTaping = driftColumns(tapingBand, {
@@ -215,6 +220,7 @@ if (tapingBand) {
     track: ".taping-band__track",
     down: "taping-band__col--down",
     speed: 15,
+    pause: false,
   });
   // Photographs are measured, not laid out from text metrics: a track measured
   // before its images have decoded is the wrong height, and the loop wraps
@@ -354,12 +360,19 @@ const voiceRunStrip = document.querySelector(".voice-run__strip");
 if (voiceRunStrip) {
   const runReviews = REVIEWS.filter((review) => review.quote.length <= 190)
     .slice(0, 9)
-    .map(
-      (review) => `<li>
+    .map((review) => {
+      /* The one label reviews.js allows. A reader scanning the run wants to
+         know which half of the practice a review is about before they read
+         it, and the file already knows. */
+      const services = review.services
+        .map((service) => SERVICE_LABELS[service])
+        .join(" &middot; ");
+      return `<li>
+        <p class="voice-run__service">${services}</p>
         <blockquote><p>${review.quote}</p></blockquote>
         <cite>${review.name}</cite>
-      </li>`,
-    )
+      </li>`;
+    })
     .join("");
   voiceRunStrip.innerHTML = runReviews;
 
