@@ -154,7 +154,7 @@ const STATIONS = [
    and runs the length of the page. The stage strip that used to index the five
    stations from up here is gone; the stations index themselves as you pass.
 
-   The line-wave behind the title is the one /testimonials carries, taken
+   The line-wave behind the title is the one /client-stories carries, taken
    verbatim — same classes, same artwork, so the two heads are one thing kept
    in one place. Only where it sits is this page's business, because this head
    has an intro and a drop line under the title where that one has neither;

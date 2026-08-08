@@ -2,7 +2,7 @@
 
    On the pages that have one thing they are actually for — the sentence that
    turns from her to you on /about, the fees on /prices, the reviews on
-   /testimonials — the first scroll down the page does not scroll it. It
+   /client-stories — the first scroll down the page does not scroll it. It
    carries the reader from the head to that thing and stops there. The weight
    of the gesture makes no difference: the smallest nudge of a wheel and the
    hardest flick of a trackpad make exactly the same journey.

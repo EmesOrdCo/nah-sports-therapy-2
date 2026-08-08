@@ -1,6 +1,6 @@
 /* Single source of truth for client reviews.
  *
- * Reviews are shown in one place — the /testimonials page — and read from here.
+ * Reviews are shown in one place — the /client-stories page — and read from here.
  * Add a review once, in the order you want it to appear.
  *
  * The captions used to be inconsistent: some named a service, some named the

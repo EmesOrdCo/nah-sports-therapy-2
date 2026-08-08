@@ -1,4 +1,4 @@
-/* The testimonial wall on /testimonials.
+/* The wall of written reviews on /client-stories.
  *
  * Three columns drift — the outer two down, the middle up — and all three stop
  * the moment the pointer or the keyboard reaches the band. Stopped, each column

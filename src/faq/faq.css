@@ -22,9 +22,9 @@
   padding: clamp(104px, 10vw, 132px) 0 0;
 }
 
-/* ---- The line-wave, shared with /testimonials ---- */
+/* ---- The line-wave, shared with /client-stories ---- */
 
-/* /testimonials is the artwork's height and nothing else, so the wave hangs off
+/* /client-stories is the artwork's height and nothing else, so the wave hangs off
    the bottom edge of that head. This one carries an intro and the drop line into
    station one as well, and on the same bottom anchor the sweep lands under both
    of them with the title it belongs to left in clear paper above. So it hangs
@@ -53,7 +53,7 @@
    amount. It is centred in the head, and this head is half as tall again as the
    one that rule was written against — centred here puts the crop below the
    title and behind the intro instead of around the title. Anchored under the
-   bar it lands where /testimonials has it. */
+   bar it lands where /client-stories has it. */
 @media (max-width: 700px) {
   .faq-hero .page-hero__wave {
     background-position: left 26% top clamp(96px, 26vw, 140px);
@@ -69,7 +69,7 @@
 /* ---- Arriving ---- */
 
 /* The sweep the wave makes on load is the shared one — see
-   @keyframes hero-wave-sweep. /testimonials and /prices take it too, so it
+   @keyframes hero-wave-sweep. /client-stories and /prices take it too, so it
    lives with the rest of the wave rather than here.
 
    What is this page's own is the drop line out of the head, drawn after the

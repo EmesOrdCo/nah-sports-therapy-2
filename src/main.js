@@ -4,8 +4,8 @@ import "./about/about.css";
 import { initPageFeatures, renderRoute } from "./site-content.js";
 import { observeBase, routePath } from "./base-path.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
-import { initMagneticScroll } from "./magnetic-scroll.js";
 import { initScrollDrift } from "./scroll-drift.js";
+import { initScrubIn } from "./scrub-in.js";
 import { initDrawnSequence } from "./drawn-sequence.js";
 import { initStepWave } from "./step-wave.js";
 import { initFaqJourney } from "./faq/index.js";
@@ -13,6 +13,7 @@ import { initAboutPage } from "./about/index.js";
 import { initOpeningMove } from "./opening-move.js";
 import { initContactSelects } from "./contact/index.js";
 import { initVoicesWall } from "./voices-wall.js";
+import { initFilmShelf } from "./films.js";
 import { REVIEWS, SERVICE_LABELS } from "./reviews.js";
 import { driftColumns } from "./drift-columns.js";
 
@@ -25,7 +26,7 @@ document.documentElement.classList.add("js");
    so an inner page's first frame is its own content, never the home page's. */
 document.documentElement.classList.remove("is-booting");
 
-/* The /testimonials service switch used to live here. It has gone with the
+/* The /client-stories service switch used to live here. It has gone with the
    single-column thread: the wall gives each category its own column, so the
    switch was filtering a layout that had already done the filtering — and
    picking one service left a column standing beside two empty ones. */
@@ -141,6 +142,47 @@ if (reducedMotion.matches || !("IntersectionObserver" in window)) {
   }, 3000);
 }
 
+/* The fascia map on /sports-therapy counts itself in — the centre first, then
+   the six labels in the order they are numbered — and a count is only worth
+   running if you are watching it happen. That is why it is not on the shared
+   reveal above: the site-wide trigger fires 12% BELOW the fold, which is the
+   right moment for a paragraph settling into place and the wrong one here.
+   The sequence takes about 1.2s end to end, so fired from down there it was
+   over, and the diagram at rest, before any of it had reached the screen.
+
+   This one waits until the figure's top edge is at mid-screen. By then the
+   centre of the map is fully in view and only its bottom row is still below
+   the fold — which arrives last anyway, by which point the scroll has carried
+   it up. Measured off the top edge rather than a share of the element, so it
+   does not change meaning when the map stacks tall on a phone: a threshold of
+   0.6 on a figure taller than the window can never be met, and the six would
+   simply never arrive.
+
+   Everything is gated the same way the shared reveal is — .pre-reveal is only
+   ever added on the branch that goes on to observe, so no JS, no observer or
+   reduced motion all leave the map at rest and visible. */
+const fasciaMap = document.querySelector(".fascia-map");
+if (fasciaMap && !reducedMotion.matches && "IntersectionObserver" in window) {
+  let fasciaDelivered = false;
+  const fasciaObserver = new IntersectionObserver(
+    (entries, observer) => {
+      fasciaDelivered = true;
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      fasciaMap.classList.remove("pre-reveal");
+      observer.disconnect();
+    },
+    { threshold: 0, rootMargin: "0px 0px -50% 0px" },
+  );
+  fasciaMap.classList.add("pre-reveal");
+  fasciaObserver.observe(fasciaMap);
+  // Same safety net as the shared reveal, and the same reasoning: a working
+  // observer always delivers an initial batch, so silence means it is broken.
+  window.setTimeout(() => {
+    if (fasciaDelivered) return;
+    fasciaMap.classList.remove("pre-reveal");
+  }, 3000);
+}
+
 /* Follow the boundary between the home page's story chapters. A chapter stays
    pinned while the next rises over it, so its own bottom edge is parked off at
    the fold and the boundary you see is the arriving chapter's top edge. The CSS
@@ -210,6 +252,10 @@ if (storyChapters.length && !reducedMotion.matches) {
    column it was threading. Three columns each moving on their own already
    carry the band; a line weaving behind them had nothing left to join up. */
 initVoicesWall();
+
+/* The film shelf above that wall, when /client-stories has one. No-ops while
+   films.js has no films in it, which is the state it ships in. */
+initFilmShelf();
 
 /* The taping band on /sports-therapy runs the same drift: photographs up the
    left, down the right, the copy standing still between them.
@@ -358,7 +404,7 @@ initMarquee({
 });
 
 /* The client voices under the quote panel. The cards are written from
-   reviews.js rather than into index.html, so the home page and /testimonials
+   reviews.js rather than into index.html, so the home page and /client-stories
    cannot drift apart — that file is the single source of truth for a review.
    The shortest ones lead: these cards go past, and a review that needs a
    second look is one the reader loses. The full set is a click away. */
@@ -449,82 +495,56 @@ if (studioTabs.length) {
 }
 
 /* The quote band under the studio flies up as you scroll down to it and sinks
-   back as you scroll away. Unlike every other reveal on the page, this one is
-   scrubbed: the band's own position on screen is the animation's clock, so
-   there is no moment it can fire at and be finished before you look.
+   back as you scroll away, its two halves one after the other. Scrubbed
+   against the band's own position rather than fired at a moment — see
+   scrub-in.js for why, and for what makes each of these four numbers
+   load-bearing.
 
-   It was an IntersectionObserver at first, and that was the mistake. A quarter
-   of a 620px band is satisfied while the band is still a 199px strip at the
-   foot of a 900px fold — measured, not guessed — so all 750ms of the run
-   happened below the screen and the band was already at rest by the time it
-   was in front of you. Position cannot be early.
+   A stretch of the band's approach each, back to back: the photograph's begins
+   exactly where the navy's ends, so neither moves while the other is still
+   going. Written as where the band's top sits in the fold rather than as a
+   split of one run, because each boundary has to agree with a travel distance
+   in the stylesheet, and that is far easier to read side by side:
 
-   The CSS reads the two properties this writes, and swaps which of the pair
-   they drive on a phone, where the photograph is the half stacked on top. */
-const voicePanelCard = document.querySelector(".voice-panel__card");
-if (voicePanelCard && !reducedMotion.matches) {
-  /* Where the band's top sits as a share of the fold, at each end of the run.
-     It begins as the band's top edge crosses the bottom of the screen, so the
-     panels are already climbing by the time you have any of the band to look
-     at, and finishes while the band is still in the lower half — the movement
-     is over before you are reading the quote rather than under it.
+     navy   starts at 0.88  ->  travels 14vh, needs more than 12
+     photo  starts at 0.72  ->  travels 32vh, needs more than 28
 
-     Both ends are load-bearing. The first version of this fired 199px below
-     the fold and was finished before any of it was visible. The second ran
-     from 0.86 to 0.3, which is the band's whole crossing: 120px of travel
-     spread over that reads as static. Real travel over a short range is what
-     makes it visible; where that range sits is what makes it early. */
-  /* A stretch of the band's approach each, back to back — the photograph's
-     begins exactly where the navy's ends, so neither moves while the other is
-     still going. Written as where the band's top sits in the fold rather than
-     as a split of one run, because each boundary has to agree with a travel
-     distance in the stylesheet, and that is far easier to read side by side:
+   The run begins as the band's top edge crosses the bottom of the screen, so
+   the panels are already climbing by the time you have any of the band to look
+   at, and ends while the band is still in the lower half — the movement is
+   over before you are reading the quote rather than under it.
 
-       navy   starts at 0.88  ->  needs to travel more than 12vh
-       photo  starts at 0.72  ->  needs to travel more than 28vh
+   The CSS reads both properties, and swaps which of the pair they drive on a
+   phone, where the photograph is the half stacked on top. */
+initScrubIn(document.querySelector(".voice-panel__card"), [
+  { property: "--voice-in", from: 0.88, to: 0.72 },
+  { property: "--voice-in-late", from: 0.72, to: 0.3 },
+]);
 
-     A panel waiting its turn sits one travel-distance below its resting place,
-     so it stays off screen only while (1 - start) * fold is less than that
-     travel. Get it wrong and you watch the panel parked in view before it sets
-     off — and, scrolling back up, parked again after it has handed back. Which
-     is exactly what happened when the travels were fixed pixel amounts: 150px
-     could not cover the 0.38 of a fold that the photograph's turn began at, so
-     192px of it sat on screen doing nothing. The stylesheet's travels are in
-     vh for this reason — the requirement scales with the window, so the
-     distance has to as well. */
-  const navyFrom = 0.88;
-  const navyTo = 0.72;
-  const photoFrom = 0.72;
-  const photoTo = 0.3;
-  let voiceQueued = false;
+/* The pair of cards under "What sports therapy helps with" arrives the same
+   way, and for the same reason: they are a two-panel band on a page of static
+   ones, so the quote band's entrance is the one they should share. Outcomes
+   leads and the navy conditions card comes up behind it — see .st-pair, which
+   is where the 14vh and 20vh these fractions are paired with actually live.
 
-  const clamp01 = (value) => Math.min(Math.max(value, 0), 1);
+   The quote band's own range does not transfer, though: the band is a strip,
+   and this pair is two full-height cards. Run to the band's 0.3 and the navy
+   card is still climbing when its own foot is already off the bottom of the
+   screen — you scroll a fold and a half past the heading before the row is at
+   rest. So the run is pulled up the fold: it starts as the pair's top edge
+   crosses the bottom of the screen and is finished by the time that edge is at
+   mid-screen, with the whole row in front of you.
 
-  const drawVoicePanel = () => {
-    voiceQueued = false;
-    const top =
-      voicePanelCard.getBoundingClientRect().top / window.innerHeight;
-    /* Sequential by construction: the photograph's stretch begins on the same
-       fraction the navy's ends on, so --voice-in is already pinned at 1 by the
-       time --voice-in-late leaves 0. */
-    const span = (from, to) => clamp01((from - top) / (from - to));
-    voicePanelCard.style.setProperty("--voice-in", span(navyFrom, navyTo).toFixed(4));
-    voicePanelCard.style.setProperty(
-      "--voice-in-late",
-      span(photoFrom, photoTo).toFixed(4),
-    );
-  };
+     outcomes   starts at 1.00  ->  travels 14vh, needs more than 0
+     conditions starts at 0.86  ->  travels 20vh, needs more than 14
 
-  const queueVoicePanel = () => {
-    if (voiceQueued) return;
-    voiceQueued = true;
-    window.requestAnimationFrame(drawVoicePanel);
-  };
-
-  window.addEventListener("scroll", queueVoicePanel, { passive: true });
-  window.addEventListener("resize", queueVoicePanel, { passive: true });
-  drawVoicePanel();
-}
+   Pulling the run up shortens it, so the travels come down with it to hold the
+   ratio of movement to scroll: the navy card still moves about three quarters
+   of a pixel per pixel of scroll, as it did before. */
+initScrubIn(document.querySelector(".st-pair"), [
+  { property: "--pair-in", from: 1.0, to: 0.86 },
+  { property: "--pair-in-late", from: 0.86, to: 0.6 },
+]);
 
 const sectionLinks = [
   ...(navigation?.querySelectorAll('a[href*="#"]') || []),
@@ -653,7 +673,22 @@ const openingMoveTargets = {
   "/about": ".av-e__opening", // the quote that turns from her to you
   "/prices": ".prices-page", // the fees
   "/price-list": ".prices-page",
-  "/testimonials": ".voices", // the wall of reviews
+  /* Whichever of the two a page actually opens with. A selector list matches
+     in document order, not in the order it is written, so this is the film
+     shelf on the films side and the wall of quotes on the reviews side — and
+     with no films at all, /client-stories is the wall and this still finds it.
+     The switch above them is not a target: it is one row of two links, and
+     carrying the reader to it would stop them short of the thing they came
+     for. */
+  /* The lead film, which on this page is the head — so the one scroll centres
+     it in the window rather than carrying the reader anywhere. With no films
+     the route is the wall of quotes instead, and .films-hero__lead is not
+     there to match. Not ".films": that is now only the EARLIER films, and
+     travelling to it would carry the reader straight past the lead. */
+  "/client-stories": ".films__lead, .voices",
+  "/client-stories/reviews": ".voices",
+  "/client-stories/journeys": ".journeys",
+  "/testimonials": ".voices",
 };
 if (!initialSection) {
   const opening = openingMoveTargets[routePath()];
@@ -662,15 +697,9 @@ if (!initialSection) {
 
 initAboutPage();
 initSmoothScroll();
-/* After initSmoothScroll: that module's easing is what the magnet waits for
-   to finish, and it only takes over what is left. No-ops on every page that
-   has not marked anything data-magnet, which today is all of them but
-   /pilates. */
-initMagneticScroll();
-/* After initMagneticScroll, though the two never meet: the magnet writes the
-   window's scroll position and this only ever reads it, so drift follows a
-   glide the same way it follows a wheel. No-ops wherever nothing is marked
-   data-drift, which today is /studio's three media columns. */
+/* Only ever reads the window's scroll position, so it follows whatever moved
+   it. No-ops wherever nothing is marked data-drift, which today is /studio's
+   three media columns. */
 initScrollDrift();
 initDrawnSequence();
 /* After initDrawnSequence, and for the same reason it runs where it does: the
@@ -684,3 +713,34 @@ initFaqJourney();
 // After initPageFeatures: the contact page's submit listener has to run second
 // so it can put focus on a dropdown the shared handler could not reach.
 initContactSelects();
+
+/* The hairline under each section title on /sports-therapy and /pilates is
+   also the page's progress bar: its brand-coloured lead is short on the first
+   title and full on the last, so a reader who has scrolled to the fourth of
+   six sections sees a rule four-sixths filled. One bar per section rather
+   than one bar for the page — the reader is never looking at more than one of
+   them, and the fraction is legible in the section they are actually in.
+   See .title-rule in the stylesheet for how the two colours are painted.
+   No-ops on every page that has no section titles marked, which today is all
+   of them but those two.
+
+   The step is the title's ORDINAL among the page's titles, not its measured
+   offset. Both say "further down the page" — the titles are in document order
+   — but an ordinal needs no measuring, so it cannot be thrown by a late font
+   or an image that lands after this runs, and it does not have to be redone
+   on resize. It also guarantees the two ends: first title short, last title
+   full, whatever the sections between them turn out to be worth in pixels.
+
+   The floor is 14% rather than 0 so the first rule still reads as a rule with
+   a coloured start, the same as every other one on the page. At 0 the opening
+   section would be the only title on the site under a plain hairline, which
+   looks like the treatment failing rather than like a bar at its beginning. */
+const titleRules = [...document.querySelectorAll(".title-rule")];
+if (titleRules.length > 1) {
+  const FLOOR = 0.14;
+  const last = titleRules.length - 1;
+  titleRules.forEach((rule, index) => {
+    const filled = FLOOR + (1 - FLOOR) * (index / last);
+    rule.style.setProperty("--title-rule-lead", `${(filled * 100).toFixed(2)}%`);
+  });
+}

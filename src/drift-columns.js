@@ -1,6 +1,6 @@
 /* Columns that drift past on a loop, and stop the moment you reach for them.
  *
- * Two bands use this: the testimonial wall on /testimonials and the taping
+ * Two bands use this: the wall of reviews on /client-stories and the taping
  * band on /sports-therapy. Both are the same mechanism — a fixed-height
  * window per column, the list inside it cloned until it is taller than the
  * window, and a position that wraps by exactly one copy so the loop has no
@@ -26,7 +26,7 @@ const NARROW = window.matchMedia("(max-width: 900px)");
    data-drift-speed.
 
    `pause: false` keeps the band running under the pointer. Quotes are read, so
-   the testimonial wall stops for a reader; photographs are not, and a band of
+   the wall of reviews stops for a reader; photographs are not, and a band of
    them that halts every time the pointer crosses the copy between the columns
    reads as broken rather than considerate. */
 export function driftColumns(band, parts) {
