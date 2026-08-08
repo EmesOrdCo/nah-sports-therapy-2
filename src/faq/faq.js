@@ -167,7 +167,7 @@ function faqHero() {
         <a href="/">Home</a><span aria-hidden="true">/</span><span>FAQ</span>
       </nav>
       <h1>Your first appointment, start to finish</h1>
-      <p class="page-hero__intro">What happens, what to bring, what it costs and what follows &mdash; answered in the order you meet them.</p>
+      <p class="page-hero__intro">What happens, what to bring, what it costs and what follows.</p>
       <div class="faq-hero__spine" aria-hidden="true"></div>
     </div>
   </section>`;

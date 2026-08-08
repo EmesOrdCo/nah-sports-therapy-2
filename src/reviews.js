@@ -258,7 +258,7 @@ export const WALL_COLUMNS = [
     list: REVIEWS.filter(only(SPORTS_THERAPY)),
   },
   {
-    label: "Both",
+    label: `${SERVICE_LABELS[SPORTS_THERAPY]} &middot; ${SERVICE_LABELS[PILATES]}`,
     direction: "up",
     speed: 11,
     list: REVIEWS.filter(both),

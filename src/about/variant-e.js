@@ -99,8 +99,7 @@ export function build() {
         <span class="av-e__intro-rule" aria-hidden="true" data-reveal></span>
         <p class="av-e__framing" data-reveal>
           ${NAME} is a Sports Therapist and Certified STOTT Pilates instructor
-          in Studham. Where she trained, what she treats and why she does it —
-          in her own words.
+          in Studham. Where she trained, what she treats and why she does it.
         </p>
         <a class="av-e__intro-cta" href="/contact" data-reveal>
           Book an appointment <span aria-hidden="true">&#8599;</span>
