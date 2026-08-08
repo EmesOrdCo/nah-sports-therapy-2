@@ -11,7 +11,7 @@ export const NAME = "Natasha Hadland";
 export const CONTACT = {
   tel: "07881 821901",
   telHref: "tel:+447881821901",
-  email: "njhsportstherapyandpilates@gmail.com",
+  email: "natasha@njhsportstherapy.co.uk",
 };
 
 /* Verbatim from the current /about page, in her voice. */

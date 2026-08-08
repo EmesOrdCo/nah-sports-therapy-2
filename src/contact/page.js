@@ -136,9 +136,14 @@ function form() {
         error: "Please choose an option.",
         options: `<option value="">Choose a service</option>${SERVICES.map((s) => `<option value="${s.value}">${s.label}</option>`).join("")}`,
       })}
+      ${/* Field names are the labels in the notification email — the provider
+            prints the name attribute verbatim — so they read as English rather
+            than as camelCase. "name" and "email" stay lowercase and unchanged:
+            the reply-to address is picked out of a field called "email", and
+            renaming it would quietly cost Natasha the ability to hit reply. */ ""}
       ${selectField({
         id: "contact-method",
-        name: "preferredContact",
+        name: "preferred reply",
         label: "Preferred reply",
         options: REPLY_OPTIONS.map((o) => `<option>${o}</option>`).join(""),
       })}

@@ -1,0 +1,44 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # The GitHub Pages build serves from a subdirectory, so vite.config.js
+  # defaults the base to /njh-sports-therapy/. Netlify serves the site at the
+  # root of NJH's own domain, where that prefix would break every asset URL.
+  BASE_PATH = "/"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Stated rather than auto-detected. Left to itself `netlify dev` picks the Vite
+# port it finds free, which is whichever one another editor window is not
+# already using — so the URL moves between runs and the form gets tested
+# against a stale server as often as not. Pinning both ports means `npm run
+# dev:netlify` is always http://localhost:8888, functions included.
+[dev]
+  command = "npm run dev -- --port 5183 --strictPort"
+  targetPort = 5183
+  port = 8888
+
+# Rules are matched in order, first hit wins, so the form endpoint has to be
+# declared before the catch-all below — otherwise every POST to it is answered
+# with the HTML page and the form silently stops working. Stating the mapping
+# here rather than relying on a function's own `path` config keeps that
+# ordering explicit and independent of how Netlify prioritises the two.
+[[redirects]]
+  from = "/api/enquiry"
+  to = "/.netlify/functions/enquiry"
+  status = 200
+  force = true
+
+# Client-routed site: every path that is not a real file is the same app.
+# public/_redirects already carries the legacy 301s and was written in this
+# syntax, so Netlify honours it as-is and the two files compose — the specific
+# rules there are matched before this catch-all.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -28,3 +28,9 @@ audit/
 
 # Generated sketch renders (100MB of PNGs); the scripts that make them are tracked
 sketches/out/
+
+# Rendered by `npm run email:preview` to look at the notification email
+email-preview.html
+
+# Netlify CLI's local link and cached function build
+.netlify/

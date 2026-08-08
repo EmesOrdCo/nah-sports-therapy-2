@@ -25,6 +25,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          # Vite inlines VITE_* at build time, so the contact form's endpoint has
+          # to be present here or the deployed bundle ships without one and the
+          # form falls back to showing the email address. A repository variable,
+          # not a secret: the value ends up in public JS either way, and masking
+          # it only makes a failed build harder to read.
+          VITE_CONTACT_FORM_ENDPOINT: ${{ vars.VITE_CONTACT_FORM_ENDPOINT }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
