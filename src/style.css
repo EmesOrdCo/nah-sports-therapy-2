@@ -631,8 +631,13 @@ a {
 /* Centred on the hero itself, not on the space left under the header. The bar
    is transparent here, so the photograph runs behind it and the eye centres on
    the frame rather than on the gap below the nav. The small offset is only
-   there to keep the eyebrow clear of the bar on a short window. */
-.home-hero__inner {
+   there to keep the eyebrow clear of the bar on a short window.
+
+   The studio hero lands its type in the same place, so it takes these rules
+   rather than a second copy of them — this block and its three breakpoint
+   overrides below are the one definition of "where a hero's type sits". */
+.home-hero__inner,
+.clinics-hero__inner {
   position: relative;
   z-index: 2;
   width: min(660px, 52vw);
@@ -1456,7 +1461,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     transform: translateY(-3px) rotate(-45deg);
   }
 
-  .home-hero__inner {
+  .home-hero__inner,
+  .clinics-hero__inner {
     width: min(620px, 68vw);
   }
 
@@ -1488,8 +1494,11 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   }
 
   /* One column, and the scrim goes vertical — a left-weighted wedge has
-     nowhere to fall back to once the type spans the full width. */
-  .home-hero__scrim {
+     nowhere to fall back to once the type spans the full width. The studio
+     hero puts its type in the same place at this width, so it needs the same
+     ground under it and takes this rule rather than a second reading of it. */
+  .home-hero__scrim,
+  .clinics-hero__scrim {
     background: linear-gradient(
       to top,
       oklch(17.4% 0.048 275 / 0.94) 0%,
@@ -1499,7 +1508,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     );
   }
 
-  .home-hero__inner {
+  .home-hero__inner,
+  .clinics-hero__inner {
     width: calc(100% - var(--page-gutter) * 2);
     padding-top: clamp(96px, 15vh, 130px);
   }
@@ -1535,7 +1545,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 }
 
 @media (max-height: 720px) and (min-width: 641px) {
-  .home-hero__inner {
+  .home-hero__inner,
+  .clinics-hero__inner {
     padding-top: 20px;
   }
 
@@ -2071,7 +2082,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 }
 
 /* Compact head — for pages where the content is the point and the title is
-   only a label for it. /testimonials is the case: at the full height above,
+   only a label for it. /client-stories is the case: at the full height above,
    a 250px top pad and a --step-5 display line put the entire wall of quotes
    below the fold on a page that exists to show them. A step and a half down, no
    drifting rings, and the intro alongside the heading rather than under it.
@@ -2110,7 +2121,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   text-align: center;
 }
 
-/* The line-wave behind a compact title, opt-in per page — /testimonials takes
+/* The line-wave behind a compact title, opt-in per page — /client-stories takes
    it. The artwork is drawn in --brand on white and blended with multiply rather
    than shipped with an alpha channel: the hero is white, so multiply drops the
    paper and leaves the lines, and a flat WebP of a thousand hairlines is a
@@ -2227,6 +2238,58 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   );
 }
 
+/* ---- The sweep, on arrival ---- */
+
+/* The wave is drawn linework, so it arrives the way it was drawn: left to
+   right, out of the dense tail and away across the page. A clip edge travels
+   over it and the hairlines come in end-first, which reads as the sweep being
+   laid down rather than a picture being faded up.
+
+   Clipped rather than masked because the mask above is already spoken for —
+   the fade at the head and foot of the art is a mask-image, and a second one
+   would mean compositing two mask layers for no gain. clip-path is applied
+   separately from mask, so the two simply stack.
+
+   The edge leans: it is 14% further along at the top of the head than at the
+   foot, which is roughly the angle the sweep itself runs at. A dead-vertical
+   wipe on near-horizontal lines announces itself as a wipe.
+
+   The parallelogram starts wholly to the left of the box (nothing in frame)
+   and ends wholly past its right (everything in frame), and only the right
+   edge moves — same four points throughout, so it interpolates cleanly.
+
+   No opacity in here on purpose. The wave settles at three different values
+   depending on which cut it is and how wide the screen is — 0.72 here, 0.5 for
+   the crest, 0.34 on the phone crop of the /faq head — and a keyframe that
+   touched it would have to know all three. */
+@keyframes hero-wave-sweep {
+  from {
+    clip-path: polygon(-14% 0%, 0% 0%, -14% 100%, -28% 100%);
+  }
+  to {
+    clip-path: polygon(-14% 0%, 128% 0%, 114% 100%, -28% 100%);
+  }
+}
+
+/* On the shared element rather than per page: all three heads that carry a
+   wave carry the same sweep, at the same speed, which is the whole reason for
+   giving more than one page the artwork. Held off until the header has settled
+   in so the two do not arrive on top of one another, and slow, because it is
+   scenery — anything quicker turns into a transition the eye follows instead
+   of a background it reads on. */
+.page-hero__wave {
+  animation: hero-wave-sweep 1.5s 160ms var(--ease-draw) both;
+}
+
+/* The site-wide reduced-motion block only shortens transitions; keyframes have
+   to be turned off where they are declared. The animation ends on the state the
+   head should simply be in, so dropping it is the whole fix. */
+@media (prefers-reduced-motion: reduce) {
+  .page-hero__wave {
+    animation: none;
+  }
+}
+
 /* A phone is the one width where the whole wave is the wrong answer: drawn at
    375px it is a 112px thread sitting above the title, too faint to be a
    background and too thin to be a shape. Here it goes back to a crop — art
@@ -2286,7 +2349,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 }
 
 /* And behind an intro, for the heads that carry one — /prices and /faq.
-   /testimonials has no intro, which is why the rule above was all this needed
+   /client-stories has no intro, which is why the rule above was all this needed
    to begin with. A little wider and softer than the title's: the sentence is
    set at body size in the sans, so it needs less paper cleared but over more
    of it.
@@ -3567,6 +3630,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    hops to find out the Pilates page used the same blue as everywhere else.
    Their call sites now name the token directly. */
 
+/* The page's vertical rhythm is set in one place, down in "Pilates — page
+   rhythm": --gap-act, --gap-close and --pilates-block. */
 .pilates-longform {
   overflow: clip;
   background: #fff;
@@ -3709,6 +3774,9 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   position: relative;
   width: min(100%, 520px);
   aspect-ratio: 1;
+  /* Named size container so the ring draw below can state a dash length in
+     rendered pixels. See the note there for why it has to. */
+  container-type: inline-size;
 }
 
 .hero-orb__photo {
@@ -3758,6 +3826,111 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   opacity: 0.8;
 }
 
+/* Drawing the orb in.
+
+   The armed state is `.pre-reveal`, written by main.js immediately before the
+   element is observed, so the finished orb is what stands in the markup: no
+   JS, or an observer that never delivers, and the rings are simply there. Same
+   reasoning as every other reveal on the page. It is also why the drawn state
+   is `:not(.pre-reveal)` rather than `.is-visible` — main.js's safety net
+   drops `.pre-reveal` without ever adding `.is-visible`, and that path has to
+   end with the orb drawn too.
+
+   THE DASH LENGTH. One dash as long as the circle, slid off and back on, is
+   the whole trick — but these rings carry `vector-effect: non-scaling-stroke`
+   (above) to stay hairline at any size, and that decides what units the dash
+   is measured in. The stroke is built after the viewBox transform, so dashes
+   are in *rendered pixels*, while pathLength="1" normalises against the path's
+   *user-space* length. The two do not compose: pathLength="1" with a dash of 1
+   lays down a 286px dash on a 1600px circle, so you get about three arcs with
+   gaps between them rather than one closed ring. That is why there is no
+   pathLength on these circles and why the numbers below are in cqw.
+
+   --ring-len is the circle's circumference, 2πr, in the viewBox's own units.
+   `container-type: inline-size` on .hero-orb makes 1cqw one hundredth of the
+   rendered orb, which is exactly one viewBox unit — so 2πr in cqw *is* the
+   rendered circumference, at every size, with no JS and nothing to keep in
+   sync on resize. Changing an r in the markup means changing its 2πr here.
+
+   `.pre-reveal` is only ever added once, so this plays on first arrival and
+   never again. */
+.hero-orb__ring {
+  /* r=45.6 — the middle ring, the one the three nodes sit on */
+  --ring-len: 286.51cqw;
+  stroke-dasharray: var(--ring-len);
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.9s var(--ease-draw);
+}
+
+/* Modifiers after the base, or the base would win them back on equal
+   specificity. r=49.3 and r=40.4. */
+.hero-orb__ring--faint { --ring-len: 309.76cqw; }
+.hero-orb__ring--inner { --ring-len: 253.84cqw; }
+
+.hero-orb__ticks line,
+.hero-orb__node {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity var(--dur-mid) var(--ease-out) 880ms,
+    transform var(--dur-mid) var(--ease-out-quart) 880ms;
+}
+
+.pilates-orbit-figure.pre-reveal .hero-orb__ring {
+  stroke-dashoffset: var(--ring-len);
+}
+
+/* Outermost first, inward — the eye follows the draw toward the photograph
+   rather than away from it. The lead delay lets the block's own fade-up
+   (--dur-slow) finish first, so the draw is watched at full opacity instead
+   of half of it happening behind the fade. */
+.pilates-orbit-figure .hero-orb__ring {
+  transition-delay: 280ms;
+}
+
+.pilates-orbit-figure .hero-orb__ring--faint {
+  transition-delay: 160ms;
+}
+
+.pilates-orbit-figure .hero-orb__ring--inner {
+  transition-delay: 400ms;
+}
+
+.pilates-orbit-figure.pre-reveal .hero-orb__ticks line,
+.pilates-orbit-figure.pre-reveal .hero-orb__node {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+/* The facts land last, each just behind the ring its node sits on. */
+.pilates-orbit-fact {
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out-quart);
+}
+
+.pilates-orbit-figure.pre-reveal .pilates-orbit-fact {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.pilates-orbit-fact--format { transition-delay: 1000ms; }
+.pilates-orbit-fact--length { transition-delay: 1080ms; }
+.pilates-orbit-fact--available { transition-delay: 1160ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pilates-orbit-figure.pre-reveal .hero-orb__ring {
+    stroke-dashoffset: 0;
+  }
+
+  .pilates-orbit-figure.pre-reveal .hero-orb__ticks line,
+  .pilates-orbit-figure.pre-reveal .hero-orb__node,
+  .pilates-orbit-figure.pre-reveal .pilates-orbit-fact {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .pilates-section-heading {
   position: relative;
   z-index: 2;
@@ -3769,27 +3942,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   font-size: var(--step-3);
   line-height: var(--lh-head);
   text-wrap: balance;
-}
-
-/* Two columns, because the markup only ever has two children. The previous
-   three-column track left a permanently empty third column, which is what
-   made the standfirst look arbitrarily placed. */
-.pilates-section-heading--split {
-  display: grid;
-  max-width: none;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(20px, 4vw, 56px);
-  align-items: baseline;
-}
-
-.pilates-section-heading--split h2 {
-  margin: 0;
-}
-
-.pilates-section-heading--split > :last-child {
-  margin: 0 0 7px;
-  color: var(--ink-soft);
-  line-height: 1.7;
 }
 
 .pilates-approach {
@@ -3839,7 +3991,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   position: relative;
   display: grid;
   padding: 0;
-  margin: clamp(60px, 7vw, 100px) 0 0;
+  margin: var(--pilates-block) 0 0;
   grid-template-columns: repeat(4, 1fr);
   gap: clamp(16px, 2.5vw, 44px);
   list-style: none;
@@ -3853,6 +4005,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   right: 12.5%;
   height: 1px;
   background: var(--line);
+  transform-origin: left center;
 }
 
 .pilates-approach__step {
@@ -3909,60 +4062,123 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   color: var(--ink);
 }
 
+/* --- Drawing the row in ---------------------------------------------------
+   The row is authored finished. drawn-sequence.js adds .is-armed, and the
+   hidden state below is written as .is-armed:not(.is-drawn), so the animation
+   only ever exists once something is there to end it.
+
+   How the timing hangs together: the rail takes --rail-dur to cross, so its
+   head reaches step n at --rail-dur × n ÷ last. That is --step-at, and every
+   part of a step is placed relative to it — the node lands as the head
+   arrives, then the number, the drawn icon and the label follow in that
+   order. The eye tracks one moving point across the row rather than watching
+   four columns fade up together.
+
+   --step-back is the same idea reversed, and it lives on the base rule rather
+   than the drawn one because a transition takes its delay from the state it
+   is heading towards. Undrawing therefore runs right to left while the rail
+   retracts to its left end: the row leaves the way it came, and faster,
+   because by then the reader has moved on. */
+.pilates-approach__steps {
+  --rail-dur: 900ms;
+  /* Long enough that the rail is still collapsing while the leftmost node —
+     the last to go, and the point it collapses into — is fading out. */
+  --rail-back: 460ms;
+}
+
+.pilates-approach__step {
+  --step-at: calc(var(--rail-dur) * var(--step-index) / var(--steps-last));
+  --step-back: calc((var(--steps-last) - var(--step-index)) * 90ms);
+}
+
+.pilates-approach__steps::before {
+  transition: transform var(--rail-back) var(--ease-out) 0ms;
+}
+
+.pilates-approach__steps.is-drawn::before {
+  transition-duration: var(--rail-dur);
+  transition-timing-function: var(--ease-draw);
+}
+
+.pilates-approach__steps.is-armed:not(.is-drawn)::before {
+  transform: scaleX(0);
+}
+
+.pilates-approach__step::before {
+  transition:
+    opacity 200ms var(--ease-out) var(--step-back),
+    transform 240ms var(--ease-out) var(--step-back);
+}
+
+.pilates-approach__steps.is-drawn .pilates-approach__step::before {
+  transition:
+    opacity 240ms var(--ease-out) var(--step-at),
+    transform 340ms var(--ease-out-quart) var(--step-at);
+}
+
+.pilates-approach__steps.is-armed:not(.is-drawn) .pilates-approach__step::before {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.2);
+}
+
+.pilates-approach__num,
+.pilates-approach__step strong {
+  transition:
+    opacity 220ms var(--ease-out) var(--step-back),
+    transform 260ms var(--ease-out) var(--step-back);
+}
+
+/* stroke-dasharray stays put in both states — only the offset moves, and
+   pathLength="1" in the markup is what makes a single length work for every
+   shape in every icon. */
+.pilates-approach__icon svg > * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 240ms var(--ease-out) var(--step-back);
+}
+
+.pilates-approach__steps.is-drawn .pilates-approach__num {
+  transition:
+    opacity 460ms var(--ease-out) calc(var(--step-at) + 60ms),
+    transform 520ms var(--ease-out-quart) calc(var(--step-at) + 60ms);
+}
+
+.pilates-approach__steps.is-drawn .pilates-approach__icon svg > * {
+  transition: stroke-dashoffset 620ms var(--ease-draw)
+    calc(var(--step-at) + 130ms);
+}
+
+.pilates-approach__steps.is-drawn .pilates-approach__step strong {
+  transition:
+    opacity 480ms var(--ease-out) calc(var(--step-at) + 210ms),
+    transform 540ms var(--ease-out-quart) calc(var(--step-at) + 210ms);
+}
+
+.pilates-approach__steps.is-armed:not(.is-drawn) .pilates-approach__num {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.pilates-approach__steps.is-armed:not(.is-drawn)
+  .pilates-approach__icon
+  svg
+  > * {
+  stroke-dashoffset: 1;
+}
+
+.pilates-approach__steps.is-armed:not(.is-drawn) .pilates-approach__step strong {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
 .pilates-benefits span,
 .pilates-studio-gallery figcaption,
 .pilates-feature figcaption,
-.pilates-dual article > span,
-.pilates-retreats article > span,
-.pilates-practical article > span {
+.pilates-retreats article > span {
   color: var(--brand);
   font-size: var(--label);
   font-weight: var(--label-weight);
   letter-spacing: var(--label-track);
-  text-transform: uppercase;
-}
-
-.pilates-approach .pilates-approach__quote {
-  width: min(780px, 100%);
-  margin: clamp(64px, 8vw, 116px) auto 0;
-  text-align: center;
-}
-
-.pilates-approach__quote::before {
-  content: "";
-  display: block;
-  width: 40px;
-  height: 1px;
-  margin: 0 auto clamp(28px, 4vw, 44px);
-  background: var(--brand);
-}
-
-.pilates-approach__quote blockquote {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-size: var(--step-2h);
-  font-style: italic;
-  line-height: 1.34;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-
-.pilates-approach__quote figcaption {
-  margin-top: clamp(20px, 2.5vw, 30px);
-  color: var(--brand);
-  font-size: var(--label);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-track);
-  text-transform: uppercase;
-}
-
-.pilates-approach__credential-label {
-  margin: clamp(38px, 5vw, 58px) 0 0;
-  color: var(--ink-soft);
-  font-size: var(--label-sm);
-  font-weight: var(--meta-weight);
-  letter-spacing: var(--label-sm-track);
-  text-align: center;
   text-transform: uppercase;
 }
 
@@ -4043,39 +4259,116 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   align-items: center;
 }
 
-.pilates-feature__media {
-  position: relative;
-  min-height: min(70vw, 780px);
+/* Reformer and Stability Chair. Both machines are long and low, so the media
+   column carries a landscape plate rather than the portrait crop a half-width
+   column would otherwise ask for, with a square inset lapped over one corner
+   to give the second photograph somewhere to go. The equipment sections get
+   the wider half of the grid for the same reason. */
+.pilates-feature--equipment .pilates-feature__grid {
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+  gap: clamp(56px, 7vw, 120px);
 }
 
-.pilates-feature__media img {
+/* The order swap below moves the media into the first track, so the wider
+   share has to move with it — otherwise the two sections show the same
+   photograph at two different sizes. */
+.pilates-feature--equipment .pilates-feature__grid--media-first {
+  grid-template-columns: minmax(320px, 1.1fr) minmax(0, 0.9fr);
+}
+
+/* Content stays first in the source on both sections — the heading should be
+   read before the picture either way — so the alternation is done with order
+   rather than by moving the markup. */
+.pilates-feature__grid--media-first .pilates-feature__content {
+  order: 2;
+}
+
+.pilates-feature__grid--media-first .pilates-feature__media {
+  order: 1;
+}
+
+.pilates-feature__media {
+  position: relative;
+  /* Room under the plate for the inset to hang into. */
+  padding-bottom: clamp(46px, 6vw, 88px);
+}
+
+.pilates-feature__shot {
+  margin: 0;
+  overflow: hidden;
+}
+
+.pilates-feature__shot img {
+  display: block;
   width: 100%;
-  height: 100%;
-  min-height: inherit;
-  object-fit: cover;
+  height: auto;
   filter: saturate(0.68) contrast(0.96);
 }
 
-.pilates-feature__media figcaption {
+/* Scroll drift (see scroll-drift.js). Everything constant is here; the module
+   writes nothing but `translate`, once per frame, on these same two elements.
+
+   Both halves are keyed to .is-adrift, which the module adds on start-up. That
+   is what keeps the no-JS and reduced-motion renderings honest: no scale, so no
+   crop, and no will-change asking for compositor tiles to hold still pictures
+   still. The plate's FRAME is deliberately not in either selector — it does not
+   move, the picture inside it does. */
+.pilates-feature__media.is-adrift
+  .pilates-feature__shot:not(.pilates-feature__shot--inset)
+  img {
+  /* The runway. 8% of the frame's height spills above and 8% below, which is
+     what the module's PLATE_TRAVEL (7%) is allowed to spend. Raising this
+     without raising that just crops the photograph for nothing; raising that
+     without raising this shows the frame's own edge at the extremes. */
+  scale: 1.16;
+}
+
+/* Centre origin on both. The picture is scaled inside a frame it overflows in
+   both directions, and scaling from anywhere else would put all the runway at
+   one end and none at the other. */
+.pilates-feature__media.is-adrift .pilates-feature__shot img,
+.pilates-feature__media.is-adrift .pilates-feature__shot--inset {
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* The inset is square regardless of what it is given. The machine photographs
+   are 1:1 sources, so this is a no-op for them; the studio's second shot on
+   /studio is a 4:3 room photograph, and left uncropped it came out a squat
+   letterbox beside two square insets on the same page. Cropping to the common
+   shape is what keeps the three sections reading as one arrangement. */
+.pilates-feature__shot--inset img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.pilates-feature__shot--inset {
   position: absolute;
-  right: 24px;
-  bottom: 24px;
-  left: 24px;
-  display: flex;
-  justify-content: space-between;
-  color: #fff;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.7);
+  bottom: 0;
+  width: clamp(120px, 27%, 210px);
+  /* Sits on the outer edge of whichever side the media is on, so the inset
+     leans away from the text rather than crowding it. */
+  right: 0;
+  border: 8px solid var(--paper);
+}
+
+.pilates-feature__grid--media-first .pilates-feature__shot--inset {
+  right: auto;
+  left: 0;
 }
 
 .pilates-feature__content {
   max-width: 590px;
 }
 
+/* A clear step below the h2 above it (--step-3). At --step-2h the two ran
+   within a few pixels of each other and the standfirst read as a second
+   heading rather than as the line under one. */
 .pilates-feature__lead {
   margin: clamp(42px, 5vw, 70px) 0 24px;
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: var(--step-2h);
+  font-size: var(--step-2);
   line-height: 1.2;
   letter-spacing: -0.03em;
 }
@@ -4202,22 +4495,48 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   padding-bottom: clamp(80px, 9vw, 140px);
 }
 
-/* Unchanged internally — it has simply moved out of the narrow right-hand
-   track the photograph left it in. The cap keeps it at roughly the width it
-   read at there, rather than stretching the day rows across the whole shell. */
-.pilates-timetable {
-  max-width: 1000px;
-  margin-top: clamp(56px, 6vw, 96px);
+/* Heading left, timetable right. The accent rule is drawn on the grid rather
+   than the heading block, so it runs the height of the taller column — top of
+   the title down to the last line of the note under the card. */
+.pilates-group__grid {
+  display: grid;
+  margin-top: var(--pilates-block);
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 2fr);
+  gap: clamp(36px, 5vw, 90px);
+  border-left: 2px solid var(--brand);
+  align-items: start;
 }
 
+.pilates-group__intro {
+  padding-left: clamp(20px, 2vw, 32px);
+}
+
+.pilates-group__intro > p {
+  margin: 26px 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step-0s);
+  line-height: 1.7;
+}
+
+/* The booking note follows the standfirst in the left column, a step down in
+   size so it reads as a footnote to it rather than a second paragraph. */
+.pilates-group__intro > .pilates-group__note {
+  font-size: var(--step-00);
+  line-height: 1.65;
+}
+
+.pilates-timetable {
+  margin-top: 0;
+}
+
+/* Caption above the card rather than a bordered band across it, so the card
+   below is the only ruled thing in the column. */
 .pilates-detail-label {
   display: flex;
-  min-height: 60px;
-  align-items: center;
+  padding-bottom: 14px;
+  align-items: baseline;
   justify-content: space-between;
   gap: 25px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
 }
 
 .pilates-detail-label span {
@@ -4236,14 +4555,31 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   text-transform: uppercase;
 }
 
+.pilates-timetable__table {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
 .pilates-timetable__row {
   display: grid;
-  min-height: 115px;
-  padding: 25px 0;
-  grid-template-columns: minmax(0, 215px) minmax(0, 1fr);
-  gap: 30px;
+  min-height: 130px;
+  grid-template-columns: minmax(0, 190px) minmax(0, 1fr);
   border-bottom: 1px solid var(--line);
+  align-items: stretch;
+}
+
+.pilates-timetable__row:last-child {
+  border-bottom: 0;
+}
+
+/* The navy day column, the same dark blue as the site's dark sections. Read
+   down the card the three panels make one solid block, which is what holds the
+   days together as a column against the times. */
+.pilates-timetable__day {
+  display: flex;
+  padding: 28px clamp(16px, 1.8vw, 26px);
   align-items: center;
+  background: var(--navy);
 }
 
 .pilates-timetable__row strong {
@@ -4254,22 +4590,35 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   text-transform: uppercase;
 }
 
+/* A step up from the 10px label size: the day is the heading of its row and
+   was reading as a caption beside the times. */
+.pilates-timetable__day strong {
+  color: var(--on-dark);
+  font-size: var(--step-0s);
+}
+
+/* A track per session slot rather than a flex run, so the second and third
+   times line up down the card instead of following the width of whatever sits
+   to their left. */
 .pilates-timetable__row p {
-  display: flex;
+  display: grid;
   margin: 0;
-  align-items: center;
-  justify-content: flex-start;
-  gap: clamp(25px, 4vw, 65px);
+  padding: 28px clamp(20px, 2.4vw, 38px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  align-content: center;
+  align-items: start;
 }
 
 .pilates-timetable__row p > span {
   font-family: var(--font-serif);
   font-size: var(--step-2);
+  line-height: 1.15;
 }
 
 .pilates-timetable__row small {
   display: block;
-  margin-top: 5px;
+  margin-top: 7px;
   color: var(--ink-soft);
   font-family: var(--font-sans);
   font-size: var(--label-sm);
@@ -4278,57 +4627,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   text-transform: uppercase;
 }
 
-.pilates-timetable__note {
-  max-width: 650px;
-  margin: 28px 0 0;
-  color: var(--ink-soft);
-  font-size: var(--step-00);
-  line-height: 1.65;
-}
-
-.pilates-dual {
-  padding-block: var(--space-section);
-  background: #fff;
-}
-
-.pilates-dual__grid {
-  display: grid;
-  /* was up to 145px, which left the lone heading marooned above the grid */
-  margin-top: clamp(36px, 4vw, 56px);
-  grid-template-columns: 1fr 1fr;
-  border-top: 1px solid var(--line);
-}
-
-.pilates-dual article {
-  padding: 40px clamp(35px, 5vw, 80px) 60px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.pilates-dual article + article {
-  padding-right: 0;
-  padding-left: clamp(35px, 5vw, 80px);
-  border-left: 1px solid var(--line);
-}
-
-.pilates-dual figure {
-  display: flex;
-  height: clamp(260px, 31vw, 470px);
-  margin-bottom: 32px;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background: var(--surface-2);
-}
-
-.pilates-dual figure img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: saturate(0.62);
-}
-
 /* h3s were rendering larger than the h2s above them, inverting the hierarchy. */
-.pilates-dual h3,
 .pilates-retreats h3 {
   margin: 12px 0 20px;
   font-family: var(--font-serif);
@@ -4336,14 +4635,11 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   line-height: var(--lh-head);
 }
 
-.pilates-dual article p,
-.pilates-dual li,
 .pilates-retreats article p {
   color: var(--ink-soft);
   line-height: 1.7;
 }
 
-.pilates-dual ul,
 .pilates-golf__benefits {
   padding: 0;
   margin: 30px 0 0;
@@ -4351,14 +4647,12 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   list-style: none;
 }
 
-.pilates-dual li,
 .pilates-golf__benefits li {
   position: relative;
   padding: 17px 0 17px 25px;
   border-bottom: 1px solid var(--line);
 }
 
-.pilates-dual li::before,
 .pilates-golf__benefits li::before {
   position: absolute;
   top: 24px;
@@ -4370,11 +4664,18 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   content: "";
 }
 
-/* Left-aligned and sized down. It previously used margin-left:auto at 36px
-   serif, which floated it off to the right with nothing to align against. */
-.pilates-dual__note {
+/* The line under the pre- and postnatal chapters. It keeps the rule and the
+   measure the old side-by-side block gave it, but the top margin is gone: the
+   band now follows a full-height photograph that is welded to its top edge, and
+   the section's own padding is the whole of the air above the rule. */
+.natal-note {
+  padding-block: var(--gap-close);
+  background: var(--paper);
+}
+
+.natal-note p {
   max-width: 58ch;
-  margin: clamp(36px, 4vw, 56px) 0 0;
+  margin: 0;
   padding-top: clamp(24px, 3vw, 36px);
   border-top: 1px solid var(--line);
   color: var(--ink-soft);
@@ -4393,14 +4694,43 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 /* Photograph plus a left-to-right navy wash: near-solid behind the copy,
    clearing across to the right so the picture comes through. The wash is the
-   ::after so the image can be swapped by changing one background-image. */
+   ::after so the image can be swapped by changing one background-image.
+
+   The photograph is a golfer at the top of the follow-through, shot from
+   behind against a soft evening sky — the whole body turned around its
+   centre, which is the sentence this band is making. It replaces an empty
+   fairway: a course with nobody on it said where golf happens, not what
+   this section is for.
+
+   Where he sits in the file is deliberate. The band is always taller than
+   the picture's 2.18, so cover scales it by height and the crop is
+   horizontal only — nothing is ever taken off the top or bottom, and 72%
+   below decides which slice of the width is on screen. He is cut to sit at
+   about 0.68 across so he lands in the part of the band the wash has
+   cleared, and stays in frame down to the narrow slice a phone shows. Any
+   replacement needs the same: subject two thirds across, or he disappears
+   behind the solid end of the wash. */
 .pilates-golf__backdrop {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background-image: url("/images/golf-backdrop-1600.webp");
+  background-image: url("/images/golf-backdrop-6256591-1600.webp");
   background-position: 72% center;
   background-size: cover;
+}
+
+/* Scroll drift (see scroll-drift.js). Nothing is scaled here — the backdrop is
+   a box with a cover background rather than an <img>, so the runway is bought
+   by overhanging the box past the band instead: 10% of the band's height above
+   and 10% below, against the 7% of its own (now 120%) height that the markup
+   spends, which comes to 8.4%. The band is overflow:hidden, so the overhang
+   never shows.
+
+   The wash lives on this element's ::after and so travels with it, which is
+   what stops the picture arriving un-dimmed at the edges under the copy. */
+.pilates-golf.is-adrift .pilates-golf__backdrop {
+  inset: -10% 0;
+  will-change: transform;
 }
 
 /* The 1600 crop is already soft at 2x on a wide desktop, and the band runs
@@ -4408,7 +4738,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    only worth loading where it is actually visible. */
 @media (min-width: 1100px) {
   .pilates-golf__backdrop {
-    background-image: url("/images/golf-backdrop-2400.webp");
+    background-image: url("/images/golf-backdrop-6256591-2400.webp");
   }
 }
 
@@ -4463,90 +4793,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   border-color: var(--periwinkle);
 }
 
-.pilates-practical {
-  padding-block: var(--space-section);
-  background: var(--surface-2);
-}
-
-/* One column against the left edge — the fees card that used to fill the
-   second track has gone. Capped so the summary rows keep a readable measure
-   instead of running the full 1440px shell. */
-.pilates-practical__grid {
-  display: grid;
-  margin-top: clamp(48px, 5vw, 80px);
-  grid-template-columns: minmax(0, 820px);
-  justify-content: start;
-}
-
-.pilates-practical article {
-  border-top: 1px solid var(--line);
-}
-
-.pilates-practical article > span {
-  display: block;
-  padding-block: 24px;
-  border-bottom: 1px solid var(--line);
-}
-
-/* The fees card carries copy where the price rows used to sit, so it needs the
-   same top breathing room the ruled rows gave it. */
-.pilates-practical__pointer {
-  margin: 24px 0 0;
-  max-width: 44ch;
-  color: var(--ink-soft);
-  line-height: 1.6;
-}
-
-.pilates-practical .pilates-arrow-link {
-  margin-top: 28px;
-}
-
-.pilates-practical article > small {
-  display: block;
-  margin-top: 24px;
-  color: var(--ink-soft);
-  line-height: 1.6;
-}
-
-.pilates-practical details {
-  border-bottom: 1px solid var(--line);
-}
-
-.pilates-practical summary {
-  display: flex;
-  min-height: 86px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 30px;
-  cursor: pointer;
-  font-family: var(--font-serif);
-  font-size: var(--step-1);
-  list-style: none;
-}
-
-.pilates-practical summary::-webkit-details-marker {
-  display: none;
-}
-
-.pilates-practical summary b {
-  color: var(--brand);
-  font-family: var(--font-sans);
-  font-size: var(--step-0);
-  font-weight: 400;
-  transition: transform var(--dur-fast) ease;
-}
-
-.pilates-practical details[open] summary b {
-  transform: rotate(45deg);
-}
-
-.pilates-practical details p {
-  max-width: 650px;
-  margin: 0;
-  padding: 0 50px 28px 0;
-  color: var(--ink-soft);
-  line-height: 1.7;
-}
+/* The .pilates-practical rules stood here — the section and its policy
+   accordion moved to /faq, so nothing on the site renders them. */
 
 .pilates-retreats {
   padding-block: var(--space-section);
@@ -4594,12 +4842,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     gap: 55px;
   }
 
-  .pilates-section-heading--split {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-
-  .pilates-section-heading--split > :last-child {
-    grid-column: 2;
+  .pilates-group__grid {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.8fr);
   }
 }
 
@@ -4608,17 +4852,42 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     padding-top: 135px;
   }
 
+  /* Stacked, the `gap` that was separating two columns is now separating the
+     two halves of a section top to bottom, so it takes the page's own block
+     step rather than the 55px left over from the wide layout. */
   .pilates-hero__grid, .pilates-feature__grid, .pilates-golf__grid {
     grid-template-columns: 1fr;
+    gap: var(--pilates-block);
   }
 
   .pilates-hero__grid {
     min-height: auto;
   }
 
+  /* Stacked, the timetable comes down under the heading and would otherwise
+     sit against the rule, so the whole column clears it instead of just the
+     heading block. */
+  .pilates-group__grid {
+    padding-left: clamp(20px, 2vw, 32px);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--pilates-block);
+  }
+
+  .pilates-group__intro {
+    padding-left: 0;
+  }
+
+  .pilates-group__intro > p {
+    max-width: 60ch;
+  }
+
   .pilates-approach__steps {
     grid-template-columns: 1fr 1fr;
     gap: clamp(36px, 6vw, 54px) clamp(16px, 4vw, 40px);
+    /* No rail to follow once it wraps, so the ramp is there only to keep the
+       steps from arriving as one block — a shorter one, since the reading
+       order now turns a corner rather than running straight across. */
+    --rail-dur: 460ms;
   }
 
   .pilates-approach__steps::before,
@@ -4643,13 +4912,15 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     flex-direction: column;
   }
 
-  .pilates-feature__media {
-    width: 100%;
-    min-height: 540px;
+  /* Stacked, the alternation has nothing left to alternate — both sections
+     read heading, copy, then pictures — so the order swap is dropped. */
+  .pilates-feature__grid--media-first .pilates-feature__content,
+  .pilates-feature__grid--media-first .pilates-feature__media {
+    order: 0;
   }
 
-  .pilates-practical__grid {
-    grid-template-columns: minmax(0, 1fr);
+  .pilates-feature__media {
+    width: 100%;
   }
 
   /* Stacked, the copy sits over the whole photograph rather than the dark
@@ -4679,18 +4950,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     font-size: var(--step-3);
   }
 
-  .pilates-section-heading--split {
-    display: block;
-  }
-
-  .pilates-section-heading--split h2 {
-    margin-top: 25px;
-  }
-
-  .pilates-section-heading--split > :last-child {
-    margin-top: 30px;
-  }
-
   .pilates-approach__steps {
     grid-template-columns: 1fr;
     gap: 30px;
@@ -4706,34 +4965,31 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     font-size: var(--step-2);
   }
 
-  .pilates-feature__media {
-    min-height: 420px;
-  }
-
+  /* The day panel goes across the top of its row rather than beside the
+     times, which are down to two tracks at this width. */
   .pilates-timetable__row {
     grid-template-columns: 1fr;
-    gap: 15px;
+  }
+
+  .pilates-timetable__day {
+    padding: 12px 16px;
   }
 
   .pilates-timetable__row p {
-    flex-wrap: wrap;
+    padding: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 10px;
   }
 
   .pilates-detail-label {
     align-items: flex-start;
     flex-direction: column;
+    gap: 8px;
     justify-content: center;
   }
 
-  .pilates-dual__grid,
   .pilates-retreats__grid {
     grid-template-columns: 1fr;
-  }
-
-  .pilates-dual article,
-  .pilates-dual article + article {
-    padding: 35px 0 50px;
-    border-left: 0;
   }
 
   .pilates-retreats figure {
@@ -4783,19 +5039,19 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    — because that is already this site's language for a hero the bar sits on,
    and a second dialect of it would only drift.
 
-   The type is held at the foot rather than centred. A walkthrough is
-   constantly re-composing itself, and the one part of the frame that stays
-   quiet enough to read against is the floor. */
+   The box is the home hero's, to the pixel — same height, same centring —
+   and the type block inside it shares that hero's positioning rules outright
+   rather than restating them (see .home-hero__inner). The two are meant to
+   be the same landing, so they resolve from one definition. */
 .clinics-hero {
   position: relative;
   display: flex;
+  width: 100%;
   min-height: max(680px, 100svh);
-  padding: clamp(104px, 11vw, 138px) 0 clamp(44px, 7vh, 84px);
-  flex-direction: column;
-  justify-content: flex-end;
+  align-items: center;
+  isolation: isolate;
   overflow: hidden;
   background: var(--navy);
-  isolation: isolate;
 }
 
 .clinics-hero__media {
@@ -4858,13 +5114,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     linear-gradient(to bottom, oklch(17.4% 0.048 275 / 0.42) 0%, transparent 16%);
 }
 
-.clinics-hero__inner {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-}
-
 .clinics-hero__eyebrow {
   display: flex;
   margin: 0 0 clamp(18px, 2.4vh, 28px);
@@ -4925,11 +5174,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   .clinics-hero__reel {
     transition: none;
   }
-}
-
-.clinics-studio {
-  padding-block: var(--space-section);
-  background: #fff;
 }
 
 /* Continuous Sports Therapy page */
@@ -5106,17 +5350,11 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     padding-top: 130px;
   }
 
-  /* Unlike the heroes that collapse to auto here, this one is a frame: let it
-     shrink to its content and the footage becomes a letterbox strip. It keeps
-     a viewport-ish height and just gives back some of the head padding. */
-  .clinics-hero {
-    min-height: max(560px, 92svh);
-    padding-top: 122px;
-  }
-
-  .clinics-hero h1 {
-    font-size: var(--step-4);
-  }
+  /* The studio hero has nothing to say at this width. It does not collapse to
+     auto like the heroes either side of it — shrink a frame to its content and
+     the footage becomes a letterbox strip — and everything that does change is
+     the home hero's, taken from the shared rules further up: the full-viewport
+     box, the vertical scrim, and the type block's padding clear of the bar. */
 
   .therapy-fascia h2 {
     font-size: var(--step-3);
@@ -5162,12 +5400,21 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   min-height: calc(2 * (100vh - var(--header-scrolled)));
   min-height: calc(2 * (100svh - var(--header-scrolled)));
 
-  /* How far down the fold the chapter arriving over this one has got, and
-     whether there is anything there to round against. JS keeps both current;
-     the defaults are a whole uncut panel, which is what a chapter sitting on
-     its own should be. */
+  /* How far down the fold the chapter arriving over this one has got, and how
+     much of a corner there is to round against. JS keeps both current; the
+     defaults are a whole uncut panel with a square foot, which is what a
+     chapter sitting on its own should be.
+
+     --seam-open is a 0..1 share rather than a length so that the corner can
+     GROW as the boundary lifts off the foot of the panel. It was a straight
+     switch between 0 and the full radius, which put a 20px corner on screen
+     inside a single frame at the exact moment one chapter handed over to the
+     next — the one moment a reader is looking at that edge. Keeping the length
+     itself here also means the last chapter below can open its corner by
+     saying so, without repeating the figure. */
   --seam: 100%;
-  --seam-radius: 0px;
+  --seam-open: 0;
+  --seam-radius: calc(var(--story-radius) * var(--seam-open));
 }
 
 .story__chapter + .story__chapter {
@@ -5188,8 +5435,9 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   /* Nothing climbs over this one, so its foot never moves off the panel and
      the radius can just sit there — the band is welded to that edge and rides
      up with it, which makes it a boundary like any other. JS leaves the last
-     chapter alone for this reason. */
-  --seam-radius: var(--story-radius);
+     chapter alone for this reason, which is also why this opens the corner
+     rather than setting the length: the figure lives in one place. */
+  --seam-open: 1;
 }
 
 .story__copy,
@@ -5215,6 +5463,22 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     0 0 calc(100% - var(--seam)) 0 round var(--story-radius) var(--story-radius)
       var(--seam-radius) var(--seam-radius)
   );
+}
+
+/* The cut moves every frame while one chapter climbs over another, and a
+   clip that changes is a repaint of everything it clips — here two panels the
+   size of the screen, one of them a full-bleed photograph. Held on their own
+   compositor layers the change is a clip applied to something already
+   rastered, rather than the pair being painted again from the top sixty times
+   a second.
+
+   Only the chapters whose cut actually travels: main.js sets .is-seamed on
+   exactly the ones it writes to, so the last chapter — whose clip never
+   changes — and every chapter under reduced motion or with no JS keeps
+   ordinary paint instead of two screen-sized tiles held for nothing. */
+.story__chapter.is-seamed > .story__copy,
+.story__chapter.is-seamed > .story__media {
+  will-change: clip-path;
 }
 
 /* The photograph takes the left column and the copy the right, ordered here
@@ -5304,6 +5568,27 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 #pilates .story__media img {
   object-position: 48% 42%;
+}
+
+/* The same two chapters again on /pilates, pre- and postnatal. These two used
+   to be the softest photographs on the site — legacy stock at 412x291 and
+   500x302 blown up to fill a panel several times that. They are Pexels stock
+   now, cut 4:5 from portrait originals, which is the way round a half-width
+   full-height panel wants and enough resolution to be sharp on it.
+
+   Neither sits centred, because a near-square panel takes a fifth of the
+   height out of a 4:5 photograph and both of these fill their frame top to
+   bottom. The prenatal client is a standing figure, so the crop is pinned to
+   the top — that keeps her head and takes the floor instead, where centring
+   it cut her across the eyes. The postnatal pair run from the child at the
+   top to the mother's head at the very foot, so that one is held just below
+   centre to keep her face in. */
+#prenatal .story__media img {
+  object-position: center top;
+}
+
+#postnatal .story__media img {
+  object-position: center 55%;
 }
 
 /* A short window still has to hold a whole chapter on the fold, so the copy
@@ -5425,7 +5710,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
      labels instead of just cropping. */
   width: 100%;
   margin-top: clamp(20px, 2.2vw, 34px);
-  border-radius: clamp(14px, 1.4vw, 22px);
+  border-radius: clamp(5px, 0.5vw, 8px);
   /* Letterboxed rather than 16:9 so the whole band — title through photograph
      — clears a laptop fold without the page having to scroll through it. The
      cap is what makes that a guarantee rather than a size that happens to work:
@@ -5527,12 +5812,86 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   background: var(--paper);
 }
 
+/* The band flies up as you scroll down to it and sinks back as you scroll
+   away. It is scrubbed, not switched: main.js writes --voice-in every frame
+   from where the band sits on screen, so the movement is tied to the band's
+   position rather than to a moment it once crossed.
+
+   That distinction is the whole point. This began as a threshold observer at
+   0.25, which a 620px band satisfies while it is still a 199px strip at the
+   foot of the fold — the run finished off screen and you never saw it move.
+   Position cannot be early: the band is on screen for every frame of it.
+
+   A second attempt fixed the timing but tied 48px of travel to 670px of
+   scrolling — fourteen pixels of scroll per pixel of movement, which reads as
+   nothing moving at all. Perceptible motion needs both: a run that happens on
+   screen, and a ratio you can see. Hence the short range below.
+
+   The two halves travel as whole panels — the navy block on the left, the
+   photograph on the right — and what they uncover as they go is the page's
+   own white. Earlier attempts moved only the content inside the navy, to avoid
+   exactly that strip, and were stuck with whatever travel the citation left
+   them. Letting the white show is what buys the travel: the two panels fly up
+   into the band out of the page rather than shuffling their contents. It also
+   keeps the halves reading as two halves, which a coloured card does not — fill
+   the card navy and the band becomes one blue box with a photograph inset in
+   it. The photograph keeps its exact framing either way: it rides with its
+   panel instead of moving inside a fixed frame, so there is no overscale and
+   no zoom.
+
+   The defaults of 1 are the resting state, so with no JS — or with reduced
+   motion, where main.js leaves the band alone — nothing is displaced. */
+/* In vh, not pixels, and the exact figures are load-bearing — see the note in
+   main.js, which is where the ranges these are paired with live and where the
+   arithmetic tying the two together is written out.
+
+   A panel waiting its turn sits one travel below its resting place, so it is
+   only hidden while that travel exceeds the gap between its start fraction and
+   the fold. Navy starts at 1.00, right on the bottom of the screen, so any
+   travel keeps it hidden; the photograph starts at 0.92, so it needs more than
+   8vh, and 20vh leaves it plenty. Drop either below its figure and you get the
+   panel sitting parked in view before it moves, and parked again on the way
+   back up — which is the whole reason these are not fixed pixel amounts.
+
+   The other end of the bargain is speed: a panel climbs the screen at its own
+   travel PLUS the 1px per px the band is already rising at, so a travel large
+   against its range is a panel outrunning the page and stuttering against it.
+   Both of these sit near a third of their range, which holds the pair around
+   1.3x. Raising either without lengthening its range in main.js is how this
+   band came to jump three frames at a time in the first place. */
+.voice-panel__words {
+  transform: translateY(calc((1 - var(--voice-in, 1)) * 10vh));
+}
+
+/* The panels are moved every frame while the band crosses the screen, so they
+   are held on their own compositor layers rather than being rastered again
+   from the top each time — a photograph half a screen wide is not something to
+   repaint sixty times a second. Keyed to .is-scrubbing, which scrub-in.js sets
+   on start-up, so reduced motion and no-JS are not asked to hold two tiles for
+   an effect they will never show. Same bargain as .is-adrift above. */
+.voice-panel__card.is-scrubbing .voice-panel__words,
+.voice-panel__card.is-scrubbing .voice-panel__media {
+  will-change: transform;
+}
+
+/* Further than the navy as well as later, which the geometry wants anyway:
+   starting later means starting deeper, so the photograph is the half that
+   travels. It is also the half still moving once the navy has landed, which
+   is what makes the pair read as one leading and one following. */
+.voice-panel__media {
+  transform: translateY(calc((1 - var(--voice-in-late, 1)) * 20vh));
+}
+
 .voice-panel__card {
   display: grid;
   min-height: clamp(400px, 44vw, 620px);
   margin: 0;
   overflow: hidden;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* White, and load-bearing: this is what the panels uncover as they travel.
+     It reads as the page showing through behind them, which is what keeps the
+     navy block and the photograph looking like two separate halves. */
+  background: var(--paper);
 }
 
 /* The words start where the page's content starts. `50vw - 720px` is the
@@ -5608,6 +5967,17 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   text-transform: uppercase;
 }
 
+/* The way out of the band. .btn--on-photo already solves a button on a dark
+   ground — a hairline rather than a second fill — so this only has to place
+   it: `align-self` because .voice-panel__words is a flex column, and a column
+   stretches its children, which would run the button the full width of the
+   navy half. Set off from the attribution by a little more than the
+   attribution is set off from the quote, so the three read in that order. */
+.voice-panel__link {
+  align-self: start;
+  margin-top: clamp(24px, 2.8vw, 36px);
+}
+
 /* The photograph is taken out of flow inside its half. Left in flow its own
    intrinsic height sets the grid row, which is the whole band's height — a
    900px-wide image would make a 530px band 530px taller. Absolute means the
@@ -5643,8 +6013,19 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     aspect-ratio: 3 / 2;
   }
 
+  /* Stacked, the photograph is the half you reach first — so the two swap
+     which of the pair leads, and the words come up behind it. Shorter travel
+     than side by side: the halves are half the height here, and 120px of a
+     260px photograph is a slide, not a settle. The same two figures the wide
+     layout uses — they are shares of the fold, so they already scale, and the
+     ranges they are paired with in main.js do not change with the layout. */
+  .voice-panel__media {
+    transform: translateY(calc((1 - var(--voice-in, 1)) * 10vh));
+  }
+
   .voice-panel__words {
     padding: clamp(34px, 8vw, 52px) var(--page-gutter);
+    transform: translateY(calc((1 - var(--voice-in-late, 1)) * 20vh));
   }
 
   .voice-panel__card blockquote p {
@@ -5664,35 +6045,79 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    itself in the meantime rather than leaving a heading standing
    over nothing.
    ============================================================ */
+/* Deeper above than below, and only above: the quote band overhead now flies
+   its two halves in, and running the reviews up close underneath it left the
+   two competing for the same stretch of screen. The foot is under the plain
+   --space-section: with the closing mark now shutting the quotation above the
+   link, the tail of this section was carrying three full section-sized gaps in
+   a row and reading as a hole in the page rather than as air.
+
+   The head multiplier is down from 1.75 now that the opening mark stands in
+   that gap: the mark plus its margin restores most of the height it gave up,
+   so the run sits about as far below the quote band as it did — the air is
+   just doing something now.
+
+   Column flex so the two marks are laid out by the section rather than
+   floated over it: first item hugs the left, last item hugs the right, and
+   neither can land on a card whatever height the run happens to be. */
 .voice-run {
-  padding-block: var(--space-section);
+  display: flex;
+  flex-direction: column;
+  padding-block: calc(var(--space-section) * 1.15)
+    calc(var(--space-section) * 0.55);
   background: var(--paper);
+}
+
+/* Aligned to the page gutter, not the fade: the opening mark sits over the
+   same line the first card's rule starts on. */
+.voice-run__mark {
+  color: var(--brand);
+  font-family: var(--font-serif);
+  font-size: var(--step-5);
+  line-height: 0.6;
+  opacity: 0.18;
+}
+
+.voice-run__mark--open {
+  align-self: flex-start;
+  margin-left: var(--page-gutter);
+  margin-bottom: var(--space-m);
+}
+
+/* Dropped further from the cards than the opening mark is raised above them:
+   an opening mark reads as leaning into the words below it, while a closing
+   one wants clear air above it to read as having shut the quotation rather
+   than as punctuation hanging off the last card. */
+.voice-run__mark--close {
+  align-self: flex-end;
+  margin-right: var(--page-gutter);
+  margin-top: calc(var(--space-l) * 1.5);
 }
 
 .voice-run:not(:has(li)) {
   display: none;
 }
 
-.voice-run__head {
+/* No heading over the run. The reviews announce themselves — a label reading
+   "in their words" over a row of quotes in quotation marks was naming what was
+   already in front of you, and it put a second uppercase micro-label within a
+   screen of the qualifications strip's. The link underneath is the only chrome
+   the section carries. */
+/* Shorter than the section's own foot padding, not equal to it: the closing
+   mark sits directly above the link now, and it arrives having already been
+   dropped clear of the last card, so an equal section-sized gap here left the
+   link marooned mid-white. --space-m keeps the two apart while reading as one
+   closing block rather than two stranded lines. */
+.voice-run__link {
+  width: fit-content;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-m);
-  margin-bottom: var(--space-m);
+  margin: var(--space-m) auto 0;
 }
 
-.voice-run__title {
-  margin: 0;
-  color: var(--brand);
-  font-family: var(--font-sans);
-  font-size: var(--label-lg);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-lg-track);
-  text-transform: uppercase;
-}
-
+/* Wider than the qualifications' gutter: with no box around a card, the gap is
+   the only thing telling one review from the next. */
 .voice-run__track {
-  --run-gap: clamp(16px, 2vw, 30px);
+  --run-gap: clamp(26px, 3vw, 52px);
   --run-fade: clamp(28px, 7vw, 110px);
   margin-inline: calc(var(--page-gutter) * -1);
   overflow-x: auto;
@@ -5751,25 +6176,38 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   }
 }
 
-/* Taller than a qualification card, and deliberately so: this one has to hold
-   a full review without the type dropping to a size nobody reads in passing.
-   The margin carries the gutter rather than a flex `gap`, so every card is an
-   identical block — see the note on .creds__strip li. */
+/* A rule over each review rather than a box around it. The qualifications
+   strip above carries no cards at all, and an outlined card here read as a
+   component borrowed from a different site; a brand hairline separates just as
+   well and leaves the type sitting on the page.
+
+   Taller than a qualification card, deliberately: this one holds a full review
+   without the type dropping to a size nobody reads in passing. The margin
+   carries the gutter rather than a flex `gap`, so every card is an identical
+   block — see the note on .creds__strip li. */
 .voice-run__strip li {
   display: flex;
   flex-direction: column;
-  flex: 0 0 clamp(260px, 25vw, 350px);
-  min-height: clamp(240px, 21vw, 290px);
-  padding: clamp(24px, 2.4vw, 34px) clamp(22px, 2.2vw, 32px);
+  flex: 0 0 clamp(250px, 24vw, 330px);
+  min-height: clamp(230px, 20vw, 280px);
+  padding-top: clamp(18px, 1.8vw, 24px);
   margin-right: var(--run-gap);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  justify-content: space-between;
-  gap: var(--space-s);
+  border-top: 1px solid var(--brand);
+}
+
+/* Named, not implied: which half of the practice a review is about is the one
+   thing the quote itself does not always say. */
+.voice-run__service {
+  margin: 0 0 clamp(12px, 1.4vw, 18px);
+  color: var(--ink-soft);
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-sm-track);
+  text-transform: uppercase;
 }
 
 .voice-run__strip blockquote {
-  margin: 0;
+  margin: 0 0 var(--space-s);
 }
 
 .voice-run__strip blockquote p {
@@ -5777,17 +6215,19 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   color: var(--ink);
   font-family: var(--font-serif);
   font-size: var(--step-1);
-  line-height: 1.42;
+  line-height: 1.4;
   letter-spacing: -0.01em;
 }
 
+/* Serif and mixed case: this is a person, not a field label. The uppercase
+   micro-type above it is the category; making both the same turned the name
+   into a second piece of metadata. */
 .voice-run__strip cite {
+  margin-top: auto;
   color: var(--brand);
-  font-size: var(--label);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
   font-style: normal;
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-track);
-  text-transform: uppercase;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5796,16 +6236,537 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   }
 }
 
+
+/* ============================================================
+   Client stories — the switch between the two sides
+   Films on /client-stories, the wall of quotes on
+   /client-stories/reviews, and this sits under the head of
+   both.
+
+   Two links, not two buttons over hidden panels: each side is
+   a real page, so the switch survives with no JS, the browser
+   marks visited state, and either side can be sent to somebody
+   or opened in a new tab. The markup is in site-content.js.
+
+   Everything below hangs off [aria-current], which the markup
+   sets on the side being shown — one source of truth for which
+   way the switch is thrown, rather than a class that can fall
+   out of step with the attribute a screen reader is reading.
+   ============================================================ */
+
+.stories-switch {
+  padding-block: clamp(10px, 1.4vw, 20px) 0;
+  background: var(--surface);
+}
+
+.stories-switch__inner {
+  display: flex;
+  /* Three sides now, and on a narrow phone three tabs of uppercase label do
+     not fit across 375px. They wrap inside the rail rather than pushing it
+     wider than the screen — the rail keeps its border round whatever shape
+     the sides end up in, which is what stops a wrapped switch reading as
+     three loose links. */
+  flex-wrap: wrap;
+  max-width: 100%;
+  gap: 4px;
+  /* The rail. A hairline box around both sides is what makes them read as one
+     control with a position, rather than as two links that happen to be next
+     to each other. */
+  width: fit-content;
+  padding: 4px;
+  border: 1px solid var(--line);
+  /* Square. --radius-sm rather than a hard 0: at 2px the corner still reads as
+     square at reading distance, and it is the radius the site's other small
+     rectangles already take. A true 0 is the only corner on the page that
+     nothing else shares. */
+  border-radius: var(--radius-sm);
+}
+
+.stories-switch a {
+  padding: 9px clamp(16px, 1.8vw, 26px);
+  border-radius: var(--radius-sm);
+  color: var(--ink-soft);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.stories-switch a:hover {
+  color: var(--brand-strong);
+  background: color-mix(in oklab, var(--brand) 7%, transparent);
+}
+
+/* The side you are on. Filled rather than merely darker: at label size a
+   weight change alone is not a position, and the whole job of a switch is to
+   say which way it is thrown from across the room. */
+.stories-switch a[aria-current="page"] {
+  color: var(--paper);
+  background: var(--brand);
+}
+
+.stories-switch a[aria-current="page"]:hover {
+  color: var(--paper);
+  background: var(--brand-strong);
+}
+
+.stories-switch a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stories-switch a {
+    transition: none;
+  }
+}
+
+/* A comfortable thumb on a phone. The label type is small by design, which
+   left these 34px tall — a target you aim at rather than one you tap. The box
+   grows; the type does not. */
 @media (max-width: 700px) {
-  .voice-run__head {
+  .stories-switch a {
     display: grid;
-    gap: 10px;
-    justify-items: start;
+    min-height: 44px;
+    place-items: center;
   }
 }
 
 /* ============================================================
-   Client voices — the /testimonials wall
+   Client stories — the film shelf
+   Sits above the wall of written quotes on /client-stories:
+   clients on camera saying what brought them in.
+
+   Undated, and no fixed number of them. The shelf is however
+   many films there are — one is a card, four are a row — which
+   is why the columns come from auto-fit rather than from a
+   count, and why the only thing [data-count] does is stop a
+   single film from being stretched the full width of a 1440px
+   shell like a cinema trailer.
+
+   Nothing here renders while films.js has an empty list: the
+   markup is not written at all, so there is no empty shelf to
+   style and no placeholder to explain. See the note at the top
+   of that file for why it is built that way.
+   ============================================================ */
+
+.films {
+  /* The same tight opening the wall used to take. The head above ends on a
+     wave with its own paper under it, so whatever comes first on this page
+     hugs it rather than clearing it. */
+  padding-block: clamp(6px, 0.7vw, 12px) var(--space-section);
+  background: var(--surface);
+}
+
+/* On the reviews side the switch is the thing directly under the head, so the
+   wall clears the switch rather than the wave. The films side does not need
+   this: its switch is inside the head, above the film. */
+.stories-switch + .voices {
+  padding-top: clamp(20px, 2.4vw, 36px);
+}
+
+/* ---- The films head ----
+
+   A head with a film in it instead of a title. Everything the compact head
+   already does — the crumb on the page edge, the centred column, the wave
+   layer behind it — is doing the same job here; what changes is what stands in
+   the middle of it and how much room that needs.
+
+   The wave is anchored to the BOTTOM of a normal head, which is right when the
+   thing above it is two lines of type and wrong when it is a 676px video: the
+   art would sink to the foot of the film and sweep under it rather than
+   behind. Centred, the film sits on the middle of the sweep, which is where
+   the artwork is densest and where it reads as something the film is standing
+   on rather than something following it down the page. */
+.films-hero {
+  padding-bottom: clamp(30px, 3.4vw, 48px);
+}
+
+.films-hero .page-hero__wave {
+  background-position: left var(--wave-x) center;
+}
+
+/* The head's own min-height is the wave's, which the film clears on its own.
+   Left in, it adds its height to a head that is already tall enough and opens
+   a band of empty paper under the caption. */
+.films-hero.page-hero--wave {
+  min-height: 0;
+}
+
+.films-hero .page-hero__inner {
+  gap: clamp(16px, 2vw, 26px);
+}
+
+/* The switch inside the head, under the film. Its own top padding is for
+   sitting beneath a page head; here it is answering a caption, so the gap is
+   the head's grid gap plus a little to set it apart from the film's name and
+   line rather than reading as a third line of the caption. */
+.films-hero .stories-switch {
+  padding-block: clamp(6px, 1vw, 14px) 0;
+  background: none;
+}
+
+/* ---- The lead film ----
+
+   Centred, with its name and line underneath. The text used to stand beside
+   the film, which filled the row but left the film itself sitting hard against
+   the left gutter — and everything above it on this page (the title, the lead
+   sentence, the ornament, the switch) is centred. One thing off-axis under a
+   centred head reads as a mistake rather than as a layout.
+
+   The frame is capped rather than fluid: a 9:16 box that grows with the
+   viewport grows in HEIGHT twice as fast as it does in width, and past about
+   400px it stops being a video on a page and becomes a page with a video for a
+   background. min() rather than a media query, so it is simply the full width
+   of the column on a phone, where 380px is already more than there is. */
+.films__lead {
+  display: grid;
+  /* No bottom margin: this is the last thing in the head, and the head's own
+     padding is what separates it from what follows. */
+  margin: 0;
+  gap: clamp(18px, 2.2vw, 30px);
+  justify-items: center;
+  text-align: center;
+}
+
+.films__lead .films__frame {
+  width: min(380px, 100%);
+}
+
+.films__lead-text {
+  max-width: 46ch;
+}
+
+.films__lead-blurb {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  line-height: 1.45;
+}
+
+/* ---- The earlier films ---- */
+
+/* Centred to follow the lead above it. Left where it was, the heading and the
+   row under it were the only things on the page off the middle axis, which
+   with a centred film directly above reads as a block that failed to move
+   rather than as a block that was left alone. */
+.films__more-title {
+  margin: 0 0 clamp(18px, 2vw, 28px);
+  color: var(--brand);
+  text-align: center;
+  /* An h2, and the same treatment every other micro-label on the site gets:
+     sans, not the serif an h2 inherits. */
+  font-family: var(--font-sans);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
+  text-transform: uppercase;
+}
+
+/* Narrower columns than the lead, and as many as fit. Three or four earlier
+   films sit in one row on a desktop.
+
+   The 140px minimum is doing one specific job: it is small enough that two
+   columns still fit across a 375px phone. Left at 200px these dropped to a
+   single stack, and three full-width 9:16 cards under the lead is most of a
+   screen each — a lot of thumb for films that are meant to be the back
+   catalogue. Two-up they read as a row of stills, which is what they are. */
+.films__shelf {
+  display: grid;
+  /* The max-widths below cap this well short of the shell, so it needs telling
+     which end of the leftover space to sit in. The middle — see the note on
+     the heading above. */
+  margin-inline: auto;
+  gap: clamp(18px, 2vw, 30px);
+  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+}
+
+/* One or two earlier films should not stretch to fill a row built for four:
+   left to it, a single 9:16 card becomes half a screen tall. */
+.films__shelf[data-count="1"] {
+  max-width: 240px;
+}
+
+.films__shelf[data-count="2"] {
+  max-width: 500px;
+}
+
+.films__shelf[data-count="3"] {
+  max-width: 760px;
+}
+
+.films__card {
+  margin: 0;
+}
+
+/* 9:16 — short form, the way these are shot and the way they are watched. The
+   ratio is held by the frame rather than by the file, so a clip that came off
+   a camera at some other shape is cropped to the page instead of setting the
+   height of the row it is in. */
+.films__frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 9 / 16;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--ink);
+}
+
+.films__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The overlay. `controls` is in the markup, so with no JS the native player is
+   already there and working — this button is the nicer way in, and it only
+   exists once the boot sequence has said there is JS to run it. */
+.films__play {
+  display: none;
+}
+
+.js .films__play {
+  position: absolute;
+  display: grid;
+  inset: 0;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  /* A wash rather than a full scrim: the still is a person's face, and the
+     point of a poster frame is that you can see who is about to speak. */
+  background: color-mix(in oklab, var(--ink) 22%, transparent);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+/* Once a film has been started the overlay comes off for good — see the note
+   in initFilmShelf about not throwing it back over a paused player. Both
+   shapes: the lead is a .films__lead, not a .films__card. */
+.js .films__card.is-playing .films__play,
+.js .films__lead.is-playing .films__play {
+  display: none;
+}
+
+.js .films__play:hover,
+.js .films__play:focus-visible {
+  background: color-mix(in oklab, var(--ink) 34%, transparent);
+}
+
+.js .films__play:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -6px;
+}
+
+/* The mark: a disc with a triangle cut into it by a border trick, so there is
+   no icon file and nothing to load. */
+.films__play-mark {
+  display: grid;
+  width: clamp(52px, 5vw, 68px);
+  height: clamp(52px, 5vw, 68px);
+  place-items: center;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 6px 24px oklch(23.2% 0.055 277 / 0.28);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.films__play-mark::before {
+  width: 0;
+  height: 0;
+  /* Optically centred: a triangle's visual centre sits behind its geometric
+     one, so it is nudged right by a couple of pixels rather than left in the
+     middle of the disc looking like it is falling backwards. */
+  margin-left: 4px;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-left: 15px solid var(--brand);
+  content: "";
+}
+
+.films__play:hover .films__play-mark {
+  transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .films__play-mark {
+    transition: none;
+  }
+
+  .films__play:hover .films__play-mark {
+    transform: none;
+  }
+}
+
+.films__caption {
+  margin-top: 18px;
+}
+
+.films__name {
+  margin: 0;
+  color: var(--brand);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
+  text-transform: uppercase;
+}
+
+.films__blurb {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0s);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   Client journeys — /client-stories/journeys
+   Three beats an entry, the same three every time: what brought
+   them in, what has changed, what they enjoy. Set as an
+   editorial spread rather than a card — the name at display
+   size in the serif, the labels in a rail down the left, one
+   hairline between neighbours. See journeys.js.
+   ============================================================ */
+
+/* The same tight opening .voices takes on the wall next door, and for the same
+   reason: the head above ends on a wave with its own paper under it, so what
+   follows hugs it rather than clearing it. */
+.journeys {
+  padding-block: clamp(6px, 0.7vw, 12px) var(--space-section);
+  background: var(--surface);
+}
+
+/* And the same air under the switch that .voices gets, on the pages where one
+   is standing between the head and the reading. */
+.stories-switch + .journeys {
+  padding-top: clamp(20px, 2.4vw, 36px);
+}
+
+/* One column, capped and centred.
+ *
+ * The cap is the whole reason this reads: the rail and the text beside it come
+ * to about 50rem before the lines get too long to track back to the start of
+ * the next one. Left to the 1440px shell, the third beat of every entry would
+ * be a single 1200px line. Centred because everything above it on this page —
+ * title, ornament, switch — is centred, and one block off-axis under a centred
+ * head reads as a mistake rather than as a layout.
+ *
+ * The `--journeys-rail` custom property is declared here rather than on each
+ * beat so every label in the column measures from one number: the labels line
+ * up down the page whatever their length, which is what makes the rail read as
+ * a rail rather than as three indents that happen to agree. */
+.journeys__list {
+  /* Wide enough that the longest label — "How Pilates helped" — sits on one
+     line at the top of the clamp. See the note on BEATS in journeys.js about
+     why the labels are short rather than the rail being wide enough for any
+     wording somebody might type. */
+  --journeys-rail: clamp(124px, 12.5vw, 168px);
+
+  /* 46rem, not wider: the rail takes its share off the front, and what is left
+     is the reading column. At 50rem that column ran to about 75 characters a
+     line — past the point where the eye reliably finds the start of the next
+     one, and this page is nothing but reading. */
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+/* A hairline between entries rather than a border around each. With no box to
+   hold them apart, the rule and the space either side of it are the whole of
+   what separates one client from the next — so the space is generous, and the
+   first entry opens with no rule above it because there is nothing above it to
+   be separated from. */
+.journeys__entry + .journeys__entry {
+  margin-top: clamp(36px, 4vw, 60px);
+  padding-top: clamp(36px, 4vw, 60px);
+  border-top: 1px solid var(--line);
+}
+
+/* The name at display size in the serif — the treatment a page title takes,
+   which is the point: the client is what the entry is about. This is the one
+   place on the site a person's name is set as anything other than a micro-
+   label, and it is the reason the spread reads as an article about somebody
+   rather than as a record in a list.
+
+   --step-2h, not larger: the h1 above is --step-3h, and a name matching it
+   would put two display lines of equal weight on the page with nothing to say
+   which was the title. */
+.journeys__name {
+  margin: 0 0 clamp(20px, 2.2vw, 30px);
+  color: var(--ink);
+  font-size: var(--step-2h);
+  font-weight: 400;
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+}
+
+.journeys__beats {
+  display: grid;
+  margin: 0;
+  gap: clamp(18px, 1.8vw, 26px);
+}
+
+/* Label in the rail, words beside it. minmax(0, 1fr) rather than 1fr on the
+   text column: a bare 1fr takes its min-content width from the longest
+   unbreakable run in the copy, which is a column that changes width when
+   somebody writes a long word. */
+.journeys__beat {
+  display: grid;
+  gap: 6px 18px;
+  grid-template-columns: var(--journeys-rail) minmax(0, 1fr);
+  align-items: start;
+}
+
+/* The beat labels. Quiet, small and uppercase — everything the name is not,
+   because a label beside a serif line at reading size should be findable and
+   then ignored. The optical nudge down is the same one every rail label needs:
+   an 10px cap-height sitting on the same baseline grid as a 15px serif reads
+   as slightly high, and 4px puts its centre on the first line's. */
+.journeys__beat dt {
+  padding-top: 4px;
+  color: var(--ink-soft);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
+/* Below the rail's own width plus a readable measure, the two columns stop
+   being columns. The label goes back over its text, which is what the beats
+   did before the rail existed and is still the right shape on a phone. */
+@media (max-width: 620px) {
+  .journeys__beat {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .journeys__beat dt {
+    padding-top: 0;
+  }
+}
+
+/* The serif, the same as every other piece of client wording on the site — the
+   quotes on the wall and the lines under the films. A step up from those, at
+   --step-0 rather than --step-0s: this is the page's only content and it is
+   read rather than glanced at, where a line under a film is a caption.
+
+   `margin: 0` is doing two jobs. It overrides the browser's default dd indent,
+   which would push the text out of the column the rail set for it; and the
+   space above each pair is now the grid's row gap, so a margin here would be a
+   second, disagreeing source for the same gap. */
+.journeys__beat dd {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+/* ============================================================
+   Client voices — the /client-stories wall
    A column per category: Sports Therapy, both, Pilates. The outer
    two drift down and the middle one up, and all three stop the
    moment the pointer or the keyboard reaches the band — you reach
@@ -6192,6 +7153,15 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     clip-path: none;
   }
 
+  /* Nothing left to clip, so nothing to hold a layer for. Written with the
+     same selector as the promotion itself rather than folded into the rule
+     above: a media query adds no specificity, and .story__copy on its own
+     loses to the .is-seamed child selector. */
+  .story__chapter.is-seamed > .story__copy,
+  .story__chapter.is-seamed > .story__media {
+    will-change: auto;
+  }
+
   .story__media {
     order: -1;
   }
@@ -6199,6 +7169,14 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   .story__media img {
     height: auto;
     aspect-ratio: 4 / 3;
+  }
+
+  /* Except the pre- and postnatal pair, which are portrait: a 4:3 phone frame
+     cuts the pregnant client off at the knees and takes either the child or
+     the mother's head out of the other. They keep the ratio they were cut to
+     rather than being cropped through. */
+  #pre-postnatal .story__media img {
+    aspect-ratio: 4 / 5;
   }
 
   .story__copy {
@@ -6230,11 +7208,29 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    Bigger intervals mark the moves between acts.
    ============================================================ */
 
+/* Both intervals used to read off the same slope — --gap-close was
+   clamp(3.5rem, 2.6rem + 3.6vw, 6.5rem) and --gap-act was --space-section's
+   clamp(3.5rem, 2.6rem + 3.6vw, 7rem) — so below about 1720px, which is every
+   viewport anyone actually uses, an act break and a sibling gap were the same
+   number of pixels. The two-tier rhythm above was real in the stylesheet and
+   invisible on screen, and the page went back to reading as one flat run.
+
+   They are now genuinely different slopes, and both are more generous: the
+   sections here are separate ideas printed on one white ground, with no
+   change of surface to mark where one ends, so the air between them is the
+   only boundary there is and it has to be worth noticing. */
 .pilates-longform {
   /* between sibling sections inside an act */
-  --gap-close: clamp(3.5rem, 2.6rem + 3.6vw, 6.5rem);
-  /* between acts */
+  --gap-close: clamp(3.75rem, 2.3rem + 4.6vw, 7rem);
+  /* between acts — carried by --space-section, which the closing band and
+     anything else shared on this page reads too */
+  --space-section: clamp(5.5rem, 3.2rem + 7vw, 10rem);
   --gap-act: var(--space-section);
+  /* The step below both: between the parts of one section — a heading and the
+     timetable under it, the quote and the four steps. Kept well under a
+     sibling gap's two sides, which is what keeps "next element" and "next
+     section" reading as different distances. */
+  --pilates-block: clamp(3.5rem, 2.1rem + 4.4vw, 6.5rem);
 }
 
 /* Act break: orientation -> the offer. The place used to sit between the two;
@@ -6245,7 +7241,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 /* The offer: four sibling services, bound as one act */
 .pilates-feature,
-.pilates-dual,
 .pilates-golf {
   padding-block: var(--gap-close);
 }
@@ -6258,8 +7253,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   padding-bottom: var(--gap-act);
 }
 
-/* Act break: logistics and the aside */
-.pilates-practical,
+/* Act break: the aside */
 .pilates-retreats {
   padding-block: var(--gap-act);
 }
@@ -6267,13 +7261,9 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 /* One ground under the whole offer act, instead of alternating
    white / tint / transparent section by section. */
 .pilates-feature--individual,
-.pilates-feature--group,
-.pilates-dual {
+.pilates-feature--equipment,
+.pilates-feature--group {
   background: var(--paper);
-}
-
-.pilates-practical {
-  background: var(--surface);
 }
 
 .pilates-retreats {
@@ -6310,277 +7300,48 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 /* ============================================================
    Studio — page rhythm
    Was var(--space-section) on every section, the same flat cadence
-   the Pilates page had. (Testimonials used to sit in the middle
+   the Pilates page had. (Client stories used to sit in the middle
    here, and a charity paragraph closed the page — both have moved
    out, so the tight binds they needed have gone with them.)
    ============================================================ */
 
-/* Tighter than the shared --space-section rhythm. The page is one act now —
-   the room — and at the site default it floated in far more air than it
-   needed. */
+/* Tighter than the shared --space-section rhythm. At the site default this
+   page floated in far more air than it needed. */
 .clinics-longform {
   --gap-act: clamp(2.5rem, 1.9rem + 2.6vw, 4.75rem);
+  /* The second interval the Pilates page has: the gap between siblings inside
+     an act, tighter than the gap between acts. Same relationship as
+     --gap-close to --gap-act over there, scaled to this page's tighter
+     ceiling. Without this, .pilates-feature's padding-block below reads an
+     undefined custom property, the declaration is invalid at computed-value
+     time, and all three sections collapse to zero padding. */
+  --gap-close: clamp(1.75rem, 1.3rem + 2vw, 3.25rem);
+  /* .st-section reads --space-section for the closing band. Left at the site
+     default it opens far more air under the last machine than this page's own
+     rhythm ever uses, and the ending stops matching the page. */
+  --space-section: var(--gap-act);
 }
 
-.clinics-studio {
-  padding-block: var(--gap-act);
+/* One act, three siblings: the room, the Reformer, the Chair. They are three
+   views of the same place in the same layout, so they sit a --gap-close apart
+   and the act's air goes on the outside of the run only — the shape the offer
+   act has on /pilates, where .pilates-feature--individual opens it and
+   .pilates-golf closes it.
+
+   Keyed to ids rather than to :first-of-type/:last-of-type, which would both
+   land on the wrong element: the hero is a section too, and the closing band
+   is a div, so the run's real ends are not the parent's. */
+.clinics-longform .pilates-feature {
+  padding-block: var(--gap-close);
 }
 
-/* ============================================================
-   Studio — the room
-   The address and the photographs used to be two sections with
-   a heading each — "The Studham studio" at one size over a
-   full-width rule, then "Inside the studio" at another, larger
-   size a few lines below. Two titles for one room. They are now
-   one act: a single title, and the photographs introduced by a
-   label rather than a competing heading.
-   ============================================================ */
-
-/* The title, alone over the rule. The standfirst that used to sit beside it is
-   now the first of the three columns below, so the name has the row to itself. */
-.clinics-studio__head {
-  padding-bottom: clamp(22px, 2.8vw, 36px);
-  border-bottom: 1px solid var(--line);
+.clinics-longform #studio {
+  padding-top: var(--gap-act);
 }
 
-/* --step-3 to match every other section heading on the site; it used to sit a
-   step below the heading that followed it. */
-.clinics-studio__head h2 {
-  margin: 0;
-  font-size: var(--step-3);
+.clinics-longform #stability-chair {
+  padding-bottom: var(--gap-act);
 }
-
-/* The copy that used to be the "The Studham studio" section on /pilates. It
-   sits under the title rather than carrying a heading of its own, so the page
-   still reads as one act about one room.
-
-   Three paragraphs, three columns, one row: the standfirst about what runs in
-   the room, then the two about the room itself. A single measure left half the
-   row empty, and the standfirst set beside the title made the title row do the
-   work this row should. auto-fit rather than a fixed repeat(3) so the columns
-   fold to two and then one on their own, without a breakpoint each. */
-.clinics-studio__story {
-  margin-top: clamp(28px, 3.5vw, 48px);
-}
-
-.clinics-studio__copy {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
-  column-gap: clamp(20px, 4vw, 56px);
-  row-gap: 1.35em;
-  align-items: start;
-  color: var(--ink-soft);
-  font-size: var(--step-0s);
-  line-height: 1.75;
-}
-
-.clinics-studio__copy p {
-  margin: 0;
-}
-
-.clinics-studio__gallery {
-  margin-top: clamp(28px, 3.5vw, 48px);
-}
-
-/* A plate label for the photographs, not a second title. The compound selector
-   is needed to clear ".clinics-longform h3", which otherwise puts the display
-   serif and its negative tracking on a 10px uppercase label. */
-.clinics-longform .clinics-studio__gallery-label {
-  margin: 0;
-  color: var(--ink-soft);
-  font-family: var(--font-sans);
-  font-size: var(--label);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-track);
-  text-transform: uppercase;
-}
-
-
-/* ============================================================
-   Studio — carousel
-   The click-through treatment that used to carry the four
-   studio photographs on /pilates. Restored here because the
-   subject is the room itself, which is what this page is about.
-   Slides are stacked on one spot and offset by JS, so the two
-   neighbours sit behind and to the side of the active print.
-   ============================================================ */
-
-/* Full width of the shell. The old rule subtracted another page gutter, which
-   made sense when the carousel sat on its own but inside .section-shell it
-   double-inset the prints — they started 32px in from the title above them. */
-.studio-carousel {
-  width: 100%;
-  margin: clamp(24px, 3vw, 40px) auto 0;
-}
-
-/* No fixed height. The prints stack in one grid cell, so the stage comes out
-   exactly as tall as a print at every width. It used to carry a
-   clamp(300px, 42vw, 540px) guess at that height, which left ~70px of dead
-   space above and below the photo on a desktop and ~55px on a phone. */
-.studio-carousel__stage {
-  position: relative;
-}
-
-.studio-carousel__track {
-  display: grid;
-  grid-template-columns: 1fr;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.studio-carousel__slide {
-  grid-area: 1 / 1;
-  place-self: center;
-  width: min(60%, 640px);
-  margin: 0;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  background: #e7e2d8;
-  transform: translate(-50%, -50%);
-  transition:
-    transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
-    opacity 0.6s ease,
-    filter 0.6s ease;
-  will-change: transform, opacity;
-  cursor: pointer;
-}
-
-.studio-carousel__slide.is-active {
-  cursor: default;
-  box-shadow: 0 34px 90px rgba(16, 27, 57, 0.24);
-}
-
-.studio-carousel__slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: saturate(0.74) contrast(0.97);
-  pointer-events: none;
-}
-
-.studio-carousel__nav {
-  position: absolute;
-  z-index: 40;
-  top: 50%;
-  display: grid;
-  place-items: center;
-  width: clamp(44px, 4vw, 56px);
-  height: clamp(44px, 4vw, 56px);
-  padding: 0;
-  color: var(--ink);
-  font-size: var(--step-1);
-  line-height: 1;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    border-color 0.25s ease;
-}
-
-.studio-carousel__nav:hover {
-  color: #fff;
-  background: var(--brand);
-  border-color: transparent;
-}
-
-.studio-carousel__nav--prev {
-  left: clamp(4px, 2vw, 24px);
-}
-
-.studio-carousel__nav--next {
-  right: clamp(4px, 2vw, 24px);
-}
-
-.studio-carousel__meta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: clamp(24px, 3vw, 40px);
-  text-align: center;
-}
-
-.studio-carousel__index {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  color: var(--brand);
-  font-size: var(--label);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-track);
-  text-transform: uppercase;
-}
-
-.studio-carousel__index-sep {
-  opacity: 0.4;
-}
-
-.studio-carousel__caption {
-  margin: 12px 0 0;
-  color: var(--ink);
-  font-size: var(--step-1);
-  font-style: italic;
-}
-
-.studio-carousel__dots {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.studio-carousel__dot {
-  width: 9px;
-  height: 9px;
-  padding: 0;
-  background: rgba(16, 27, 57, 0.22);
-  border: 0;
-  border-radius: 50%;
-  cursor: pointer;
-  transition:
-    background 0.25s ease,
-    transform 0.25s ease;
-}
-
-.studio-carousel__dot:hover {
-  background: rgba(16, 27, 57, 0.42);
-}
-
-.studio-carousel__dot.is-active {
-  background: var(--brand);
-  transform: scale(1.25);
-}
-
-@media (max-width: 800px) {
-  .studio-carousel__slide {
-    width: min(72%, 520px);
-  }
-}
-
-/* The arrows go at this width and the slides are stepped through by
-   swiping or by the dots, both of which are already wired up. */
-@media (max-width: 600px) {
-  .studio-carousel__slide {
-    width: min(84%, 420px);
-    aspect-ratio: 4 / 3;
-  }
-
-  .studio-carousel__nav {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .studio-carousel__slide {
-    transition: none;
-  }
-}
-
-
 
 /* ============================================================
    Sports Therapy — original rules, restored from HEAD
@@ -6707,6 +7468,186 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   position: relative;
 }
 
+/* ---- Section title rule ----
+
+   Shared by /sports-therapy and /pilates. On both pages a section title was
+   a line of serif floating in white with nothing to mark where one band
+   ended and the next began — every light surface is white since the client
+   revision, so there is no change of ground doing that job either. Every
+   section title on the two pages now carries the page's tag above it and a
+   hairline under it, and the pair is what says "new section" rather than the
+   air around it.
+
+   The rule is one line, not two: a lead length carries the brand colour and
+   the rest runs at --line, so the colour reads as the start of the same
+   stroke rather than as a separate accent bar sitting next to it. Painted as
+   two background gradients on the element itself — a border-bottom with an
+   overlaid pseudo-element would need the pseudo at -1px to cover the border,
+   which drifts under fractional device pixel ratios. background-size sets the
+   lead exactly and lets the remainder be whatever the column is wide, so the
+   same class works on a full-shell header and inside a 550px text column
+   without a second declaration.
+
+   That lead is how far down the page the title is: --title-rule-lead is a
+   percentage written per title by main.js, short at the top of the page and
+   full by the last section, so the run of rules reads down the page as one
+   filling bar. It has to be a percentage rather than a length because the
+   rules are not all the same width — a full-shell header is 1152px and the
+   small-group intro column is 279px — and progress that meant a fixed number
+   of pixels would show as a different fraction in each. The declared 64px
+   stays as the fallback for no JS: a constant lead on every title, which is
+   the same rule doing less rather than a line that has lost an end.
+
+   Both colours arrive through variables so a dark band can re-point them
+   without restating the gradients. */
+.title-rule {
+  --title-rule-brand: var(--brand);
+  --title-rule-line: var(--line);
+  padding-bottom: clamp(18px, 1.8vw, 26px);
+  background-image:
+    linear-gradient(var(--title-rule-brand), var(--title-rule-brand)),
+    linear-gradient(var(--title-rule-line), var(--title-rule-line));
+  background-repeat: no-repeat;
+  background-position:
+    left bottom,
+    left bottom;
+  background-size:
+    var(--title-rule-lead, clamp(44px, 5vw, 64px)) 1px,
+    100% 1px;
+}
+/* On navy the brand blue goes black and --line is a black tint on a black
+   ground, so both ends of the stroke have to come back as the light pair.
+   The line sits well under --on-dark-quiet: that figure is set for text at
+   caption size, and a 1px rule carrying the same alpha reads as a border. */
+.st-section--dark .title-rule,
+.pilates-golf .title-rule {
+  --title-rule-brand: var(--periwinkle);
+  --title-rule-line: color-mix(in oklch, var(--on-dark) 22%, transparent);
+}
+/* The golf band is the one dark ground on /pilates that is not an
+   .st-section--dark, so its tag needs the same move the navy sections get
+   from the rule three declarations above. */
+.pilates-golf .st-eyebrow {
+  color: var(--periwinkle);
+}
+
+/* ============================================================
+   Sports Therapy — page rhythm
+   Every band took the same --space-section interval, so the page
+   read as a flat stack: the three sections describing the
+   treatment sat exactly as far from one another as they did from
+   the visit and from the booking. Since the client revision every
+   light surface is white, so there is no change of ground to mark
+   a boundary either — the air is all there is.
+
+   The same two tiers as /pilates, at the same figures, so the two
+   service pages breathe alike. Acts: orientation (the hero, what it
+   helps with, what to expect) -> the treatment (myofascial release,
+   techniques, taping) -> booking. What to expect answers the
+   question the reader arrives with — what actually happens to me —
+   so it sits with the overview rather than after the detail of how
+   the work is done.
+   ============================================================ */
+
+.therapy-longform {
+  /* between sibling sections inside an act */
+  --gap-close: clamp(3.75rem, 2.3rem + 4.6vw, 7rem);
+  /* between acts */
+  --space-section: clamp(5.5rem, 3.2rem + 7vw, 10rem);
+  --gap-act: var(--space-section);
+  /* Between the parts of one section: a heading and the cards under it, the
+     cards and the note that qualifies them. This was the page's real
+     crowding — 44px under a section heading and 32px above a note, against
+     187px between the sections themselves, so a heading read as belonging to
+     its cards about as much as to the section above. */
+  --st-block: clamp(3.5rem, 2.1rem + 4.4vw, 6.5rem);
+}
+
+/* The taping band is full-bleed and keeps its own zero padding; the sections
+   either side of it supply the air. */
+.therapy-longform .st-section:not(.st-section--flush) {
+  padding-block: var(--gap-close);
+}
+
+/* :not() carries specificity, so this has to match the rule above it or the
+   sibling interval wins and the act breaks never appear. */
+.therapy-longform .st-section--act:not(.st-section--flush) {
+  padding-top: var(--gap-act);
+}
+
+/* The page ends on the booking card, and the footer under it is a different
+   thing again. */
+.therapy-longform > .st-section:last-child {
+  padding-bottom: var(--gap-act);
+}
+
+.therapy-longform .st-head {
+  margin-bottom: var(--st-block);
+}
+
+.therapy-longform .st-note {
+  margin-top: var(--st-block);
+}
+
+/* The treatment index is the one band on the page that is scanned rather
+   than read: two groups of eight short strings, and under them the note
+   saying referrals are welcome — the line a referring GP or consultant is
+   actually looking for. At the page's standard interval the section runs
+   past 1000px on a 1280-wide screen, so that note lands below the fold and
+   has to be hunted for. So the gaps *within* the band run at roughly two
+   thirds of the page's rhythm — tight rows, for a list nobody reads line by
+   line.
+
+   The air *around* the band goes the other way, to the act interval rather
+   than the sibling one. Compressing both would have buried the section in
+   the run of the page: a scan-list wants its rows close together and its
+   edges far apart, so the eye can see where the list starts and stops. */
+.therapy-longform #treatment {
+  --st-block: clamp(1.5rem, 0.9rem + 1.7vw, 2.5rem);
+  padding-block: var(--gap-act);
+}
+/* The one interval here that is not on the compact setting. The heading has
+   a standfirst under it, so the gap below it has to separate two pieces of
+   running text from a ruled list — the other gaps in this section only ever
+   part one row from the next. At --st-block it read as though the standfirst
+   belonged to the first group's label. */
+#treatment .st-head {
+  margin-bottom: clamp(2.5rem, 1.6rem + 2.7vw, 4rem);
+}
+#treatment .st-index__group {
+  padding-top: clamp(14px, 1.3vw, 18px);
+}
+#treatment .st-index__group:first-child {
+  padding-top: 0;
+}
+/* Kept well under the gap below the heading, so the two read as one index
+   with a heading over it rather than as two sections in a row. */
+#treatment .st-index__group + .st-index__group {
+  margin-top: clamp(14px, 1.5vw, 22px);
+}
+/* Short single-line strings, so the rule between them carries the
+   separation and the row does not need the air a paragraph would. */
+#treatment .st-rows--split li {
+  padding: 8px 0;
+}
+/* No frame — the treatment index above is built from rules, so the note
+   closes it as one more rule rather than as an outlined block. Only the
+   brand edge on the left remains, and the padding drops to what that edge
+   needs to clear the text. */
+#treatment .st-note {
+  padding: 2px 0 2px clamp(18px, 2vw, 26px);
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  background: none;
+}
+/* Reads as the closing row of the index above, not as a block of prose, so it
+   takes the shell as its measure rather than the 70ch cap other notes hold. */
+#treatment .st-note p {
+  max-width: none;
+}
+
+
 /* ---- Section heading ---- */
 
 .st-head {
@@ -6761,6 +7702,76 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 .st-section--tint .st-card {
   background: var(--paper);
 }
+
+/* One card of a pair painted navy — the conditions list on /sports-therapy,
+   which is the half of that pair naming what people arrive with. It takes the
+   same on-dark treatment .st-section--dark gives a whole band, scoped to the
+   box instead. Named twice because the tint rule directly above is 0,2,0: a
+   lone .st-card--navy would lose to the paper it is meant to replace.
+   The border is the fill so the box has no hairline halo against the tint. */
+.st-card--navy,
+.st-section--tint .st-card--navy {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: var(--on-dark);
+}
+.st-card--navy h2,
+.st-card--navy h3 {
+  color: var(--on-dark);
+}
+.st-card--navy > p {
+  color: var(--on-dark-soft);
+}
+.st-card--navy .st-eyebrow {
+  color: var(--periwinkle);
+}
+
+/* ---- A pair of cards that flies up as you scroll to it ----
+   The home page's quote band, applied to two cards instead of two halves of
+   one: outcomes climbs into place first and the navy conditions card comes up
+   behind it. Scrubbed, not switched — main.js writes --pair-in and
+   --pair-in-late every frame from where the pair sits on screen, so the
+   movement is tied to position rather than to a moment it once crossed. See
+   scrub-in.js, which the quote band now shares.
+
+   The two cards travel as whole panels, and what they uncover as they go is
+   the section's own tint. That is what buys the travel: they fly up into the
+   row out of the page rather than shuffling their contents, and it is why the
+   distances below can be tens of a fold rather than the tens of pixels a
+   card's own padding would have allowed.
+
+   The defaults of 1 are the resting state, so with no JS — or under reduced
+   motion, where scrub-in.js leaves the pair alone — nothing is displaced. */
+.st-pair {
+  /* Holds each panel to the row while it is displaced, so a card waiting its
+     turn cannot spill down over the band below. Safe on a card that is only
+     ever translated: nothing here overflows its cell at rest. */
+  overflow: clip;
+}
+
+/* Square, against the rounded card everywhere else: these two are read as one
+   pair of panels rather than two objects, and the hard corner is what makes
+   the row sit as a block. */
+.st-pair__panel {
+  border-radius: 0;
+}
+
+/* In vh, and paired with the fractions in main.js — a panel waiting its turn
+   sits one travel below its resting place, so it is off screen only while
+   that travel exceeds the gap between its start fraction and the fold.
+   Outcomes starts at 1.0, as its top edge crosses the bottom of the screen, so
+   any travel keeps it hidden; conditions starts at 0.86, so it needs more than
+   14vh, and 20vh leaves it six of margin. */
+.st-pair__panel:first-child {
+  transform: translateY(calc((1 - var(--pair-in, 1)) * 14vh));
+}
+
+/* Further than the first as well as later: starting later means starting
+   deeper, so the navy card is the one that travels. */
+.st-pair__panel:last-child {
+  transform: translateY(calc((1 - var(--pair-in-late, 1)) * 20vh));
+}
+
 .st-card h2,
 .st-card h3 {
   margin: 0 0 14px;
@@ -6777,21 +7788,143 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 .st-card > p:last-child {
   margin-bottom: 0;
 }
-.st-card--step b {
+/* ---- What to expect: three unboxed steps on a drawn line ----
+   No card chrome here. The numbers carry the sequence and a single drawn line
+   threads them — the same broad-nib hand as the conversation on /about, turned
+   on its side. See step-wave.js, which measures and draws it.
+
+   The rule below it is the fallback, not a second device: the wave only runs
+   when the three steps are on one line, and step-wave.js adds .has-wave to say
+   so. Wrapped to two columns or one — or with no JS at all — the group keeps
+   the vertical rule instead, which is what this section looked like before the
+   line existed. */
+/* The rule and the padding are read back by the note below this block, which
+   is a sibling of it rather than a child and so has to be told the same
+   inset by hand — see #what-to-expect .st-note--rule. Fallbacks kept so the
+   class still stands up on its own if it is ever used outside that section. */
+.st-ruled {
+  position: relative;
+  padding-left: var(--ruled-pad, clamp(18px, 2vw, 28px));
+  border-left: var(--ruled-rule, 2px) solid var(--brand);
+  /* How far off its axis the line swings, in px. A bare number rather than a
+     length because step-wave.js does arithmetic with it, the same as
+     --spine-amp on /about. It has to stay inside .st-step__node's margin or
+     the swing crosses the type. */
+  --wave-amp: 22;
+}
+.st-ruled.has-wave {
+  border-left-color: transparent;
+}
+
+/* overflow is visible because the line enters from off the left of the shell
+   and runs out past the right, drawing into the section's own padding at both
+   ends. */
+.st-wave {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* A filled shape rather than a stroke: on this line the width is the drawing —
+   thin along the horizontals, swelling through each turn — and a width that
+   changes along its length is not something stroke-width can say. Weights
+   match the spine on /about, which is the same pen. */
+.st-wave__nib {
+  fill: color-mix(in oklch, var(--brand) 68%, transparent);
+}
+.st-wave__node {
+  fill: color-mix(in oklch, var(--brand) 78%, transparent);
+}
+
+.st-steps {
+  display: grid;
+  position: relative;
+  z-index: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 64px);
+}
+.st-head {
+  position: relative;
+  z-index: 1;
+}
+.st-step b {
   display: block;
-  margin-bottom: 18px;
-  color: var(--brand);
-  font-size: var(--step-00);
-  font-weight: 600;
-  letter-spacing: 0.11em;
-}
-.st-card--step h3 {
+  color: var(--ink);
+  font-family: var(--font-serif);
   font-size: var(--step-2);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
 }
-.st-card--step p {
+
+/* Where the line's node goes, and — because it is in the flow rather than
+   drawn over it — the only thing reserving room for the swing. Its margins
+   have to clear --wave-amp above and below or the line crosses the type.
+   Empty and 7px square so the same box is the dot when there is no wave. */
+.st-step__node {
+  display: block;
+  width: 7px;
+  height: 7px;
+  margin: clamp(28px, 2.8vw, 40px) 0;
+  border-radius: 50%;
+}
+.st-ruled:not(.has-wave) .st-step__node {
+  margin: clamp(14px, 1.4vw, 20px) 0;
+  background: var(--brand);
+}
+.st-step h3 {
+  margin: 0 0 10px;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  font-weight: 600;
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+}
+.st-step p {
+  max-width: 30ch;
   margin: 0;
   color: var(--ink-soft);
+  font-size: var(--step-0s);
   line-height: var(--lh-body);
+}
+
+/* The row reads left to right, so it should arrive that way too. Delays are
+   on the step, not the observer, so each one holds until its turn.
+
+   --at is when this step's text is released. The values here are the fallback
+   — an even 130ms apart, for the wrapped layouts and the no-JS case, where
+   nothing is drawing and there is nothing to be in step with. When the line is
+   running, step-wave.js overwrites --at inline with the moment the line
+   actually reaches that node, which is not evenly spaced: the entry sweep and
+   the swing between nodes are arc, so 02 arrives later than a third of the way
+   through. */
+.st-step[data-reveal].pre-reveal {
+  transform: translateY(30px);
+}
+.st-step {
+  transition-delay: var(--at, 0ms);
+}
+
+/* --lift is how far this step rides off the row's baseline so that it sits on
+   its own node — 01 and 03 up, 02 down, written by step-wave.js from the same
+   amplitude it draws the swing at. It has to be folded into the reveal's
+   transform rather than set alongside it, because there is only one transform
+   per element and the reveal already owns it. Both rules have to out-specify
+   the [data-reveal] pair in the reveal block above, which is why they carry
+   the wrapper and the attribute. */
+.st-ruled.has-wave .st-step[data-reveal].pre-reveal {
+  transform: translateY(calc(var(--lift, 0px) + 30px));
+}
+.st-ruled.has-wave .st-step[data-reveal].is-visible {
+  transform: translateY(var(--lift, 0px));
+}
+.st-step:nth-child(2) {
+  --at: 130ms;
+}
+.st-step:nth-child(3) {
+  --at: 260ms;
 }
 .st-card--onDark {
   border-color: rgba(242, 246, 255, 0.16);
@@ -6824,6 +7957,309 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   padding-bottom: 0;
 }
 
+/* ---- Fascia map: the six uses set around the claim that links them ----
+   Deliberately card-free. It sits beside a bordered card and next to a page of
+   them, so a box here would put the diagram back in the same bracket as the
+   list it replaced; the ring is the only enclosure it needs.
+
+   Three columns rather than polar coordinates: the labels are sentences of
+   very different lengths and a real ring would either clip the long one or
+   push the short ones miles out. The wires and the dotted orbit do the radial
+   reading; the grid keeps the text in two clean stacks. ---- */
+
+/* The map is the wider half. An even split gives it about 640px, and once the
+   centre has taken 240 of those the sentences are down to five or six
+   characters a line. 0.72/1 leaves the prose a 60ch measure — what it reads at
+   now — and hands the rest to the diagram. */
+.st-grid--fascia {
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+  align-items: center;
+}
+
+/* --st-block is set for a heading sitting on top of a block of cards, where
+   the gap is the only thing parting the two. Nothing here needs that much:
+   the heading carries no standfirst, and the map below it opens on its own
+   ring of space, so the page interval read as a hole between the title and
+   the band rather than as air around either. Roughly half, which still
+   clears the heading of the prose column beside the ring. */
+#myofascial-release .st-head {
+  margin-bottom: clamp(2rem, 1.3rem + 2.2vw, 3.5rem);
+}
+
+/* No card here either. The map is card-free and a bordered box beside it made
+   the pair read as one boxed thing and one loose one; unboxed, the two halves
+   sit on the same ground and the ring is the only enclosure in the band. The
+   measure the card's padding used to enforce is now the rule's own job. */
+/* The gap between paragraphs is wider than the site's default because this
+   column has room the others do not: it sits against a map half as tall again,
+   and the air between the three was the only thing left holding it short. Two
+   gaps at this figure still leave the prose the shorter of the two, so the
+   band's height is the map's and does not move. */
+.fascia-prose p {
+  max-width: 52ch;
+  margin: 0 0 clamp(22px, 2.4vw, 34px);
+  line-height: var(--lh-body);
+}
+.fascia-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.fascia-map {
+  /* Shared by the column gap and the wire length, so a wire always lands at
+     the orbit no matter how the gap has scaled. */
+  --fascia-gap: clamp(18px, 2.4vw, 40px);
+  --fascia-line: rgba(242, 246, 255, 0.22);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--fascia-gap);
+  margin: 0;
+  padding-block: clamp(8px, 1.6vw, 24px);
+}
+
+/* Rows are floored rather than content-sized so both columns come out the same
+   height. Left to itself the right column runs ~120px longer — 05 is three
+   lines where 01 is two — and the two sides stop being level with each other,
+   which a diagram built on a centre line cannot afford. The floor clears three
+   lines at this measure; a fourth grows the row on both sides at once. */
+/* The pitch between rows is set against the ring, not against the text: at
+   this gap the outer two sit a little past the top and bottom of the circle
+   rather than alongside it, so the six read as spread around the centre
+   instead of stacked beside it. */
+.fascia-map__nodes {
+  display: grid;
+  grid-auto-rows: minmax(76px, auto);
+  align-content: center;
+  gap: clamp(30px, 4.6vw, 68px);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.fascia-map__node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--on-dark-soft);
+  font-size: var(--step-0s);
+  line-height: 1.45;
+}
+.fascia-map__node b {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--fascia-line);
+  border-radius: 50%;
+  color: var(--on-dark);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
+}
+
+/* The wire from each row to the orbit. --row is the row's index within its
+   column, and the middle row is the one level with the centre, so only the
+   outer two are tilted. Left column: the wire leaves the row's inner (right)
+   edge and the far end drops for row 0, rises for row 2. Right column is the
+   same line mirrored, which flips the sign of both. */
+.fascia-map__node::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: var(--wire, calc(var(--fascia-gap) + 6px));
+  border-top: 1px dashed var(--fascia-line);
+  transform: rotate(var(--tilt, 0deg));
+}
+.fascia-map__nodes--left .fascia-map__node::after {
+  left: 100%;
+  transform-origin: left center;
+}
+.fascia-map__nodes--right .fascia-map__node::after {
+  right: 100%;
+  transform-origin: right center;
+}
+/* Now that the outer rows clear the top and bottom of the circle, they can
+   come in over the shoulder of it — the ring is barely any width up there.
+   That inward step is what makes the six sit around the centre rather than in
+   two flat stacks, and it steepens the wires, so both change together.
+
+   translate rather than margin: the row keeps its column width, so shifting it
+   does not reflow the sentence into a narrower measure than the middle row's.
+   The step is held as --nudge rather than written straight into a transform,
+   because the reveal below needs the same transform to lift the row in — one
+   property, so the two have to be composed rather than declared twice.
+
+   The outer wires are the long ones, not the short ones. Only the middle row
+   meets the ring at its widest point; up at the shoulder the ring has fallen
+   back most of its radius, so a stub the length of the middle one's stops in
+   open space. Everything here scales off --fascia-gap, which scales with the
+   circle, so the three lengths stay in proportion as the band resizes. */
+.fascia-map__nodes .fascia-map__node[style*="--row:0"],
+.fascia-map__nodes .fascia-map__node[style*="--row:2"] {
+  --shift: clamp(12px, 1.8vw, 28px);
+  --wire: calc(var(--fascia-gap) * 1.9 + 8px);
+}
+.fascia-map__nodes--left .fascia-map__node[style*="--row:0"] {
+  --tilt: 27deg;
+  --nudge: var(--shift);
+}
+.fascia-map__nodes--left .fascia-map__node[style*="--row:2"] {
+  --tilt: -27deg;
+  --nudge: var(--shift);
+}
+.fascia-map__nodes--right .fascia-map__node[style*="--row:0"] {
+  --tilt: -27deg;
+  --nudge: calc(var(--shift) * -1);
+}
+.fascia-map__nodes--right .fascia-map__node[style*="--row:2"] {
+  --tilt: 27deg;
+  --nudge: calc(var(--shift) * -1);
+}
+
+/* The map arrives a piece at a time: the centre first, then the six counting
+   round 01 to 06, so the diagram assembles itself in the order it is meant to
+   be read rather than fading up as one flat block.
+
+   The figure is the trigger, not the thing that moves. It is off the shared
+   [data-reveal] entirely — a count this long needs a later trigger than the
+   site-wide one, and main.js has its own observer for it that puts .pre-reveal
+   here and takes it away once the map is properly on screen. Nothing moves the
+   figure itself: had it faded too, its opacity would multiply its children's
+   and the first node would come up through two fades at once.
+
+   Everything below hangs off .pre-reveal, which JS only adds once its observer
+   is running, so with no JS and under reduced motion (where .pre-reveal is
+   never applied) the map is simply there. */
+.fascia-map__core,
+.fascia-map__node {
+  transform: translateX(var(--nudge, 0px));
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out-quart);
+  transition-delay: var(--at, 0ms);
+}
+.fascia-map.pre-reveal .fascia-map__core,
+.fascia-map.pre-reveal .fascia-map__node {
+  opacity: 0;
+}
+/* The centre settles out rather than up — it is the thing the wires point at,
+   so it should look like it was always there and the labels came to it. */
+.fascia-map.pre-reveal .fascia-map__core {
+  transform: scale(0.94);
+}
+.fascia-map.pre-reveal .fascia-map__node {
+  transform: translate(var(--nudge, 0px), 16px);
+}
+
+/* 01–03 down the left, then 04–06 down the right: the numbering's order, which
+   is also the <ol>'s. Delays are on the node, not the observer, so the six
+   count off in sequence from the one moment the figure enters rather than each
+   firing when its own row happens to cross the fold — the two columns are side
+   by side, so per-node observers would run 01 and 04 together. */
+.fascia-map__nodes--left .fascia-map__node:nth-child(1) {
+  --at: 120ms;
+}
+.fascia-map__nodes--left .fascia-map__node:nth-child(2) {
+  --at: 220ms;
+}
+.fascia-map__nodes--left .fascia-map__node:nth-child(3) {
+  --at: 320ms;
+}
+.fascia-map__nodes--right .fascia-map__node:nth-child(1) {
+  --at: 420ms;
+}
+.fascia-map__nodes--right .fascia-map__node:nth-child(2) {
+  --at: 520ms;
+}
+.fascia-map__nodes--right .fascia-map__node:nth-child(3) {
+  --at: 620ms;
+}
+
+.fascia-map__core {
+  position: relative;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  width: clamp(230px, 19vw, 268px);
+  aspect-ratio: 1;
+  /* A circle's usable box is narrower than its diameter, and the claim and the
+     note both have to sit inside it — keep this generous and the text spills
+     over the ring instead. */
+  padding: clamp(18px, 1.9vw, 28px);
+  border: 1px solid var(--fascia-line);
+  border-radius: 50%;
+  text-align: center;
+}
+/* The orbit — where the wires are aimed. Sits outside the ring at half the
+   column gap, so it stays clear of the labels as the gap scales. */
+.fascia-map__core::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--fascia-gap) / -2 - 4px);
+  border: 1px dashed rgba(242, 246, 255, 0.13);
+  border-radius: 50%;
+}
+/* Hands on a back, cropped square, filling the whole circle. Decorative — the
+   claim over it says the thing, so the img carries alt="" rather than a second
+   telling of the same sentence.
+
+   Absolute rather than a background-image: the core is a grid whose one flow
+   child is the claim, and taking the photo out of flow is what lets the text
+   centre on the circle instead of being pushed below the picture. Its own
+   border-radius rather than overflow:hidden on the core — the orbit ring is
+   the core's ::before at a negative inset, and clipping the box would take
+   that with it. */
+.fascia-map__shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+/* The scrim. A photograph of skin under white serif is a contrast problem at
+   every size the circle takes, and the answer that keeps the photograph
+   readable is a wash rather than a flat panel: heaviest in the middle where
+   the two lines sit, easing off towards the rim so the edge of the disc still
+   dissolves into the navy instead of stopping against a hard grey ring.
+
+   ::after, because ::before is already the orbit. It is generated as the last
+   child of the core, so it paints over the claim as well as the photo unless
+   the claim is lifted past it — see the z-index on .fascia-map__claim, which
+   is the only reason this needs stacking at all. */
+.fascia-map__core::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    oklch(17.4% 0.048 275 / 0.8) 0%,
+    oklch(17.4% 0.048 275 / 0.68) 55%,
+    oklch(17.4% 0.048 275 / 0.52) 100%
+  );
+  pointer-events: none;
+}
+/* Tag-qualified: .st-section--dark p paints every paragraph on navy
+   --on-dark-soft at the same weight as a bare class, so this one needs the
+   element to hold its own colour. */
+/* Lifted over the scrim (the core's ::after, which is generated after it), and
+   held at full --on-dark rather than the softened variant now that it is
+   reading against a photograph instead of flat navy. The shadow is a hairline
+   of insurance for the light patches in the crop, not a visible effect. */
+p.fascia-map__claim {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  text-shadow: 0 1px 12px oklch(17.4% 0.048 275 / 0.55);
+  color: var(--on-dark);
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
 /* ---- Ruled index: card-free groups, label rail + two columns of rows.
    Used by /sports-therapy#treatment, which sits directly below another
    two-card grid — without the box chrome the two sections stop echoing
@@ -6835,6 +8271,13 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   gap: clamp(22px, 3vw, 52px);
   padding-top: clamp(20px, 2.4vw, 30px);
   border-top: 1.5px solid var(--ink);
+}
+/* The first group sits right under the section heading, so its rule read as a
+   second line under the one the heading already carries. The rule between the
+   groups still does the separating work. */
+.st-index__group:first-child {
+  padding-top: 0;
+  border-top: 0;
 }
 .st-index__group + .st-index__group {
   margin-top: clamp(30px, 3.6vw, 48px);
@@ -6858,6 +8301,11 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   border-top: 1px solid var(--line);
   border-bottom: 0;
   break-inside: avoid;
+}
+/* Tagged in rows() — the first row of each column. Nothing sits above it for
+   the rule to separate it from. */
+.st-rows--split li.is-col-top {
+  border-top: 0;
 }
 
 /* ---- Notes ---- */
@@ -6890,6 +8338,36 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 .st-note--rule {
   border-radius: 0;
   border-left: 4px solid var(--brand-strong);
+}
+/* Both notes on /sports-therapy carry the brand edge and neither keeps a
+   frame. This one closes the steps, and there is no box anywhere in that
+   band: the wave, the numerals and the step text all sit straight on the
+   page. A frame here would be the only one in the section, so the edge does
+   the work alone. */
+#what-to-expect .st-note--rule {
+  /* The steps above sit inside .st-ruled, inset from the shell by that
+     wrapper's own rule plus its padding. This note is a sibling of the
+     wrapper, not a child, so it started hard against the shell edge and its
+     brand rule hung a full inset to the left of the heading it belongs
+     under. Both figures are declared on the section below, so the two
+     cannot drift apart. */
+  margin-left: var(--ruled-inset);
+  padding: 2px 0 2px clamp(18px, 1.8vw, 24px);
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  background: none;
+}
+/* Notes elsewhere hold a 70ch measure so they read as a block of prose. This
+   one closes the steps band and is meant to run the width of the section, so
+   it drops the cap and takes the shell as its measure. */
+#what-to-expect .st-note--rule p {
+  max-width: none;
+}
+#what-to-expect {
+  --ruled-rule: 2px;
+  --ruled-pad: clamp(18px, 2vw, 28px);
+  --ruled-inset: calc(var(--ruled-rule) + var(--ruled-pad));
 }
 
 .st-footnote {
@@ -7152,6 +8630,81 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   }
 }
 
+/* The map needs about 700px to keep three columns without the sentences going
+   to five characters a line, and its share of the shell stops supplying that
+   well before the other two-card grids are in trouble. So this grid breaks to
+   one column of its own accord, earlier than .st-grid--2 does, and the map
+   takes the full width rather than the map itself collapsing. */
+@media (max-width: 1240px) {
+  .st-grid--fascia {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(28px, 4vw, 48px);
+  }
+  /* Both halves take the same measure once they are stacked, or the prose
+     runs the full shell at 110ch above a map that stops well short of it. */
+  /* Both halves take the same measure and the same left edge as the heading —
+     everything else in the band starts at the shell edge, and a centred pair
+     under a left-set h2 reads as a mistake. */
+  .fascia-map,
+  .fascia-prose {
+    max-width: 860px;
+  }
+  /* Stacked, the map has the whole shell and the labels go to one line each,
+     so the centre can take the room it wants rather than the room the
+     right-hand column could spare. */
+  .fascia-map__core {
+    width: clamp(260px, 30vw, 320px);
+  }
+}
+
+/* Below this even the full width is too narrow for a centre with a column
+   either side: the orbit is dropped, the claim goes on top and the six run as
+   two plain columns under it. */
+@media (max-width: 720px) {
+  .fascia-map {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    justify-items: start;
+    gap: clamp(22px, 4vw, 32px);
+  }
+  /* The centre is the middle child in source order, which is where it belongs
+     when it has a column either side. Stacked, it reads first.
+
+     It used to shed the circle here too — no ring, no aspect ratio, just a
+     claim sitting over the two columns. It holds the photograph now, and a
+     box whose height is two lines of text would squash that into a letterbox
+     with 50% rounding on it, so the disc stays a disc and only the width comes
+     down. The orbit is still dropped: there are no wires left to aim at it. */
+  .fascia-map__core {
+    order: -1;
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: min(100%, 260px);
+  }
+  .fascia-map__core::before {
+    display: none;
+  }
+  .fascia-map__node::after {
+    display: none;
+  }
+  /* The row floor exists to keep the two sides level across the centre. Once
+     they are stacked there is no centre to be level with, and it just leaves
+     one-line items floating in 76px. */
+  .fascia-map__nodes {
+    grid-auto-rows: auto;
+    gap: clamp(16px, 3vw, 24px);
+  }
+  /* No ring to come in over once they are stacked — the step just makes two of
+     every three rows look accidentally indented. Zeroing --shift rather than
+     --nudge or the transform: --nudge is set per-column and per-row and the
+     transform is shared with the reveal, so the far end of the chain is the
+     one place a single rule reaches all four. */
+  .fascia-map__nodes .fascia-map__node[style*="--row:0"],
+  .fascia-map__nodes .fascia-map__node[style*="--row:2"] {
+    --shift: 0px;
+  }
+}
+
 @media (max-width: 960px) {
   .therapy-hero__grid {
     grid-template-columns: 1fr;
@@ -7170,6 +8723,10 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   .st-grid--3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .st-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(24px, 4vw, 40px);
+  }
   .st-split,
   .st-split--text {
     grid-template-columns: 1fr;
@@ -7179,6 +8736,11 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 @media (max-width: 640px) {
   .st-rows--split {
     columns: 1;
+  }
+  /* One column now, so the second column's old first row is a middle row
+     again and needs its rule back. */
+  .st-rows--split li.is-col-top:not(:first-child) {
+    border-top: 1px solid var(--line);
   }
   .therapy-hero {
     min-height: auto;
@@ -7196,8 +8758,15 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     height: 420px;
   }
   .st-grid--2,
-  .st-grid--3 {
+  .st-grid--3,
+  .st-steps {
     grid-template-columns: 1fr;
+  }
+  .st-step p {
+    max-width: none;
+  }
+  .fascia-map {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

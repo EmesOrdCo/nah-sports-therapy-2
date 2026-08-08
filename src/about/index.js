@@ -19,7 +19,11 @@ export function buildAboutPage() {
   };
 }
 
-/* No init hook: the page is entirely CSS — the standing columns are
-   position:sticky and the fades are the site's own IntersectionObserver. If a
-   future change needs JS here, add an init() to the variant module and call it
-   from main.js alongside initPageFeatures(). */
+/* One init hook, for the drawn spine down the conversation. Everything else on
+   the page is CSS — the fades are the site's own IntersectionObserver, the
+   portrait's edges are a mask — and the travel from the hero to the quote is
+   the site-wide opening move, wired up per route in main.js. A no-op on every
+   other route. */
+export function initAboutPage() {
+  about.init();
+}

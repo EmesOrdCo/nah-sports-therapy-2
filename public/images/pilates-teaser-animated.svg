@@ -72,9 +72,8 @@
 
   <!-- Nodes -->
   <circle class="node" style="--delay:2.05s" cx="500" cy="70" r="7" />
-  <circle class="node" style="--delay:2.14s" cx="68" cy="500" r="6" />
-  <circle class="node" style="--delay:2.23s" cx="932" cy="500" r="6" />
-  <circle class="node" style="--delay:2.32s" cx="742" cy="262" r="6" />
-  <circle class="node" style="--delay:2.41s" cx="300" cy="740" r="6" />
-  <circle class="node" style="--delay:2.5s" cx="700" cy="740" r="6" />
+  <circle class="node" style="--delay:2.14s" cx="70" cy="500" r="6" />
+  <circle class="node" style="--delay:2.23s" cx="930" cy="500" r="6" />
+  <circle class="node" style="--delay:2.32s" cx="285" cy="872.4" r="6" />
+  <circle class="node" style="--delay:2.41s" cx="715" cy="872.4" r="6" />
 </svg>

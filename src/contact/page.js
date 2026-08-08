@@ -92,12 +92,12 @@ function hero() {
       <p class="cv__lede">Get in touch to ask a question, discuss what you need or arrange an appointment.</p>
 
       <div class="cv__doors">
-        <a class="cv__door cv__door--call" href="${BUSINESS.phoneHref}">
+        <a class="cv__door cv__door--call" href="${BUSINESS.phoneHref}" data-reveal>
           <span class="cv__door-icon">${icon("phone")}</span>
           <span class="cv__door-value">${BUSINESS.phoneDisplay}</span>
           <span class="cv__door-note">Call Natasha</span>
         </a>
-        <a class="cv__door cv__door--write" href="#enquiry">
+        <a class="cv__door cv__door--write" href="#enquiry" data-reveal>
           <span class="cv__door-icon">${icon("mail")}</span>
           <h2 class="cv__door-value" id="enquiry-title">Send an enquiry</h2>
           <span class="cv__door-note">Prefer to write? Use the form.</span>

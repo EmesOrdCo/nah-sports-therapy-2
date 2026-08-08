@@ -172,11 +172,11 @@ your own group of friends`,
     parent: "pilates",
     images: [
       {
-        src: "/images/legacy/prenatal-pilates.jpg",
+        src: "/images/natal/prenatal-7155356.webp",
         alt: "Prenatal Pilates exercise",
       },
       {
-        src: "/images/legacy/postnatal-pilates.jpg",
+        src: "/images/natal/postnatal-3094222.webp",
         alt: "Postnatal Pilates exercise",
       },
     ],

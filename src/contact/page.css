@@ -180,15 +180,30 @@
   padding: var(--space-s);
   align-content: start;
   gap: 4px;
-  border-radius: var(--radius-card);
+  border-radius: 0;
   text-decoration: none;
+  /* The tiles carry data-reveal, so they rise the way the reassurance items
+     further down the page do. The reveal transition has to be restated here —
+     this rule and the shared [data-reveal] one weigh the same and this one is
+     later, so a plain `background, transform` list would win and the tiles
+     would appear without moving. The hover colour keeps its own short
+     duration and no delay. */
   transition:
-    background var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
+    opacity var(--dur-slow) var(--ease-out) 60ms,
+    transform var(--dur-slow) var(--ease-out-quart) 60ms,
+    background var(--dur-fast) var(--ease-out);
 }
 
+/* The second tile a beat behind the first, so the pair lands in sequence. */
+.cv__door--write {
+  transition-delay: 190ms, 190ms, 0s;
+}
+
+/* The press is immediate; only the arrival is delayed. */
 .cv__door:active {
   transform: translateY(1px);
+  transition-duration: var(--dur-fast);
+  transition-delay: 0s;
 }
 
 .cv__door--call {
@@ -219,7 +234,7 @@
   height: 34px;
   margin-block-end: var(--space-2xs);
   place-items: center;
-  border-radius: 9px;
+  border-radius: 0;
   color: var(--brand-strong);
   background: rgb(45 43 116 / 0.1);
 }

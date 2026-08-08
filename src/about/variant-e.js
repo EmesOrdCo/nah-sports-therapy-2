@@ -1,4 +1,5 @@
 import "./variant-e.css";
+import { initSpine } from "./spine.js";
 import {
   NAME,
   STORY,
@@ -15,14 +16,14 @@ import {
    Who she is, where she trained, what she treats, why she does it. An
    introduction and her portrait open the page together — two columns, the
    words held on the shell's left line and the photograph running off the right
-   edge of the window — and the conversation runs beneath them, closing on the
-   one sentence from the old site that turns from her to you ("You don't have to
-   be an athlete…").
+   edge of the window — then the marks she trained under drift past, and the
+   one sentence from the old site that turns from her to you ("You don't have
+   to be an athlete…") stands centred on the page before a word of the
+   conversation.
 
-   That sentence ("You don't have to be an athlete…") now opens the page as a
-   display quote between the credentials strip and the first question, rather
-   than closing it from inside the navy band. The band it came out of carries
-   the qualifications on their own.
+   That sentence used to close the page from inside a navy band, with the
+   qualifications listed beside it. The band has gone: the strip carries the
+   credentials now, and the sentence carries itself.
 
    The practical half — what happens, what to wear, what it costs, the clinic
    policies, where to find her, how to book — used to run underneath this and
@@ -34,6 +35,15 @@ import {
    first-time client came for. */
 
 export const meta = { label: "Interview", tone: "light" };
+
+/* The travel from the hero to the quote is the site-wide opening move, wired
+   up per route in main.js — see opening-move.js. It used to live here in full;
+   /prices and /client-stories wanted the same gesture, and three copies of a
+   scroll takeover is three ways for it to drift apart. */
+
+export function init() {
+  initSpine();
+}
 
 /* Answers are assembled by splitting her paragraphs at sentence boundaries
    rather than by retyping the fragments here. It keeps the wording bound to
@@ -58,11 +68,21 @@ const slug = (question) =>
     .replace(/^-|-$/g, "");
 
 /* <dl> allows a wrapping <div> around each pair, which is what lets one
-   question and its answer reveal and space as a single unit. The id is what
-   the practical half's index links to. */
-function pair(question, body, modifier = "") {
-  return `<div class="av-e__pair${modifier}" id="q-${slug(question)}" data-reveal>
-    <dt class="av-e__q">${question}</dt>
+   question and its answer reveal and space as a single unit, and here also what
+   lets the pair be placed as one cell of the grid. The id is what the practical
+   half's index links to.
+
+   `index` decides the side, and the row is set explicitly rather than left to
+   the grid. Auto-placement fills the first free cell, so the second pair asking
+   for the left column would land in the row the first pair had already opened:
+   questions would sit two abreast, the reader would meet them in pairs instead
+   of one at a time, and the spine would have to run dead horizontal between two
+   nodes sharing a line. One question per row is the whole premise. */
+function pair(question, body, index) {
+  const side = index % 2 === 0 ? "right" : "left";
+  return `<div class="av-e__pair av-e__pair--${side}" id="q-${slug(question)}"
+    style="grid-row: ${index + 1}" data-pair data-reveal>
+    <dt class="av-e__q" data-question>${question}</dt>
     <dd class="av-e__a">${body}</dd>
   </div>`;
 }
@@ -144,32 +164,26 @@ export function build() {
     </div>
   </section>
 
+  <!-- The axis is an empty, zero-width marker rather than anything drawn: it is
+       where the stylesheet says the spine runs, and the only thing spine.js
+       reads to find out. Which side each question sits on is then worked out
+       from whether it lands left or right of that mark, so the single column on
+       a phone — spine held at the left margin, every question to the right of
+       it — is a change of stylesheet and nothing else. -->
   <section class="av-e__interview">
     <div class="section-shell">
-      <dl class="av-e__qa">
-        ${pair("How did you get into this?", paras(STORY[0], TRAINING[0]))}
-        ${pair("Where did you train?", paras(TRAINING[1], TRAINING[2]))}
-        ${pair("What do you treat?", paras(PRACTICE.specialism))}
-        ${pair("What will you actually do?", paras(CARE[1]))}
-        ${pair("What are we working towards?", paras(AIM[0], CARE[2]))}
-        ${pair("Why do you do it?", paras(PULLQUOTES.passion), " av-e__pair--emphasis")}
-      </dl>
-    </div>
-  </section>
-
-  <!-- The record: the strip under the hero is the marks, this is what they
-       are. Both are built from QUALIFICATIONS, so they cannot disagree. -->
-  <section class="av-e__statement" aria-labelledby="quals-title">
-    <div class="section-shell av-e__statement-grid">
-      <h2 id="quals-title" data-reveal>Qualifications</h2>
-      <ul class="av-e__quals">
-        ${QUALIFICATIONS.map(
-          (q) => `<li data-reveal>
-            <span class="av-e__qual-name">${q.title}</span>
-            <span class="av-e__qual-body">${q.body}</span>
-          </li>`,
-        ).join("")}
-      </ul>
+      <div class="av-e__spine" data-spine>
+        <span class="av-e__spine-axis" aria-hidden="true" data-spine-axis></span>
+        <svg class="av-e__spine-draw" aria-hidden="true" focusable="false" data-spine-draw></svg>
+        <dl class="av-e__qa">
+          ${pair("How did you get into this?", paras(STORY[0], TRAINING[0]), 0)}
+          ${pair("Where did you train?", paras(TRAINING[1], TRAINING[2]), 1)}
+          ${pair("What do you treat?", paras(PRACTICE.specialism), 2)}
+          ${pair("What will you actually do?", paras(CARE[1]), 3)}
+          ${pair("What are we working towards?", paras(AIM[0], CARE[2]), 4)}
+          ${pair("Why do you do it?", paras(PULLQUOTES.passion), 5)}
+        </dl>
+      </div>
     </div>
   </section>
 

@@ -1,6 +1,6 @@
 /* Columns that drift past on a loop, and stop the moment you reach for them.
  *
- * Two bands use this: the testimonial wall on /testimonials and the taping
+ * Two bands use this: the wall of reviews on /client-stories and the taping
  * band on /sports-therapy. Both are the same mechanism — a fixed-height
  * window per column, the list inside it cloned until it is taller than the
  * window, and a position that wraps by exactly one copy so the loop has no
@@ -23,7 +23,12 @@ const NARROW = window.matchMedia("(max-width: 900px)");
 /* `parts` names the pieces inside the band: the columns, the window each one
    drifts inside, the track holding the list, and the class that marks a column
    as running downwards. Speed is per column, in pixels a second, via
-   data-drift-speed. */
+   data-drift-speed.
+
+   `pause: false` keeps the band running under the pointer. Quotes are read, so
+   the wall of reviews stops for a reader; photographs are not, and a band of
+   them that halts every time the pointer crosses the copy between the columns
+   reads as broken rather than considerate. */
 export function driftColumns(band, parts) {
   if (!band) return;
 
@@ -153,10 +158,12 @@ export function driftColumns(band, parts) {
   /* Hovering one column stops them all. Stopping only the one under the
      pointer leaves the others moving in the corner of your eye at the exact
      moment you have decided to look at something. */
-  band.addEventListener("pointerenter", hold);
-  band.addEventListener("pointerleave", release);
-  band.addEventListener("focusin", hold);
-  band.addEventListener("focusout", release);
+  if (parts.pause !== false) {
+    band.addEventListener("pointerenter", hold);
+    band.addEventListener("pointerleave", release);
+    band.addEventListener("focusin", hold);
+    band.addEventListener("focusout", release);
+  }
 
   let queued = false;
   const queueRebuild = () => {

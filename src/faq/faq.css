@@ -22,9 +22,9 @@
   padding: clamp(104px, 10vw, 132px) 0 0;
 }
 
-/* ---- The line-wave, shared with /testimonials ---- */
+/* ---- The line-wave, shared with /client-stories ---- */
 
-/* /testimonials is the artwork's height and nothing else, so the wave hangs off
+/* /client-stories is the artwork's height and nothing else, so the wave hangs off
    the bottom edge of that head. This one carries an intro and the drop line into
    station one as well, and on the same bottom anchor the sweep lands under both
    of them with the title it belongs to left in clear paper above. So it hangs
@@ -53,7 +53,7 @@
    amount. It is centred in the head, and this head is half as tall again as the
    one that rule was written against — centred here puts the crop below the
    title and behind the intro instead of around the title. Anchored under the
-   bar it lands where /testimonials has it. */
+   bar it lands where /client-stories has it. */
 @media (max-width: 700px) {
   .faq-hero .page-hero__wave {
     background-position: left 26% top clamp(96px, 26vw, 140px);
@@ -63,6 +63,36 @@
        far enough under the type that the words are read first and the wave is
        what they are read on. */
     opacity: 0.34;
+  }
+}
+
+/* ---- Arriving ---- */
+
+/* The sweep the wave makes on load is the shared one — see
+   @keyframes hero-wave-sweep. /client-stories and /prices take it too, so it
+   lives with the rest of the wave rather than here.
+
+   What is this page's own is the drop line out of the head, drawn after the
+   sweep has passed the point it hangs from. It is the same line the journey
+   continues below, so it should look like it was started here rather than
+   already waiting. */
+@keyframes faq-spine-draw {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+.faq-hero__spine {
+  transform-origin: top;
+  animation: faq-spine-draw 0.7s 1.05s var(--ease-draw) both;
+}
+
+/* The site-wide reduced-motion block only shortens transitions; keyframes have
+   to be turned off where they are declared. This one ends on the state the page
+   should simply be in, so dropping the animation is the whole fix. */
+@media (prefers-reduced-motion: reduce) {
+  .faq-hero__spine {
+    animation: none;
   }
 }
 
@@ -335,5 +365,112 @@
 
   .faq-pair + .faq-pair {
     margin-top: clamp(2.25rem, 3.5vw, 3.25rem);
+  }
+}
+
+/* ---- Practical details -----------------------------------------------------
+
+   The section that used to close /pilates, moved here whole: same heading,
+   same four rows, same wording. These rules are the .pilates-practical block
+   from style.css carried across under the faq- prefix.
+
+   Two custom properties had to be resolved on the way over. --gap-act and
+   --pilates-block are declared on .pilates-longform, not on :root, so over
+   here they are undefined and every declaration reading one would have been
+   invalid at computed-value time — the section would have lost its padding
+   entirely. They are replaced with this page's own rhythm rather than with the
+   Pilates figures, so the section sits in the cadence of the page it is on and
+   meets .page-cta below it on the same interval.
+
+   .faq-practical__head reproduces .pilates-section-heading, which is a global
+   utility in style.css despite the name. It is restated here so this page does
+   not reach across into another page's classes for a heading. -------------- */
+
+.faq-practical {
+  padding-block: var(--space-section);
+  background: var(--surface);
+}
+
+.faq-practical__head {
+  position: relative;
+  z-index: 2;
+  max-width: 1080px;
+}
+
+.faq-practical__head h2 {
+  margin: 0;
+  font-size: var(--step-3);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+/* One column against the left edge — the fees card that used to fill the
+   second track has gone. Capped so the summary rows keep a readable measure
+   instead of running the full 1440px shell. */
+.faq-practical__grid {
+  display: grid;
+  margin-top: var(--space-l);
+  grid-template-columns: minmax(0, 820px);
+  justify-content: start;
+}
+
+.faq-practical article {
+  border-top: 1px solid var(--line);
+}
+
+.faq-practical article > span {
+  display: block;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line);
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
+.faq-practical details {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-practical summary {
+  display: flex;
+  min-height: 86px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  list-style: none;
+}
+
+.faq-practical summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-practical summary b {
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 400;
+  transition: transform var(--dur-fast) ease;
+}
+
+.faq-practical details[open] summary b {
+  transform: rotate(45deg);
+}
+
+.faq-practical details p {
+  max-width: 650px;
+  margin: 0;
+  padding: 0 50px 28px 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+@media (max-width: 960px) {
+  .faq-practical__grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
