@@ -117,6 +117,24 @@ rollback.
 
 ---
 
+## The GitHub Pages copy
+
+`https://emesordco.github.io/nah-sports-therapy-2/` is a second public copy of
+the site, and **its contact form cannot work**. Pages is static hosting, so there
+is no `/api/enquiry` on it. The form correctly shows NJH's email address instead,
+and `VITE_CONTACT_FORM_ENDPOINT` is deliberately left unset in that workflow so it
+keeps doing so — setting it would give a form that looks live, posts into a 404,
+and loses the enquiry.
+
+**Test on the `.netlify.app` URL, never on Pages.**
+
+After cutover there will be three public copies: Pages, `.netlify.app` and the
+real domain. Google can index the Pages one, and a client who finds it will
+report the form as broken. Worth retiring the workflow, or adding a `noindex`,
+once the domain is live. Not urgent for the meeting.
+
+---
+
 ## Rollback
 
 - **Site wrong?** Put the apex `A` back to `185.230.63.107` and `www` back to

@@ -25,13 +25,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-        env:
-          # Vite inlines VITE_* at build time, so the contact form's endpoint has
-          # to be present here or the deployed bundle ships without one and the
-          # form falls back to showing the email address. A repository variable,
-          # not a secret: the value ends up in public JS either way, and masking
-          # it only makes a failed build harder to read.
-          VITE_CONTACT_FORM_ENDPOINT: ${{ vars.VITE_CONTACT_FORM_ENDPOINT }}
+        # Deliberately no VITE_CONTACT_FORM_ENDPOINT here.
+        #
+        # The form posts to a Netlify Function, and Pages is static hosting:
+        # there is no /api/enquiry on this deployment and there cannot be. Left
+        # unset, the build ships without an endpoint and the form shows NJH's
+        # email address instead — which is the truth on this host. Setting it
+        # would replace an honest message with a form that looks live, posts
+        # into a 404 and loses the enquiry.
+        #
+        # Netlify is the real deployment. This workflow is a preview.
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
