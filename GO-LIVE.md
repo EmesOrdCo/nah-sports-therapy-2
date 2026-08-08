@@ -7,26 +7,34 @@ all work — a real enquiry was sent and received. What is untested is the brows
 
 ---
 
-## 0. Before the meeting — REQUIRED
+## 0. Deployed and tested — nothing to do
 
-**The contact form code is not on any remote yet.** It is committed locally on
-the branch `contact-form-resend`, and neither GitHub repo has `netlify.toml` or
-the `netlify/` directory. Until this is pushed and deployed, the five Netlify
-environment variables have nothing to read them, and the form posts into the
-catch-all redirect and fails without an error.
+Merged, pushed to `EmesOrdCo/nah-sports-therapy-2`, and live on
+`https://njh-therapy-2.netlify.app`. Verified against the deployed site, not
+locally:
 
-```sh
-git checkout main
-git merge contact-form-resend
-git push njh2 main          # confirm which remote Netlify builds from
-```
+| Check | Result |
+| --- | --- |
+| `/api/enquiry` reaches the function | `GET` → 405, the function's own reply |
+| A full enquiry sends | `{"success":true}`, email received |
+| Honeypot | success returned, nothing sent |
+| Bad email / no consent / no message / no name | each rejected with its own message |
+| Endpoint baked into the bundle | `/api/enquiry`, fallback branch eliminated |
 
-Then in Netlify: **Deploys → Trigger deploy → Clear cache and deploy site.**
+Two things had to be fixed to get there, both worth knowing if it breaks again:
 
-**Then test it before the meeting.** Submit the real form on the `.netlify.app`
-URL. It should arrive at the address the Resend account was opened with — the
-sandbox delivers nowhere else — which proves the whole chain end to end. If this
-does not work, nothing tomorrow will.
+- **Secrets scanning failed the build** on four environment variables that are
+  public by design. `SECRETS_SCAN_OMIT_KEYS` in `netlify.toml` now names them.
+  `RESEND_API_KEY` is deliberately still scanned. In the Netlify UI, only
+  `RESEND_API_KEY` should have "Contains secret values" ticked.
+- **The `/api/enquiry` rule did nothing in `netlify.toml`.** Netlify reads
+  `public/_redirects` first, so its `/*` catch-all matched the endpoint before
+  the toml was consulted — the form returned the HTML page with a 200, which the
+  client-side handler reads as success. It reported "your enquiry has been sent"
+  and sent nothing. All redirect rules now live in `_redirects`, in order.
+
+**If the form ever silently succeeds without an email arriving, check the
+redirect ordering first.** That failure looks exactly like a working form.
 
 ---
 
