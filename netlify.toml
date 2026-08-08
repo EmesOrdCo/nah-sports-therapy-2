@@ -4,6 +4,25 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+  # Secrets scanning checks the build output and the repo for the *values* of
+  # environment variables, and fails the build on a hit. Exactly one of ours is
+  # a secret. The other four are public by design and are named here so the
+  # scanner keeps guarding RESEND_API_KEY without crying about the rest:
+  #
+  #   VITE_CONTACT_FORM_ENDPOINT  "/api/enquiry" — Vite inlines it into public
+  #                               JavaScript on purpose, so it is *always* in
+  #                               the output. Scanned, it fails every build.
+  #   MAIL_FROM                   Resend's public sandbox address today, and a
+  #                               published send-only address after that.
+  #   MAIL_FROM_NAME              "NJH Website" — a display name, and the
+  #                               function's own default in enquiry.js.
+  #   MAIL_TO                     an inbox address, written in the docs.
+  #
+  # RESEND_API_KEY is deliberately absent from this list. It is the one value
+  # that must never appear in the repo or the build, and the scanner is the
+  # thing that would catch it if it ever did.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_CONTACT_FORM_ENDPOINT,MAIL_FROM,MAIL_FROM_NAME,MAIL_TO"
   # The GitHub Pages build serves from a subdirectory, so vite.config.js
   # defaults the base to /njh-sports-therapy/. Netlify serves the site at the
   # root of NJH's own domain, where that prefix would break every asset URL.

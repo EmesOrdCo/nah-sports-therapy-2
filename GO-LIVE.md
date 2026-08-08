@@ -24,8 +24,9 @@ git push njh2 main          # confirm which remote Netlify builds from
 Then in Netlify: **Deploys → Trigger deploy → Clear cache and deploy site.**
 
 **Then test it before the meeting.** Submit the real form on the `.netlify.app`
-URL. It should arrive at `emesordco@gmail.com` — that is the sandbox target and
-proves the whole chain end to end. If this does not work, nothing tomorrow will.
+URL. It should arrive at the address the Resend account was opened with — the
+sandbox delivers nowhere else — which proves the whole chain end to end. If this
+does not work, nothing tomorrow will.
 
 ---
 
@@ -140,7 +141,8 @@ once the domain is live. Not urgent for the meeting.
 - **Site wrong?** Put the apex `A` back to `185.230.63.107` and `www` back to
   `pointing.wixdns.net`. Wix returns.
 - **Email not arriving?** Set `MAIL_FROM` back to `onboarding@resend.dev` and
-  `MAIL_TO` to `emesordco@gmail.com`, redeploy. That is the known-good state.
+  `MAIL_TO` back to the Resend account's own address, redeploy. That is the
+  known-good state, and it is the one that was tested.
 - **Anything unclear?** Netlify → Functions → `enquiry` → the logs carry the full
   error. With no form-provider dashboard behind this, they are the only record
   that an enquiry existed.
