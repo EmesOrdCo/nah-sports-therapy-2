@@ -7,7 +7,7 @@
 export const BUSINESS = {
   phoneDisplay: "07881 821 901",
   phoneHref: "tel:+447881821901",
-  email: "njhsportstherapyandpilates@gmail.com",
+  email: "natasha@njhsportstherapy.co.uk",
 };
 
 /* The studio is also a private home, so it is named by village only — no
@@ -72,14 +72,30 @@ export const SAFETY_NOTE =
 
 /* Shared form internals. Every variant must keep data-enquiry-form and the
    field names intact — initPageFeatures() in site-content.js binds to them and
-   posts the whole FormData to VITE_CONTACT_FORM_ENDPOINT. */
+   posts the whole FormData to VITE_CONTACT_FORM_ENDPOINT.
+
+   The underscore-prefixed fields are the form provider's, and their names are
+   the whole of their behaviour: `_gotcha` is the honeypot and `_subject` sets
+   the notification's subject line, which the submit handler overwrites per
+   enquiry so the inbox can be triaged on the subject alone.
+
+   These names are Formspree's. FormSubmit — used briefly while the endpoint
+   was being proved out — calls the same honeypot `_honey`, and a provider swap
+   that forgets to rename it does not error: the field is simply accepted,
+   ignored, and the form goes unprotected while still looking correct. Whatever
+   provider is in VITE_CONTACT_FORM_ENDPOINT, check the honeypot's name against
+   its documentation, and submit a bot-shaped request to prove it. */
 export function honeypotAndSubject() {
   return `<div class="form-honeypot" aria-hidden="true"><label>Leave this field empty<input name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
     <input type="hidden" name="_subject" value="New NJH website enquiry">`;
 }
 
+/* The checkbox carries an explicit value because an unset one submits as the
+   literal "on", and "consent: on" is not a record of anything — least of all
+   on a health form, where what was agreed to may matter later. The value says
+   what was agreed, so the notification email is the evidence. */
 export function consentField() {
-  return `<div class="form-field form-field--full form-consent"><label><input type="checkbox" name="consent" required><span>I agree that NJH may use these details to respond to my enquiry.</span></label><span class="form-error">Please confirm before sending.</span></div>`;
+  return `<div class="form-field form-field--full form-consent"><label><input type="checkbox" name="consent" value="Yes — agreed NJH may use these details to reply" required><span>I agree that NJH may use these details to respond to my enquiry.</span></label><span class="form-error">Please confirm before sending.</span></div>`;
 }
 
 export function submitRow(label = "Send enquiry") {

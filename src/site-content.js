@@ -10,7 +10,7 @@ import { journeysList, hasJourneys } from "./journeys.js";
 const BUSINESS = {
   phoneDisplay: "07881 821 901",
   phoneHref: "tel:+447881821901",
-  email: "njhsportstherapyandpilates@gmail.com",
+  email: "natasha@njhsportstherapy.co.uk",
 };
 
 const escapePath = (path) => path.replace(/\/+$/, "") || "/";
@@ -2024,6 +2024,25 @@ export function initPageFeatures() {
     button.setAttribute("aria-busy", "true");
     status.textContent = "Sending your enquiry…";
 
+    /* The subject line is the only part of the notification Natasha sees
+       before opening it, and on a phone it is most of what she gets. A fixed
+       "New NJH website enquiry" wastes that: a screenful of identical subjects
+       cannot be triaged, and a Pilates question and an acute injury want
+       different reply times. Writing who and what into it makes the inbox
+       sortable and searchable by name months later.
+
+       Composed here rather than in the markup because it needs the values,
+       and written back into the existing hidden field so the FormData below
+       picks it up unchanged. Falls back to the static value if either field
+       is missing — no page should lose its send over a subject line. */
+    const subjectField = form.querySelector('input[name="_subject"]');
+    if (subjectField) {
+      const who = form.querySelector("#name")?.value.trim();
+      const what = form.querySelector("#service")?.value;
+      const parts = ["New enquiry", what, who].filter(Boolean);
+      if (parts.length > 1) subjectField.value = parts.join(" — ");
+    }
+
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -2031,6 +2050,23 @@ export function initPageFeatures() {
         headers: { Accept: "application/json" },
       });
       if (!response.ok) throw new Error("Form submission failed");
+
+      /* Some providers answer 200 to submissions they have refused and report
+         the refusal only in the body — FormSubmit does exactly this for an
+         address whose form has not been activated, and a blocked origin reads
+         the same way. Trusting the status code alone would thank somebody for
+         an enquiry that was never delivered, and on this site that is a lost
+         client. Formspree signals failure in the status code and so never
+         trips this, but the check costs nothing and outlives the provider.
+
+         A body that will not parse is treated as sent: the request did come
+         back 200, and inventing a failure has its own cost. Only an explicit
+         "false" counts as a refusal. */
+      const result = await response.json().catch(() => null);
+      if (result && String(result.success) === "false") {
+        throw new Error(result.message || "Form submission rejected");
+      }
+
       form.reset();
       form.classList.remove("was-validated");
       status.textContent =
