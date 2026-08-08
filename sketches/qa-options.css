@@ -1,0 +1,419 @@
+/* Styles for the five About Q&A directions. Everything here leans on the
+   site's own tokens — no new colours, no new type ramp — so what the captures
+   show is what the page would actually look like. */
+
+.qa {
+  background: var(--paper);
+  padding-block: var(--space-section);
+}
+
+.qa h3 {
+  margin: 0;
+}
+
+/* ===========================================================================
+   A. The spine
+   =========================================================================== */
+
+/* Narrower than the shell. The zig-zag already spends width; letting it run
+   the full 1440 leaves a column of dead paper down both outside edges and
+   pushes the two halves of the conversation too far apart to read as one. */
+.qa-a__rail {
+  position: relative;
+  max-width: 1120px;
+  margin-inline: auto;
+}
+
+/* Sits behind the cards and spans the whole rail, because the ties from each
+   node out to its card are drawn in the same path set as the curve itself. */
+.qa-a__curve {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* --line is a 14% ink hairline, which is right for a border and disappears as
+   a drawn stroke. The curve is the one piece of drawing on the section, so it
+   is allowed to be seen. */
+.qa-a__curve path {
+  stroke: color-mix(in oklch, var(--brand) 45%, transparent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.qa-a__list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 132px 1fr;
+  row-gap: var(--space-l);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qa-a__item {
+  position: relative;
+  display: flex;
+}
+
+.qa-a__item--right {
+  grid-column: 3;
+  justify-content: flex-start;
+}
+
+.qa-a__item--left {
+  grid-column: 1;
+  justify-content: flex-end;
+}
+
+.qa-a__card {
+  max-width: 30rem;
+}
+
+.qa-a__q {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+.qa-a__a p {
+  margin: var(--space-2xs) 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+/* The node is the anchor the curve is measured to, so it must sit on the
+   question's cap height rather than the top of the card. */
+.qa-a__node {
+  position: absolute;
+  top: 0.62em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--brand);
+  font-size: var(--step-1);
+}
+
+.qa-a__item--right .qa-a__node {
+  left: calc(-1 * var(--space-s));
+}
+
+.qa-a__item--left .qa-a__node {
+  right: calc(-1 * var(--space-s));
+}
+
+/* The last answer is the reason she does the job at all, so the curve ends
+   into it rather than passing it. */
+.qa-a__item--end .qa-a__a p {
+  max-width: 22ch;
+  color: var(--ink);
+  font-size: var(--step-3);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+/* ===========================================================================
+   B. Transcript
+   =========================================================================== */
+
+.qa-b__list {
+  position: relative;
+  max-width: 62rem;
+  margin: 0;
+  padding: 0 0 0 5.5rem;
+  list-style: none;
+}
+
+/* One hairline for the whole conversation rather than one per answer. */
+.qa-b__list::before {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 4rem;
+  width: 1px;
+  background: var(--line);
+}
+
+.qa-b__item {
+  position: relative;
+}
+
+.qa-b__item + .qa-b__item {
+  margin-top: var(--space-l);
+}
+
+.qa-b__num {
+  position: absolute;
+  top: 0.35em;
+  left: -5.5rem;
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.qa-b__q {
+  max-width: 30ch;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-head);
+}
+
+.qa-b__a p {
+  max-width: 58ch;
+  margin: var(--space-2xs) 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+.qa-b__item--end .qa-b__a p {
+  max-width: 24ch;
+  color: var(--ink);
+  font-size: var(--step-3);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+}
+
+/* ===========================================================================
+   C. Sticky question
+   =========================================================================== */
+
+.qa-c__item {
+  display: grid;
+  grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+  gap: var(--space-l);
+  padding-block: var(--space-m);
+  border-top: 1px solid var(--line);
+}
+
+.qa-c__item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.qa-c__pin {
+  position: sticky;
+  top: var(--space-l);
+}
+
+.qa-c__num {
+  display: block;
+  margin-bottom: var(--space-2xs);
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.qa-c__q {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-2);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+.qa-c__a p {
+  max-width: 56ch;
+  margin: 0 0 var(--space-xs);
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+.qa-c__a p:last-child {
+  margin-bottom: 0;
+}
+
+.qa-c__item--end .qa-c__a p {
+  max-width: 26ch;
+  color: var(--ink);
+  font-size: var(--step-3);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+}
+
+/* ===========================================================================
+   D. Bands
+   =========================================================================== */
+
+.qa-d {
+  padding-block: 0;
+}
+
+.qa-d__band {
+  padding-block: var(--space-l);
+}
+
+.qa-d__band--tint {
+  background: color-mix(in oklch, var(--brand) 4%, white);
+}
+
+.qa-d__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-l);
+  align-items: start;
+}
+
+.qa-d__head {
+  display: flex;
+  gap: var(--space-s);
+  align-items: baseline;
+}
+
+.qa-d__num {
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.qa-d__q {
+  max-width: 16ch;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-2h);
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+.qa-d__a p {
+  max-width: 54ch;
+  margin: 0 0 var(--space-xs);
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+.qa-d__a p:last-child {
+  margin-bottom: 0;
+}
+
+.qa-d__band--end .qa-d__a p {
+  max-width: 24ch;
+  color: var(--ink);
+  font-size: var(--step-3);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+}
+
+/* ===========================================================================
+   E. Index and panel
+   =========================================================================== */
+
+.qa-e__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+  gap: var(--space-l);
+  align-items: start;
+}
+
+.qa-e__index {
+  position: sticky;
+  top: var(--space-l);
+}
+
+.qa-e__index-label {
+  margin: 0 0 var(--space-s);
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-00);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.qa-e__index ol {
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--line);
+  list-style: none;
+}
+
+.qa-e__index li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  padding: var(--space-2xs) 0 var(--space-2xs) var(--space-s);
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: var(--step-0s);
+  line-height: 1.35;
+}
+
+.qa-e__index li span {
+  color: var(--line);
+}
+
+.qa-e__index li.is-here {
+  border-left-color: var(--brand);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.qa-e__index li.is-here span {
+  color: var(--brand);
+}
+
+.qa-e__item + .qa-e__item {
+  margin-top: var(--space-l);
+}
+
+.qa-e__q {
+  max-width: 30ch;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-1);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-head);
+}
+
+.qa-e__a p {
+  max-width: 58ch;
+  margin: var(--space-2xs) 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+/* The one the index is pointing at reads at full strength; the rest sit back
+   a little, which is what makes the index feel like it is doing something. */
+.qa-e__item:not(.is-here):not(.qa-e__item--end) .qa-e__a p {
+  color: color-mix(in oklch, var(--ink-soft) 62%, white);
+}
+
+.qa-e__item--end .qa-e__a p {
+  max-width: 24ch;
+  color: var(--ink);
+  font-size: var(--step-3);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--lh-head);
+}

@@ -19,7 +19,12 @@ export function buildAboutPage() {
   };
 }
 
-/* No init hook: the page is entirely CSS — the standing columns are
-   position:sticky and the fades are the site's own IntersectionObserver. If a
-   future change needs JS here, add an init() to the variant module and call it
-   from main.js alongside initPageFeatures(). */
+/* One init hook. Everything else on the page is CSS — the fades are the site's
+   own IntersectionObserver, the portrait's edges are a mask — but the pull to
+   the quote has to watch for the reader's first scroll, so it needs JS. Call
+   it from main.js alongside initPageFeatures(); it is a no-op on every other
+   route, and on this one it stands down the moment anything else has already
+   claimed the scroll position. */
+export function initAboutPage() {
+  about.init();
+}

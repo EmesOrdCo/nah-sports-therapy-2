@@ -5525,6 +5525,52 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   background: var(--paper);
 }
 
+/* The band rises as you reach it and settles back down as you leave, rather
+   than revealing once and staying put: it is the page's one pause, and it
+   reads better as somewhere you arrive at than as something that was always
+   there. The words lead, the photograph follows a beat behind.
+
+   Neither half can be the thing that moves. Each carries the band's own
+   colour — navy one side, the photograph the other — so a panel sliding up
+   would leave a strip of white under it at the band's edge. Instead the
+   words' content travels inside its navy panel, and the photograph is held
+   slightly oversized so it can travel inside its own frame without ever
+   uncovering an edge. */
+.voice-panel__words > *,
+.voice-panel__media img {
+  transition: transform var(--dur-slow) var(--ease-out-quart);
+}
+
+/* main.js adds .is-armed just before it starts watching, so with no JS — or
+   no observer — the band is simply visible. Nothing is gated on it firing. */
+/* The throw is capped by the citation, not by taste: the words are centred in
+   their panel, so what they can drop by is the slack under the last line —
+   about 35px once the quote has run to seven lines on a narrow window. Past
+   that the name slides out of the foot of the navy panel and the card's
+   overflow cuts it off, which is visible on the way back up, where the band
+   returns bottom-edge first. */
+.voice-panel__card.is-armed .voice-panel__words > * {
+  transform: translateY(30px);
+}
+
+/* The photograph's travel is a share of its own height rather than a fixed
+   distance, because the slack it moves through is one too: the 16% overscale
+   is 8% of the band above and below, and the band is anywhere from 400px to
+   620px tall. In pixels the travel would outrun the slack on a short band and
+   uncover the frame's edge; in percent the two shrink together. */
+.voice-panel__card.is-armed .voice-panel__media img {
+  transform: translateY(5%) scale(1.16);
+  transition-delay: 130ms;
+}
+
+.voice-panel__card.is-armed.is-in .voice-panel__words > * {
+  transform: translateY(0);
+}
+
+.voice-panel__card.is-armed.is-in .voice-panel__media img {
+  transform: translateY(0) scale(1.16);
+}
+
 .voice-panel__card {
   display: grid;
   min-height: clamp(400px, 44vw, 620px);
@@ -5639,6 +5685,16 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   .voice-panel__media {
     order: -1;
     aspect-ratio: 3 / 2;
+  }
+
+  /* Stacked, the photograph is the half you reach first — so the beat between
+     them swaps with the order, and the words come in behind it. */
+  .voice-panel__card.is-armed .voice-panel__media img {
+    transition-delay: 0ms;
+  }
+
+  .voice-panel__card.is-armed .voice-panel__words > * {
+    transition-delay: 130ms;
   }
 
   .voice-panel__words {

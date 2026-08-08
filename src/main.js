@@ -5,6 +5,7 @@ import { initPageFeatures, renderRoute } from "./site-content.js";
 import { observeBase, routePath } from "./base-path.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
 import { initFaqJourney } from "./faq/index.js";
+import { initAboutPage } from "./about/index.js";
 import { initContactSelects } from "./contact/index.js";
 import { initVoicesWall } from "./voices-wall.js";
 import { REVIEWS, SERVICE_LABELS } from "./reviews.js";
@@ -442,6 +443,33 @@ if (studioTabs.length) {
   });
 }
 
+/* The quote band under the studio. Every other reveal on the page fires once
+   and unobserves; this one is toggled, so the band comes up as you scroll down
+   to it and settles back down as you scroll away. The CSS carries the stagger
+   between the two halves — and reverses it on a phone, where the photograph is
+   the half you reach first. */
+const voicePanelCard = document.querySelector(".voice-panel__card");
+if (
+  voicePanelCard &&
+  !reducedMotion.matches &&
+  "IntersectionObserver" in window
+) {
+  // Armed only now: until this line the band is plain visible markup, so a
+  // browser without the observer never ends up looking at an empty navy panel.
+  voicePanelCard.classList.add("is-armed");
+  new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) =>
+        voicePanelCard.classList.toggle("is-in", entry.isIntersecting),
+      );
+    },
+    // A quarter of the band. Less and it settles while it is still a sliver at
+    // the fold; much more and it would be waiting on a fraction of a band that
+    // is already most of a short window.
+    { threshold: 0.25 },
+  ).observe(voicePanelCard);
+}
+
 const sectionLinks = [
   ...(navigation?.querySelectorAll('a[href*="#"]') || []),
 ].filter((link) => {
@@ -553,6 +581,10 @@ if (initialSection) {
 initSmoothScroll();
 initPageFeatures();
 initFaqJourney();
+// The About page's pull to the quote. Not when the route has already asked for
+// a section — /charity-work and the legacy anchors land the reader somewhere
+// deliberate, and this would set off from underneath them.
+if (!initialSection) initAboutPage();
 // After initPageFeatures: the contact page's submit listener has to run second
 // so it can put focus on a dropdown the shared handler could not reach.
 initContactSelects();
