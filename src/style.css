@@ -2238,6 +2238,58 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   );
 }
 
+/* ---- The sweep, on arrival ---- */
+
+/* The wave is drawn linework, so it arrives the way it was drawn: left to
+   right, out of the dense tail and away across the page. A clip edge travels
+   over it and the hairlines come in end-first, which reads as the sweep being
+   laid down rather than a picture being faded up.
+
+   Clipped rather than masked because the mask above is already spoken for —
+   the fade at the head and foot of the art is a mask-image, and a second one
+   would mean compositing two mask layers for no gain. clip-path is applied
+   separately from mask, so the two simply stack.
+
+   The edge leans: it is 14% further along at the top of the head than at the
+   foot, which is roughly the angle the sweep itself runs at. A dead-vertical
+   wipe on near-horizontal lines announces itself as a wipe.
+
+   The parallelogram starts wholly to the left of the box (nothing in frame)
+   and ends wholly past its right (everything in frame), and only the right
+   edge moves — same four points throughout, so it interpolates cleanly.
+
+   No opacity in here on purpose. The wave settles at three different values
+   depending on which cut it is and how wide the screen is — 0.72 here, 0.5 for
+   the crest, 0.34 on the phone crop of the /faq head — and a keyframe that
+   touched it would have to know all three. */
+@keyframes hero-wave-sweep {
+  from {
+    clip-path: polygon(-14% 0%, 0% 0%, -14% 100%, -28% 100%);
+  }
+  to {
+    clip-path: polygon(-14% 0%, 128% 0%, 114% 100%, -28% 100%);
+  }
+}
+
+/* On the shared element rather than per page: all three heads that carry a
+   wave carry the same sweep, at the same speed, which is the whole reason for
+   giving more than one page the artwork. Held off until the header has settled
+   in so the two do not arrive on top of one another, and slow, because it is
+   scenery — anything quicker turns into a transition the eye follows instead
+   of a background it reads on. */
+.page-hero__wave {
+  animation: hero-wave-sweep 1.5s 160ms var(--ease-draw) both;
+}
+
+/* The site-wide reduced-motion block only shortens transitions; keyframes have
+   to be turned off where they are declared. The animation ends on the state the
+   head should simply be in, so dropping it is the whole fix. */
+@media (prefers-reduced-motion: reduce) {
+  .page-hero__wave {
+    animation: none;
+  }
+}
+
 /* A phone is the one width where the whole wave is the wrong answer: drawn at
    375px it is a 112px thread sitting above the title, too faint to be a
    background and too thin to be a shape. Here it goes back to a crop — art
@@ -3578,7 +3630,23 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    hops to find out the Pilates page used the same blue as everywhere else.
    Their call sites now name the token directly. */
 
+/* The page's vertical rhythm, in two steps.
+
+   Every band on this page reaches for --space-section, so overriding it here
+   sets the whole page's spacing in one declaration — and only this page's.
+   It runs about half again the site default because the sections here are
+   separate ideas printed on the same white ground: there is no change of
+   surface to mark where one ends, so the air between them is the only
+   boundary there is, and at the shared figure they read as one long run.
+
+   --pilates-block is the step below it: the gap between the parts of a single
+   section. Held at roughly two thirds of the band padding, which is what
+   keeps "next element" and "next section" reading as different distances.
+   Anything closer and the hierarchy collapses again from the other end. */
 .pilates-longform {
+  --space-section: clamp(5rem, 2.9rem + 6.6vw, 9.5rem);
+  --pilates-block: clamp(3.5rem, 2.1rem + 4.4vw, 6.5rem);
+
   overflow: clip;
   background: #fff;
 }
@@ -3850,7 +3918,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   position: relative;
   display: grid;
   padding: 0;
-  margin: clamp(60px, 7vw, 100px) 0 0;
+  margin: var(--pilates-block) 0 0;
   grid-template-columns: repeat(4, 1fr);
   gap: clamp(16px, 2.5vw, 44px);
   list-style: none;
@@ -3930,50 +3998,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   font-size: var(--label);
   font-weight: var(--label-weight);
   letter-spacing: var(--label-track);
-  text-transform: uppercase;
-}
-
-.pilates-approach .pilates-approach__quote {
-  width: min(780px, 100%);
-  margin: clamp(64px, 8vw, 116px) auto 0;
-  text-align: center;
-}
-
-.pilates-approach__quote::before {
-  content: "";
-  display: block;
-  width: 40px;
-  height: 1px;
-  margin: 0 auto clamp(28px, 4vw, 44px);
-  background: var(--brand);
-}
-
-.pilates-approach__quote blockquote {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-size: var(--step-2h);
-  font-style: italic;
-  line-height: 1.34;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-
-.pilates-approach__quote figcaption {
-  margin-top: clamp(20px, 2.5vw, 30px);
-  color: var(--brand);
-  font-size: var(--label);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-track);
-  text-transform: uppercase;
-}
-
-.pilates-approach__credential-label {
-  margin: clamp(38px, 5vw, 58px) 0 0;
-  color: var(--ink-soft);
-  font-size: var(--label-sm);
-  font-weight: var(--meta-weight);
-  letter-spacing: var(--label-sm-track);
-  text-align: center;
   text-transform: uppercase;
 }
 
@@ -4218,7 +4242,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    read at there, rather than stretching the day rows across the whole shell. */
 .pilates-timetable {
   max-width: 1000px;
-  margin-top: clamp(56px, 6vw, 96px);
+  margin-top: var(--pilates-block);
 }
 
 .pilates-detail-label {
@@ -4304,8 +4328,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 .pilates-dual__grid {
   display: grid;
-  /* was up to 145px, which left the lone heading marooned above the grid */
-  margin-top: clamp(36px, 4vw, 56px);
+  margin-top: var(--pilates-block);
   grid-template-columns: 1fr 1fr;
   border-top: 1px solid var(--line);
 }
@@ -4385,7 +4408,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    serif, which floated it off to the right with nothing to align against. */
 .pilates-dual__note {
   max-width: 58ch;
-  margin: clamp(36px, 4vw, 56px) 0 0;
+  margin: var(--pilates-block) 0 0;
   padding-top: clamp(24px, 3vw, 36px);
   border-top: 1px solid var(--line);
   color: var(--ink-soft);
@@ -4484,7 +4507,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    instead of running the full 1440px shell. */
 .pilates-practical__grid {
   display: grid;
-  margin-top: clamp(48px, 5vw, 80px);
+  margin-top: var(--pilates-block);
   grid-template-columns: minmax(0, 820px);
   justify-content: start;
 }
@@ -4619,8 +4642,12 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     padding-top: 135px;
   }
 
+  /* Stacked, the `gap` that was separating two columns is now separating the
+     two halves of a section top to bottom, so it takes the page's own block
+     step rather than the 55px left over from the wide layout. */
   .pilates-hero__grid, .pilates-feature__grid, .pilates-golf__grid {
     grid-template-columns: 1fr;
+    gap: var(--pilates-block);
   }
 
   .pilates-hero__grid {
@@ -5525,50 +5552,52 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   background: var(--paper);
 }
 
-/* The band rises as you reach it and settles back down as you leave, rather
-   than revealing once and staying put: it is the page's one pause, and it
-   reads better as somewhere you arrive at than as something that was always
-   there. The words lead, the photograph follows a beat behind.
+/* The band flies up as you scroll down to it and sinks back as you scroll
+   away. It is scrubbed, not switched: main.js writes --voice-in every frame
+   from where the band sits on screen, so the movement is tied to the band's
+   position rather than to a moment it once crossed.
 
-   Neither half can be the thing that moves. Each carries the band's own
-   colour — navy one side, the photograph the other — so a panel sliding up
-   would leave a strip of white under it at the band's edge. Instead the
-   words' content travels inside its navy panel, and the photograph is held
-   slightly oversized so it can travel inside its own frame without ever
-   uncovering an edge. */
-.voice-panel__words > *,
-.voice-panel__media img {
-  transition: transform var(--dur-slow) var(--ease-out-quart);
+   That distinction is the whole point. This began as a threshold observer at
+   0.25, which a 620px band satisfies while it is still a 199px strip at the
+   foot of the fold — the run finished off screen and you never saw it move.
+   Position cannot be early: the band is on screen for every frame of it.
+
+   A second attempt fixed the timing but tied 48px of travel to 670px of
+   scrolling — fourteen pixels of scroll per pixel of movement, which reads as
+   nothing moving at all. Perceptible motion needs both: a run that happens on
+   screen, and a ratio you can see. Hence the short range below.
+
+   The two halves travel as whole panels — the navy block on the left, the
+   photograph on the right — and what they uncover as they go is the page's
+   own white. Earlier attempts moved only the content inside the navy, to avoid
+   exactly that strip, and were stuck with whatever travel the citation left
+   them. Letting the white show is what buys the travel: the two panels fly up
+   into the band out of the page rather than shuffling their contents. It also
+   keeps the halves reading as two halves, which a coloured card does not — fill
+   the card navy and the band becomes one blue box with a photograph inset in
+   it. The photograph keeps its exact framing either way: it rides with its
+   panel instead of moving inside a fixed frame, so there is no overscale and
+   no zoom.
+
+   The defaults of 1 are the resting state, so with no JS — or with reduced
+   motion, where main.js leaves the band alone — nothing is displaced. */
+/* In vh, not pixels, and the exact figures are load-bearing — see the note in
+   main.js. A panel waiting its turn sits one travel below its resting place,
+   so it is only hidden while that travel exceeds the gap between its start
+   fraction and the fold. Navy starts at 0.88, so it needs more than 12vh;
+   the photograph starts at 0.72, so it needs more than 28vh. Both have a
+   couple of vh of margin. Drop either below its figure and you get the panel
+   sitting parked in view before it moves, and parked again on the way back
+   up — which is the whole reason these are not fixed pixel amounts. */
+.voice-panel__words {
+  transform: translateY(calc((1 - var(--voice-in, 1)) * 14vh));
 }
 
-/* main.js adds .is-armed just before it starts watching, so with no JS — or
-   no observer — the band is simply visible. Nothing is gated on it firing. */
-/* The throw is capped by the citation, not by taste: the words are centred in
-   their panel, so what they can drop by is the slack under the last line —
-   about 35px once the quote has run to seven lines on a narrow window. Past
-   that the name slides out of the foot of the navy panel and the card's
-   overflow cuts it off, which is visible on the way back up, where the band
-   returns bottom-edge first. */
-.voice-panel__card.is-armed .voice-panel__words > * {
-  transform: translateY(30px);
-}
-
-/* The photograph's travel is a share of its own height rather than a fixed
-   distance, because the slack it moves through is one too: the 16% overscale
-   is 8% of the band above and below, and the band is anywhere from 400px to
-   620px tall. In pixels the travel would outrun the slack on a short band and
-   uncover the frame's edge; in percent the two shrink together. */
-.voice-panel__card.is-armed .voice-panel__media img {
-  transform: translateY(5%) scale(1.16);
-  transition-delay: 130ms;
-}
-
-.voice-panel__card.is-armed.is-in .voice-panel__words > * {
-  transform: translateY(0);
-}
-
-.voice-panel__card.is-armed.is-in .voice-panel__media img {
-  transform: translateY(0) scale(1.16);
+/* Further than the navy as well as later, which the geometry wants anyway:
+   starting later means starting deeper, so the photograph is the half that
+   travels. */
+.voice-panel__media {
+  transform: translateY(calc((1 - var(--voice-in-late, 1)) * 32vh));
 }
 
 .voice-panel__card {
@@ -5577,6 +5606,10 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   margin: 0;
   overflow: hidden;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* White, and load-bearing: this is what the panels uncover as they travel.
+     It reads as the page showing through behind them, which is what keeps the
+     navy block and the photograph looking like two separate halves. */
+  background: var(--paper);
 }
 
 /* The words start where the page's content starts. `50vw - 720px` is the
@@ -5687,18 +5720,17 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     aspect-ratio: 3 / 2;
   }
 
-  /* Stacked, the photograph is the half you reach first — so the beat between
-     them swaps with the order, and the words come in behind it. */
-  .voice-panel__card.is-armed .voice-panel__media img {
-    transition-delay: 0ms;
-  }
-
-  .voice-panel__card.is-armed .voice-panel__words > * {
-    transition-delay: 130ms;
+  /* Stacked, the photograph is the half you reach first — so the two swap
+     which of the pair leads, and the words come up behind it. Shorter travel
+     than side by side: the halves are half the height here, and 120px of a
+     260px photograph is a slide, not a settle. */
+  .voice-panel__media {
+    transform: translateY(calc((1 - var(--voice-in, 1)) * 14vh));
   }
 
   .voice-panel__words {
     padding: clamp(34px, 8vw, 52px) var(--page-gutter);
+    transform: translateY(calc((1 - var(--voice-in-late, 1)) * 32vh));
   }
 
   .voice-panel__card blockquote p {

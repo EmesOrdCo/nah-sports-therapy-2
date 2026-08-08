@@ -6,6 +6,7 @@ import { observeBase, routePath } from "./base-path.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
 import { initFaqJourney } from "./faq/index.js";
 import { initAboutPage } from "./about/index.js";
+import { initOpeningMove } from "./opening-move.js";
 import { initContactSelects } from "./contact/index.js";
 import { initVoicesWall } from "./voices-wall.js";
 import { REVIEWS, SERVICE_LABELS } from "./reviews.js";
@@ -443,31 +444,82 @@ if (studioTabs.length) {
   });
 }
 
-/* The quote band under the studio. Every other reveal on the page fires once
-   and unobserves; this one is toggled, so the band comes up as you scroll down
-   to it and settles back down as you scroll away. The CSS carries the stagger
-   between the two halves — and reverses it on a phone, where the photograph is
-   the half you reach first. */
+/* The quote band under the studio flies up as you scroll down to it and sinks
+   back as you scroll away. Unlike every other reveal on the page, this one is
+   scrubbed: the band's own position on screen is the animation's clock, so
+   there is no moment it can fire at and be finished before you look.
+
+   It was an IntersectionObserver at first, and that was the mistake. A quarter
+   of a 620px band is satisfied while the band is still a 199px strip at the
+   foot of a 900px fold — measured, not guessed — so all 750ms of the run
+   happened below the screen and the band was already at rest by the time it
+   was in front of you. Position cannot be early.
+
+   The CSS reads the two properties this writes, and swaps which of the pair
+   they drive on a phone, where the photograph is the half stacked on top. */
 const voicePanelCard = document.querySelector(".voice-panel__card");
-if (
-  voicePanelCard &&
-  !reducedMotion.matches &&
-  "IntersectionObserver" in window
-) {
-  // Armed only now: until this line the band is plain visible markup, so a
-  // browser without the observer never ends up looking at an empty navy panel.
-  voicePanelCard.classList.add("is-armed");
-  new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) =>
-        voicePanelCard.classList.toggle("is-in", entry.isIntersecting),
-      );
-    },
-    // A quarter of the band. Less and it settles while it is still a sliver at
-    // the fold; much more and it would be waiting on a fraction of a band that
-    // is already most of a short window.
-    { threshold: 0.25 },
-  ).observe(voicePanelCard);
+if (voicePanelCard && !reducedMotion.matches) {
+  /* Where the band's top sits as a share of the fold, at each end of the run.
+     It begins as the band's top edge crosses the bottom of the screen, so the
+     panels are already climbing by the time you have any of the band to look
+     at, and finishes while the band is still in the lower half — the movement
+     is over before you are reading the quote rather than under it.
+
+     Both ends are load-bearing. The first version of this fired 199px below
+     the fold and was finished before any of it was visible. The second ran
+     from 0.86 to 0.3, which is the band's whole crossing: 120px of travel
+     spread over that reads as static. Real travel over a short range is what
+     makes it visible; where that range sits is what makes it early. */
+  /* A stretch of the band's approach each, back to back — the photograph's
+     begins exactly where the navy's ends, so neither moves while the other is
+     still going. Written as where the band's top sits in the fold rather than
+     as a split of one run, because each boundary has to agree with a travel
+     distance in the stylesheet, and that is far easier to read side by side:
+
+       navy   starts at 0.88  ->  needs to travel more than 12vh
+       photo  starts at 0.72  ->  needs to travel more than 28vh
+
+     A panel waiting its turn sits one travel-distance below its resting place,
+     so it stays off screen only while (1 - start) * fold is less than that
+     travel. Get it wrong and you watch the panel parked in view before it sets
+     off — and, scrolling back up, parked again after it has handed back. Which
+     is exactly what happened when the travels were fixed pixel amounts: 150px
+     could not cover the 0.38 of a fold that the photograph's turn began at, so
+     192px of it sat on screen doing nothing. The stylesheet's travels are in
+     vh for this reason — the requirement scales with the window, so the
+     distance has to as well. */
+  const navyFrom = 0.88;
+  const navyTo = 0.72;
+  const photoFrom = 0.72;
+  const photoTo = 0.3;
+  let voiceQueued = false;
+
+  const clamp01 = (value) => Math.min(Math.max(value, 0), 1);
+
+  const drawVoicePanel = () => {
+    voiceQueued = false;
+    const top =
+      voicePanelCard.getBoundingClientRect().top / window.innerHeight;
+    /* Sequential by construction: the photograph's stretch begins on the same
+       fraction the navy's ends on, so --voice-in is already pinned at 1 by the
+       time --voice-in-late leaves 0. */
+    const span = (from, to) => clamp01((from - top) / (from - to));
+    voicePanelCard.style.setProperty("--voice-in", span(navyFrom, navyTo).toFixed(4));
+    voicePanelCard.style.setProperty(
+      "--voice-in-late",
+      span(photoFrom, photoTo).toFixed(4),
+    );
+  };
+
+  const queueVoicePanel = () => {
+    if (voiceQueued) return;
+    voiceQueued = true;
+    window.requestAnimationFrame(drawVoicePanel);
+  };
+
+  window.addEventListener("scroll", queueVoicePanel, { passive: true });
+  window.addEventListener("resize", queueVoicePanel, { passive: true });
+  drawVoicePanel();
 }
 
 const sectionLinks = [
@@ -578,13 +630,33 @@ if (initialSection) {
   );
 }
 
+/* The opening move: on these three routes the first scroll down carries the
+   reader from the head of the page to the thing the page is for, and stops
+   there. One entry per route, naming that thing — see opening-move.js.
+
+   BEFORE initSmoothScroll(): the move takes a qualifying wheel tick out of
+   circulation entirely, and when an event's target is window itself the
+   listeners run in registration order rather than capture-then-bubble, so
+   being registered first is what makes stopping the tick reliable.
+
+   Not armed at all when the route has already asked for a section:
+   /charity-work and the legacy anchors land the reader somewhere deliberate,
+   and this would set off from under them. */
+const openingMoveTargets = {
+  "/about": ".av-e__opening", // the quote that turns from her to you
+  "/prices": ".prices-page", // the fees
+  "/price-list": ".prices-page",
+  "/testimonials": ".voices", // the wall of reviews
+};
+if (!initialSection) {
+  const opening = openingMoveTargets[routePath()];
+  if (opening) initOpeningMove(opening);
+}
+
+initAboutPage();
 initSmoothScroll();
 initPageFeatures();
 initFaqJourney();
-// The About page's pull to the quote. Not when the route has already asked for
-// a section — /charity-work and the legacy anchors land the reader somewhere
-// deliberate, and this would set off from underneath them.
-if (!initialSection) initAboutPage();
 // After initPageFeatures: the contact page's submit listener has to run second
 // so it can put focus on a dropdown the shared handler could not reach.
 initContactSelects();

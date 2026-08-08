@@ -93,6 +93,32 @@
       "port": 5193
     },
     {
+      "name": "physio-dev-alt7",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5195",
+        "--strictPort"
+      ],
+      "port": 5195
+    },
+    {
+      "name": "physio-dev-alt8",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5197",
+        "--strictPort"
+      ],
+      "port": 5197
+    },
+    {
       "name": "physio-attach-5175",
       "url": "http://localhost:5175",
       "port": 5175

@@ -30,21 +30,22 @@ const num = (i) => String(i + 1).padStart(2, "0");
 
 /* ---- A. The spine ----
    One curve down the centre of the section, questions hanging off it left and
-   right. The path is drawn at runtime from the measured node positions — it
-   cannot be a static viewBox, because its height is whatever the answers make
-   it. See the inline script in build-qa-options.mjs. */
-const spine = () => `
-<section class="qa qa-a">
+   right. Nothing about the drawing can be known in advance — its height is
+   whatever the answers make it and its nodes sit wherever the type lands — so
+   the whole thing is written at runtime by the script in build-qa-options.mjs.
+   `line`, `node` and `tie` name which routine draws it; everything about how it
+   looks (swing, weight, colour) is a custom property in qa-options.css. */
+const spine = (treatment) => `
+<section class="qa qa-a qa-a--${treatment.id}">
   <div class="section-shell">
-    <div class="qa-a__rail" data-spine>
-      <svg class="qa-a__curve" aria-hidden="true" focusable="false"><path fill="none" /></svg>
+    <div class="qa-a__rail" data-spine='${JSON.stringify(treatment.draw)}'>
+      <svg class="qa-a__curve" aria-hidden="true" focusable="false"></svg>
       <ol class="qa-a__list">
         ${QA.map(
           (item, i) => `
-        <li class="qa-a__item qa-a__item--${i % 2 === 0 ? "right" : "left"}${item.emphasis ? " qa-a__item--end" : ""}">
-          <span class="qa-a__node" data-node></span>
+        <li class="qa-a__item qa-a__item--${i % 2 === 0 ? "right" : "left"}${item.emphasis ? " qa-a__item--end" : ""}" style="grid-row: ${i + 1}">
           <div class="qa-a__card" data-card>
-            <h3 class="qa-a__q">${item.q}</h3>
+            <h3 class="qa-a__q" data-q>${item.q}</h3>
             <div class="qa-a__a">${paras(item.a)}</div>
           </div>
         </li>`,
@@ -53,6 +54,59 @@ const spine = () => `
     </div>
   </div>
 </section>`;
+
+/* tension is how far each node's tangent is held vertical before the line is
+   allowed to head for the next one. 0.5 is the limit: past it the incoming and
+   outgoing control points cross over in y, the curve doubles back on itself at
+   the node, and anything that reads the tangent — the nib, the ribs — sees a
+   horizontal line where the curve should be at its most vertical. Low is snappy
+   and mechanical; 0.5 is as lazy as it can go without kinking. */
+export const SPINES = [
+  {
+    id: "hairline",
+    name: "Hairline — one even stroke, fading in and out at the ends",
+    draw: { line: "single", node: "dot", tie: true, tension: 0.5, fade: true, r: 3.5 },
+  },
+  {
+    id: "taut",
+    name: "Taut — barely leaves centre, open rings for nodes",
+    draw: { line: "single", node: "ring", tie: true, tension: 0.4, r: 4 },
+  },
+  {
+    id: "swing",
+    name: "Swing — the full gesture, travels further than it falls",
+    draw: { line: "single", node: "dot", tie: true, tension: 0.5, fade: true, r: 3 },
+  },
+  /* Three weights of the same pen. thin/thick is the range the stroke moves
+     between, in px; the node dot and the swing grow with it, because a 15px
+     ribbon swinging only as far as a hairline did reads as cramped, and a 2.5px
+     dot sitting on it disappears. */
+  {
+    id: "nib-medium",
+    name: "Broad nib, medium — a pen you can see",
+    draw: { line: "nib", node: "dot", tie: false, tension: 0.45, r: 3.5, nib: [1.1, 6.5] },
+  },
+  {
+    id: "nib-bold",
+    name: "Broad nib, bold — the line becomes a mark",
+    draw: { line: "nib", node: "dot", tie: false, tension: 0.45, r: 4.5, nib: [1.6, 10] },
+  },
+  {
+    id: "nib-heavy",
+    name: "Broad nib, heavy — a brush, punched through at each question",
+    draw: { line: "nib", node: "punch", tie: false, tension: 0.45, r: 5, nib: [2.4, 15] },
+  },
+  {
+    id: "vertebrae",
+    name: "Vertebrae — ribs struck along the line, long ones at the questions",
+    draw: { line: "vertebrae", node: "vertebra", tie: true, tension: 0.46, rib: 34, ribLen: 13, nodeLen: 26 },
+  },
+  {
+    id: "ribbon",
+    name: "Ribbon — two hairlines in parallel, an inside and an outside",
+    draw: { line: "ribbon", node: "dot", tie: true, tension: 0.5, offset: 2.6, r: 4 },
+  },
+];
 
 /* ---- B. Transcript ----
    One column, numbered, with a single hairline running the whole section
@@ -142,11 +196,11 @@ const index = () => `
 </section>`;
 
 export const VARIANTS = [
-  {
-    id: "a",
-    name: "The spine — centre curve, questions left and right",
-    build: spine,
-  },
+  ...SPINES.map((t, i) => ({
+    id: `a${i + 1}`,
+    name: `Spine — ${t.name}`,
+    build: () => spine(t),
+  })),
   { id: "b", name: "Transcript — one numbered column", build: transcript },
   { id: "c", name: "Sticky question — question holds, answer scrolls", build: sticky },
   { id: "d", name: "Bands — one question per full-width band", build: bands },

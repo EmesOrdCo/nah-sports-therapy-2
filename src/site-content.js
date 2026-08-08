@@ -700,10 +700,6 @@ function buildPilatesContinuousPage() {
               <strong>Restore balance to muscles around the joint</strong>
             </li>
           </ol>
-          <figure class="pilates-approach__quote" data-reveal>
-            <blockquote>Awareness is the greatest agent for change.</blockquote>
-          </figure>
-          <p class="pilates-approach__credential-label" data-reveal>STOTT Pilates trained</p>
         </div>
       </section>
 
@@ -725,8 +721,11 @@ function buildPilatesContinuousPage() {
                   <line x1="50" y1="99.3" x2="50" y2="94.4" />
                   <line x1="0.7" y1="50" x2="5.6" y2="50" />
                 </g>
+                <!-- Three nodes on the r=45.6 ring, 120° apart: top, then
+                     clockwise to lower-right and lower-left. -->
                 <circle class="hero-orb__node" cx="50" cy="4.4" r="1.5" />
-                <circle class="hero-orb__node" cx="95.6" cy="50" r="1.5" />
+                <circle class="hero-orb__node" cx="89.49" cy="72.8" r="1.5" />
+                <circle class="hero-orb__node" cx="10.51" cy="72.8" r="1.5" />
               </svg>
             </div>
             <dl class="pilates-orbit-facts">
@@ -1566,32 +1565,27 @@ function initStudioCarousel() {
       const distance = Math.abs(offset);
       const direction = Math.sign(offset);
 
-      // The neighbours tilt away from the centre — negative to the left,
-      // positive to the right — so the set reads as prints fanned on a table
-      // rather than a flat strip. The active print always sits square.
+      // Every print sits square. The neighbours are set back by scale, blur
+      // and opacity alone, so the set reads as photographs laid out flat.
       let translate;
-      let rotate;
       let scale;
       let opacity;
       let blur;
       let depth;
       if (offset === 0) {
         translate = 0;
-        rotate = 0;
         scale = 1;
         opacity = 1;
         blur = 0;
         depth = 30;
       } else if (distance === 1) {
         translate = direction * 56;
-        rotate = direction * 6;
         scale = 0.8;
         opacity = 0.5;
         blur = 1.4;
         depth = 20;
       } else {
         translate = direction * 90;
-        rotate = direction * 10;
         scale = 0.62;
         opacity = 0;
         blur = 4;
@@ -1599,9 +1593,8 @@ function initStudioCarousel() {
       }
 
       // Centring is the grid's job (place-self on the shared cell), so this
-      // only has to carry the offset. Rotate after the translate so each print
-      // turns about its own centre rather than swinging around the stage.
-      slide.style.transform = `translateX(${translate}%) rotate(${rotate}deg) scale(${scale})`;
+      // only has to carry the offset.
+      slide.style.transform = `translateX(${translate}%) scale(${scale})`;
       slide.style.opacity = String(opacity);
       slide.style.filter = blur ? `blur(${blur}px)` : "none";
       slide.style.zIndex = String(depth);

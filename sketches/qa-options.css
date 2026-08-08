@@ -15,6 +15,24 @@
    A. The spine
    =========================================================================== */
 
+/* The whole drawing — curve, ties and nodes — is written into this one SVG at
+   runtime, because none of it can be known in advance: the height is whatever
+   the answers make it, and the nodes sit wherever the type lands. Colour and
+   weight still live here rather than in the script, so the six treatments
+   below differ in CSS terms and not in JavaScript ones.
+
+   --qa-line   the drawn stroke
+   --qa-ink    nodes and vertebrae
+   --qa-amp    how far the curve swings off centre, in px
+   --qa-gutter the centre column the swing has to live inside */
+.qa-a {
+  --qa-line: color-mix(in oklch, var(--brand) 42%, transparent);
+  --qa-ink: var(--brand);
+  --qa-amp: 46;
+  --qa-gutter: 132px;
+  --qa-stroke: 1.25;
+}
+
 /* Narrower than the shell. The zig-zag already spends width; letting it run
    the full 1440 leaves a column of dead paper down both outside edges and
    pushes the two halves of the conversation too far apart to read as one. */
@@ -24,8 +42,6 @@
   margin-inline: auto;
 }
 
-/* Sits behind the cards and spans the whole rail, because the ties from each
-   node out to its card are drawn in the same path set as the curve itself. */
 .qa-a__curve {
   position: absolute;
   inset: 0;
@@ -34,20 +50,57 @@
   pointer-events: none;
 }
 
-/* --line is a 14% ink hairline, which is right for a border and disappears as
-   a drawn stroke. The curve is the one piece of drawing on the section, so it
-   is allowed to be seen. */
-.qa-a__curve path {
-  stroke: color-mix(in oklch, var(--brand) 45%, transparent);
-  stroke-width: 1.5;
+.qa-a__line {
+  fill: none;
+  stroke: var(--qa-line);
+  stroke-width: var(--qa-stroke);
   stroke-linecap: round;
+}
+
+/* The broad-nib treatment is a filled shape rather than a stroke — its width
+   is the drawing, so it cannot be a stroke-width. */
+.qa-a__nib {
+  fill: var(--qa-line);
+  stroke: none;
+}
+
+.qa-a__tie {
+  fill: none;
+  stroke: var(--qa-line);
+  stroke-width: 1;
+}
+
+.qa-a__dot {
+  fill: var(--qa-ink);
+  stroke: none;
+}
+
+.qa-a__ring {
+  fill: var(--paper);
+  stroke: var(--qa-ink);
+  stroke-width: 1.25;
+}
+
+.qa-a__vertebra {
+  fill: none;
+  stroke: var(--qa-ink);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+}
+
+.qa-a__rib {
+  fill: none;
+  stroke: var(--qa-ink);
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0.55;
 }
 
 .qa-a__list {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1fr 132px 1fr;
+  grid-template-columns: 1fr var(--qa-gutter) 1fr;
   row-gap: var(--space-l);
   margin: 0;
   padding: 0;
@@ -59,6 +112,11 @@
   display: flex;
 }
 
+/* The row is set per item in the markup rather than left to auto-placement.
+   Auto-placement fills the first free cell, so item 2 asking for column 1 lands
+   in the row item 1 already opened — pairs end up side by side, two questions
+   read at once, and the curve has to run dead horizontal between two nodes
+   sharing a y. One question per row is the whole premise. */
 .qa-a__item--right {
   grid-column: 3;
   justify-content: flex-start;
@@ -91,26 +149,6 @@
   line-height: 1.65;
 }
 
-/* The node is the anchor the curve is measured to, so it must sit on the
-   question's cap height rather than the top of the card. */
-.qa-a__node {
-  position: absolute;
-  top: 0.62em;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--brand);
-  font-size: var(--step-1);
-}
-
-.qa-a__item--right .qa-a__node {
-  left: calc(-1 * var(--space-s));
-}
-
-.qa-a__item--left .qa-a__node {
-  right: calc(-1 * var(--space-s));
-}
-
 /* The last answer is the reason she does the job at all, so the curve ends
    into it rather than passing it. */
 .qa-a__item--end .qa-a__a p {
@@ -120,6 +158,92 @@
   letter-spacing: var(--tracking-display);
   line-height: var(--lh-head);
   text-wrap: balance;
+}
+
+/* ---- Six treatments of the line ----
+   The layout underneath is identical in all six. What changes is how far the
+   curve swings, how tightly it turns, and what the stroke is made of. */
+
+/* 1. Hairline. One even stroke, fading in and out at both ends so the line
+      neither starts nor stops on the paper. The quiet reading. */
+.qa-a--hairline {
+  --qa-amp: 46;
+  --qa-gutter: 132px;
+  --qa-stroke: 1.25;
+}
+
+/* 2. Taut. Almost straight — the line breathes rather than travels, and the
+      nodes become open rings so the drawing is punctuation, not gesture. */
+.qa-a--taut {
+  --qa-line: color-mix(in oklch, var(--brand) 32%, transparent);
+  --qa-amp: 26;
+  --qa-gutter: 108px;
+  --qa-stroke: 1;
+}
+
+/* 3. Swing. The full gesture — the line travels further sideways than it falls
+      between nodes, and needs a much wider centre column to do it in. */
+.qa-a--swing {
+  --qa-line: color-mix(in oklch, var(--brand) 38%, transparent);
+  --qa-amp: 96;
+  --qa-gutter: 248px;
+  --qa-stroke: 1.5;
+}
+
+/* 4. Broad nib. Width varies with the angle of travel, thin on the verticals
+      and swelling through each turn — a pen held at a fixed angle. This is the
+      one that reads as the same hand as the site's line drawings.
+
+      Three weights. The colour firms up as the stroke gets heavier rather than
+      staying put: a 15px ribbon at the medium weight's transparency reads as a
+      wash, and a hairline at the heavy weight's would read as a hard rule. */
+.qa-a--nib-medium {
+  --qa-line: color-mix(in oklch, var(--brand) 68%, transparent);
+  --qa-ink: color-mix(in oklch, var(--brand) 78%, transparent);
+  --qa-amp: 58;
+  --qa-gutter: 168px;
+}
+
+.qa-a--nib-bold {
+  --qa-line: color-mix(in oklch, var(--brand) 80%, transparent);
+  --qa-ink: var(--brand);
+  --qa-amp: 66;
+  --qa-gutter: 184px;
+}
+
+.qa-a--nib-heavy {
+  --qa-line: color-mix(in oklch, var(--brand) 92%, transparent);
+  --qa-ink: var(--brand);
+  --qa-amp: 74;
+  --qa-gutter: 204px;
+}
+
+/* At the heavy weight a dot on the stroke is invisible, so the node becomes a
+   hole punched clean through it — paper showing, ringed in the same ink. */
+.qa-a__punch {
+  fill: var(--paper);
+  stroke: var(--qa-ink);
+  stroke-width: 1;
+}
+
+/* 5. Vertebrae. The hairline with short ribs struck perpendicular along it,
+      longer where a question hangs off. Anatomical, which is what the practice
+      is about — and it makes each node a landmark rather than a bullet. */
+.qa-a--vertebrae {
+  --qa-line: color-mix(in oklch, var(--brand) 34%, transparent);
+  --qa-ink: color-mix(in oklch, var(--brand) 70%, transparent);
+  --qa-amp: 40;
+  --qa-gutter: 132px;
+  --qa-stroke: 1;
+}
+
+/* 6. Ribbon. Two hairlines running parallel a couple of pixels apart, so the
+      line has an inside and an outside — a tendon rather than a wire. */
+.qa-a--ribbon {
+  --qa-line: color-mix(in oklch, var(--brand) 38%, transparent);
+  --qa-amp: 52;
+  --qa-gutter: 152px;
+  --qa-stroke: 1;
 }
 
 /* ===========================================================================

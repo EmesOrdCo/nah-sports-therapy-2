@@ -19,12 +19,11 @@ export function buildAboutPage() {
   };
 }
 
-/* One init hook. Everything else on the page is CSS — the fades are the site's
-   own IntersectionObserver, the portrait's edges are a mask — but the pull to
-   the quote has to watch for the reader's first scroll, so it needs JS. Call
-   it from main.js alongside initPageFeatures(); it is a no-op on every other
-   route, and on this one it stands down the moment anything else has already
-   claimed the scroll position. */
+/* One init hook, for the drawn spine down the conversation. Everything else on
+   the page is CSS — the fades are the site's own IntersectionObserver, the
+   portrait's edges are a mask — and the travel from the hero to the quote is
+   the site-wide opening move, wired up per route in main.js. A no-op on every
+   other route. */
 export function initAboutPage() {
   about.init();
 }

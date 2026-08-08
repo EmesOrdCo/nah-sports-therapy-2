@@ -1,4 +1,5 @@
 import "./variant-e.css";
+import { initSpine } from "./spine.js";
 import {
   NAME,
   STORY,
@@ -35,117 +36,13 @@ import {
 
 export const meta = { label: "Interview", tone: "light" };
 
-/* ---- The pull to the quote ----
-   The first scroll on this page does not just move it a little. Once that
-   opening gesture has come to rest, the page carries on down of its own accord
-   and settles with the quote centred, so the sentence that speaks to the
-   reader is what the page arrives at rather than something they have to go
-   looking for.
-
-   It is the only movement on the site the reader does not drive, so it is
-   hedged: it fires once, only from the top, only downwards, only if they have
-   not already scrolled past the quote under their own steam, and never for
-   anyone who has asked for reduced motion. Anything they do during the travel
-   ends it on the spot and hands the page straight back. */
-
-// Quiet, in ms, that marks the end of the opening gesture. The weighted
-// scroller in smooth-scroll.js keeps emitting scroll events while a flick
-// settles, so this is measured from the last of those, not from the wheel.
-const SETTLE_QUIET = 140;
-// Past this many pixels the page is no longer "at the top" and the reader is
-// already somewhere of their own choosing.
-const ARM_LIMIT = 160;
-// Less than this is a stray pixel of wheel, a bounce, or a focus ring being
-// scrolled into view — not somebody setting off down the page.
-const MIN_INTENT = 24;
-
-const easeOut = (t) => 1 - Math.pow(1 - t, 3);
-
-/* Hand-rolled rather than scrollIntoView({ behavior: "smooth" }): the browser's
-   own duration is fixed and short, and over the 1,600-odd pixels between the
-   top of this page and the quote it reads as a jump cut rather than as travel.
-   Writing the position frame by frame also means the wheel handler in
-   smooth-scroll.js picks up cleanly from wherever we stopped. */
-function glide(to) {
-  const from = window.scrollY;
-  const distance = to - from;
-  const duration = Math.min(1100, Math.max(600, Math.abs(distance) * 0.55));
-  const started = performance.now();
-  const events = ["wheel", "touchstart", "keydown", "mousedown"];
-  let frame = 0;
-
-  const stop = () => {
-    if (frame) window.cancelAnimationFrame(frame);
-    frame = 0;
-    events.forEach((name) => window.removeEventListener(name, stop));
-  };
-
-  const step = (now) => {
-    const progress = Math.min(1, (now - started) / duration);
-    // "instant", or this inherits the stylesheet's scroll-behavior: smooth and
-    // puts a second easing on top of the one above.
-    window.scrollTo({
-      top: from + distance * easeOut(progress),
-      behavior: "instant",
-    });
-    if (progress < 1) frame = window.requestAnimationFrame(step);
-    else stop();
-  };
-
-  events.forEach((name) =>
-    window.addEventListener(name, stop, { passive: true }),
-  );
-  frame = window.requestAnimationFrame(step);
-}
+/* The travel from the hero to the quote is the site-wide opening move, wired
+   up per route in main.js — see opening-move.js. It used to live here in full;
+   /prices and /testimonials wanted the same gesture, and three copies of a
+   scroll takeover is three ways for it to drift apart. */
 
 export function init() {
-  const quote = document.querySelector(".av-e__opening");
-  if (!quote) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  // A hash means the reader asked for a particular place on the page. Taking
-  // them somewhere else instead is the one thing this must never do.
-  if (window.location.hash || window.scrollY > ARM_LIMIT) return;
-
-  const from = window.scrollY;
-  let armed = true;
-  let timer = 0;
-
-  const disarm = () => {
-    armed = false;
-    window.clearTimeout(timer);
-    window.removeEventListener("scroll", onScroll);
-    window.removeEventListener("keydown", disarm);
-  };
-
-  /* Space, Page Down and the arrows move the page a deliberate, known amount,
-     and tabbing scrolls the next link into view. Carrying on past any of those
-     under your own steam is the opposite of what was asked for, so the first
-     key stands the whole thing down. */
-  window.addEventListener("keydown", disarm, { passive: true });
-
-  const travel = () => {
-    if (!armed) return;
-    const y = window.scrollY;
-    // Still where they started, or gone back up: not the opening scroll, so
-    // stay armed and wait for one that is.
-    if (y <= from + MIN_INTENT) return;
-
-    const box = quote.getBoundingClientRect();
-    const centre = y + box.top + box.height / 2 - window.innerHeight / 2;
-    disarm();
-    // At it or past it already — a restored scroll position, or a reader who
-    // moves faster than this does. Either way, leave them where they are.
-    if (y >= centre - 8) return;
-    glide(centre);
-  };
-
-  function onScroll() {
-    if (!armed) return;
-    window.clearTimeout(timer);
-    timer = window.setTimeout(travel, SETTLE_QUIET);
-  }
-
-  window.addEventListener("scroll", onScroll, { passive: true });
+  initSpine();
 }
 
 /* Answers are assembled by splitting her paragraphs at sentence boundaries
@@ -171,11 +68,21 @@ const slug = (question) =>
     .replace(/^-|-$/g, "");
 
 /* <dl> allows a wrapping <div> around each pair, which is what lets one
-   question and its answer reveal and space as a single unit. The id is what
-   the practical half's index links to. */
-function pair(question, body, modifier = "") {
-  return `<div class="av-e__pair${modifier}" id="q-${slug(question)}" data-reveal>
-    <dt class="av-e__q">${question}</dt>
+   question and its answer reveal and space as a single unit, and here also what
+   lets the pair be placed as one cell of the grid. The id is what the practical
+   half's index links to.
+
+   `index` decides the side, and the row is set explicitly rather than left to
+   the grid. Auto-placement fills the first free cell, so the second pair asking
+   for the left column would land in the row the first pair had already opened:
+   questions would sit two abreast, the reader would meet them in pairs instead
+   of one at a time, and the spine would have to run dead horizontal between two
+   nodes sharing a line. One question per row is the whole premise. */
+function pair(question, body, index) {
+  const side = index % 2 === 0 ? "right" : "left";
+  return `<div class="av-e__pair av-e__pair--${side}" id="q-${slug(question)}"
+    style="grid-row: ${index + 1}" data-pair data-reveal>
+    <dt class="av-e__q" data-question>${question}</dt>
     <dd class="av-e__a">${body}</dd>
   </div>`;
 }
@@ -257,16 +164,26 @@ export function build() {
     </div>
   </section>
 
+  <!-- The axis is an empty, zero-width marker rather than anything drawn: it is
+       where the stylesheet says the spine runs, and the only thing spine.js
+       reads to find out. Which side each question sits on is then worked out
+       from whether it lands left or right of that mark, so the single column on
+       a phone — spine held at the left margin, every question to the right of
+       it — is a change of stylesheet and nothing else. -->
   <section class="av-e__interview">
     <div class="section-shell">
-      <dl class="av-e__qa">
-        ${pair("How did you get into this?", paras(STORY[0], TRAINING[0]))}
-        ${pair("Where did you train?", paras(TRAINING[1], TRAINING[2]))}
-        ${pair("What do you treat?", paras(PRACTICE.specialism))}
-        ${pair("What will you actually do?", paras(CARE[1]))}
-        ${pair("What are we working towards?", paras(AIM[0], CARE[2]))}
-        ${pair("Why do you do it?", paras(PULLQUOTES.passion), " av-e__pair--emphasis")}
-      </dl>
+      <div class="av-e__spine" data-spine>
+        <span class="av-e__spine-axis" aria-hidden="true" data-spine-axis></span>
+        <svg class="av-e__spine-draw" aria-hidden="true" focusable="false" data-spine-draw></svg>
+        <dl class="av-e__qa">
+          ${pair("How did you get into this?", paras(STORY[0], TRAINING[0]), 0)}
+          ${pair("Where did you train?", paras(TRAINING[1], TRAINING[2]), 1)}
+          ${pair("What do you treat?", paras(PRACTICE.specialism), 2)}
+          ${pair("What will you actually do?", paras(CARE[1]), 3)}
+          ${pair("What are we working towards?", paras(AIM[0], CARE[2]), 4)}
+          ${pair("Why do you do it?", paras(PULLQUOTES.passion), 5)}
+        </dl>
+      </div>
     </div>
   </section>
 

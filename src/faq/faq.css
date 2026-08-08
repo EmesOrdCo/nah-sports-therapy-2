@@ -66,6 +66,36 @@
   }
 }
 
+/* ---- Arriving ---- */
+
+/* The sweep the wave makes on load is the shared one — see
+   @keyframes hero-wave-sweep. /testimonials and /prices take it too, so it
+   lives with the rest of the wave rather than here.
+
+   What is this page's own is the drop line out of the head, drawn after the
+   sweep has passed the point it hangs from. It is the same line the journey
+   continues below, so it should look like it was started here rather than
+   already waiting. */
+@keyframes faq-spine-draw {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+.faq-hero__spine {
+  transform-origin: top;
+  animation: faq-spine-draw 0.7s 1.05s var(--ease-draw) both;
+}
+
+/* The site-wide reduced-motion block only shortens transitions; keyframes have
+   to be turned off where they are declared. This one ends on the state the page
+   should simply be in, so dropping the animation is the whole fix. */
+@media (prefers-reduced-motion: reduce) {
+  .faq-hero__spine {
+    animation: none;
+  }
+}
+
 .faq-hero .breadcrumbs {
   margin-bottom: clamp(18px, 2.4vw, 30px);
 }

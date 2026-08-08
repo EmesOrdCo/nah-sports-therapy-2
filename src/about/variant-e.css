@@ -179,9 +179,13 @@
 }
 
 /* ---- The conversation ----
-   Now that her portrait has the hero to itself, the questions run as a single
-   measured column rather than beside a standing image. Held to the left of the
-   shell, on the same line her name starts on, so the page has one spine. */
+   The questions hang off a single drawn line running down the middle of the
+   section, alternating right and left, and the line draws itself in as the
+   reader goes. spine.js writes the drawing; everything here is what it reads.
+
+   --spine-amp is how far off the axis the line swings, in px, and it is a bare
+   number rather than a length because the script does arithmetic with it. It
+   has to stay inside half the centre column or the swing crosses the type. */
 
 /* The quote is a chapter break, not a heading for what follows, so the first
    question starts a long way under it — far enough that the two never read as
@@ -190,13 +194,54 @@
   padding-block: var(--space-section) var(--space-section);
 }
 
-.av-e .av-e__qa {
-  max-width: 68ch;
-  margin: 0;
+.av-e .av-e__spine {
+  position: relative;
+  --spine-amp: 14;
 }
 
-.av-e .av-e__pair + .av-e__pair {
-  margin-top: var(--space-l);
+/* Zero-width, and the only statement anywhere of where the line runs. On a
+   phone it stands just inside the left margin with the whole conversation to
+   the right of it. */
+.av-e .av-e__spine-axis {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.25rem;
+  width: 0;
+}
+
+/* overflow is visible because the line starts above the first question and
+   runs past the last, drawing into the section's own padding at both ends. */
+.av-e .av-e__spine-draw {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* A filled shape rather than a stroke: on this line the width is the drawing —
+   thin along the verticals, swelling through each turn — and a width that
+   changes along its length is not something stroke-width can say. */
+.av-e .av-e__spine-nib {
+  fill: color-mix(in oklch, var(--brand) 68%, transparent);
+}
+
+.av-e .av-e__spine-node {
+  fill: color-mix(in oklch, var(--brand) 78%, transparent);
+}
+
+.av-e .av-e__qa {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  margin: 0;
+  padding-left: 3.5rem;
+  row-gap: var(--space-l);
+}
+
+.av-e .av-e__pair {
+  margin: 0;
 }
 
 .av-e .av-e__q {
@@ -211,17 +256,15 @@
   text-wrap: balance;
 }
 
-/* A <dd> carries a 40px UA margin-inline-start. Reset it, then reintroduce
-   the indent as a deliberate rule-and-inset so her answers read as a spoken
-   column rather than as list items hanging off a heading. */
+/* A <dd> carries a 40px UA margin-inline-start. The rule-and-inset that used to
+   stand in for it has gone: with the spine drawn beside every answer, a second
+   vertical line an inch away was two lines saying the same thing. */
 .av-e .av-e__a {
-  margin: var(--space-xs) 0 0;
-  padding-left: var(--space-s);
-  border-left: 1px solid var(--line);
+  margin: var(--space-2xs) 0 0;
 }
 
 .av-e .av-e__a p {
-  max-width: 58ch;
+  max-width: 52ch;
   margin: 0 0 var(--space-xs);
   color: var(--ink-soft);
   font-family: var(--font-serif);
@@ -233,22 +276,13 @@
   margin-bottom: 0;
 }
 
-/* One answer is allowed to become display type — the reason she does the job
-   at all. It is the same serif as every other answer, just let off the leash,
-   so the escalation reads as emphasis rather than as a different component. */
-.av-e .av-e__pair--emphasis .av-e__a {
-  border-left-color: var(--brand);
-}
-
-.av-e .av-e__pair--emphasis .av-e__a p {
-  max-width: 20ch;
-  color: var(--ink);
-  font-size: var(--step-3);
-  font-weight: 400;
-  letter-spacing: var(--tracking-display);
-  line-height: var(--lh-head);
-  text-wrap: balance;
-}
+/* The last answer used to be let off the leash into display type — same serif,
+   but at --step-3 with the display tracking and the darker ink. It read as a
+   second pull quote arriving a screen after the first one, and against the
+   drawn line it was the type competing with the drawing rather than the two
+   sitting together. Every answer is now set the same, and the last one is the
+   end of the conversation because the spine finishes into it, not because it
+   shouts. */
 
 /* ---- The opening statement ----
    The only place on the page where the subject changes from her to you, so it
@@ -449,12 +483,48 @@
     height: min(78svh, 680px);
   }
 
-  .av-e .av-e__pair + .av-e__pair {
-    margin-top: clamp(3rem, 5vw, 4.5rem);
+  /* The conversation opens out. The axis moves to the middle, the questions
+     alternate either side of it, and the swing grows to match — 58px inside a
+     168px centre column, which leaves the line clear of the type on both sides
+     with room for the widest part of the nib. */
+  .av-e .av-e__spine {
+    --spine-amp: 58;
   }
 
-  .av-e .av-e__a {
-    padding-left: var(--space-m);
+  .av-e .av-e__spine-axis {
+    left: 50%;
+  }
+
+  /* Narrower than the shell. The alternation already spends width; run at the
+     full 1440 it leaves a column of dead paper down both outside edges and puts
+     the two halves of the conversation too far apart to read as one. Centred,
+     so the middle column stays under the axis, which is centred on the section
+     rather than on this grid. */
+  .av-e .av-e__qa {
+    grid-template-columns: 1fr 168px 1fr;
+    max-width: 1120px;
+    margin-inline: auto;
+    padding-left: 0;
+    row-gap: clamp(3rem, 5vw, 4.5rem);
+  }
+
+  /* Each pair is pushed up against the centre column from its own side, so both
+     halves of the conversation start at the line rather than at the outside
+     edge of the page. The text stays left-aligned on both sides — ragged-right
+     on the left-hand answers as well — because a mirrored column would be a
+     different voice, not the same one from the other side. */
+  .av-e .av-e__pair {
+    max-width: 30rem;
+  }
+
+  .av-e .av-e__pair--right {
+    grid-column: 3;
+    justify-self: start;
+  }
+
+  .av-e .av-e__pair--left {
+    grid-column: 1;
+    justify-self: end;
   }
 
   /* Display size, and a wider measure to go with it. The cap is what decides
