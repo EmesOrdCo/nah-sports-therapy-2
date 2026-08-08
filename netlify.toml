@@ -42,22 +42,11 @@
   targetPort = 5183
   port = 8888
 
-# Rules are matched in order, first hit wins, so the form endpoint has to be
-# declared before the catch-all below — otherwise every POST to it is answered
-# with the HTML page and the form silently stops working. Stating the mapping
-# here rather than relying on a function's own `path` config keeps that
-# ordering explicit and independent of how Netlify prioritises the two.
-[[redirects]]
-  from = "/api/enquiry"
-  to = "/.netlify/functions/enquiry"
-  status = 200
-  force = true
-
-# Client-routed site: every path that is not a real file is the same app.
-# public/_redirects already carries the legacy 301s and was written in this
-# syntax, so Netlify honours it as-is and the two files compose — the specific
-# rules there are matched before this catch-all.
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# No redirects here, deliberately. They all live in public/_redirects.
+#
+# The two files do not compose the way it looks like they should: Netlify reads
+# _redirects first, so its trailing /* catch-all matched /api/enquiry before a
+# rule declared here was ever reached. The form posted, got the HTML page back
+# with a 200, and reported success while sending nothing — the worst shape a
+# bug can take on a contact form. Keeping every rule in one file makes "first
+# hit wins" something you can check by reading top to bottom.

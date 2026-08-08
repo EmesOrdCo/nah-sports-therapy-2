@@ -1,3 +1,16 @@
+# The contact form's endpoint, and it must stay above the /* catch-all at the
+# bottom: rules are matched in order and the first hit wins, so anything below
+# that line is unreachable. The 200! is a rewrite, not a redirect — the browser
+# keeps posting to /api/enquiry and never sees the function's real path — and
+# the ! forces it to win over the static file that would otherwise be served.
+#
+# This lives here rather than in netlify.toml, where it was first written and
+# silently did nothing: Netlify reads this file *before* netlify.toml, so the
+# catch-all below was matching /api/enquiry before the toml was ever consulted.
+# Every POST came back as the HTML page with a 200, which is indistinguishable
+# from a working form until you notice no email arrived. One file, one order.
+/api/enquiry  /.netlify/functions/enquiry  200!
+
 /blank-1  /studio#studio  301
 /individual-pilates  /pilates#individual  301
 /small-group-pilates-timetable  /pilates#small-group  301
