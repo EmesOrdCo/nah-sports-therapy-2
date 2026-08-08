@@ -21,10 +21,17 @@ const navGroups = [
     links: [
       ["Overview", "/pilates#overview"],
       ["Individual Pilates", "/pilates#individual"],
+      ["Reformer Pilates", "/pilates#reformer"],
+      ["Stability Chair", "/pilates#stability-chair"],
       ["Small-group timetable", "/pilates#small-group"],
       ["Pre & postnatal Pilates", "/pilates#pre-postnatal"],
       ["Pilates for golfers", "/pilates#golfers"],
-      ["Practical details", "/pilates#practical"],
+      // "Practical details" was the last item here, pointing at a section of
+      // this page. That section now closes /faq, and this submenu is a table
+      // of contents for /pilates — every other item is an anchor into the page
+      // it drops from — so the entry is not kept here pointing off-page. The
+      // footer's Movement column carries /faq#practical instead, and FAQ is a
+      // top-level nav item in its own right.
     ],
   },
   {
@@ -647,10 +654,14 @@ const prices = page(
   )}${cta("Discuss the right appointment length.")}`,
 );
 
-function legacyImage(path, index, className = "") {
+/* `attrs` is a raw attribute string, for the callers that need to mark the
+   image itself rather than the figure around it — scroll drift moves the
+   picture inside its frame, so the attribute has to land on the <img>. Written
+   in by the call site, never by anything a visitor can reach. */
+function legacyImage(path, index, className = "", attrs = "") {
   const image = legacyPages[path]?.images?.[index];
   if (!image) return "";
-  return `<img class="${className}" src="${image.src}" alt="${escapeContent(image.alt)}" loading="${path === "/pilates" && index === 1 ? "eager" : "lazy"}">`;
+  return `<img class="${className}" ${attrs} src="${image.src}" alt="${escapeContent(image.alt)}" loading="${path === "/pilates" && index === 1 ? "eager" : "lazy"}">`;
 }
 
 function buildPilatesContinuousPage() {
@@ -673,30 +684,40 @@ function buildPilatesContinuousPage() {
 
       <section class="pilates-approach" id="approach" aria-labelledby="approach-title">
         <div class="section-shell">
-          <header class="pilates-approach__head" data-reveal>
+          <header class="pilates-approach__head" data-reveal data-magnet>
             <h2 id="approach-title">&ldquo;In 10 sessions you will feel the difference. In 20, you will see the difference. And in 30, you&rsquo;ll be on your way to having a whole new body.&rdquo;</h2>
             <p class="pilates-approach__cite">Joseph Hubertus Pilates</p>
             <p class="pilates-approach__intro">The benefits of Pilates are understanding how to correct poor posture, improve strength and range of movement around the joint, and promote and maintain a healthy back.</p>
           </header>
-          <ol class="pilates-approach__steps" data-reveal>
-            <li class="pilates-approach__step">
+          <!-- The rail draws itself left to right on the way in and retracts
+               the same way on the way out — see drawn-sequence.js. Each step
+               carries its own index so the delays are arithmetic rather than
+               a stack of nth-child rules, and --steps-last lets the exit run
+               back the other way. Adding or removing a step means changing
+               these two numbers and nothing else.
+
+               pathLength="1" on every shape in the icons normalises their
+               lengths, so one stroke-dashoffset animation draws all of them
+               at the same rate whatever their real geometry. -->
+          <ol class="pilates-approach__steps" style="--steps-last: 3" data-drawn-sequence data-magnet>
+            <li class="pilates-approach__step" style="--step-index: 0">
               <span class="pilates-approach__num">01</span>
-              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.2" r="2.1"/><path d="M12 6.5v7"/><path d="M8.5 9.2h7"/><path d="M12 13.5 9.2 21"/><path d="M12 13.5 14.8 21"/></svg></span>
+              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle pathLength="1" cx="12" cy="4.2" r="2.1"/><path pathLength="1" d="M12 6.5v7"/><path pathLength="1" d="M8.5 9.2h7"/><path pathLength="1" d="M12 13.5 9.2 21"/><path pathLength="1" d="M12 13.5 14.8 21"/></svg></span>
               <strong>Improve posture</strong>
             </li>
-            <li class="pilates-approach__step">
+            <li class="pilates-approach__step" style="--step-index: 1">
               <span class="pilates-approach__num">02</span>
-              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 5.8v4.7c0 4.3 3 6.7 7 8.2 4-1.5 7-3.9 7-8.2V5.8L12 3Z"/><path d="M9.2 11.4 11.3 13.6 15 9.4"/></svg></span>
+              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M12 3 5 5.8v4.7c0 4.3 3 6.7 7 8.2 4-1.5 7-3.9 7-8.2V5.8L12 3Z"/><path pathLength="1" d="M9.2 11.4 11.3 13.6 15 9.4"/></svg></span>
               <strong>Core strength &amp; stability</strong>
             </li>
-            <li class="pilates-approach__step">
+            <li class="pilates-approach__step" style="--step-index: 2">
               <span class="pilates-approach__num">03</span>
-              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5c2.5-2.6 5.5-2.6 8 0s5.5 2.6 8 0"/><path d="M3 14.5c2.5-2.6 5.5-2.6 8 0s5.5 2.6 8 0"/></svg></span>
+              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M3 8.5c2.5-2.6 5.5-2.6 8 0s5.5 2.6 8 0"/><path pathLength="1" d="M3 14.5c2.5-2.6 5.5-2.6 8 0s5.5 2.6 8 0"/></svg></span>
               <strong>Release unwanted tension</strong>
             </li>
-            <li class="pilates-approach__step">
+            <li class="pilates-approach__step" style="--step-index: 3">
               <span class="pilates-approach__num">04</span>
-              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5h16"/><path d="M12 10.5V19"/><path d="M8.5 19h7"/><path d="M12 10.5 9 5h6l-3 5.5Z"/></svg></span>
+              <span class="pilates-approach__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M4 10.5h16"/><path pathLength="1" d="M12 10.5V19"/><path pathLength="1" d="M8.5 19h7"/><path pathLength="1" d="M12 10.5 9 5h6l-3 5.5Z"/></svg></span>
               <strong>Restore balance to muscles around the joint</strong>
             </li>
           </ol>
@@ -707,7 +728,7 @@ function buildPilatesContinuousPage() {
            about the room. -->
 
       <section class="pilates-feature pilates-feature--individual" id="individual" aria-labelledby="individual-title">
-        <div class="section-shell pilates-feature__grid">
+        <div class="section-shell pilates-feature__grid" data-magnet>
           <div class="pilates-orbit-figure" data-reveal>
             <div class="hero-orb hero-orb--inline">
               <img class="hero-orb__photo" src="/images/pilates-duet-orb.webp" srcset="/images/pilates-duet-orb-450.webp 450w, /images/pilates-duet-orb.webp 900w" sizes="(max-width: 960px) 78vw, 34vw" alt="Two clients working through a teaser with a ball in a duet session" width="900" height="900" loading="lazy">
@@ -743,20 +764,78 @@ function buildPilatesContinuousPage() {
         </div>
       </section>
 
+      <!-- Reformer and Stability Chair. Individual Pilates above says what a
+           private session is; these two say what it is worked on, which is the
+           part the site never mentioned. They alternate sides so the run from
+           #individual to #small-group has a rhythm rather than three
+           left-hand figures in a column.
+
+           Every photograph here is Pexels stock, free for commercial use with
+           no attribution required — placeholders for Studham. Swapping them is
+           the six files under public/images/pilates and nothing else. -->
+      <section class="pilates-feature pilates-feature--equipment" id="reformer" aria-labelledby="reformer-title">
+        <div class="section-shell pilates-feature__grid" data-magnet>
+          <div class="pilates-feature__content" data-reveal>
+            <h2 id="reformer-title">Reformer Pilates</h2>
+            <p class="pilates-feature__lead">One-to-one sessions on the Reformer, where spring resistance carries part of the work.</p>
+            <p>The carriage runs against adjustable springs, so an exercise can be lightened while you find the control for it and loaded again once that control holds. It suits posture and core work, joint range of movement, and a supported return to exercise after injury.</p>
+            <dl class="pilates-facts">
+              <div><dt>Format</dt><dd>One-to-one</dd></div>
+              <div><dt>Length</dt><dd>One hour</dd></div>
+            </dl>
+            <a class="pilates-arrow-link" href="#contact">Ask about a Reformer session <span>→</span></a>
+          </div>
+          <div class="pilates-feature__media" data-reveal data-drift>
+            <figure class="pilates-feature__shot">
+              <img data-drift-lag="0.07" src="/images/pilates/reformer-25596677.webp" srcset="/images/pilates/reformer-25596677-700.webp 700w, /images/pilates/reformer-25596677.webp 1400w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying on the Reformer carriage, working through an exercise with the straps" width="1400" height="933" loading="lazy">
+            </figure>
+            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
+              <img src="/images/pilates/reformer-detail-25596680.webp" alt="Closer view of the Reformer carriage, straps and springs during a session" width="640" height="640" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="pilates-feature pilates-feature--equipment" id="stability-chair" aria-labelledby="chair-title">
+        <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first" data-magnet>
+          <div class="pilates-feature__content" data-reveal>
+            <h2 id="chair-title">Stability Chair</h2>
+            <p class="pilates-feature__lead">Focused work on the Stability Chair, one-to-one or as a 2:1 session shared with a friend or partner.</p>
+            <p>The sprung pedal gives resistance through a small, controlled range, worked seated, standing or lying. It is useful for balance, for building strength around a particular joint, and for carrying what you have learned into the upright positions you use every day.</p>
+            <dl class="pilates-facts">
+              <div><dt>Format</dt><dd>One-to-one or 2:1</dd></div>
+              <div><dt>Length</dt><dd>One hour</dd></div>
+            </dl>
+            <a class="pilates-arrow-link" href="#contact">Ask about a Chair session <span>→</span></a>
+          </div>
+          <div class="pilates-feature__media" data-reveal data-drift>
+            <figure class="pilates-feature__shot">
+              <img data-drift-lag="0.07" src="/images/pilates/stability-chair-5473893.webp" srcset="/images/pilates/stability-chair-5473893-700.webp 700w, /images/pilates/stability-chair-5473893.webp 1400w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client holding a supported position along the top of the Stability Chair" width="1400" height="933" loading="lazy">
+            </figure>
+            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
+              <img src="/images/pilates/stability-chair-standing-5473901.webp" alt="A client working the Stability Chair pedal from a standing position, hands on the seat" width="640" height="640" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </section>
+
       <section class="pilates-feature pilates-feature--group" id="small-group" aria-labelledby="group-title">
-        <div class="section-shell">
-          <header class="pilates-section-heading pilates-section-heading--split" data-reveal>
+        <!-- Heading and standfirst now sit in a narrow left column behind an
+             accent rule, with the timetable card beside them rather than
+             underneath. Same words, same rows — the day names have picked up
+             an initial in a ring, which is decoration drawn from the name. -->
+        <div class="section-shell pilates-group__grid" data-magnet>
+          <header class="pilates-section-heading pilates-group__intro" data-reveal>
             <h2 id="group-title">Small group Pilates</h2>
             <p>Class sizes are small to ensure close attention to posture and movement during each exercise where necessary. Sessions focus on precise, controlled movement to improve your joint range of movement and help you feel stronger.</p>
           </header>
-          <!-- The studio photograph that sat beside the timetable has gone; the
-               timetable itself is unchanged, it just runs the full measure now
-               rather than sitting in the narrower right-hand track. -->
           <div class="pilates-timetable" data-reveal>
             <div class="pilates-detail-label"><span>Weekly timetable</span><small>Confirm availability before booking</small></div>
-            <div class="pilates-timetable__row"><strong>Monday</strong><p><span>6.30pm</span></p></div>
-            <div class="pilates-timetable__row"><strong>Tuesday</strong><p><span>8.30am <small>45 min</small></span><span>9.20am</span><span>11.30am</span></p></div>
-            <div class="pilates-timetable__row"><strong>Friday</strong><p><span>7.30am</span><span>9.30am</span></p></div>
+            <div class="pilates-timetable__table">
+              <div class="pilates-timetable__row"><div class="pilates-timetable__day"><i aria-hidden="true">M</i><strong>Monday</strong></div><p><span>6.30pm</span></p></div>
+              <div class="pilates-timetable__row"><div class="pilates-timetable__day"><i aria-hidden="true">T</i><strong>Tuesday</strong></div><p><span>8.30am <small>45 min</small></span><span>9.20am</span><span>11.30am</span></p></div>
+              <div class="pilates-timetable__row"><div class="pilates-timetable__day"><i aria-hidden="true">F</i><strong>Friday</strong></div><p><span>7.30am</span><span>9.30am</span></p></div>
+            </div>
             <p class="pilates-timetable__note">Sessions are 55 minutes unless noted. An initial one-to-one assessment including postural analysis is required before joining Small Group Pilates.</p>
           </div>
         </div>
@@ -767,22 +846,28 @@ function buildPilatesContinuousPage() {
           <header class="pilates-section-heading" data-reveal>
             <h2 id="natal-title">Pre- and postnatal Pilates</h2>
           </header>
-          <div class="pilates-dual__grid">
+          <!-- The pair counter-moves: prenatal lags, postnatal leads. Same
+               magnitude both sides, because these two are the same size in the
+               same row and any difference reads as one of them being wrong
+               rather than as depth. Both are clipped by a fixed-height
+               overflow:hidden figure, so 0.07 is what the 1.16 scale in the
+               stylesheet affords — see scroll-drift.js. -->
+          <div class="pilates-dual__grid" data-magnet data-drift>
             <article data-reveal>
-              <figure>${legacyImage("/blank", 0)}</figure>
+              <figure>${legacyImage("/blank", 0, "", 'data-drift-lag="0.07"')}</figure>
               <span>Prenatal</span>
               <h3>During pregnancy</h3>
               <ul><li>Maintain fitness during pregnancy</li><li>Improve posture</li><li>Strengthen the pelvic floor</li><li>Release tension</li></ul>
             </article>
             <article data-reveal>
-              <figure>${legacyImage("/blank", 1)}</figure>
+              <figure>${legacyImage("/blank", 1, "", 'data-drift-lead="0.07"')}</figure>
               <span>Postnatal</span>
               <h3>After birth</h3>
               <p>After the six-week GP check, or 8–12 weeks following a Caesarean section.</p>
               <ul><li>Restore abdominal strength after birth</li><li>Strengthen the pelvic floor</li><li>Improve conditions such as diastasis recti</li></ul>
             </article>
           </div>
-          <p class="pilates-dual__note" data-reveal>Available individually or for your own small group of NCT, prenatal or postnatal friends. Maximum 1:7 to ensure close attention and correction when necessary.</p>
+          <p class="pilates-dual__note" data-reveal data-magnet>Available individually or for your own small group of NCT, prenatal or postnatal friends. Maximum 1:7 to ensure close attention and correction when necessary.</p>
         </div>
       </section>
 
@@ -790,9 +875,14 @@ function buildPilatesContinuousPage() {
            section now carries a single photograph behind the copy, with a navy
            wash that is near-solid on the left so the text stays legible and
            clears to the right so the picture reads. -->
-      <section class="pilates-golf" id="golfers" aria-labelledby="golf-title">
-        <div class="pilates-golf__backdrop" aria-hidden="true"></div>
-        <div class="section-shell pilates-golf__grid">
+      <section class="pilates-golf" id="golfers" aria-labelledby="golf-title" data-drift>
+        <!-- The only single-layer group on the site. It works because the copy
+             on top of it does not move: the backdrop drifts against the page
+             itself, which is the other half of the pair everywhere else. The
+             stylesheet overhangs it past the band under .is-adrift so there is
+             somewhere to drift to. -->
+        <div class="pilates-golf__backdrop" aria-hidden="true" data-drift-lag="0.07"></div>
+        <div class="section-shell pilates-golf__grid" data-magnet>
           <div class="pilates-golf__content" data-reveal>
             <h2 id="golf-title">Pilates for golfers</h2>
             <p>For a golfer, muscle imbalances can affect the legs, hips, arms, shoulders and lower back. Pilates is based on movement from the centre of the body, as are most shots in golf.</p>
@@ -802,31 +892,17 @@ function buildPilatesContinuousPage() {
         </div>
       </section>
 
-      <section class="pilates-practical" id="practical" aria-labelledby="practical-title">
-        <div class="section-shell">
-          <header class="pilates-section-heading" data-reveal>
-            <h2 id="practical-title">Practical details</h2>
-          </header>
-          <!-- Session fees came out; policies are the only card left, so the
-               grid is one column against the left edge rather than a lone
-               article floating in a two-column track. -->
-          <div class="pilates-practical__grid">
-            <article data-reveal>
-              <span>Clinic policies</span>
-              <details><summary>Appointments and cancellation <b>+</b></summary><p>A charge is made for missed Soft Tissue, 1:1 or 2:1 Pilates appointments or non-attendance unless 24 hours notice is given. A 50% charge is required for less than 48 hours notice.</p></details>
-              <details><summary>Late arrival <b>+</b></summary><p>If you are late for your 1:1 or 2:1, the session still falls within the scheduled appointment time. If the practitioner misses a scheduled 1:1 appointment, you will receive a free session.</p></details>
-              <details><summary>Small Group blocks <b>+</b></summary><p>Small Group Pilates blocks are paid for in termly blocks. Once payment is received, your place is reserved for the entire block and no refunds are given.</p></details>
-              <details><summary>Clients under 16 <b>+</b></summary><p>Clients under 16 must be accompanied by a parent who will be required to sign a parental consent form.</p></details>
-            </article>
-          </div>
-        </div>
-      </section>
+      <!-- The "Practical details" section that used to sit here — a four-row
+           accordion of clinic policies — has moved whole to the foot of /faq,
+           unchanged, where somebody looking for the terms goes to find them.
+           See practicalDetails() in faq/faq.js. /pilates now runs from the
+           work straight into its closing card. -->
 
       <!-- Same closing shape as the foot of /sports-therapy: one bordered card
            on a tinted band, actions in a row. Copy is unchanged. -->
       <div class="st-section st-section--tint">
         <div class="section-shell">
-          <section class="st-card" id="contact" aria-labelledby="pilates-contact-title" data-reveal>
+          <section class="st-card" id="contact" aria-labelledby="pilates-contact-title" data-reveal data-magnet>
             <h2 id="pilates-contact-title">Find the right place to begin.</h2>
             <p>For further details or to discuss your specific requirements, contact Natasha Hadland.</p>
             <div class="st-card__actions">
@@ -888,49 +964,139 @@ function buildStudioContinuousPage() {
         </div>
       </section>
 
-      <section class="clinics-studio" id="studio" aria-labelledby="studio-title">
-        <div class="section-shell">
-          <header class="clinics-studio__head" data-reveal>
+      <!-- The room, told the same way as the two machines below it: one wide
+           plate of the space with a second photograph lapped over its corner,
+           and the copy beside it rather than under a rule.
+
+           It used to be a full-width heading, a column of prose, then a
+           four-photograph carousel under a second heading — a different shape
+           from anything else on the page, and the only interactive component
+           on the site that asked the reader to press a button to see the room.
+           Four photographs of one small studio was three more than the point
+           needed, and three of them could only be reached by clicking. Two
+           show it, and both are on screen at once.
+
+           Media-first here so the run down the page alternates: the room's
+           plate sits left, the Reformer's right, the Chair's left again. -->
+      <section class="pilates-feature pilates-feature--equipment" id="studio" aria-labelledby="studio-title">
+        <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first" data-magnet>
+          <div class="pilates-feature__content" data-reveal>
             <h2 id="studio-title">The Studham studio</h2>
-          </header>
-          <div class="clinics-studio__story">
-            <div class="clinics-studio__copy" data-reveal>
-              <p>Sports Therapy, individual Pilates and small-group Pilates, all in one private studio. Full directions are sent when your appointment is confirmed.</p>
-              <p>After working in physio clinics for many years, January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
-              <p>Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, Individual or Small Group Pilates sessions, this is a place to restore muscular wellbeing and improve posture.</p>
-            </div>
+            <p class="pilates-feature__lead">Sports Therapy, individual Pilates and small-group Pilates, all in one private studio.</p>
+            <p>After working in physio clinics for many years, January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
+            <p>Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, Individual or Small Group Pilates sessions, this is a place to restore muscular wellbeing and improve posture.</p>
+            <!-- The room was described as having "the space and equipment
+                 needed" without ever saying what the equipment is. It is named
+                 here, and the two sections below show it. Deliberately not
+                 linked in the prose: the site has no inline link style, and
+                 .text-link is a standalone component (inline-flex, 44px tall)
+                 that breaks the leading of the column it lands in. The arrow
+                 link under this column carries the reader instead. -->
+            <p>Alongside the mat work, the studio is equipped with a Reformer and a Stability Chair for individual and 2:1 sessions.</p>
+            <!-- The directions line was the tail of the opening paragraph,
+                 where the one fact a visitor actually needs sat behind three
+                 clauses about what the studio offers. It is a fact, so it goes
+                 where the facts go. -->
+            <dl class="pilates-facts">
+              <div><dt>Where</dt><dd>Studham, near Whipsnade</dd></div>
+              <div><dt>Directions</dt><dd>Sent when your appointment is confirmed</dd></div>
+            </dl>
+            <a class="pilates-arrow-link" href="#reformer">See what is in the room <span>→</span></a>
           </div>
-          <div class="clinics-studio__gallery" id="gallery">
-            <div class="clinics-studio__gallery-head" data-reveal>
-              <h3 class="clinics-studio__gallery-label">Inside the studio</h3>
-            </div>
-            <div class="studio-carousel" data-studio-carousel data-reveal>
-              <div class="studio-carousel__stage" data-carousel-stage>
-                <button class="studio-carousel__nav studio-carousel__nav--prev" type="button" aria-label="Previous photo" data-carousel-prev><span aria-hidden="true">&#8249;</span></button>
-                <ul class="studio-carousel__track" role="list">
-                  ${[
-                    "Light, private and considered",
-                    "Room to move",
-                    "Studham, near Whipsnade",
-                    "Sports Therapy and Pilates",
-                  ]
-                    .map(
-                      (caption, index) =>
-                        `<li class="studio-carousel__slide" data-carousel-slide data-caption="${escapeContent(caption)}">${legacyImage("/blank-1", index)}</li>`,
-                    )
-                    .join("")}
-                </ul>
-                <button class="studio-carousel__nav studio-carousel__nav--next" type="button" aria-label="Next photo" data-carousel-next><span aria-hidden="true">&#8250;</span></button>
-              </div>
-              <div class="studio-carousel__meta">
-                <p class="studio-carousel__index"><span data-carousel-current>01</span><span class="studio-carousel__index-sep">/</span><span data-carousel-total>04</span></p>
-                <p class="studio-carousel__caption" data-carousel-caption aria-live="polite">Light, private and considered</p>
-                <div class="studio-carousel__dots" data-carousel-dots role="tablist" aria-label="Choose studio photo"></div>
-              </div>
-            </div>
+          <div class="pilates-feature__media" data-reveal data-drift>
+            <figure class="pilates-feature__shot">
+              <img data-drift-lag="0.07" src="/images/legacy/pilates-studio-4.jpg" alt="The studio looking towards the window, with the treatment couch, the mat space and the exercise balls all in one room" width="1600" height="1200" loading="lazy">
+            </figure>
+            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
+              <img src="/images/legacy/pilates-studio-1.jpg" alt="The studio entrance, with the garden door, coat hooks and the balls and rollers stacked beyond" width="1600" height="1200" loading="lazy">
+            </figure>
           </div>
         </div>
       </section>
+
+      <!-- The two machines, after the room they stand in — same layout, so the
+           page reads as three views of one place rather than a place and then
+           a catalogue.
+
+           /pilates already carries a Reformer and a Stability Chair section;
+           these are not those. There the question is "what is this session
+           like" — format, length, book it. Here it is "what is in this room" —
+           what the machine is, what it lets the room do that a mat cannot, and
+           a link across to the session pages for anyone who has stopped
+           reading about the place and started thinking about booking.
+
+           Same classes as /pilates on purpose. .pilates-feature--equipment is
+           the site's layout for a long, low machine — landscape plate, square
+           inset lapped over one corner, alternating sides — and a second
+           dialect of it here would only drift. The prefix is a misnomer at
+           this point, as .clinics- is on this page; both are older names the
+           rest of the stylesheet still answers to.
+
+           Photographs are the same six Pexels files /pilates uses. Swapping
+           them for Studham is public/images/pilates and nothing else. -->
+      <section class="pilates-feature pilates-feature--equipment" id="reformer" aria-labelledby="studio-reformer-title">
+        <div class="section-shell pilates-feature__grid" data-magnet>
+          <div class="pilates-feature__content" data-reveal>
+            <h2 id="studio-reformer-title">The Reformer</h2>
+            <p class="pilates-feature__lead">A carriage running on rails against a bank of springs — the piece of equipment most of the individual work in the studio is built around.</p>
+            <p>Changing the springs changes how much of the movement you carry and how much the machine carries for you, so the same exercise can be lightened while the control for it is found and loaded again once that control holds. It is what lets the room work with a shoulder that will not yet take its own weight, and with an athlete a fortnight out from a race.</p>
+            <p>It stands at the studio's far end, under the windows, with the mat space kept clear beside it — most sessions use both.</p>
+            <dl class="pilates-facts">
+              <div><dt>Suits</dt><dd>Posture and core control, joint range, return from injury</dd></div>
+              <div><dt>Booked as</dt><dd>Individual or 2:1</dd></div>
+            </dl>
+            <a class="pilates-arrow-link" href="/pilates#reformer">How a Reformer session runs <span>→</span></a>
+          </div>
+          <div class="pilates-feature__media" data-reveal data-drift>
+            <figure class="pilates-feature__shot">
+              <img data-drift-lag="0.07" src="/images/pilates/reformer-25596677.webp" srcset="/images/pilates/reformer-25596677-700.webp 700w, /images/pilates/reformer-25596677.webp 1400w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying on the Reformer carriage, working through an exercise with the straps" width="1400" height="933" loading="lazy">
+            </figure>
+            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
+              <img src="/images/pilates/reformer-detail-25596680.webp" alt="Closer view of the Reformer carriage, straps and springs during a session" width="640" height="640" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="pilates-feature pilates-feature--equipment" id="stability-chair" aria-labelledby="studio-chair-title">
+        <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first" data-magnet>
+          <div class="pilates-feature__content" data-reveal>
+            <h2 id="studio-chair-title">The Stability Chair</h2>
+            <p class="pilates-feature__lead">A box with a sprung pedal, small enough to sit in a corner and demanding enough to be the whole session.</p>
+            <p>The pedal gives resistance through a short, controlled range, worked seated, standing or lying, with nothing to lean on but the position you are holding. Where the Reformer supports you into a movement, the Chair asks you to own it — which is why it tends to come later, and why it is the piece that carries studio work into standing, stairs and lifting.</p>
+            <p>It is the smallest thing in the studio and the one clients remember.</p>
+            <dl class="pilates-facts">
+              <div><dt>Suits</dt><dd>Balance, single-joint strength, upright control</dd></div>
+              <div><dt>Booked as</dt><dd>Individual or 2:1</dd></div>
+            </dl>
+            <a class="pilates-arrow-link" href="/pilates#stability-chair">How a Chair session runs <span>→</span></a>
+          </div>
+          <div class="pilates-feature__media" data-reveal data-drift>
+            <figure class="pilates-feature__shot">
+              <img data-drift-lag="0.07" src="/images/pilates/stability-chair-5473893.webp" srcset="/images/pilates/stability-chair-5473893-700.webp 700w, /images/pilates/stability-chair-5473893.webp 1400w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client holding a supported position along the top of the Stability Chair" width="1400" height="933" loading="lazy">
+            </figure>
+            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
+              <img src="/images/pilates/stability-chair-standing-5473901.webp" alt="A client working the Stability Chair pedal from a standing position, hands on the seat" width="640" height="640" loading="lazy">
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- The page used to stop dead on the last carousel photograph. With two
+           more sections after it the drop is longer, so it closes the way
+           /pilates and /sports-therapy close — the same st-card on tint. -->
+      <div class="st-section st-section--tint">
+        <div class="section-shell">
+          <section class="st-card" id="visit" aria-labelledby="studio-contact-title" data-reveal data-magnet>
+            <h2 id="studio-contact-title">Come and see the room.</h2>
+            <p>For directions, availability, or to talk through which of the two would suit you, contact Natasha Hadland.</p>
+            <div class="st-card__actions">
+              <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay} <span>↗</span></a>
+              <a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a>
+            </div>
+          </section>
+        </div>
+      </div>
 
     </div>`,
   };
@@ -1026,17 +1192,27 @@ const therapyHero = () => `<section class="therapy-hero" id="overview" aria-labe
 
 /* Photographs for the taping band — Pexels stock, free for commercial use with
    no attribution required, resized to 900px wide and 4:5 to match the frame.
-   Each column mixes a treatment-room shot with a close-up of the tape itself.
-   Swapping any of them is these two lists and nothing else: the band clones
-   whatever it is given, so the count can change too. */
+
+   All six are one shoot: Maksim Goncharenok's kinesio-tape series, the same
+   white seamless, the same practitioner in the same white coat, the same
+   black/pink tape. That is the point of them. The band ran on six photographs
+   from four different shoots before this — a warm domestic treatment room, a
+   moody grey close-up, an orange gym floor — and drifting them past each other
+   in two columns put the mismatch side by side, which is where it showed.
+   Anything added here has to come from the same series, or the band goes back
+   to looking like a search result.
+
+   Ordered so neither column runs three wide shots together: each one steps
+   close, wide, mid. Swapping any of them is these two lists and nothing else —
+   the band clones whatever it is given, so the count can change too. */
 const TAPING_SHOTS_LEFT = [
-  "/images/taping/taping-6076134.webp",
-  "/images/taping/taping-8219157.webp",
   "/images/taping/taping-6094040.webp",
+  "/images/taping/taping-6094057.webp",
+  "/images/taping/taping-6094056.webp",
 ];
 const TAPING_SHOTS_RIGHT = [
   "/images/taping/taping-6094397.webp",
-  "/images/taping/taping-7339489.webp",
+  "/images/taping/taping-6094334.webp",
   "/images/taping/taping-6094047.webp",
 ];
 
@@ -1063,8 +1239,8 @@ function therapyVariantA() {
   const { techniques, injuries, outcomes, conditions, fascia, steps, taping } =
     THERAPY;
   return `
-  <section class="st-section st-section--tint" id="approach" aria-labelledby="therapy-benefits-title">
-    <div class="section-shell">
+  <section class="st-section st-section--tint st-section--act" id="approach" aria-labelledby="therapy-benefits-title">
+    <div class="section-shell" data-magnet>
       <header class="st-head" data-reveal><h2 id="therapy-benefits-title">What sports therapy helps with</h2><p>Advanced techniques can help alleviate symptoms associated with a range of conditions.</p></header>
       <div class="st-grid st-grid--2">
         <article class="st-card" data-reveal>${eyebrow("Outcomes")}<h3>What improves</h3>${rows(outcomes)}</article>
@@ -1074,7 +1250,7 @@ function therapyVariantA() {
   </section>
 
   <section class="st-section st-section--dark" id="myofascial-release" aria-labelledby="fascia-title">
-    <div class="section-shell">
+    <div class="section-shell" data-magnet>
       <header class="st-head" data-reveal><h2 id="fascia-title">Myofascial release</h2></header>
       <div class="st-grid st-grid--2">
         <article class="st-card st-card--onDark" data-reveal><p>Fascia is strong, flexible tissue surrounding muscles and bones. It spans the whole body as one connected material.</p><p>In a healthy state, fascia is relaxed and supports posture, range of movement and flexibility. Physical trauma, inflammation, surgery or habitual poor posture can make it tight and restricted.</p><p>Myofascial Release uses slow, sustained pressure to relax deep tissue, improve movement and reduce tension. Pressure can range from very gentle touch to deeper work and should never be beyond your tolerance.</p></article>
@@ -1084,7 +1260,7 @@ function therapyVariantA() {
   </section>
 
   <section class="st-section" id="treatment" aria-labelledby="treatment-title">
-    <div class="section-shell">
+    <div class="section-shell" data-magnet>
       <header class="st-head" data-reveal><h2 id="treatment-title">Treatment techniques</h2><p>Techniques are often combined with exercises to stretch and strengthen muscles at home.</p></header>
       <div class="st-index">
         <section class="st-index__group" data-reveal aria-labelledby="treatment-delivery-title">
@@ -1100,23 +1276,26 @@ function therapyVariantA() {
     </div>
   </section>
 
-  <section class="st-section st-section--tint" id="what-to-expect" aria-labelledby="expect-title">
-    <div class="section-shell">
-      <header class="st-head" data-reveal><h2 id="expect-title">What to expect</h2></header>
-      <div class="st-grid st-grid--3">
-        ${steps
-          .map(
-            ([title, body], index) =>
-              `<article class="st-card st-card--step" data-reveal><b>0${index + 1}</b><h3>${title}</h3><p>${body}</p></article>`,
-          )
-          .join("")}
+  <section class="st-section st-section--tint st-section--act" id="what-to-expect" aria-labelledby="expect-title">
+    <div class="section-shell" data-magnet>
+      <div class="st-ruled" data-step-wave>
+        <svg class="st-wave" aria-hidden="true" focusable="false" data-step-wave-draw></svg>
+        <header class="st-head" data-reveal><h2 id="expect-title">What to expect</h2></header>
+        <div class="st-steps">
+          ${steps
+            .map(
+              ([title, body], index) =>
+                `<article class="st-step" data-reveal><b>0${index + 1}</b><i class="st-step__node" data-step-wave-node></i><h3>${title}</h3><p>${body}</p></article>`,
+            )
+            .join("")}
+        </div>
       </div>
       <aside class="st-note st-note--dark" data-reveal>${eyebrow("What to wear")}<p>Wear loose, comfortable clothing or bring shorts where possible. Depending on the location of your injury, you may be asked to remove some clothing; treatment can be carried out through clothes if you prefer.</p></aside>
     </div>
   </section>
 
   <section class="st-section st-section--flush" id="kinesiology-taping" aria-labelledby="taping-title">
-    <div class="taping-band">
+    <div class="taping-band" data-magnet>
       ${tapingColumn(TAPING_SHOTS_LEFT, "up", 16)}
       <div class="taping-band__content" data-reveal>
         ${eyebrow("Taping")}
@@ -1128,9 +1307,9 @@ function therapyVariantA() {
     </div>
   </section>
 
-  <div class="st-section st-section--tint">
+  <div class="st-section st-section--tint st-section--act">
     <div class="section-shell">
-      <section class="st-card" id="practical" aria-labelledby="therapy-practical-title" data-reveal>${eyebrow("Appointments")}<h2 id="therapy-practical-title">Booking an appointment</h2><p>Appointment length is selected around the complexity of the presentation — 30 minutes where that is enough, up to 90 for a new or more involved case. The recommended duration is discussed before booking.</p><p class="st-footnote">Fees for every appointment length are listed on one page.</p><div class="st-card__actions"><a class="pilates-arrow-link" href="/prices">View prices <span>→</span></a><a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a></div></section>
+      <section class="st-card" id="practical" aria-labelledby="therapy-practical-title" data-reveal data-magnet>${eyebrow("Appointments")}<h2 id="therapy-practical-title">Booking an appointment</h2><p>Appointment length is selected around the complexity of the presentation — 30 minutes where that is enough, up to 90 for a new or more involved case. The recommended duration is discussed before booking.</p><p class="st-footnote">Fees for every appointment length are listed on one page.</p><div class="st-card__actions"><a class="pilates-arrow-link" href="/prices">View prices <span>→</span></a><a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a></div></section>
     </div>
   </div>`;
 }
@@ -1259,7 +1438,6 @@ const pilatesLegacyTargets = {
   "/small-group-pilates-timetable": "small-group",
   "/blank": "pre-postnatal",
   "/pilates-for-golfers": "golfers",
-  "/clinic-policies": "practical",
   // Retreat content is archived, so there is no section to land on — the key
   // stays so /retreats keeps resolving to /pilates instead of falling through
   // to the legacy retreat page.
@@ -1290,6 +1468,10 @@ const therapyLegacyTargets = {
   "/office-based-sports-massage": "",
 };
 
+/* Built once and shared by /faq and the legacy /clinic-policies route, so the
+   two URLs render the same object rather than two builds of the same page. */
+const faq = buildFaqPage();
+
 const routes = {
   "/pilates": pilatesContinuous,
   ...Object.fromEntries(
@@ -1319,7 +1501,12 @@ const routes = {
   "/charity-work": { ...aboutContinuous, scrollTarget: "charity" },
   // The FAQ owns its own hero, so it is assembled by its module rather than
   // through page() — same arrangement as About.
-  "/faq": buildFaqPage(),
+  "/faq": faq,
+  // The old site's /clinic-policies page. The "Practical details" section it
+  // used to land on has moved from /pilates to the foot of /faq, so the legacy
+  // URL follows it and still opens on the policies themselves. renderRoute
+  // hands scrollTarget to main.js, which scrolls there before first paint.
+  "/clinic-policies": { ...faq, scrollTarget: "practical" },
   "/testimonials": testimonials,
   // The old site spelled it singular; keep that URL working.
   "/testimonial": testimonials,
@@ -1406,7 +1593,7 @@ function hydrateShell(path) {
       <span class="wordmark__name">NJH</span><span class="wordmark__descriptor">Sports Therapy<br>& Pilates</span>
     </a>
     <div><p class="site-footer__label">Treatment</p><a href="/sports-therapy">Sports Therapy</a><a href="/sports-therapy#treatment">Techniques</a><a href="/sports-therapy#what-to-expect">Your appointment</a></div>
-    <div><p class="site-footer__label">Movement</p><a href="/pilates">Clinical Pilates</a><a href="/pilates#small-group">Timetable</a><a href="/pilates#practical">Practical details</a></div>
+    <div><p class="site-footer__label">Movement</p><a href="/pilates">Clinical Pilates</a><a href="/pilates#small-group">Timetable</a><a href="/faq#practical">Practical details</a></div>
     <div><p class="site-footer__label">Practice</p><a href="/about">About Natasha</a><a href="/faq">FAQ</a><a href="/studio">Studio</a><a href="/testimonials">Testimonials</a><a href="/prices">Prices</a><a href="/contact">Contact</a></div>`;
   }
   const footerBottom = document.querySelector(".site-footer__bottom");
@@ -1521,147 +1708,11 @@ function initStudioReel() {
   ).observe(reel);
 }
 
-/* The studio carousel on /studio. Slides are stacked on one spot and placed
-   by offset from the active one, so the neighbours sit behind and to the side
-   rather than running off in a strip — the arrangement reads as a set of
-   photographs on a table rather than a filmstrip. */
-function initStudioCarousel() {
-  const carousel = document.querySelector("[data-studio-carousel]");
-  if (!carousel) return;
-
-  const stage = carousel.querySelector("[data-carousel-stage]");
-  const slides = [...carousel.querySelectorAll("[data-carousel-slide]")];
-  if (!slides.length) return;
-
-  const previousButton = carousel.querySelector("[data-carousel-prev]");
-  const nextButton = carousel.querySelector("[data-carousel-next]");
-  const currentLabel = carousel.querySelector("[data-carousel-current]");
-  const totalLabel = carousel.querySelector("[data-carousel-total]");
-  const captionLabel = carousel.querySelector("[data-carousel-caption]");
-  const dotsWrap = carousel.querySelector("[data-carousel-dots]");
-  const count = slides.length;
-  let active = 0;
-
-  if (totalLabel) totalLabel.textContent = String(count).padStart(2, "0");
-
-  const dots = slides.map((_, index) => {
-    const dot = document.createElement("button");
-    dot.type = "button";
-    dot.className = "studio-carousel__dot";
-    dot.setAttribute("role", "tab");
-    dot.setAttribute("aria-label", `Show photo ${index + 1}`);
-    dot.addEventListener("click", () => go(index));
-    dotsWrap?.append(dot);
-    return dot;
-  });
-
-  function update() {
-    slides.forEach((slide, index) => {
-      // Shortest way round the loop, so stepping past the last slide moves the
-      // first one in from the right rather than winding all the way back.
-      let offset = index - active;
-      if (offset > count / 2) offset -= count;
-      if (offset < -count / 2) offset += count;
-      const distance = Math.abs(offset);
-      const direction = Math.sign(offset);
-
-      // Every print sits square. The neighbours are set back by scale, blur
-      // and opacity alone, so the set reads as photographs laid out flat.
-      let translate;
-      let scale;
-      let opacity;
-      let blur;
-      let depth;
-      if (offset === 0) {
-        translate = 0;
-        scale = 1;
-        opacity = 1;
-        blur = 0;
-        depth = 30;
-      } else if (distance === 1) {
-        translate = direction * 56;
-        scale = 0.8;
-        opacity = 0.5;
-        blur = 1.4;
-        depth = 20;
-      } else {
-        translate = direction * 90;
-        scale = 0.62;
-        opacity = 0;
-        blur = 4;
-        depth = 5;
-      }
-
-      // Centring is the grid's job (place-self on the shared cell), so this
-      // only has to carry the offset.
-      slide.style.transform = `translateX(${translate}%) scale(${scale})`;
-      slide.style.opacity = String(opacity);
-      slide.style.filter = blur ? `blur(${blur}px)` : "none";
-      slide.style.zIndex = String(depth);
-      slide.style.pointerEvents =
-        offset === 0 ? "none" : opacity > 0 ? "auto" : "none";
-      slide.setAttribute("aria-hidden", offset === 0 ? "false" : "true");
-      slide.classList.toggle("is-active", offset === 0);
-    });
-
-    if (currentLabel) {
-      currentLabel.textContent = String(active + 1).padStart(2, "0");
-    }
-    if (captionLabel) {
-      captionLabel.textContent = slides[active].dataset.caption || "";
-    }
-    dots.forEach((dot, index) => {
-      const isActive = index === active;
-      dot.classList.toggle("is-active", isActive);
-      dot.setAttribute("aria-selected", String(isActive));
-    });
-  }
-
-  function go(index) {
-    active = ((index % count) + count) % count;
-    update();
-  }
-
-  previousButton?.addEventListener("click", () => go(active - 1));
-  nextButton?.addEventListener("click", () => go(active + 1));
-  slides.forEach((slide, index) =>
-    slide.addEventListener("click", () => {
-      if (index !== active) go(index);
-    }),
-  );
-
-  carousel.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      go(active - 1);
-    } else if (event.key === "ArrowRight") {
-      event.preventDefault();
-      go(active + 1);
-    }
-  });
-
-  let startX = null;
-  let dragging = false;
-  stage?.addEventListener("pointerdown", (event) => {
-    startX = event.clientX;
-    dragging = true;
-  });
-  window.addEventListener("pointerup", (event) => {
-    if (!dragging || startX === null) return;
-    dragging = false;
-    const deltaX = event.clientX - startX;
-    startX = null;
-    if (Math.abs(deltaX) > 40) go(deltaX < 0 ? active + 1 : active - 1);
-  });
-
-  update();
-}
-
 export function initPageFeatures() {
-  // Ahead of the form guard: /studio carries the hero reel and the carousel,
-  // and no enquiry form.
+  // Ahead of the form guard: /studio carries the hero reel and no enquiry
+  // form. (initStudioCarousel lived here too, until the carousel was replaced
+  // by the two photographs now standing in the room section.)
   initStudioReel();
-  initStudioCarousel();
 
   const form = document.querySelector("[data-enquiry-form]");
   if (!form) return;

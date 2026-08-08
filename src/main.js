@@ -4,6 +4,10 @@ import "./about/about.css";
 import { initPageFeatures, renderRoute } from "./site-content.js";
 import { observeBase, routePath } from "./base-path.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
+import { initMagneticScroll } from "./magnetic-scroll.js";
+import { initScrollDrift } from "./scroll-drift.js";
+import { initDrawnSequence } from "./drawn-sequence.js";
+import { initStepWave } from "./step-wave.js";
 import { initFaqJourney } from "./faq/index.js";
 import { initAboutPage } from "./about/index.js";
 import { initOpeningMove } from "./opening-move.js";
@@ -580,7 +584,10 @@ const legacyPilatesSections = {
   "/small-group-pilates-timetable": "small-group",
   "/blank": "pre-postnatal",
   "/pilates-for-golfers": "golfers",
-  "/clinic-policies": "practical",
+  // "/clinic-policies" left this map when the practical details section moved
+  // to /faq. It does not need an entry in a new one: the route carries
+  // scrollTarget: "practical" from site-content, and routeState.scrollTarget
+  // is read before any of these maps below.
   "/retreats": "",
 };
 // Mirrors studioLegacyTargets in site-content.js. "/blank-1" moved across from
@@ -655,6 +662,23 @@ if (!initialSection) {
 
 initAboutPage();
 initSmoothScroll();
+/* After initSmoothScroll: that module's easing is what the magnet waits for
+   to finish, and it only takes over what is left. No-ops on every page that
+   has not marked anything data-magnet, which today is all of them but
+   /pilates. */
+initMagneticScroll();
+/* After initMagneticScroll, though the two never meet: the magnet writes the
+   window's scroll position and this only ever reads it, so drift follows a
+   glide the same way it follows a wheel. No-ops wherever nothing is marked
+   data-drift, which today is /studio's three media columns. */
+initScrollDrift();
+initDrawnSequence();
+/* After initDrawnSequence, and for the same reason it runs where it does: the
+   line is measured off boxes that [data-reveal] may still be transforming, so
+   it reads offsetTop rather than a rect and has to run once the markup is in
+   place. No-ops on every page without a [data-step-wave] group, which today is
+   all of them but /sports-therapy. */
+initStepWave();
 initPageFeatures();
 initFaqJourney();
 // After initPageFeatures: the contact page's submit listener has to run second

@@ -367,3 +367,110 @@
     margin-top: clamp(2.25rem, 3.5vw, 3.25rem);
   }
 }
+
+/* ---- Practical details -----------------------------------------------------
+
+   The section that used to close /pilates, moved here whole: same heading,
+   same four rows, same wording. These rules are the .pilates-practical block
+   from style.css carried across under the faq- prefix.
+
+   Two custom properties had to be resolved on the way over. --gap-act and
+   --pilates-block are declared on .pilates-longform, not on :root, so over
+   here they are undefined and every declaration reading one would have been
+   invalid at computed-value time — the section would have lost its padding
+   entirely. They are replaced with this page's own rhythm rather than with the
+   Pilates figures, so the section sits in the cadence of the page it is on and
+   meets .page-cta below it on the same interval.
+
+   .faq-practical__head reproduces .pilates-section-heading, which is a global
+   utility in style.css despite the name. It is restated here so this page does
+   not reach across into another page's classes for a heading. -------------- */
+
+.faq-practical {
+  padding-block: var(--space-section);
+  background: var(--surface);
+}
+
+.faq-practical__head {
+  position: relative;
+  z-index: 2;
+  max-width: 1080px;
+}
+
+.faq-practical__head h2 {
+  margin: 0;
+  font-size: var(--step-3);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+/* One column against the left edge — the fees card that used to fill the
+   second track has gone. Capped so the summary rows keep a readable measure
+   instead of running the full 1440px shell. */
+.faq-practical__grid {
+  display: grid;
+  margin-top: var(--space-l);
+  grid-template-columns: minmax(0, 820px);
+  justify-content: start;
+}
+
+.faq-practical article {
+  border-top: 1px solid var(--line);
+}
+
+.faq-practical article > span {
+  display: block;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line);
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-track);
+  text-transform: uppercase;
+}
+
+.faq-practical details {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-practical summary {
+  display: flex;
+  min-height: 86px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  list-style: none;
+}
+
+.faq-practical summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-practical summary b {
+  color: var(--brand);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 400;
+  transition: transform var(--dur-fast) ease;
+}
+
+.faq-practical details[open] summary b {
+  transform: rotate(45deg);
+}
+
+.faq-practical details p {
+  max-width: 650px;
+  margin: 0;
+  padding: 0 50px 28px 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+@media (max-width: 960px) {
+  .faq-practical__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

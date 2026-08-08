@@ -587,6 +587,11 @@
                 >Sports Therapist &amp; Pilates Instructor</span
               >
             </figcaption>
+            <!-- The band answers "is this place for someone like me" in her
+                 own voice, so the way on from it is her, not the diary. -->
+            <a class="btn btn--on-photo voice-panel__link" href="/about"
+              >More about Natasha</a
+            >
           </div>
           <div class="voice-panel__media">
             <!-- The landscape crop, not the portrait one /about uses: this
@@ -609,12 +614,26 @@
            the track is empty here on purpose, so the home page and
            /testimonials can never quote different text. -->
       <section class="voice-run" aria-label="What clients say">
+        <!-- A pair of marks opening at the top left and closing at the right
+             under the last card, so the whole run reads as one long quotation
+             rather than a row of loose sentences. The closing mark shuts the
+             quotation before the link, which belongs to the section rather
+             than to the words. Decoration, not punctuation, and hidden
+             for the same reason as the quote band's: each card is already a
+             blockquote, and a stray double-quote announced twice per section
+             adds nothing. -->
+        <span class="voice-run__mark voice-run__mark--open" aria-hidden="true"
+          >&ldquo;</span
+        >
         <!-- tabindex is for the no-JS / reduced-motion fallback, where this is
              a plain swipe track and none of the cards are focusable. The
              marquee removes it once it takes over the scrolling. -->
         <div class="voice-run__track" data-voice-marquee tabindex="0">
           <ul class="voice-run__strip"></ul>
         </div>
+        <span class="voice-run__mark voice-run__mark--close" aria-hidden="true"
+          >&rdquo;</span
+        >
         <a class="text-link voice-run__link" href="/testimonials"
           >Read all testimonials <span>&#8594;</span></a
         >

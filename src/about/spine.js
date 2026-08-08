@@ -10,25 +10,19 @@
    vertically, swelling through each turn, the way a pen held at a fixed angle
    behaves. That is the same hand as the line drawings elsewhere on the site,
    which is what keeps this reading as house style rather than as an effect.
-   Because its width is the drawing, it is a filled shape and not a stroke, and
-   that is why the reveal below is a clip rather than a stroke-dasharray.
+   The pen itself lives in ../nib.js, shared with the line that runs across the
+   three steps on /sports-therapy; this file only says where the points are and
+   what reveals them. Because the nib's width is the drawing, it is a filled
+   shape and not a stroke, and that is why the reveal below is a clip rather
+   than a stroke-dasharray.
 
    Everything about how it looks — colour, swing, where the axis sits — is a
    custom property in variant-e.css. This file only measures and draws. */
 
-const NS = "http://www.w3.org/2000/svg";
+import { curve, nib, offsetWithin } from "../nib.js";
 
-// The range the stroke travels between, in px. Read together with --spine-amp:
-// a heavier nib needs a wider swing or it reads as cramped.
-const NIB_THIN = 1.1;
-const NIB_THICK = 6.5;
-
-// How far each node's tangent is held vertical before the line is allowed to
-// head for the next one. 0.5 is the ceiling: past it the incoming and outgoing
-// control points cross over in y, the curve doubles back on itself at the node,
-// and the nib — which takes its width from the angle of travel — sees a
-// horizontal line exactly where the curve should be at its most vertical.
-const TENSION = 0.45;
+// This line runs down the page, which is what the pen is held to suit.
+const ALONG = "y";
 
 const NODE_R = 3.5;
 
@@ -45,29 +39,14 @@ const HEAD = 0.62;
 
 const CLIP_ID = "av-spine-clip";
 
-/* Layout positions, not painted ones. The pairs carry [data-reveal], so at the
-   moment this runs some of them are still translated down by the reveal — a
-   getBoundingClientRect would put their nodes wherever the animation had got
-   to. offsetTop and offsetLeft ignore transforms and report where the box
-   actually sits, which is what the line has to be drawn to.
-
-   Summed up the offsetParent chain rather than read in one go, because those
-   offsets are relative to the nearest positioned ancestor and there are two
-   between here and the rail: the <dl>, which is positioned to sit over the
-   drawing, and each pair itself, which the reveal's transform turns into an
-   offsetParent for its own question. Read directly, every question in the
-   conversation reports the same handful of pixels from the top of its own pair,
-   and the whole spine collapses onto one line. */
-function offsetWithin(el, root) {
-  let x = 0;
-  let y = 0;
-  for (let node = el; node && node !== root; node = node.offsetParent) {
-    x += node.offsetLeft;
-    y += node.offsetTop;
-  }
-  return { x, y };
-}
-
+/* offsetWithin, not getBoundingClientRect: the pairs carry [data-reveal], so
+   at the moment this runs some of them are still translated down by the reveal
+   and a rect would put their nodes wherever the animation had got to. There
+   are two positioned ancestors between a question and the rail — the <dl>,
+   which sits over the drawing, and each pair itself, which the reveal's
+   transform turns into an offsetParent — so the walk up the chain in nib.js is
+   what keeps every question from reporting the same handful of pixels and
+   collapsing the whole spine onto one line. */
 function marks(rail, axisX) {
   return [...rail.querySelectorAll("[data-pair]")].map((pair) => {
     const question = pair.querySelector("[data-question]");
@@ -87,65 +66,6 @@ function marks(rail, axisX) {
       y: at.y + line / 2,
     };
   });
-}
-
-function curve(points) {
-  let d = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
-  for (let i = 1; i < points.length; i++) {
-    const a = points[i - 1];
-    const b = points[i];
-    const pull = (b.y - a.y) * TENSION;
-    d +=
-      ` C ${a.x.toFixed(2)} ${(a.y + pull).toFixed(2)},` +
-      ` ${b.x.toFixed(2)} ${(b.y - pull).toFixed(2)},` +
-      ` ${b.x.toFixed(2)} ${b.y.toFixed(2)}`;
-  }
-  return d;
-}
-
-/* Walk the curve for position and tangent. Deriving both from the Bézier
-   control points would be exact, but this is a drawing and 2px of arc length is
-   already finer than the stroke it is describing. */
-function walk(svg, d, step) {
-  const probe = document.createElementNS(NS, "path");
-  probe.setAttribute("d", d);
-  probe.style.visibility = "hidden";
-  svg.appendChild(probe);
-  const length = probe.getTotalLength();
-  const out = [];
-  for (let s = 0; s <= length; s += step) {
-    const at = probe.getPointAtLength(s);
-    const behind = probe.getPointAtLength(Math.max(0, s - 1));
-    const ahead = probe.getPointAtLength(Math.min(length, s + 1));
-    out.push({ x: at.x, y: at.y, tx: ahead.x - behind.x, ty: ahead.y - behind.y });
-  }
-  svg.removeChild(probe);
-  return out;
-}
-
-/* The nib. Width follows the angle of travel — thin along the verticals, broad
-   through the turns — normalised against the widest turn on this particular
-   curve, so the stroke uses its whole range whether the swing is a phone's or a
-   wide monitor's rather than coming out uniformly thin on the narrow one. */
-function nib(svg, d) {
-  const points = walk(svg, d, 2);
-  const lean = points.map((p) => Math.abs(Math.atan2(Math.abs(p.tx), Math.abs(p.ty))));
-  const widest = Math.max(...lean) || 1;
-  const near = [];
-  const far = [];
-
-  points.forEach((p, i) => {
-    const half = (NIB_THIN + (NIB_THICK - NIB_THIN) * (lean[i] / widest)) / 2;
-    const length = Math.hypot(p.tx, p.ty) || 1;
-    const nx = (-p.ty / length) * half;
-    const ny = (p.tx / length) * half;
-    near.push([p.x + nx, p.y + ny]);
-    far.push([p.x - nx, p.y - ny]);
-  });
-
-  const side = (list) =>
-    list.map(([x, y]) => `${x.toFixed(2)} ${y.toFixed(2)}`).join(" L ");
-  return `M ${side(near)} L ${side(far.reverse())} Z`;
 }
 
 export function initSpine() {
@@ -182,7 +102,7 @@ export function initSpine() {
       ...found.map((m) => ({ x: axisX + m.dir * amp, y: m.y })),
       { x: axisX, y: bottom },
     ];
-    const d = curve(points);
+    const d = curve(points, ALONG);
 
     const nodes = found
       .map(
@@ -203,7 +123,7 @@ export function initSpine() {
       `<rect x="${-width}" y="${top.toFixed(2)}" width="${width * 3}" height="0" />` +
       `</clipPath></defs>` +
       `<g clip-path="url(#${CLIP_ID})">` +
-      `<path class="av-e__spine-nib" d="${nib(svg, d)}" />${nodes}</g>`;
+      `<path class="av-e__spine-nib" d="${nib(svg, d, ALONG)}" />${nodes}</g>`;
 
     clip = svg.querySelector(`#${CLIP_ID} rect`);
     reveal();

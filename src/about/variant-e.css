@@ -413,7 +413,9 @@
   /* The one heavy edge. It reads as a marker on an aside rather than as a
      frame around a card, which is what a uniform 2px border would give. */
   border-top: 2px solid var(--brand);
-  border-radius: var(--radius-card);
+  /* Square. A rounded corner would make this a card, and the page has no
+     cards on it — the hero photograph, the credentials strip and the quote are
+     all edges and hairlines. */
   box-shadow: var(--shadow-sm);
 }
 

@@ -195,6 +195,40 @@ function station(item, index) {
   </section>`;
 }
 
+/* Practical details — carried over whole from the foot of /pilates, where it
+   sat as the last section before the closing card. Same heading, same four
+   rows, same wording; only the class prefix changed, from pilates- to faq-,
+   and the rules came across to faq.css with it.
+
+   It stays an accordion, which makes it the one thing on this page that folds
+   away — the note at the top of this file says nothing here hides, and this
+   section is the exception, kept because it came over unchanged.
+
+   Two things to know before editing it. All four policies are also answered
+   inside the stations above, in Natasha's fuller wording; the rows below are
+   the condensed version /pilates carried. And the copy here is typed into this
+   function, where every other answer on the page is read from
+   about/content.js — so editing POLICIES there will not change these four
+   rows, and editing these will not change the stations. */
+function practicalDetails() {
+  return `<section class="faq-practical" id="practical" aria-labelledby="practical-title">
+    <div class="section-shell">
+      <header class="faq-practical__head" data-reveal>
+        <h2 id="practical-title">Practical details</h2>
+      </header>
+      <div class="faq-practical__grid">
+        <article data-reveal>
+          <span>Clinic policies</span>
+          <details><summary>Appointments and cancellation <b>+</b></summary><p>A charge is made for missed Soft Tissue, 1:1 or 2:1 Pilates appointments or non-attendance unless 24 hours notice is given. A 50% charge is required for less than 48 hours notice.</p></details>
+          <details><summary>Late arrival <b>+</b></summary><p>If you are late for your 1:1 or 2:1, the session still falls within the scheduled appointment time. If the practitioner misses a scheduled 1:1 appointment, you will receive a free session.</p></details>
+          <details><summary>Small Group blocks <b>+</b></summary><p>Small Group Pilates blocks are paid for in termly blocks. Once payment is received, your place is reserved for the entire block and no refunds are given.</p></details>
+          <details><summary>Clients under 16 <b>+</b></summary><p>Clients under 16 must be accompanied by a parent who will be required to sign a parental consent form.</p></details>
+        </article>
+      </div>
+    </div>
+  </section>`;
+}
+
 /* The closing band is written out here rather than borrowed from
    site-content's cta() helper, because this page owns its whole document —
    same arrangement as About. Keep it in step with .page-cta if that changes. */
@@ -220,6 +254,7 @@ export function faqBody() {
       ${STATIONS.map(station).join("")}
     </div>
   </div>
+  ${practicalDetails()}
   ${faqCta()}`;
 }
 
