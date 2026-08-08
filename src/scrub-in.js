@@ -42,21 +42,34 @@ const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const clamp01 = (value) => Math.min(Math.max(value, 0), 1);
 
+/* Decimal places kept in the written fraction. The travels these drive are
+   tens of a fold — the deepest is 20vh, about 150px on a laptop — so a
+   thousandth is already a sixth of a pixel, well under anything that can be
+   shown. The fourth decimal was a different string on every frame for a
+   difference nothing paints, and every distinct string is a fresh style
+   invalidation on the group and a repaint of both panels. Three places, and
+   the write is skipped outright when the figure has not moved, so a group
+   sitting at rest — pinned at 0 or 1, which is most of the page — costs
+   nothing at all. */
+const PLACES = 3;
+
 /* stages: [{ property, from, to }] — `from` and `to` are where the group's top
    edge sits as a share of the fold at the two ends of that stage's run. */
 export function initScrubIn(node, stages) {
   if (!node || REDUCED.matches) return;
 
   let queued = false;
+  // Last figure written per property, so an unchanged frame writes nothing.
+  const written = new Map();
 
   const draw = () => {
     queued = false;
     const top = node.getBoundingClientRect().top / window.innerHeight;
     stages.forEach(({ property, from, to }) => {
-      node.style.setProperty(
-        property,
-        clamp01((from - top) / (from - to)).toFixed(4),
-      );
+      const value = clamp01((from - top) / (from - to)).toFixed(PLACES);
+      if (written.get(property) === value) return;
+      written.set(property, value);
+      node.style.setProperty(property, value);
     });
   };
 
@@ -68,5 +81,14 @@ export function initScrubIn(node, stages) {
 
   window.addEventListener("scroll", queue, { passive: true });
   window.addEventListener("resize", queue, { passive: true });
+
+  /* Marks the group as driven, which is what the stylesheet hangs the panels'
+     compositor layers off. Set here rather than in the stylesheet for the same
+     reason scroll-drift.js sets .is-adrift there: a browser that never runs
+     this file — reduced motion, or no JS at all — is not going to move these
+     panels, and should not be asked to hold a tile per panel for an effect it
+     will not show. Set before the first draw so the class and the offsets land
+     together. */
+  node.classList.add("is-scrubbing");
   draw();
 }

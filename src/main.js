@@ -194,6 +194,9 @@ if (storyChapters.length && !reducedMotion.matches) {
   // The panels park under the header, so --seam is measured down from there
   // rather than from the top of the page: it is an inset into the panel.
   let panelTop = 0;
+  // Last figures written per chapter, so an unchanged frame writes nothing.
+  const seams = new Map();
+  const opens = new Map();
 
   const measurePanelTop = () => {
     panelTop =
@@ -204,28 +207,64 @@ if (storyChapters.length && !reducedMotion.matches) {
       ) || 0;
   };
 
+  /* How far the boundary has to lift off the foot of the panel before the
+     corner is fully round, in px. The corner used to be a straight switch —
+     nothing at all until the seam was a pixel clear of the bottom, then the
+     whole radius — so it appeared at full size inside a single frame, right at
+     the handover between one chapter and the next. That pop is exactly the
+     moment a reader is looking at the boundary. Grown over this distance
+     instead, the corner opens as the arriving chapter's edge leaves the fold.
+     Wide enough to take a few frames at reading pace, short enough that the
+     corner is fully itself long before the boundary is anywhere near the
+     middle of the screen. */
+  const RADIUS_RAMP = 40;
+
   const drawSeams = () => {
     seamQueued = false;
-    const fold = window.innerHeight;
-    const panel = fold - panelTop;
+    /* Floored, because it is the far end of the clamp below: a fold shorter
+       than the header — a collapsed or hidden window — would otherwise clamp
+       the seam to a NEGATIVE inset and cut the panels the wrong way. */
+    const panel = Math.max(window.innerHeight - panelTop, 0);
+
+    /* Read every edge, then write every seam. Interleaving the two makes the
+       browser flush layout once per chapter instead of once per frame — the
+       same trap scroll-drift.js calls out, and the reason it measures its
+       groups in one pass before it moves any of them.
+
+       Only another chapter climbs over one. What follows the story is an
+       ordinary section that pushes the last photograph up the page instead, so
+       that pair's edges never move and the stylesheet keeps them. */
+    const edges = storyChapters.map((chapter, index) =>
+      storyChapters[index + 1]
+        ? storyChapters[index + 1].getBoundingClientRect().top
+        : null,
+    );
 
     storyChapters.forEach((chapter, index) => {
-      // Only another chapter climbs over one. What follows the story is an
-      // ordinary section that pushes the last photograph up the page instead,
-      // so that pair's edges never move and the stylesheet keeps them.
-      const arriving = storyChapters[index + 1];
-      if (!arriving) return;
-      const top = arriving.getBoundingClientRect().top;
-      const seam = Math.min(Math.max(top - panelTop, 0), panel);
-      chapter.style.setProperty("--seam", `${seam}px`);
+      const top = edges[index];
+      if (top === null) return;
+
+      /* Whole pixels. This figure is a cut across two panels the size of the
+         screen, one of them a full-bleed photograph, and every distinct value
+         is a fresh clip for both of them — so the seven decimal places this
+         used to carry bought a repaint on every frame of every scroll for a
+         boundary that had not visibly moved. Rounded, a frame that shifts the
+         line by less than a pixel writes nothing at all, which is most frames
+         while the page is easing to rest. */
+      const seam = Math.round(Math.min(Math.max(top - panelTop, 0), panel));
       // A seam still at the foot of the panel is nothing arriving yet, and a
       // rounded corner there would just be two notches sitting at the bottom
-      // of the screen. Under a pixel of it is the arriving chapter sitting
-      // exactly on the fold, off by a subpixel — not a boundary either.
-      chapter.style.setProperty(
-        "--seam-radius",
-        panel - seam > 1 ? "var(--story-radius)" : "0px",
-      );
+      // of the screen. The stylesheet spends this 0..1 on --story-radius.
+      const open = Math.min((panel - seam) / RADIUS_RAMP, 1).toFixed(2);
+
+      if (seams.get(chapter) !== seam) {
+        seams.set(chapter, seam);
+        chapter.style.setProperty("--seam", `${seam}px`);
+      }
+      if (opens.get(chapter) !== open) {
+        opens.set(chapter, open);
+        chapter.style.setProperty("--seam-open", open);
+      }
     });
   };
 
@@ -244,6 +283,17 @@ if (storyChapters.length && !reducedMotion.matches) {
     },
     { passive: true },
   );
+  /* Marks the chapters whose cut actually travels — every one but the last,
+     which has nothing climbing over it and so keeps a clip that never changes.
+     The stylesheet hangs those panels' compositor layers off this, so a
+     chapter that never moves, and every chapter under reduced motion or with
+     no JS at all, is left as ordinary paint rather than being handed two
+     screen-sized tiles to hold for a boundary that will not move. Set before
+     the first draw so the class and the seams land together. */
+  storyChapters
+    .slice(0, -1)
+    .forEach((chapter) => chapter.classList.add("is-seamed"));
+
   measurePanelTop();
   drawSeams();
 }
@@ -495,30 +545,55 @@ if (studioTabs.length) {
 }
 
 /* The quote band under the studio flies up as you scroll down to it and sinks
-   back as you scroll away, its two halves one after the other. Scrubbed
+   back as you scroll away, one half leading the other. Scrubbed
    against the band's own position rather than fired at a moment — see
    scrub-in.js for why, and for what makes each of these four numbers
    load-bearing.
 
-   A stretch of the band's approach each, back to back: the photograph's begins
-   exactly where the navy's ends, so neither moves while the other is still
-   going. Written as where the band's top sits in the fold rather than as a
-   split of one run, because each boundary has to agree with a travel distance
-   in the stylesheet, and that is far easier to read side by side:
+   A stretch of the band's approach each: the photograph sets off just after
+   the navy and is still going long after it has landed, so the pair reads as
+   one leading and one following. Written as where the band's top sits in the
+   fold rather than as a split of one run, because each boundary has to agree
+   with a travel distance in the stylesheet, and that is far easier to read
+   side by side:
 
-     navy   starts at 0.88  ->  travels 14vh, needs more than 12
-     photo  starts at 0.72  ->  travels 32vh, needs more than 28
+     navy   starts at 1.00  ->  travels 10vh, needs more than 0
+     photo  starts at 0.92  ->  travels 20vh, needs more than 8
 
-   The run begins as the band's top edge crosses the bottom of the screen, so
-   the panels are already climbing by the time you have any of the band to look
-   at, and ends while the band is still in the lower half — the movement is
-   over before you are reading the quote rather than under it.
+   TWO NUMBERS DECIDE WHETHER THIS READS AS MOVEMENT OR AS A JUMP, and they
+   pull against each other:
+
+     - The RANGE, (from - to), is how much scrolling the entrance is spread
+       over, and so how many frames you get to see it in. Weighted scrolling
+       hands a flick about 44px on its biggest frame and a hard one about
+       100px, so a range has to be worth a few hundred pixels before the run
+       is more than two or three frames long.
+     - The SPEED is 1 + travel/range, because the band is climbing the screen
+       at 1px per px of scroll while the panel climbs out of it. A panel
+       moving much faster than the page it sits in stutters against
+       everything around it however smooth its own arithmetic is.
+
+   The band was tuned the other way first — 0.88 -> 0.72 against 14vh — and
+   both went wrong together: a 16vh range is 115px, which a normal flick
+   crosses in six frames and a hard one in three, and 14vh of travel over it
+   put the navy on screen at 1.88x page speed. Shortening a range to make the
+   motion perceptible at reading pace is also what makes it a jump at flick
+   pace; the fix is the opposite move, a long range with a short travel.
+   These figures span 216px and 410px at a 720px fold — nine and fourteen
+   frames of a normal flick, against six and eleven — and hold both panels
+   near 1.33x.
+
+   Starting the navy at 1.00 — the band's top edge exactly on the bottom of
+   the screen — is what buys the short travel. A panel waiting its turn sits
+   one travel below its resting place and has to clear the bottom of the
+   screen, so a later start needs a deeper displacement to stay hidden, and a
+   deeper displacement is speed. Earliest start, shortest travel, longest run.
 
    The CSS reads both properties, and swaps which of the pair they drive on a
    phone, where the photograph is the half stacked on top. */
 initScrubIn(document.querySelector(".voice-panel__card"), [
-  { property: "--voice-in", from: 0.88, to: 0.72 },
-  { property: "--voice-in-late", from: 0.72, to: 0.3 },
+  { property: "--voice-in", from: 1.0, to: 0.7 },
+  { property: "--voice-in-late", from: 0.92, to: 0.35 },
 ]);
 
 /* The pair of cards under "What sports therapy helps with" arrives the same

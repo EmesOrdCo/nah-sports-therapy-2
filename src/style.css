@@ -4694,12 +4694,27 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 /* Photograph plus a left-to-right navy wash: near-solid behind the copy,
    clearing across to the right so the picture comes through. The wash is the
-   ::after so the image can be swapped by changing one background-image. */
+   ::after so the image can be swapped by changing one background-image.
+
+   The photograph is a golfer at the top of the follow-through, shot from
+   behind against a soft evening sky — the whole body turned around its
+   centre, which is the sentence this band is making. It replaces an empty
+   fairway: a course with nobody on it said where golf happens, not what
+   this section is for.
+
+   Where he sits in the file is deliberate. The band is always taller than
+   the picture's 2.18, so cover scales it by height and the crop is
+   horizontal only — nothing is ever taken off the top or bottom, and 72%
+   below decides which slice of the width is on screen. He is cut to sit at
+   about 0.68 across so he lands in the part of the band the wash has
+   cleared, and stays in frame down to the narrow slice a phone shows. Any
+   replacement needs the same: subject two thirds across, or he disappears
+   behind the solid end of the wash. */
 .pilates-golf__backdrop {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background-image: url("/images/golf-backdrop-1600.webp");
+  background-image: url("/images/golf-backdrop-6256591-1600.webp");
   background-position: 72% center;
   background-size: cover;
 }
@@ -4723,7 +4738,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    only worth loading where it is actually visible. */
 @media (min-width: 1100px) {
   .pilates-golf__backdrop {
-    background-image: url("/images/golf-backdrop-2400.webp");
+    background-image: url("/images/golf-backdrop-6256591-2400.webp");
   }
 }
 
@@ -5385,12 +5400,21 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   min-height: calc(2 * (100vh - var(--header-scrolled)));
   min-height: calc(2 * (100svh - var(--header-scrolled)));
 
-  /* How far down the fold the chapter arriving over this one has got, and
-     whether there is anything there to round against. JS keeps both current;
-     the defaults are a whole uncut panel, which is what a chapter sitting on
-     its own should be. */
+  /* How far down the fold the chapter arriving over this one has got, and how
+     much of a corner there is to round against. JS keeps both current; the
+     defaults are a whole uncut panel with a square foot, which is what a
+     chapter sitting on its own should be.
+
+     --seam-open is a 0..1 share rather than a length so that the corner can
+     GROW as the boundary lifts off the foot of the panel. It was a straight
+     switch between 0 and the full radius, which put a 20px corner on screen
+     inside a single frame at the exact moment one chapter handed over to the
+     next — the one moment a reader is looking at that edge. Keeping the length
+     itself here also means the last chapter below can open its corner by
+     saying so, without repeating the figure. */
   --seam: 100%;
-  --seam-radius: 0px;
+  --seam-open: 0;
+  --seam-radius: calc(var(--story-radius) * var(--seam-open));
 }
 
 .story__chapter + .story__chapter {
@@ -5411,8 +5435,9 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   /* Nothing climbs over this one, so its foot never moves off the panel and
      the radius can just sit there — the band is welded to that edge and rides
      up with it, which makes it a boundary like any other. JS leaves the last
-     chapter alone for this reason. */
-  --seam-radius: var(--story-radius);
+     chapter alone for this reason, which is also why this opens the corner
+     rather than setting the length: the figure lives in one place. */
+  --seam-open: 1;
 }
 
 .story__copy,
@@ -5438,6 +5463,22 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     0 0 calc(100% - var(--seam)) 0 round var(--story-radius) var(--story-radius)
       var(--seam-radius) var(--seam-radius)
   );
+}
+
+/* The cut moves every frame while one chapter climbs over another, and a
+   clip that changes is a repaint of everything it clips — here two panels the
+   size of the screen, one of them a full-bleed photograph. Held on their own
+   compositor layers the change is a clip applied to something already
+   rastered, rather than the pair being painted again from the top sixty times
+   a second.
+
+   Only the chapters whose cut actually travels: main.js sets .is-seamed on
+   exactly the ones it writes to, so the last chapter — whose clip never
+   changes — and every chapter under reduced motion or with no JS keeps
+   ordinary paint instead of two screen-sized tiles held for nothing. */
+.story__chapter.is-seamed > .story__copy,
+.story__chapter.is-seamed > .story__media {
+  will-change: clip-path;
 }
 
 /* The photograph takes the left column and the copy the right, ordered here
@@ -5529,17 +5570,25 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   object-position: 48% 42%;
 }
 
-/* The same two chapters again on /pilates, pre- and postnatal. Both of these
-   are small legacy stock — 412x291 and 500x302 — and a full-height panel is
-   several times that, so they are soft until Natasha's own shoot replaces
-   them. Hold each on its subject: the prenatal client sits right of the ball,
-   the postnatal one lies along the lower half of her frame. */
+/* The same two chapters again on /pilates, pre- and postnatal. These two used
+   to be the softest photographs on the site — legacy stock at 412x291 and
+   500x302 blown up to fill a panel several times that. They are Pexels stock
+   now, cut 4:5 from portrait originals, which is the way round a half-width
+   full-height panel wants and enough resolution to be sharp on it.
+
+   Neither sits centred, because a near-square panel takes a fifth of the
+   height out of a 4:5 photograph and both of these fill their frame top to
+   bottom. The prenatal client is a standing figure, so the crop is pinned to
+   the top — that keeps her head and takes the floor instead, where centring
+   it cut her across the eyes. The postnatal pair run from the child at the
+   top to the mother's head at the very foot, so that one is held just below
+   centre to keep her face in. */
 #prenatal .story__media img {
-  object-position: 64% center;
+  object-position: center top;
 }
 
 #postnatal .story__media img {
-  object-position: 45% 62%;
+  object-position: center 55%;
 }
 
 /* A short window still has to hold a whole chapter on the fold, so the copy
@@ -5793,22 +5842,44 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    The defaults of 1 are the resting state, so with no JS — or with reduced
    motion, where main.js leaves the band alone — nothing is displaced. */
 /* In vh, not pixels, and the exact figures are load-bearing — see the note in
-   main.js. A panel waiting its turn sits one travel below its resting place,
-   so it is only hidden while that travel exceeds the gap between its start
-   fraction and the fold. Navy starts at 0.88, so it needs more than 12vh;
-   the photograph starts at 0.72, so it needs more than 28vh. Both have a
-   couple of vh of margin. Drop either below its figure and you get the panel
-   sitting parked in view before it moves, and parked again on the way back
-   up — which is the whole reason these are not fixed pixel amounts. */
+   main.js, which is where the ranges these are paired with live and where the
+   arithmetic tying the two together is written out.
+
+   A panel waiting its turn sits one travel below its resting place, so it is
+   only hidden while that travel exceeds the gap between its start fraction and
+   the fold. Navy starts at 1.00, right on the bottom of the screen, so any
+   travel keeps it hidden; the photograph starts at 0.92, so it needs more than
+   8vh, and 20vh leaves it plenty. Drop either below its figure and you get the
+   panel sitting parked in view before it moves, and parked again on the way
+   back up — which is the whole reason these are not fixed pixel amounts.
+
+   The other end of the bargain is speed: a panel climbs the screen at its own
+   travel PLUS the 1px per px the band is already rising at, so a travel large
+   against its range is a panel outrunning the page and stuttering against it.
+   Both of these sit near a third of their range, which holds the pair around
+   1.3x. Raising either without lengthening its range in main.js is how this
+   band came to jump three frames at a time in the first place. */
 .voice-panel__words {
-  transform: translateY(calc((1 - var(--voice-in, 1)) * 14vh));
+  transform: translateY(calc((1 - var(--voice-in, 1)) * 10vh));
+}
+
+/* The panels are moved every frame while the band crosses the screen, so they
+   are held on their own compositor layers rather than being rastered again
+   from the top each time — a photograph half a screen wide is not something to
+   repaint sixty times a second. Keyed to .is-scrubbing, which scrub-in.js sets
+   on start-up, so reduced motion and no-JS are not asked to hold two tiles for
+   an effect they will never show. Same bargain as .is-adrift above. */
+.voice-panel__card.is-scrubbing .voice-panel__words,
+.voice-panel__card.is-scrubbing .voice-panel__media {
+  will-change: transform;
 }
 
 /* Further than the navy as well as later, which the geometry wants anyway:
    starting later means starting deeper, so the photograph is the half that
-   travels. */
+   travels. It is also the half still moving once the navy has landed, which
+   is what makes the pair read as one leading and one following. */
 .voice-panel__media {
-  transform: translateY(calc((1 - var(--voice-in-late, 1)) * 32vh));
+  transform: translateY(calc((1 - var(--voice-in-late, 1)) * 20vh));
 }
 
 .voice-panel__card {
@@ -5945,14 +6016,16 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   /* Stacked, the photograph is the half you reach first — so the two swap
      which of the pair leads, and the words come up behind it. Shorter travel
      than side by side: the halves are half the height here, and 120px of a
-     260px photograph is a slide, not a settle. */
+     260px photograph is a slide, not a settle. The same two figures the wide
+     layout uses — they are shares of the fold, so they already scale, and the
+     ranges they are paired with in main.js do not change with the layout. */
   .voice-panel__media {
-    transform: translateY(calc((1 - var(--voice-in, 1)) * 14vh));
+    transform: translateY(calc((1 - var(--voice-in, 1)) * 10vh));
   }
 
   .voice-panel__words {
     padding: clamp(34px, 8vw, 52px) var(--page-gutter);
-    transform: translateY(calc((1 - var(--voice-in-late, 1)) * 32vh));
+    transform: translateY(calc((1 - var(--voice-in-late, 1)) * 20vh));
   }
 
   .voice-panel__card blockquote p {
@@ -6588,9 +6661,17 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
  * up down the page whatever their length, which is what makes the rail read as
  * a rail rather than as three indents that happen to agree. */
 .journeys__list {
-  --journeys-rail: clamp(112px, 11vw, 148px);
+  /* Wide enough that the longest label — "How Pilates helped" — sits on one
+     line at the top of the clamp. See the note on BEATS in journeys.js about
+     why the labels are short rather than the rail being wide enough for any
+     wording somebody might type. */
+  --journeys-rail: clamp(124px, 12.5vw, 168px);
 
-  max-width: 50rem;
+  /* 46rem, not wider: the rail takes its share off the front, and what is left
+     is the reading column. At 50rem that column ran to about 75 characters a
+     line — past the point where the eye reliably finds the start of the next
+     one, and this page is nothing but reading. */
+  max-width: 46rem;
   margin-inline: auto;
 }
 
@@ -7072,6 +7153,15 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     clip-path: none;
   }
 
+  /* Nothing left to clip, so nothing to hold a layer for. Written with the
+     same selector as the promotion itself rather than folded into the rule
+     above: a media query adds no specificity, and .story__copy on its own
+     loses to the .is-seamed child selector. */
+  .story__chapter.is-seamed > .story__copy,
+  .story__chapter.is-seamed > .story__media {
+    will-change: auto;
+  }
+
   .story__media {
     order: -1;
   }
@@ -7079,6 +7169,14 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   .story__media img {
     height: auto;
     aspect-ratio: 4 / 3;
+  }
+
+  /* Except the pre- and postnatal pair, which are portrait: a 4:3 phone frame
+     cuts the pregnant client off at the knees and takes either the child or
+     the mother's head out of the other. They keep the ratio they were cut to
+     rather than being cropped through. */
+  #pre-postnatal .story__media img {
+    aspect-ratio: 4 / 5;
   }
 
   .story__copy {

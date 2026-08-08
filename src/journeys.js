@@ -120,14 +120,22 @@ export const JOURNEYS = [
  *   },
  */
 
-/* The labels over the three beats. One set, used by every card, so a new entry
-   cannot quietly invent a fourth heading or word one of these differently.
-   Third person and plural throughout: the card is headed with a name, but
+/* The labels beside the three beats. One set, used by every entry, so a new
+   one cannot quietly invent a fourth heading or word one of these differently.
+
+   Third person and plural throughout: the entry is headed with a name, but
    nobody has told us what pronouns that person uses, and "they" is right for
-   every client on the shelf. */
+   every client on the page.
+
+   Kept to two or three words each because they are set in a rail, and a rail
+   is only a rail while the labels in it are the same shape. "What brought them
+   in" and "How Pilates has helped" both wrapped, and a two-line label leaving
+   one word on the second line reads as a mistake beside a serif paragraph that
+   breaks cleanly. Shorter, they sit on one line each and the eye can use the
+   left edge to find its place — which is the only job they have. */
 const BEATS = [
-  ["injury", "What brought them in"],
-  ["helped", "How Pilates has helped"],
+  ["injury", "Came in with"],
+  ["helped", "How Pilates helped"],
   ["enjoy", "What they enjoy"],
 ];
 

@@ -1013,10 +1013,10 @@ function buildPilatesContinuousPage() {
           </div>
           <figure class="story__media">
             <img
-              src="/images/legacy/prenatal-pilates.jpg"
-              alt="A pregnant client working on a Pilates ball"
-              width="412"
-              height="291"
+              src="/images/natal/prenatal-7155356.webp"
+              alt="A pregnant client holding a supported squat against an exercise ball"
+              width="1200"
+              height="1500"
               loading="lazy"
             />
           </figure>
@@ -1043,10 +1043,10 @@ function buildPilatesContinuousPage() {
           </div>
           <figure class="story__media">
             <img
-              src="/images/legacy/postnatal-pilates.jpg"
-              alt="A client working on her side on a Pilates mat after birth"
-              width="500"
-              height="302"
+              src="/images/natal/postnatal-3094222.webp"
+              alt="A client on a mat after birth, holding her child above her on straight legs"
+              width="1200"
+              height="1500"
               loading="lazy"
             />
           </figure>
