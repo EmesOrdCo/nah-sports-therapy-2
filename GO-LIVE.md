@@ -75,6 +75,21 @@ rollback.
 
 ---
 
+## Where the records go
+
+**Every record in this document is typed into GoDaddy.** Nowhere else.
+
+DNS records live wherever the domain's nameservers point, and those are
+`ns35/36.domaincontrol.com` — GoDaddy. Resend and Netlify each *generate* records
+for you to copy in; neither of them hosts the zone. Wix is not involved at all:
+it is not hosting the DNS, it is only the current destination of the apex `A`
+record, and it stops being that when the record is repointed.
+
+> GoDaddy holds the address book. Resend and Netlify hand you entries to write
+> into it. Wix is just the address currently on one line of it.
+
+---
+
 ## Part A — email sending
 
 1. Resend → **Add domain** → `send.njhsportstherapy.co.uk`
