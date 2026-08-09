@@ -5559,11 +5559,12 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   object-fit: cover;
 }
 
-/* Both photographs are landscape, so a full-height panel crops them hard.
-   Hold each one on its subject: Natasha sits left of centre, and the studio
-   reads best off the window wall rather than the floor. */
+/* A full-height panel crops these hard, so each one is held on its subject.
+   Sports Therapy is a 4:5 portrait of Natasha — the way round the panel
+   wants — pinned to the top, because a short window leaves a near-square
+   panel and centring it cuts the crown of her head. */
 #sports-therapy .story__media img {
-  object-position: 40% center;
+  object-position: center top;
 }
 
 #pilates .story__media img {
