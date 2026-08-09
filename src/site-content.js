@@ -838,7 +838,7 @@ function buildPilatesContinuousPage() {
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-orbit-figure" data-reveal>
             <div class="hero-orb hero-orb--inline">
-              <img class="hero-orb__photo" src="/images/pilates-duet-orb.webp" srcset="/images/pilates-duet-orb-450.webp 450w, /images/pilates-duet-orb.webp 900w" sizes="(max-width: 960px) 78vw, 34vw" alt="Two clients working through a teaser with a ball in a duet session" width="900" height="900" loading="lazy">
+              <img class="hero-orb__photo" src="/images/pilates-individual-orb.webp" srcset="/images/pilates-individual-orb-450.webp 450w, /images/pilates-individual-orb.webp 900w" sizes="(max-width: 960px) 78vw, 34vw" alt="Natasha holding a side plank on the mat in the Studham studio, top arm reaching overhead" width="900" height="900" loading="lazy">
               <svg class="hero-orb__rings" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
                 <circle class="hero-orb__ring hero-orb__ring--faint" cx="50" cy="50" r="49.3" />
                 <circle class="hero-orb__ring" cx="50" cy="50" r="45.6" />

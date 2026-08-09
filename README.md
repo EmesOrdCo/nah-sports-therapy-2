@@ -60,7 +60,7 @@ Everything the function needs is set in Netlify's UI and read at request time. *
 | Variable | |
 | --- | --- |
 | `RESEND_API_KEY` | required: the transactional mail API key, starts `re_` |
-| `MAIL_FROM` | required: the send-only From address |
+| `MAIL_FROM` | required: the send-only From address. `onboarding@resend.dev` until the domain is verified |
 | `MAIL_FROM_NAME` | optional, defaults to "NJH Website" |
 | `MAIL_TO` | optional, defaults to the NJH Gmail |
 | `MAIL_BCC` | optional archive copy |
@@ -71,7 +71,13 @@ Run the whole thing locally (page, function and send together) with `npm run dev
 
 ### Before the domain is verified
 
-A new Resend account is sandboxed: it will only send **from** `onboarding@resend.dev` and only **to** the address the account was opened with. That is enough to exercise the entire path end to end without touching DNS. Going live is then two environment variables (`MAIL_FROM` to the real send-only address, `MAIL_TO` to the NJH Gmail) and no code change at all.
+A new Resend account is sandboxed: it will only send **from** `onboarding@resend.dev` and only **to** the address the account was opened with. That is enough to exercise the entire path end to end without touching DNS.
+
+**This is the state the site is in, and it is deliberate.** The account was opened with `njhpilates@gmail.com`, the inbox NJH actually wants enquiries in, so the sandbox's one permitted recipient is the real recipient. The form delivers there today with no DNS at all. The unfinished half is the *sending* identity: mail goes out from `onboarding@resend.dev`, which carries Resend's authentication rather than NJH's — the reputation problem this system exists to solve, deferred rather than fixed. It reached the inbox on test, but nothing about that is guaranteed to hold.
+
+The reason it is deferred is access: verifying the domain needs DNS records at GoDaddy, and the client has not yet supplied that login. When they do, verification lifts the sandbox and going live is **one** environment variable, `MAIL_FROM` to the send-only address. `MAIL_TO` is already correct. No code change at all.
+
+Until then, do not point `MAIL_TO` anywhere else. While the domain is unverified it is the only address Resend will accept, and any other value returns a 403 that surfaces to the visitor as "your message could not be sent".
 
 Verifying `send.njhsportstherapy.co.uk` in Resend produces three records to publish at the registrar: an `MX` on the subdomain for bounce handling, a `TXT` SPF record on the subdomain, and a `TXT` DKIM record at `resend._domainkey.send`. Resend re-checks and flips to verified within about ten minutes. None of the three touches the apex domain, so existing mail keeps working throughout.
 

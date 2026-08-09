@@ -2,8 +2,39 @@
 
 Everything for the client meeting, in order. Tested as far as it can be tested
 without DNS: the function, the template, the Resend credentials and the honeypot
-all work: a real enquiry was sent and received. What is untested is the browser
-→ function hop on the deployed site, and anything involving the domain.
+all work: a real enquiry was sent and received. What is untested is anything
+involving the domain.
+
+---
+
+## Where this stands, 9 August 2026
+
+**The form works and delivers to `njhpilates@gmail.com`.** A real enquiry sent
+from `https://njh-therapy-2.netlify.app/contact` arrived in that inbox, not Spam.
+
+It gets there without any DNS at all, by a deliberate shortcut. The client has
+not produced the GoDaddy login, so `send.njhsportstherapy.co.uk` cannot be
+verified, so Resend's sandbox rule applies: **an unverified account delivers only
+to the address it was opened with.** The account was therefore opened with
+`njhpilates@gmail.com` — the destination NJH actually wants — which turns that
+restriction into the answer instead of the obstacle.
+
+| | Now | After verification |
+| --- | --- | --- |
+| Resend account | opened with `njhpilates@gmail.com` | unchanged |
+| `MAIL_FROM` | `onboarding@resend.dev` | `enquiries@send.njhsportstherapy.co.uk` |
+| `MAIL_TO` | `njhpilates@gmail.com` | unchanged |
+| Domain | unverified, no DNS needed | verified |
+
+What this costs: mail is sent from `onboarding@resend.dev`, a shared Resend
+address, so it carries none of NJH's own authentication. It reached the inbox on
+test, but that is Resend's reputation holding it up rather than NJH's, and it can
+change without warning. **Part A below is still the destination, not an
+alternative.** It is deferred on GoDaddy access, nothing else.
+
+What this does *not* cost: the site cutover in Part B does not disturb it. That
+changes the apex `A` and `www`; Resend reads neither. The form keeps working
+through the cutover with no action at all.
 
 ---
 
@@ -63,8 +94,9 @@ Three things follow from this:
 
 ## What to get from the client
 
-- [ ] **GoDaddy account login** (with access to DNS management)
-- [ ] Confirm enquiries should go to `njhpilates@gmail.com`
+- [ ] **GoDaddy account login** (with access to DNS management). Asked for and not
+      yet received, which is the only thing blocking Part A
+- [x] Enquiries go to `njhpilates@gmail.com` — confirmed and working
 - [ ] Confirm they understand **the Wix site stops being visible** when the apex
       is repointed. This is the visible, alarming step, better agreed than sprung
 - [ ] Whether anything else uses the domain that is not the website or email
@@ -92,6 +124,14 @@ record, and it stops being that when the record is repointed.
 
 ## Part A: email sending
 
+**Blocked on the GoDaddy login, and not urgent.** The form already delivers, per
+the section at the top. This is what replaces `onboarding@resend.dev` with NJH's
+own authenticated sending identity, and it is worth doing whenever access
+arrives: the current arrangement rents somebody else's reputation.
+
+Do it in the account opened with `njhpilates@gmail.com`. Adding the domain there
+lifts the sandbox, so nothing about the recipient has to change afterwards.
+
 1. Resend → **Add domain** → `send.njhsportstherapy.co.uk`
 
    The subdomain matters. NJH's live mail runs off the apex, and a second or
@@ -111,12 +151,12 @@ record, and it stops being that when the record is repointed.
 
 3. Wait for Resend to show **Verified** (~10 min, sometimes faster).
 
-4. Netlify → Environment variables → change **two**:
+4. Netlify → Environment variables → change **one**:
 
    - `MAIL_FROM` → `enquiries@send.njhsportstherapy.co.uk`
-   - `MAIL_TO` → `njhpilates@gmail.com`
 
-   Leave `RESEND_API_KEY`, `MAIL_FROM_NAME` and `VITE_CONTACT_FORM_ENDPOINT` alone.
+   `MAIL_TO` is already `njhpilates@gmail.com` and stays there. Leave
+   `RESEND_API_KEY`, `MAIL_FROM_NAME` and `VITE_CONTACT_FORM_ENDPOINT` alone.
 
 5. **Redeploy.** Environment variables do not apply to an existing deploy.
 
@@ -163,9 +203,11 @@ once the domain is live. Not urgent for the meeting.
 
 - **Site wrong?** Put the apex `A` back to `185.230.63.107` and `www` back to
   `pointing.wixdns.net`. Wix returns.
-- **Email not arriving?** Set `MAIL_FROM` back to `onboarding@resend.dev` and
-  `MAIL_TO` back to the Resend account's own address, redeploy. That is the
-  known-good state, and it is the one that was tested.
+- **Email not arriving?** Set `MAIL_FROM` back to `onboarding@resend.dev`,
+  redeploy. With `MAIL_TO` at `njhpilates@gmail.com` that is the known-good
+  state, and it is the one delivering today. Do not change `MAIL_TO`: while the
+  domain is unverified, that address is the *only* one Resend will deliver to,
+  and pointing it anywhere else is what produces a 403 and a failed form.
 - **Anything unclear?** Netlify → Functions → `enquiry` → the logs carry the full
   error. With no form-provider dashboard behind this, they are the only record
   that an enquiry existed.

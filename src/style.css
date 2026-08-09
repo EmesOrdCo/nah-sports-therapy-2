@@ -3177,7 +3177,11 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   letter-spacing: var(--tracking-display);
 }
 
+/* The one note that is not a footnote to a column. It answers to both sets of
+   fees, so it runs the whole measure of the shell rather than the 62ch the
+   in-column notes are held to. */
 .prices-terms .prices-note {
+  max-width: none;
   margin-top: clamp(10px, 1.2vw, 14px);
 }
 
@@ -6020,10 +6024,13 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   display: block;
   width: 100%;
   height: 100%;
-  /* She sits right of centre in the source, in front of the chart. Holding
-     the crop there keeps her whole rather than splitting her at the edge. */
+  /* The half is squarer than the source, so cover crops the sides: she runs
+     from her planted hand at the left to her feet at the right, and pulling
+     the window left of centre is what keeps both ends inside it. The 40% down
+     only bites on a phone, where the 3/2 half crops height instead — it holds
+     her head clear of the top edge. */
   object-fit: cover;
-  object-position: 62% 30%;
+  object-position: 42% 40%;
   filter: saturate(0.62) contrast(1.02);
 }
 
