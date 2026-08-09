@@ -1,19 +1,17 @@
 /* The written client journeys — /client-stories/journeys.
  *
- * The third side of Client Stories. The films on /client-stories are a minute
- * of somebody talking; the wall on /client-stories/reviews is a quote and a
+ * The other side of Client Stories. The films on /client-stories are a minute
+ * of somebody talking; the run of quotes on the home page is a sentence and a
  * name. This is the thing neither of those gives a visitor who is weighing up
  * whether to book: the shape of a course of treatment, start to now. What they
  * came in with, what changed, and what keeps them coming back once the thing
  * that brought them in has settled.
  *
- * A page rather than a section under the films, and for the reason the films
- * and the wall are two pages rather than one stacked page — see the note above
+ * A page rather than a section under the films — see the note above
  * storiesSwitch() in site-content.js. Sitting under the film shelf, this was a
- * screenful of reading that somebody who came to watch had not asked for, and
- * it was unreachable from the wall without going through the films first. On
- * its own URL it can be linked to, and the switch offers it from both of the
- * other two.
+ * screenful of reading that somebody who came to watch had not asked for. On
+ * its own URL it can be linked to, and the switch offers it from the other
+ * side.
  *
  * ---- Three beats, always the same three ----
  *
@@ -30,14 +28,14 @@
  *             what the hour is actually like.
  *
  * A journey with only two of the three is not a journey, it is a review, and
- * the wall on /client-stories/reviews is where a review goes. If a client only
- * gave you two beats, either go back and ask for the third or put what they
- * said on the wall instead. Do not pad the missing one.
+ * reviews.js is where a review goes. If a client only gave you two beats,
+ * either go back and ask for the third or put what they said in reviews.js
+ * instead. Do not pad the missing one.
  *
  * ---- Names, and nothing else ----
  *
- * The caption is a first name, on its own, exactly as on the reviews wall —
- * see the rule at the top of reviews.js. No condition tag, no occupation, no
+ * The caption is a first name, on its own, exactly as on a review — see the
+ * rule at the top of reviews.js. No condition tag, no occupation, no
  * duration, no village, and no Sports Therapy / Pilates label: the three beats
  * say which of them it was far better than a chip would.
  *
@@ -81,29 +79,29 @@ export const JOURNEYS = [
   {
     name: "First story",
     injury:
-      "Placeholder. What brought this client in goes here — the injury or the condition, how long they had had it, and what it was stopping them doing.",
+      "Placeholder. What brought this client in goes here: the injury or the condition, how long they had had it, and what it was stopping them doing.",
     helped:
       "Placeholder. What has changed since, in their words: the movement they have back, the pain that has gone, the thing they can do again.",
     enjoy:
-      "Placeholder. What they get out of the sessions themselves — the part that keeps them coming once the original problem has settled.",
+      "Placeholder. What they get out of the sessions themselves, the part that keeps them coming once the original problem has settled.",
   },
   {
     name: "Second story",
     injury:
-      "Placeholder. What brought this client in goes here — the injury or the condition, how long they had had it, and what it was stopping them doing.",
+      "Placeholder. What brought this client in goes here: the injury or the condition, how long they had had it, and what it was stopping them doing.",
     helped:
       "Placeholder. What has changed since, in their words: the movement they have back, the pain that has gone, the thing they can do again.",
     enjoy:
-      "Placeholder. What they get out of the sessions themselves — the part that keeps them coming once the original problem has settled.",
+      "Placeholder. What they get out of the sessions themselves, the part that keeps them coming once the original problem has settled.",
   },
   {
     name: "Third story",
     injury:
-      "Placeholder. What brought this client in goes here — the injury or the condition, how long they had had it, and what it was stopping them doing.",
+      "Placeholder. What brought this client in goes here: the injury or the condition, how long they had had it, and what it was stopping them doing.",
     helped:
       "Placeholder. What has changed since, in their words: the movement they have back, the pain that has gone, the thing they can do again.",
     enjoy:
-      "Placeholder. What they get out of the sessions themselves — the part that keeps them coming once the original problem has settled.",
+      "Placeholder. What they get out of the sessions themselves, the part that keeps them coming once the original problem has settled.",
   },
 ];
 
@@ -191,8 +189,7 @@ const entry = (journey, index) =>
       </article>`;
 
 /* The body of /client-stories/journeys. No heading of its own: the page head
-   above it carries the title, the same way the wall of quotes has no second
-   title of its own under "In clients' own words".
+   above it carries the title.
 
    Renders nothing at all from an empty list — and with an empty list there is
    no page either, because the routes table stops offering one. See

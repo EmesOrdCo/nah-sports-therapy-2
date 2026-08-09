@@ -1,7 +1,7 @@
 /* The opening move.
 
    On the pages that have one thing they are actually for — the sentence that
-   turns from her to you on /about, the fees on /prices, the reviews on
+   turns from her to you on /about, the fees on /prices, the film on
    /client-stories — the first scroll down the page does not scroll it. It
    carries the reader from the head to that thing and stops there. The weight
    of the gesture makes no difference: the smallest nudge of a wheel and the
@@ -127,7 +127,7 @@ function glide(to, done) {
 }
 
 /* `selector` names the one thing the page is for. Anything shorter than the
-   window is centred in it; anything taller — a wall of reviews, a long list —
+   window is centred in it; anything taller — a long list, a tall figure —
    is brought up so its head sits under the bar, because centring something
    that overflows the window only hides the start of it. */
 export function initOpeningMove(selector) {
@@ -150,7 +150,7 @@ export function initOpeningMove(selector) {
   let release = 0;
 
   // Measured every time rather than cached: sections reflow, the window
-  // resizes, and a wall of reviews changes height with the column count.
+  // resizes, and a list changes height with what is in it.
   const station = () => {
     const box = target.getBoundingClientRect();
     const top = window.scrollY + box.top;

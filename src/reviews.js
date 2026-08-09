@@ -1,7 +1,9 @@
 /* Single source of truth for client reviews.
  *
- * Reviews are shown in one place — the /client-stories page — and read from here.
- * Add a review once, in the order you want it to appear.
+ * Reviews are shown in one place — the drifting run of quotes on the home page
+ * — and read from here. Add a review once, in the order you want it to appear.
+ * The wall of quotes that used to stand on /client-stories/reviews has gone;
+ * the run on the home page is what is left of it, and it takes the short ones.
  *
  * The captions used to be inconsistent: some named a service, some named the
  * injury the client came in with, others gave a job title, a duration or a
@@ -231,76 +233,3 @@ export const REVIEWS = [
       "I asked Natasha if she could help me as I had upper arm and shoulder pain and discomfort, plus some restricted movement. This occurred after a period of intensive training for my first triathlon. After one session of soft tissue work with Natasha, my full range of movement is back and all pain has gone. I'm very grateful to Natasha for getting me ready to tackle my event in just over a week's time.",
   },
 ];
-
-/* The wall — three columns, each one a category, the outer two drifting down
- * and the middle one up. The categories replaced the All / Sports Therapy /
- * Pilates switch that used to sit above the quotes: with a column per category
- * the switch was filtering a layout that had already done the filtering, and
- * choosing "Pilates" left one column standing beside two empty ones.
- *
- * There are only two services, so the third column is the reviews that carry
- * both. That is the only three-way split the tags support — a fourth kind of
- * label is the thing the rule at the top of this file exists to prevent. Add a
- * service here and the wall picks it up; the layout does not change.
- */
-const both = (review) => review.services.length > 1;
-const only = (service) => (review) =>
-  review.services.includes(service) && !both(review);
-
-export const WALL_COLUMNS = [
-  {
-    label: SERVICE_LABELS[SPORTS_THERAPY],
-    direction: "down",
-    /* Pixels per second, and three different values. Matched speeds make the
-       columns read as one sheet sliding behind a window rather than as three
-       separate lists. Slow enough to finish a quote as it goes by. */
-    speed: 13,
-    list: REVIEWS.filter(only(SPORTS_THERAPY)),
-  },
-  {
-    label: `${SERVICE_LABELS[SPORTS_THERAPY]} &middot; ${SERVICE_LABELS[PILATES]}`,
-    direction: "up",
-    speed: 11,
-    list: REVIEWS.filter(both),
-  },
-  {
-    label: SERVICE_LABELS[PILATES],
-    direction: "down",
-    speed: 12,
-    list: REVIEWS.filter(only(PILATES)),
-  },
-];
-
-const card = (review) =>
-  `<figure class="voices__card">
-            <blockquote>&ldquo;${review.quote}&rdquo;</blockquote>
-            <figcaption>${review.name}</figcaption>
-          </figure>`;
-
-/* One copy of each list ships in the HTML. voices-wall.js clones it as many
-   times as the window is tall and drives the loop from there — how many copies
-   a seamless loop needs depends on the viewport, which is not something the
-   server knows. Without JS the three lists simply stand still at full height,
-   which is the same thing a phone gets.
-
-   The gap between cards is carried as a margin rather than a flex `gap`, for
-   the same reason the credentials marquee does it: every card is then an
-   identical block, so one copy is exactly as tall as the next and the loop
-   wraps on an identical frame. A shared `gap` leaves the seam one gap short.
-
-   data-native-scroll is smooth-scroll.js's opt-out. Without it that module
-   swallows every wheel event on the page and eases the window instead, so a
-   stopped column could never be scrolled by hand — which is the whole point of
-   stopping it. */
-export function voicesColumns() {
-  return WALL_COLUMNS.map(
-    (column, index) => `<div class="voices__col voices__col--${column.direction}" data-drift-speed="${column.speed}">
-      <p class="voices__label" id="voices-label-${index}">${column.label}<i aria-hidden="true"></i></p>
-      <div class="voices__window" tabindex="0" role="group" aria-labelledby="voices-label-${index}" data-native-scroll>
-        <div class="voices__track">
-          ${column.list.map(card).join("\n          ")}
-        </div>
-      </div>
-    </div>`,
-  ).join("\n    ");
-}

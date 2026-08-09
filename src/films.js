@@ -22,9 +22,8 @@
  * again eight months later.
  *
  * An empty list renders nothing at all: filmLead() returns "", the switch
- * loses its Films side, and /client-stories falls through to the wall of
- * written quotes. There is never an empty shelf, a placeholder card or a
- * "coming soon".
+ * loses its Films side, and /client-stories falls through to the journeys.
+ * There is never an empty shelf, a placeholder card or a "coming soon".
  *
  * ---- Adding a film ----
  *
@@ -52,56 +51,48 @@
  */
 
 /* ============================================================
-   PLACEHOLDER FOOTAGE — REPLACE BEFORE THIS PAGE GOES LIVE
+   REAL FILMS. LINES AND CAPTIONS STILL TO COME
    ============================================================
 
-   Every clip below is Mixkit stock footage (Mixkit Free License: commercial
-   use, no attribution required), standing in so the shelf can be designed,
-   reviewed and shown to NJH before a single real film has been shot. The
-   people in them are actors. They are not clients of this practice and have
-   never been through its door.
+   The Mixkit placeholders that used to stand here — stock footage of actors,
+   there so the shelf could be designed before anything had been shot — are
+   gone, files and all. What is below is the real thing: three clients of this
+   practice, filmed in the studio, under the names they gave.
 
-   Which is why not one of these cards carries a name or a quote. The captions
-   describe the slot, not a person. A stranger's face under an invented first
-   name, on a page headed "in clients' own words", is a fabricated testimonial
-   — and it is no less fabricated for everyone involved knowing it is a
-   placeholder, because the visitor reading it does not know.
+   Julia and Isabella were filmed in one sitting and both films open on the
+   same two-shot of the pair before cutting to whichever of them is speaking,
+   which is why their posters are taken from those closer frames instead of
+   from the first second: two identical stills side by side on the shelf tell a
+   visitor nothing about which film is whose.
 
-   So: swap in real films and real names TOGETHER. If a real film arrives for
-   one slot, delete the remaining placeholders rather than leaving one genuine
-   client sitting in a row of actors. Empty is a state this shelf handles — see
-   filmLead(), which renders nothing at all from an empty list.
+   Two things still missing, and neither is invented here:
 
-   The captions each film should end up with are described in the header above.
+   `blurb` — the one line under the name, what brought them in, in their words
+   where possible. It is what each of these three actually says on camera, so
+   it comes from NJH or from the film, not from a guess about the person in the
+   still. Optional in the markup (see captionText): with no line the caption is
+   the name alone rather than a name over an empty space.
+
+   `captions` — a .vtt per film, which the header above calls not optional and
+   means it. Writing one requires listening to the film and typing what is
+   said; it cannot be generated from the file. Until they exist the films play
+   without captions, and that is a gap to close, not a decision.
    ============================================================ */
 export const FILMS = [
   {
-    name: "Latest film",
-    blurb:
-      "Placeholder footage. A client film goes here, with their name above and a line about what brought them in.",
-    poster: "/images/films/45761.webp",
-    sources: [{ src: "/videos/films/45761-portrait.mp4" }],
+    name: "Jo",
+    poster: "/images/films/client-story-1.webp",
+    sources: [{ src: "/videos/films/client-story-1.mp4" }],
   },
   {
-    name: "Earlier film",
-    blurb:
-      "Placeholder footage. A client film goes here, with their name above and a line about what brought them in.",
-    poster: "/images/films/48547.webp",
-    sources: [{ src: "/videos/films/48547-portrait.mp4" }],
+    name: "Julia",
+    poster: "/images/films/client-story-2.webp",
+    sources: [{ src: "/videos/films/client-story-2.mp4" }],
   },
   {
-    name: "Earlier film",
-    blurb:
-      "Placeholder footage. A client film goes here, with their name above and a line about what brought them in.",
-    poster: "/images/films/45695.webp",
-    sources: [{ src: "/videos/films/45695-portrait.mp4" }],
-  },
-  {
-    name: "Earlier film",
-    blurb:
-      "Placeholder footage. A client film goes here, with their name above and a line about what brought them in.",
-    poster: "/images/films/48553.webp",
-    sources: [{ src: "/videos/films/48553-portrait.mp4" }],
+    name: "Isabella",
+    poster: "/images/films/client-story-3.webp",
+    sources: [{ src: "/videos/films/client-story-3.mp4" }],
   },
 ];
 
@@ -161,8 +152,15 @@ const filmFrame = (film, index) => {
      film is which. As an aria-label rather than as clipped text inside the
      button, because a visually hidden span is a name computed from contents —
      and something that has to be computed is something that can be missed.
-     This is the name, stated. */
-  const label = `Play ${film.name}&rsquo;s story`;
+     This is the name, stated.
+
+     A film with no name yet has nothing to state, and "Play this client's
+     film" three times over is the same nothing the bare "Play" was — so the
+     fallback numbers them instead. A number is a poor name but it is a
+     distinct one, and it holds a film that has been shot but not yet named. */
+  const label = film.name
+    ? `Play ${film.name}&rsquo;s story`
+    : `Play client film ${index + 1}`;
   return `<div class="films__frame">
         <video
           class="films__video"
@@ -189,26 +187,37 @@ const filmFrame = (film, index) => {
 
    Its name and line sit underneath rather than beside it: centred under a
    centred film, the pair reads as one object. */
+
+/* The caption under a film, and it renders only what a film actually has. A
+   film with no name yet is not a film with an empty line where the name goes:
+   an empty <p> under a face is a gap that reads as something failing to load,
+   and under the lead the stylesheet gives that gap its own space whether or
+   not there is anything in it. No name and no line, no figcaption at all. */
+const captionText = (film, blurbClass) =>
+  [
+    film.name ? `<p class="films__name">${film.name}</p>` : "",
+    film.blurb ? `<p class="${blurbClass}">${film.blurb}</p>` : "",
+  ]
+    .filter(Boolean)
+    .join("\n        ");
+
 export function filmLead() {
   if (!FILMS.length) return "";
   const film = FILMS[0];
+  const text = captionText(film, "films__lead-blurb");
   return `<figure class="films__lead" data-reveal>
       ${filmFrame(film, 0)}
-      <figcaption class="films__lead-text">
-        <p class="films__name">${film.name}</p>
-        <p class="films__lead-blurb">${film.blurb}</p>
-      </figcaption>
+      ${text ? `<figcaption class="films__lead-text">${text}</figcaption>` : ""}
     </figure>`;
 }
 
-const earlierFilm = (film, index) =>
-  `<figure class="films__card" data-reveal>
+const earlierFilm = (film, index) => {
+  const text = captionText(film, "films__blurb");
+  return `<figure class="films__card" data-reveal>
       ${filmFrame(film, index)}
-      <figcaption class="films__caption">
-        <p class="films__name">${film.name}</p>
-        <p class="films__blurb">${film.blurb}</p>
-      </figcaption>
+      ${text ? `<figcaption class="films__caption">${text}</figcaption>` : ""}
     </figure>`;
+};
 
 /* Everything after the first, in the order the list is written — newest at the
    top, so a new film goes in at the top and nothing else moves.

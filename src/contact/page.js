@@ -45,7 +45,7 @@ export const meta = { label: "Two doors", tone: "dark" };
 const HERO = {
   wide: "/images/contact-hero-1600.webp",
   narrow: "/images/contact-hero-800.webp",
-  alt: "The NJH studio in Studham — a light, empty room with a wooden floor",
+  alt: "The NJH studio in Studham, a light, empty room with a wooden floor",
 };
 
 /* Stroke glyphs rather than a webfont: five icons is not worth a request, and

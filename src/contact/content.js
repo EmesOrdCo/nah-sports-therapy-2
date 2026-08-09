@@ -95,7 +95,7 @@ export function honeypotAndSubject() {
    on a health form, where what was agreed to may matter later. The value says
    what was agreed, so the notification email is the evidence. */
 export function consentField() {
-  return `<div class="form-field form-field--full form-consent"><label><input type="checkbox" name="consent" value="Yes — agreed NJH may use these details to reply" required><span>I agree that NJH may use these details to respond to my enquiry.</span></label><span class="form-error">Please confirm before sending.</span></div>`;
+  return `<div class="form-field form-field--full form-consent"><label><input type="checkbox" name="consent" value="Yes, agreed NJH may use these details to reply" required><span>I agree that NJH may use these details to respond to my enquiry.</span></label><span class="form-error">Please confirm before sending.</span></div>`;
 }
 
 export function submitRow(label = "Send enquiry") {

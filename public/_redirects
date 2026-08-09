@@ -18,8 +18,9 @@
 /pilates-for-golfers  /pilates#golfers  301
 /clinic-policies  /faq#practical  301
 /retreats  /pilates  301
-/testimonial  /client-stories/reviews  301
-/testimonials  /client-stories/reviews  301
+/testimonial  /client-stories  301
+/testimonials  /client-stories  301
+/client-stories/reviews  /client-stories  301
 /clinics  /studio  301
 /links  /studio  301
 /charity-work  /about#charity  301

@@ -2,12 +2,12 @@
 
 Everything for the client meeting, in order. Tested as far as it can be tested
 without DNS: the function, the template, the Resend credentials and the honeypot
-all work — a real enquiry was sent and received. What is untested is the browser
+all work: a real enquiry was sent and received. What is untested is the browser
 → function hop on the deployed site, and anything involving the domain.
 
 ---
 
-## 0. Deployed and tested — nothing to do
+## 0. Deployed and tested, nothing to do
 
 Merged, pushed to `EmesOrdCo/nah-sports-therapy-2`, and live on
 `https://njh-therapy-2.netlify.app`. Verified against the deployed site, not
@@ -29,7 +29,7 @@ Two things had to be fixed to get there, both worth knowing if it breaks again:
   `RESEND_API_KEY` should have "Contains secret values" ticked.
 - **The `/api/enquiry` rule did nothing in `netlify.toml`.** Netlify reads
   `public/_redirects` first, so its `/*` catch-all matched the endpoint before
-  the toml was consulted — the form returned the HTML page with a 200, which the
+  the toml was consulted: the form returned the HTML page with a 200, which the
   client-side handler reads as success. It reported "your enquiry has been sent"
   and sent nothing. All redirect rules now live in `_redirects`, in order.
 
@@ -44,9 +44,9 @@ Read from public DNS, so no client access was needed. Saves asking.
 
 | | |
 | --- | --- |
-| **DNS host** | **GoDaddy** — `ns35/36.domaincontrol.com` |
-| **Website** | Wix — apex `A` → `185.230.63.107`, `www` → `wixdns.net` |
-| **Email** | **123-reg** — `mx0/mx1.123-reg.co.uk` |
+| **DNS host** | **GoDaddy**, `ns35/36.domaincontrol.com` |
+| **Website** | Wix, apex `A` → `185.230.63.107`, `www` → `wixdns.net` |
+| **Email** | **123-reg**, `mx0/mx1.123-reg.co.uk` |
 | **SPF** | none |
 | **DMARC** | none |
 | **Wildcard** | `*` A record → a legacy host, harmless |
@@ -64,9 +64,9 @@ Three things follow from this:
 ## What to get from the client
 
 - [ ] **GoDaddy account login** (with access to DNS management)
-- [ ] Confirm enquiries should go to `njhsportstherapyandpilates@gmail.com`
+- [ ] Confirm enquiries should go to `njhpilates@gmail.com`
 - [ ] Confirm they understand **the Wix site stops being visible** when the apex
-      is repointed — this is the visible, alarming step, better agreed than sprung
+      is repointed. This is the visible, alarming step, better agreed than sprung
 - [ ] Whether anything else uses the domain that is not the website or email
       (booking system, newsletter tool, anything that sends as `@njhsportstherapy.co.uk`)
 
@@ -80,7 +80,7 @@ rollback.
 **Every record in this document is typed into GoDaddy.** Nowhere else.
 
 DNS records live wherever the domain's nameservers point, and those are
-`ns35/36.domaincontrol.com` — GoDaddy. Resend and Netlify each *generate* records
+`ns35/36.domaincontrol.com`, GoDaddy. Resend and Netlify each *generate* records
 for you to copy in; neither of them hosts the zone. Wix is not involved at all:
 it is not hosting the DNS, it is only the current destination of the apex `A`
 record, and it stops being that when the record is repointed.
@@ -90,7 +90,7 @@ record, and it stops being that when the record is repointed.
 
 ---
 
-## Part A — email sending
+## Part A: email sending
 
 1. Resend → **Add domain** → `send.njhsportstherapy.co.uk`
 
@@ -106,7 +106,7 @@ record, and it stops being that when the record is repointed.
    | `TXT` | `send` | `v=spf1 include:amazonses.com ~all` |
    | `TXT` | `resend._domainkey.send` | (long `p=…` key from Resend) |
 
-   GoDaddy appends the domain automatically — enter `send`, not
+   GoDaddy appends the domain automatically, so enter `send`, not
    `send.njhsportstherapy.co.uk`, or you get `send.njhsportstherapy.co.uk.njhsportstherapy.co.uk`.
 
 3. Wait for Resend to show **Verified** (~10 min, sometimes faster).
@@ -114,18 +114,18 @@ record, and it stops being that when the record is repointed.
 4. Netlify → Environment variables → change **two**:
 
    - `MAIL_FROM` → `enquiries@send.njhsportstherapy.co.uk`
-   - `MAIL_TO` → `njhsportstherapyandpilates@gmail.com`
+   - `MAIL_TO` → `njhpilates@gmail.com`
 
    Leave `RESEND_API_KEY`, `MAIL_FROM_NAME` and `VITE_CONTACT_FORM_ENDPOINT` alone.
 
 5. **Redeploy.** Environment variables do not apply to an existing deploy.
 
-6. Submit the real form. Confirm it arrives in the client's Gmail — **check Spam**
-   — and that hitting reply addresses the enquirer, not NJH.
+6. Submit the real form. Confirm it arrives in the client's Gmail (**check Spam**)
+   and that hitting reply addresses the enquirer, not NJH.
 
 ---
 
-## Part B — site cutover
+## Part B: site cutover
 
 7. Netlify → Domain management → add `njhsportstherapy.co.uk`, follow the records
    it gives (apex `A` or `ALIAS`, plus `www` `CNAME`).
@@ -133,7 +133,7 @@ record, and it stops being that when the record is repointed.
 8. In GoDaddy, change the apex `A` off the Wix IP and repoint `www`.
 
 > **Do not switch nameservers to Netlify DNS.** It is the option Netlify pushes
-> hardest, and it moves the *entire* zone — including the 123-reg MX records.
+> hardest, and it moves the *entire* zone, including the 123-reg MX records.
 > The client's email stops that afternoon. Add the individual A/CNAME records and
 > leave the nameservers at GoDaddy.
 
@@ -147,7 +147,7 @@ record, and it stops being that when the record is repointed.
 the site, and **its contact form cannot work**. Pages is static hosting, so there
 is no `/api/enquiry` on it. The form correctly shows NJH's email address instead,
 and `VITE_CONTACT_FORM_ENDPOINT` is deliberately left unset in that workflow so it
-keeps doing so — setting it would give a form that looks live, posts into a 404,
+keeps doing so: setting it would give a form that looks live, posts into a 404,
 and loses the enquiry.
 
 **Test on the `.netlify.app` URL, never on Pages.**
@@ -190,4 +190,4 @@ npm run email:preview
 
 renders it with awkward sample data and opens it in a browser, so the design loop
 costs no sends. It is tables and inline styles because Outlook renders through
-Word — the reasoning is in the file's header comment.
+Word. The reasoning is in the file's header comment.

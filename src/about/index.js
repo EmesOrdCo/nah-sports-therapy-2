@@ -12,7 +12,7 @@ export function buildAboutPage() {
   return {
     title: "About Natasha Hadland | NJH",
     description:
-      "Meet Natasha Hadland — Sports Therapist and Certified STOTT Pilates instructor, treating clients from age 8 to over 80 at the Studham studio.",
+      "Meet Natasha Hadland, Sports Therapist and Certified STOTT Pilates instructor, treating clients from age 8 to over 80 at the Studham studio.",
     canonical: "/about",
     tone: about.meta.tone || "light",
     html: `<div class="about-variant av-e">${about.build()}</div>`,

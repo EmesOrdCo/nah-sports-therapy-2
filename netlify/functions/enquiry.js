@@ -26,7 +26,7 @@ import { buildEnquiryEmail } from "./enquiry-email.js";
    this route, and an ordered rule in one file is easier to be sure of than a
    precedence rule between two. */
 
-const DEFAULT_TO = "njhsportstherapyandpilates@gmail.com";
+const DEFAULT_TO = "njhpilates@gmail.com";
 
 /* Long enough for somebody to describe an injury properly, short enough that
    the endpoint is not a free relay for anybody who finds it. */
@@ -157,7 +157,7 @@ export default async function handler(req) {
   /* The page composes a subject carrying the name and service. It is rebuilt
      rather than trusted: it arrives from the browser like everything else, and
      a subject line is a place header injection gets attempted. */
-  const subject = ["New enquiry", service, name].filter(Boolean).join(" — ");
+  const subject = ["New enquiry", service, name].filter(Boolean).join(" - ");
 
   try {
     await sendEmail({

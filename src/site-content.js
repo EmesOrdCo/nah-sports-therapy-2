@@ -3,7 +3,6 @@ import { buildAboutPage } from "./about/index.js";
 import { buildContactPage } from "./contact/index.js";
 import { buildFaqPage } from "./faq/index.js";
 import { routePath } from "./base-path.js";
-import { voicesColumns } from "./reviews.js";
 import { filmLead, filmsMore, hasFilms, FILMS_TITLE } from "./films.js";
 import { journeysList, hasJourneys } from "./journeys.js";
 
@@ -196,12 +195,12 @@ const pilatesHub = page(
     eyebrow: "Clinical Pilates",
     title: "Pilates that teaches your body to support itself.",
     intro:
-      "Slow, precise and thoughtfully progressed movement—adapted to your body, your starting point and the way you want to move.",
+      "Slow, precise and thoughtfully progressed movement, adapted to your body, your starting point and the way you want to move.",
   },
   `${section(
     "A considered approach",
     "Awareness is the greatest agent for change.",
-    `<p>Pilates develops the deep postural muscles that support and stabilise the body. At NJH, exercises are chosen and adapted around the individual—not imposed as a one-size-fits-all sequence.</p>
+    `<p>Pilates develops the deep postural muscles that support and stabilise the body. At NJH, exercises are chosen and adapted around the individual, not imposed as a one-size-fits-all sequence.</p>
      <p>The aim is to help you understand your posture, improve strength and movement around your joints, release unnecessary tension and support a healthy back.</p>`,
   )}
   <section class="card-section"><div class="section-shell">
@@ -283,7 +282,7 @@ const individual = page(
     eyebrow: "Individual Pilates",
     title: "Individual Pilates sessions",
     intro:
-      "One-to-one Pilates—or a duet session with a friend—shaped around your posture, health, confidence and objectives.",
+      "One-to-one Pilates, or a duet session with a friend, shaped around your posture, health, confidence and objectives.",
     parent: crumbs.pilates,
   },
   `${section(
@@ -523,7 +522,7 @@ const taping = page(
     eyebrow: "Kinesiology taping",
     title: "Kinesiology taping",
     intro:
-      "Taping may be used alongside treatment—or as a short standalone appointment—to support comfort, awareness and movement.",
+      "Taping may be used alongside treatment, or as a short standalone appointment, to support comfort, awareness and movement.",
     parent: crumbs.therapy,
   },
   `<section class="card-section"><div class="section-shell">${cards([
@@ -578,25 +577,13 @@ const about = page(
   ])}${cta("Start a conversation with Natasha.")}`,
 );
 
-/* Client stories have one home. They used to run as a five-quote band on the
-   homepage and again in full inside Clinics, which meant two places to keep in
-   step and a set of reviews buried under a page about locations.
-
-   The staggered single-column thread they arrived as is now a wall: a column
-   per category, the outer two drifting down and the middle one up, all three
-   stopping the moment you reach for one. The hero is compact for the same
-   reason the wall exists — the quotes are the page, so they open in view.
-
-   Client stories are now two pages rather than one: the films on
-   /client-stories and this wall on /client-stories/reviews. They were stacked
-   at first, the shelf sitting on top of the wall, and the reason they are not
-   is that a page has one job. Somebody who came to watch a film had a screen
-   and a half of quotes underneath it they had not asked for; somebody who came
-   to read had to get past four videos to reach the reading. Two pages, and the
-   switch below hands you the other one.
+/* Client stories are the films on /client-stories and the journeys on
+   /client-stories/journeys. There was a third side — a wall of written quotes
+   on /client-stories/reviews — and it has gone. What is left of the written
+   reviews is the drifting run on the home page, which reads from reviews.js.
 
    Both heads are compact, and for the same reason in each case: the thing the
-   page is for — the films, the quotes — should be in view when it opens rather
+   page is for — the film, the reading — should be in view when it opens rather
    than a screen down from a title. */
 
 /* The switch between the sides, on every one of them. Links to real URLs rather
@@ -609,19 +596,18 @@ const about = page(
    switch is thrown rather than a class that can disagree with it.
 
    The sides are assembled from what actually exists rather than written out:
-   the wall of quotes is always there, and the films and the journeys each
-   appear only if their list has anything in it. Two consequences worth having.
-   A switch left with one side renders nothing at all — one side is not a
-   switch, it is a label — so emptying FILMS or JOURNEYS quietly removes a tab
-   rather than leaving a link to a page with nothing on it. And adding a fourth
-   side later is a line in this array, not an edit to three pages.
+   the films and the journeys each appear only if their list has anything in it.
+   Two consequences worth having. A switch left with one side renders nothing at
+   all — one side is not a switch, it is a label — so emptying FILMS or JOURNEYS
+   quietly removes a tab rather than leaving a link to a page with nothing on it.
+   And adding a third side later is a line in this array, not an edit to two
+   pages.
 
    `bare` drops the section-shell, for the one place this is dropped inside
    another shell — the films head — where a second one would gutter the gutter. */
 function storiesSwitch(current, { bare = false } = {}) {
   const sides = [
     hasFilms() && ["/client-stories", "Films", "films"],
-    ["/client-stories/reviews", "Written reviews", "reviews"],
     hasJourneys() && ["/client-stories/journeys", "Journeys", "journeys"],
   ].filter(Boolean);
   if (sides.length < 2) return "";
@@ -684,39 +670,9 @@ const clientFilms = {
   )}`,
 };
 
-const clientReviews = page(
-  {
-    metaTitle: "Client Reviews | NJH",
-    description:
-      "Reviews from NJH Sports Therapy and Pilates clients, by service.",
-    canonical: "/client-stories/reviews",
-    eyebrow: "Client Stories",
-    compact: true,
-    /* The full stop under the title, before the wall starts. /prices shares
-       this head and does not take it: that page runs straight into a list of
-       dot leaders, where another horizontal rule is one rule too many. */
-    ornament: true,
-    /* The line-wave behind the title. See .page-hero__wave. */
-    wave: true,
-    title: "In clients&rsquo; own words.",
-  },
-  `${storiesSwitch("reviews")}
-  <section class="voices" aria-label="Client reviews">
-    <div class="section-shell">
-      <div class="voices__columns">
-      ${voicesColumns()}
-      </div>
-    </div>
-  </section>
-  ${cta(
-    "Would you like to be next?",
-    "Tell Natasha what you would like help with and she will guide you towards the right place to start.",
-  )}`,
-);
-
-/* The third side. Same compact head as the wall next door and for the same
-   reason: the thing the page is for should be in view when it opens rather
-   than a screen down from a title.
+/* The other side. A compact head, for the same reason the films side has one:
+   the thing the page is for should be in view when it opens rather than a
+   screen down from a title.
 
    The title says what the three beats on every card do, so the cards need no
    heading of their own — see journeysList(). "Journeys" on the switch and a
@@ -741,6 +697,11 @@ const clientJourneys = page(
     "Tell Natasha what you would like help with and she will guide you towards the right place to start.",
   )}`,
 );
+
+/* What /client-stories actually opens, and what the old Testimonials URLs are
+   sent to. Held here rather than inlined three times in the routes table so
+   they cannot fall out of step. */
+const clientStories = hasFilms() ? clientFilms : clientJourneys;
 
 const prices = page(
   {
@@ -778,11 +739,19 @@ const prices = page(
       <p class="prices-note">Small-group classes are paid in termly blocks and are non-refundable once your place is reserved.</p>
       <a class="text-link" href="/pilates">How Pilates sessions run <span>→</span></a>
     </div>
+  </div>
+  <!-- The cancellation terms, verbatim from /clinic-policies so the two pages
+       cannot drift apart. Under the grid rather than in either column, because
+       it applies to both. -->
+  <div class="section-shell prices-terms" data-reveal>
+    <h2 class="prices-terms__title">Cancellations</h2>
+    <p class="prices-note">Missed Sports Therapy, one-to-one or duet Pilates appointments are chargeable unless at least 24 hours' notice is provided. A 50% charge applies where less than 48 hours' notice is given.</p>
+    <a class="text-link" href="/clinic-policies">Read the clinic policies <span>→</span></a>
   </div></section>
   ${section(
     "Appointment duration",
     "Enough time for the work required.",
-    `<p>Most appointments last approximately one hour. A 30-minute session may be recommended where appropriate, while a new or more complex presentation may benefit from up to 90 minutes.</p><p>The recommended duration will be discussed before booking. Treatment may occasionally finish earlier to avoid over-treatment.</p>`,
+    `<p>Appointments are 60 minutes as standard, with shorter or longer sessions where the presentation calls for it.</p><p>The recommended duration will be discussed before booking. Treatment may occasionally finish earlier to avoid over-treatment.</p>`,
     "editorial-section--tint editorial-section--middle",
   )}${cta("Discuss the right appointment length.")}`,
 );
@@ -895,7 +864,7 @@ function buildPilatesContinuousPage() {
           </div>
           <div class="pilates-feature__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="individual-title" class="title-rule">Individual Pilates</h2>
-            <p class="pilates-feature__lead">One-to-one Pilates—or a duet session with a friend—tailored to suit your needs and objectives.</p>
+            <p class="pilates-feature__lead">One-to-one Pilates, or a duet session with a friend, tailored to suit your needs and objectives.</p>
             <p>Your session focuses on restoring muscular balance, with specific exercises designed for your posture type or medical conditions such as osteoporosis, frozen shoulder, and neck, knee or lower-back issues.</p>
             <a class="pilates-arrow-link" href="#contact">Discuss your requirements <span>→</span></a>
           </div>
@@ -918,7 +887,7 @@ function buildPilatesContinuousPage() {
           <div class="pilates-feature__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="reformer-title" class="title-rule">Reformer Pilates</h2>
             <p class="pilates-feature__lead">Spring-assisted work, adjusted to what your body will do today rather than what it ought to do.</p>
-            <p>Because the springs carry part of the load, you can move through a full, controlled range before you have the strength to do it unaided — a forgiving way back into exercise after a lay-off, and a way to keep working around a joint that is stiff or sore.</p>
+            <p>Because the springs carry part of the load, you can move through a full, controlled range before you have the strength to do it unaided, a forgiving way back into exercise after a lay-off, and a way to keep working around a joint that is stiff or sore.</p>
             <p>Most people come for posture and deep core control, for hips, shoulders and lower backs gone tight at a desk, and for the steadiness that comes with both. It works upwards too: once the control holds, the springs load it.</p>
             <dl class="pilates-facts">
               <div><dt>Good for</dt><dd>Posture and core control, joint mobility, returning to exercise</dd></div>
@@ -942,7 +911,7 @@ function buildPilatesContinuousPage() {
           <div class="pilates-feature__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="chair-title" class="title-rule">Stability Chair</h2>
             <p class="pilates-feature__lead">Upright work that builds the strength and balance you actually use standing up.</p>
-            <p>It works you in the positions ordinary days are made of — seated, standing, on one leg — so what you gain transfers straight to stairs, lifting and getting up off the floor. There is nothing to lean on, which is why it is so good for balance and for confidence on your feet.</p>
+            <p>It works you in the positions ordinary days are made of (seated, standing, on one leg), so what you gain transfers straight to stairs, lifting and getting up off the floor. There is nothing to lean on, which is why it is so good for balance and for confidence on your feet.</p>
             <p>It is precise, too: a short range under controlled resistance builds strength around one joint at a time, which suits a knee, hip, ankle or shoulder that has been weak or guarded. It usually comes once mat and Reformer work have laid the groundwork.</p>
             <dl class="pilates-facts">
               <div><dt>Good for</dt><dd>Balance, strength around a single joint, everyday upright movement</dd></div>
@@ -1232,7 +1201,7 @@ function buildStudioContinuousPage() {
             <h2 id="studio-reformer-title">The Reformer</h2>
             <p class="pilates-feature__lead">A padded carriage running on rails inside a long timber frame, drawn back and forth against a bank of springs.</p>
             <p>You lie, sit, kneel or stand on it, moving the carriage against the footbar or the ropes and straps at the far end. The springs clip on and off underneath: how many are on decides how much of the movement the frame gives you and how much you carry yourself.</p>
-            <p>Footbar, ropes, headrest and shoulder rests all reposition, and the springs change in seconds — which is what lets one machine hold a whole hour of different work. It stands at the studio's far end, under the windows, with the mat space kept clear beside it.</p>
+            <p>Footbar, ropes, headrest and shoulder rests all reposition, and the springs change in seconds, which is what lets one machine hold a whole hour of different work. It stands at the studio's far end, under the windows, with the mat space kept clear beside it.</p>
             <dl class="pilates-facts">
               <div><dt>What it is</dt><dd>Sprung carriage on rails, with footbar, ropes and straps</dd></div>
               <div><dt>Adjusts</dt><dd>Spring tension, footbar, rope length, headrest</dd></div>
@@ -1255,7 +1224,7 @@ function buildStudioContinuousPage() {
           <div class="pilates-feature__content" data-reveal>
             <h2 id="studio-chair-title">The Stability Chair</h2>
             <p class="pilates-feature__lead">A padded box, roughly the size of a low stool, with a sprung pedal hinged along one side.</p>
-            <p>The pedal is the whole machine. Springs hook onto a bracket at different heights, setting how heavily it resists across a short arc, and you press it with a foot or a hand — sitting on the seat, standing beside it or lying across it.</p>
+            <p>The pedal is the whole machine. Springs hook onto a bracket at different heights, setting how heavily it resists across a short arc, and you press it with a foot or a hand: sitting on the seat, standing beside it or lying across it.</p>
             <p>There is nothing else to it: no rails, no ropes, no rest position built into the frame. Whatever holds you up is your own position, which is why the plainest machine in the room is the demanding one.</p>
             <dl class="pilates-facts">
               <div><dt>What it is</dt><dd>Padded box seat with a hinged, spring-loaded pedal</dd></div>
@@ -1435,7 +1404,7 @@ const fasciaMapColumn = (items, side, start) =>
    top without either one needing a z-index it would then have to defend.
 
    Pexels stock (photo 37719642), free for commercial use, no attribution
-   required — same licence as the taping band's six. */
+   required. */
 /* No [data-reveal]: the map runs its own entrance off its own trigger, and the
    shared one fires too early for a sequence this long to be seen. main.js
    picks it up by class — see the .fascia-map block there. */
@@ -1449,48 +1418,8 @@ const fasciaMap = (items) =>
         ${fasciaMapColumn(items.slice(3), "right", 4)}
       </figure>`;
 
-/* Photographs for the taping band — Pexels stock, free for commercial use with
-   no attribution required, resized to 900px wide and 4:5 to match the frame.
-
-   All six are one shoot: Maksim Goncharenok's kinesio-tape series, the same
-   white seamless, the same practitioner in the same white coat, the same
-   black/pink tape. That is the point of them. The band ran on six photographs
-   from four different shoots before this — a warm domestic treatment room, a
-   moody grey close-up, an orange gym floor — and drifting them past each other
-   in two columns put the mismatch side by side, which is where it showed.
-   Anything added here has to come from the same series, or the band goes back
-   to looking like a search result.
-
-   Ordered so neither column runs three wide shots together: each one steps
-   close, wide, mid. Swapping any of them is these two lists and nothing else —
-   the band clones whatever it is given, so the count can change too. */
-const TAPING_SHOTS_LEFT = [
-  "/images/taping/taping-6094040.webp",
-  "/images/taping/taping-6094057.webp",
-  "/images/taping/taping-6094056.webp",
-];
-const TAPING_SHOTS_RIGHT = [
-  "/images/taping/taping-6094397.webp",
-  "/images/taping/taping-6094334.webp",
-  "/images/taping/taping-6094047.webp",
-];
-
-/* The band is decorative — the column beside it carries every word — so the
-   photographs are hidden from assistive tech rather than captioned six times
-   over, and the drift stops on hover or focus (see drift-columns.js). */
-const tapingColumn = (shots, direction, speed) =>
-  `<div class="taping-band__col taping-band__col--${direction}" data-drift-speed="${speed}" aria-hidden="true">
-        <div class="taping-band__window">
-          <div class="taping-band__track">
-            ${shots
-              .map(
-                (src) =>
-                  `<figure class="taping-band__shot"><img src="${src}" alt="" loading="lazy"></figure>`,
-              )
-              .join("\n            ")}
-          </div>
-        </div>
-      </div>`;
+const tapingFigure = () =>
+  `<figure class="st-taping-figure" data-reveal>${legacyImage("/kinesiology-taping", 0)}<figcaption>Examples of kinesiology taping</figcaption></figure>`;
 
 /* ---------- Variant A — card grid ---------- */
 
@@ -1553,22 +1482,16 @@ function therapyVariantA() {
     </div>
   </section>
 
-  <section class="st-section st-section--flush" id="kinesiology-taping" aria-labelledby="taping-title">
-    <div class="taping-band">
-      ${tapingColumn(TAPING_SHOTS_LEFT, "up", 16)}
-      <div class="taping-band__content" data-reveal>
-        ${eyebrow("Taping")}
-        <h2 id="taping-title" class="title-rule">Kinesiology taping</h2>
-        <p>Taping can aid pain relief, reduce swelling and support postural awareness. It can be included in an appointment or booked as a standalone 15–20 minute session.</p>
-        ${rows(taping)}
-      </div>
-      ${tapingColumn(TAPING_SHOTS_RIGHT, "down", 14)}
+  <section class="st-section" id="kinesiology-taping" aria-labelledby="taping-title">
+    <div class="section-shell st-split">
+      ${tapingFigure()}
+      <div class="st-card" data-reveal><h2 id="taping-title">Kinesiology taping</h2><p>Taping can aid pain relief, reduce swelling and support postural awareness. It can be included in an appointment or booked as a standalone 15–20 minute session.</p>${rows(taping)}</div>
     </div>
   </section>
 
   <div class="st-section st-section--tint st-section--act">
     <div class="section-shell">
-      <section class="st-card" id="practical" aria-labelledby="therapy-practical-title" data-reveal>${eyebrow("Appointments")}<h2 id="therapy-practical-title" class="title-rule">Booking an appointment</h2><p>Appointment length is selected around the complexity of the presentation — 30 minutes where that is enough, up to 90 for a new or more involved case. The recommended duration is discussed before booking.</p><p class="st-footnote">Fees for every appointment length are listed on one page.</p><div class="st-card__actions"><a class="pilates-arrow-link" href="/prices">View prices <span>→</span></a><a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a></div></section>
+      <section class="st-card" id="practical" aria-labelledby="therapy-practical-title" data-reveal>${eyebrow("Appointments")}<h2 id="therapy-practical-title" class="title-rule">Booking an appointment</h2><p>Appointments are 60 minutes as standard, with shorter or longer sessions where the presentation calls for it. The recommended length is discussed before booking.</p><p class="st-footnote">Fees for every appointment type are listed on one page.</p><div class="st-card__actions"><a class="pilates-arrow-link" href="/prices">View prices <span>→</span></a><a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a></div></section>
     </div>
   </div>`;
 }
@@ -1768,28 +1691,29 @@ const routes = {
   "/clinic-policies": { ...faq, scrollTarget: "practical" },
   /* The films side, and the nav's destination — unless there are no films, in
      which case there is no films page to send anybody to and this is the
-     reviews. That is the whole of what an empty FILMS list does to the site:
-     the switch disappears, this address shows the wall, and the reviews keep
-     their own URL underneath. Nobody lands on a heading with nothing under it. */
-  "/client-stories": hasFilms() ? clientFilms : { ...clientReviews },
-  "/client-stories/reviews": clientReviews,
+     journeys. That is what an empty FILMS list does to the site: the switch
+     disappears, this address shows the journeys, and they keep their own URL
+     underneath. Nobody lands on a heading with nothing under it. */
+  "/client-stories": clientStories,
   /* The journeys, on the same terms the films are on: no entry at all when the
      list is empty, so the address 404s to the SPA fallback rather than serving
      a head with nothing under it — and the switch has already stopped offering
      it, so nothing on the site links here. See hasJourneys(). */
   ...(hasJourneys() ? { "/client-stories/journeys": clientJourneys } : {}),
-  /* The wall was called Testimonials until the films arrived and it became one
-     of two sides. Both old URLs are the reviews — that is what somebody
-     following a link to /testimonials came for — so they land there rather
-     than on the films. The redirects in public/_redirects do it at the edge;
-     these entries answer if one is reached without going past them (a direct
-     hit on the SPA fallback, or the dev server). They spread the page rather
-     than aliasing the object, so the canonical they carry is
-     /client-stories/reviews: the same arrangement /price-list has, and what
-     keeps two URLs from competing for one page in search. The singular is the
-     old site's spelling of it. */
-  "/testimonials": { ...clientReviews },
-  "/testimonial": { ...clientReviews },
+  /* Client Stories was called Testimonials on the old site, and the wall of
+     written quotes those URLs used to open has gone. They land on Client
+     Stories instead — the nearest thing to what somebody following one came
+     for. The redirects in public/_redirects do it at the edge; these entries
+     answer if one is reached without going past them (a direct hit on the SPA
+     fallback, or the dev server). They spread the page rather than aliasing the
+     object, so the canonical they carry is the one /client-stories carries: the
+     same arrangement /price-list has, and what keeps two URLs from competing
+     for one page in search. The singular is the old site's spelling of it. */
+  "/testimonials": { ...clientStories },
+  "/testimonial": { ...clientStories },
+  /* And the wall's own URL, which was live and in the sitemap. Same treatment
+     and for the same reason. */
+  "/client-stories/reviews": { ...clientStories },
   "/prices": prices,
   "/price-list": { ...prices, canonical: "/prices" },
   "/contact": buildContactPage(),
@@ -1819,9 +1743,9 @@ function navigationMarkup(path) {
     .map((group) => {
       const current =
         here === group.href ||
-        /* And anything nested under it: /client-stories/reviews is the reviews
-           side of Client Stories, not a page of its own somewhere else, so the
-           nav item stays marked while you are on either side of the switch.
+        /* And anything nested under it: /client-stories/journeys is the
+           journeys side of Client Stories, not a page of its own somewhere
+           else, so the nav item stays marked on either side of the switch.
            Guarded against "/" , which every path is nested under. */
         (group.href !== "/" && here.startsWith(`${group.href}/`)) ||
         group.links.some(([, href]) => here === href.split("#")[0]);
@@ -2040,7 +1964,7 @@ export function initPageFeatures() {
       const who = form.querySelector("#name")?.value.trim();
       const what = form.querySelector("#service")?.value;
       const parts = ["New enquiry", what, who].filter(Boolean);
-      if (parts.length > 1) subjectField.value = parts.join(" — ");
+      if (parts.length > 1) subjectField.value = parts.join(" - ");
     }
 
     try {

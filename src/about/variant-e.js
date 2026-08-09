@@ -205,7 +205,7 @@ export function build() {
       <div>
         <p>Tell us what you would like help with and we will guide you towards the most suitable first appointment.</p>
         <a class="button-link" href="/contact">Send an enquiry <span>↗</span></a>
-        <p class="av-e__cta-aside">Practical questions — what happens at a first appointment, what to wear, what it costs — are answered on the <a href="/faq">FAQ page</a>.</p>
+        <p class="av-e__cta-aside">Practical questions (what happens at a first appointment, what to wear, what it costs) are answered on the <a href="/faq">FAQ page</a>.</p>
       </div>
     </div>
   </section>`;

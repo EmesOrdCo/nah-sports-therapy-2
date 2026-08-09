@@ -624,9 +624,9 @@
 
       <!-- Client voices, drifting past on the same loop as the qualifications
            above — taller cards, because these carry a sentence rather than a
-           logo. The cards themselves are written by main.js from reviews.js;
-           the track is empty here on purpose, so the home page and
-           /client-stories can never quote different text. -->
+           logo. The cards themselves are written by main.js from reviews.js,
+           which is the single source of truth for a review; the track is empty
+           here on purpose. -->
       <section class="voice-run" aria-label="What clients say">
         <!-- A pair of marks opening at the top left and closing at the right
              under the last card, so the whole run reads as one long quotation
@@ -648,8 +648,8 @@
         <span class="voice-run__mark voice-run__mark--close" aria-hidden="true"
           >&rdquo;</span
         >
-        <a class="text-link voice-run__link" href="/client-stories/reviews"
-          >Read all client reviews <span>&#8594;</span></a
+        <a class="text-link voice-run__link" href="/client-stories"
+          >Hear from clients <span>&#8594;</span></a
         >
       </section>
 

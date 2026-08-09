@@ -12,10 +12,8 @@ import { initFaqJourney } from "./faq/index.js";
 import { initAboutPage } from "./about/index.js";
 import { initOpeningMove } from "./opening-move.js";
 import { initContactSelects } from "./contact/index.js";
-import { initVoicesWall } from "./voices-wall.js";
 import { initFilmShelf } from "./films.js";
 import { REVIEWS, SERVICE_LABELS } from "./reviews.js";
-import { driftColumns } from "./drift-columns.js";
 
 observeBase();
 const routeState = renderRoute();
@@ -26,10 +24,6 @@ document.documentElement.classList.add("js");
    so an inner page's first frame is its own content, never the home page's. */
 document.documentElement.classList.remove("is-booting");
 
-/* The /client-stories service switch used to live here. It has gone with the
-   single-column thread: the wall gives each category its own column, so the
-   switch was filtering a layout that had already done the filtering — and
-   picking one service left a column standing beside two empty ones. */
 
 const siteLoader = document.querySelector(".site-loader");
 if (!routeState.isHome) {
@@ -298,40 +292,9 @@ if (storyChapters.length && !reducedMotion.matches) {
   drawSeams();
 }
 
-/* The drawn S-curve thread that ran behind the quotes went with the single
-   column it was threading. Three columns each moving on their own already
-   carry the band; a line weaving behind them had nothing left to join up. */
-initVoicesWall();
-
-/* The film shelf above that wall, when /client-stories has one. No-ops while
-   films.js has no films in it, which is the state it ships in. */
+/* The film shelf on /client-stories. No-ops while films.js has no films in
+   it, which is the state it ships in. */
 initFilmShelf();
-
-/* The taping band on /sports-therapy runs the same drift: photographs up the
-   left, down the right, the copy standing still between them.
-
-   It does not stop for the pointer. The copy sits between the two columns, so
-   every reader who goes near the words crosses the band — and the wall of
-   photographs freezing as they arrive to read is the one thing the drift was
-   there to avoid. Nothing in the columns is to be read anyway. */
-const tapingBand = document.querySelector(".taping-band");
-if (tapingBand) {
-  const rebuildTaping = driftColumns(tapingBand, {
-    col: ".taping-band__col",
-    view: ".taping-band__window",
-    track: ".taping-band__track",
-    down: "taping-band__col--down",
-    speed: 15,
-    pause: false,
-  });
-  // Photographs are measured, not laid out from text metrics: a track measured
-  // before its images have decoded is the wrong height, and the loop wraps
-  // mid-shot. Each one that lands asks for a rebuild.
-  tapingBand.querySelectorAll("img").forEach((image) => {
-    if (image.complete) return;
-    image.addEventListener("load", () => rebuildTaping?.(), { once: true });
-  });
-}
 
 /* Drift a strip of cards past on a loop. The set is cloned until the front
    half of the track is wider than the window, and the CSS then translates the
@@ -453,11 +416,11 @@ initMarquee({
   prefix: "creds",
 });
 
-/* The client voices under the quote panel. The cards are written from
-   reviews.js rather than into index.html, so the home page and /client-stories
-   cannot drift apart — that file is the single source of truth for a review.
-   The shortest ones lead: these cards go past, and a review that needs a
-   second look is one the reader loses. The full set is a click away. */
+/* The client voices under the quote panel, and the only place written reviews
+   are shown. The cards are written from reviews.js rather than into
+   index.html: that file is the single source of truth for a review. The
+   shortest ones lead — these cards go past, and a review that needs a second
+   look is one the reader loses. */
 const voiceRunStrip = document.querySelector(".voice-run__strip");
 if (voiceRunStrip) {
   const runReviews = REVIEWS.filter((review) => review.quote.length <= 190)
@@ -748,22 +711,14 @@ const openingMoveTargets = {
   "/about": ".av-e__opening", // the quote that turns from her to you
   "/prices": ".prices-page", // the fees
   "/price-list": ".prices-page",
-  /* Whichever of the two a page actually opens with. A selector list matches
-     in document order, not in the order it is written, so this is the film
-     shelf on the films side and the wall of quotes on the reviews side — and
-     with no films at all, /client-stories is the wall and this still finds it.
-     The switch above them is not a target: it is one row of two links, and
-     carrying the reader to it would stop them short of the thing they came
-     for. */
   /* The lead film, which on this page is the head — so the one scroll centres
-     it in the window rather than carrying the reader anywhere. With no films
-     the route is the wall of quotes instead, and .films-hero__lead is not
-     there to match. Not ".films": that is now only the EARLIER films, and
-     travelling to it would carry the reader straight past the lead. */
-  "/client-stories": ".films__lead, .voices",
-  "/client-stories/reviews": ".voices",
+     it in the window rather than carrying the reader anywhere. Not ".films":
+     that is now only the EARLIER films, and travelling to it would carry the
+     reader straight past the lead. The switch under it is not a target either:
+     it is one row of links, and stopping there would stop the reader short of
+     the thing they came for. */
+  "/client-stories": ".films__lead",
   "/client-stories/journeys": ".journeys",
-  "/testimonials": ".voices",
 };
 if (!initialSection) {
   const opening = openingMoveTargets[routePath()];

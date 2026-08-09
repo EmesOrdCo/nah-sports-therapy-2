@@ -3160,6 +3160,32 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   margin-top: clamp(18px, 2vw, 26px);
 }
 
+/* The cancellation terms under both columns. A hairline rather than the 2px
+   rule the two group titles carry, so it reads as a footnote to the fees and
+   not as a third column heading. */
+.prices-terms {
+  margin-top: clamp(44px, 5vw, 72px);
+  padding-top: clamp(20px, 2.4vw, 30px);
+  border-top: 1px solid color-mix(in oklch, var(--ink) 18%, transparent);
+}
+
+.prices-terms__title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+}
+
+.prices-terms .prices-note {
+  margin-top: clamp(10px, 1.2vw, 14px);
+}
+
+.prices-terms .text-link {
+  display: inline-flex;
+  margin-top: clamp(16px, 1.8vw, 22px);
+}
+
 .contact-page {
   padding-block: var(--space-section);
   background: var(--surface);
@@ -6363,13 +6389,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   background: var(--surface);
 }
 
-/* On the reviews side the switch is the thing directly under the head, so the
-   wall clears the switch rather than the wave. The films side does not need
-   this: its switch is inside the head, above the film. */
-.stories-switch + .voices {
-  padding-top: clamp(20px, 2.4vw, 36px);
-}
-
 /* ---- The films head ----
 
    A head with a film in it instead of a title. Everything the compact head
@@ -6634,16 +6653,14 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    hairline between neighbours. See journeys.js.
    ============================================================ */
 
-/* The same tight opening .voices takes on the wall next door, and for the same
-   reason: the head above ends on a wave with its own paper under it, so what
-   follows hugs it rather than clearing it. */
+/* A tight opening: the head above ends on a wave with its own paper under it,
+   so what follows hugs it rather than clearing it. */
 .journeys {
   padding-block: clamp(6px, 0.7vw, 12px) var(--space-section);
   background: var(--surface);
 }
 
-/* And the same air under the switch that .voices gets, on the pages where one
-   is standing between the head and the reading. */
+/* Air under the switch, which stands between the head and the reading. */
 .stories-switch + .journeys {
   padding-top: clamp(20px, 2.4vw, 36px);
 }
@@ -6764,238 +6781,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   font-family: var(--font-serif);
   font-size: var(--step-0);
   line-height: 1.65;
-}
-
-/* ============================================================
-   Client voices — the /client-stories wall
-   A column per category: Sports Therapy, both, Pilates. The outer
-   two drift down and the middle one up, and all three stop the
-   moment the pointer or the keyboard reaches the band — you reach
-   for one quote, and two neighbours still sliding past is exactly
-   what makes it unreadable. Stopped, each column is a plain scroll
-   container and the reader takes over.
-
-   The drift itself lives in voices-wall.js, because it moves
-   scrollTop rather than a transform: see the note at the top of
-   that file. Everything here is the frame it runs inside, and the
-   .is-drifting class it sets once it has cloned enough copies to
-   loop. Without it — no JS, a phone, reduced motion — the three
-   lists simply stand at full height and the page scrolls them.
-
-   Replaces the staggered single-column thread. That version put
-   the rhythm in indentation and needed a service switch above it;
-   here the three columns are the categorisation, so the switch has
-   gone with them.
-   ============================================================ */
-
-.voices {
-  /* Barely any room at the top: the head above it already ends on a wave with
-     its own paper under it, and the space that gap used to hold is now part of
-     the picture rather than a margin. */
-  padding-block: clamp(6px, 0.7vw, 12px) var(--space-section);
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
-}
-
-.voices__columns {
-  --voices-gap: clamp(14px, 1.5vw, 22px);
-
-  display: grid;
-  gap: clamp(16px, 1.8vw, 26px);
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-/* The band is a window, not a list. Without a fixed height the columns are
-   three lists that happen to be moving; with one they read as continuing past
-   the frame in both directions. */
-.voices__columns.is-drifting {
-  height: min(88svh, 980px);
-}
-
-.voices__col {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.voices__label {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 0 16px;
-  align-items: baseline;
-  /* Row gap stays 0 — the rule below carries its own margin, so the name and
-     anything sitting beside it are spaced independently of the drop to it. */
-  gap: 0 10px;
-  color: var(--brand);
-  font-size: var(--label-lg);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-lg-track);
-  text-transform: uppercase;
-}
-
-/* The rule under the column name. It runs the full width of the column, which
-   is what tells you where one column ends and the next begins — the quotes
-   below are cards on white with a hairline border, so nothing else in the band
-   draws that division.
-
-   It thickens and darkens left to right and finishes on a ball. The weight
-   arrives where the eye is already travelling, so it reads as a direction
-   without an arrowhead's full stop at the end of it.
-
-   width: 100% is what puts it on its own line: the label is a wrapping flex
-   row, so a full-width item takes a line of its own however long the name
-   beside it runs. */
-/* One end colour and one ball size for both halves. The ramp has to finish a
-   ball's width short of the right edge — that is where the ball's leading edge
-   sits — so that the line arrives at the ball already the ball's own colour
-   and the two read as a single stroke rather than a line and a dot. Sizing the
-   ball from the same custom property is what keeps that true if it changes. */
-.voices__label i {
-  --rule-end: var(--brand-strong);
-  --rule-ball: 9px;
-
-  position: relative;
-  width: 100%;
-  height: var(--rule-ball);
-  margin-top: 12px;
-}
-
-/* The taper is a clip on this pseudo-element rather than on the <i>, so the
-   ball below stays a circle — a clip on the parent would cut that too. */
-.voices__label i::before {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  left: 0;
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    color-mix(in oklab, var(--rule-end) 10%, transparent),
-    var(--rule-end) calc(100% - var(--rule-ball))
-  );
-  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
-  transform: translateY(-50%);
-  content: "";
-}
-
-.voices__label i::after {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  width: var(--rule-ball);
-  height: var(--rule-ball);
-  border-radius: 50%;
-  background: var(--rule-end);
-  transform: translateY(-50%);
-  content: "";
-}
-
-.voices__window {
-  flex: 1;
-  min-height: 0;
-}
-
-.is-drifting .voices__window {
-  overflow-y: auto;
-  /* The drift is the affordance, and three permanent grey bars down a wall of
-     quotes are not. macOS and iOS overlay bars are hidden by this too, and they
-     were only ever visible mid-scroll. */
-  scrollbar-width: none;
-  /* The fade lives here rather than on the grid, so it softens the quotes
-     without touching the category labels sitting above them. */
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    transparent 0,
-    #000 9%,
-    #000 91%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg,
-    transparent 0,
-    #000 9%,
-    #000 91%,
-    transparent 100%
-  );
-}
-
-.is-drifting .voices__window::-webkit-scrollbar {
-  display: none;
-}
-
-/* The window takes focus so the wall can be stopped and read without a mouse:
-   focus pauses all three columns, and the arrow keys then scroll this one. */
-.voices__window:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 6px;
-}
-
-/* flow-root, so the last card's bottom margin is contained rather than
-   collapsing out through the track. Left to collapse, the track measures one
-   gap short of the list it holds, and voices-wall.js wraps the loop by that
-   measurement — so the column would jump a gap every time round. */
-.voices__track {
-  display: flow-root;
-}
-
-.voices__card {
-  /* The gap between cards is carried as a margin rather than the flex `gap`,
-     for the same reason the credentials marquee does it: every card is then an
-     identical block, so one copy of the list is exactly as tall as the next and
-     the loop wraps on an identical frame. */
-  margin: 0 0 var(--voices-gap);
-  padding: clamp(20px, 1.8vw, 28px);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  background: var(--paper);
-  transition: border-color var(--dur-fast) var(--ease-out);
-}
-
-.voices__card:hover {
-  border-color: var(--brand);
-}
-
-.voices__card blockquote {
-  margin: 0 0 16px;
-  color: var(--ink);
-  font-family: var(--font-serif);
-  font-size: var(--step-0s);
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: -0.005em;
-}
-
-.voices__card figcaption {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--ink-soft);
-  font-size: var(--label);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-track);
-  text-transform: uppercase;
-}
-
-.voices__card figcaption::before {
-  content: "";
-  width: 9px;
-  height: 9px;
-  flex: none;
-  border: 2px solid var(--brand);
-  border-radius: 50%;
-}
-
-/* A third of a phone screen is not a column. voices-wall.js leaves the wall
-   alone below this width, so the columns are already three static lists — they
-   just need to stack rather than sit side by side. */
-@media (max-width: 900px) {
-  .voices__columns {
-    display: block;
-  }
-
-  .voices__col + .voices__col {
-    margin-top: clamp(34px, 6vw, 52px);
-  }
 }
 
 /* ============================================================
@@ -7564,15 +7349,13 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   --st-block: clamp(3.5rem, 2.1rem + 4.4vw, 6.5rem);
 }
 
-/* The taping band is full-bleed and keeps its own zero padding; the sections
-   either side of it supply the air. */
-.therapy-longform .st-section:not(.st-section--flush) {
+.therapy-longform .st-section {
   padding-block: var(--gap-close);
 }
 
-/* :not() carries specificity, so this has to match the rule above it or the
-   sibling interval wins and the act breaks never appear. */
-.therapy-longform .st-section--act:not(.st-section--flush) {
+/* Same specificity as the rule above, so order decides: the act break has to
+   come after it or the sibling interval wins and the breaks never appear. */
+.therapy-longform .st-section--act {
   padding-top: var(--gap-act);
 }
 
@@ -8436,136 +8219,23 @@ p.fascia-map__claim {
 .st-split--text p {
   line-height: var(--lh-body);
 }
-/* ---- Taping band: two drifting photo columns either side of the copy.
-   The left column runs up, the right runs down, and both stop on hover or
-   focus. drift-columns.js adds .is-drifting once it has cloned enough copies
-   to loop — until then, and on a phone or with reduced motion, the band is
-   the copy with a plain grid of photographs under it. ---- */
-
-/* Full-bleed: no section shell, no gaps. The photographs run wall to wall and
-   the copy sits in the middle of them, so the band reads as one surface rather
-   than three columns with air between them. */
-.st-section--flush {
-  padding-block: 0;
-}
-
-.taping-band {
-  display: grid;
-  gap: 0;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 620px) minmax(0, 1fr);
-  align-items: stretch;
-}
-
-.taping-band.is-drifting {
-  height: min(74svh, 720px);
-}
-
-.taping-band__col {
-  display: flex;
-  min-height: 0;
-  flex-direction: column;
-}
-
-/* Without the drift there is nothing to stop three photographs standing at
-   their full height, so the column is cropped to the height the band would
-   have taken anyway. */
-.taping-band__window {
-  flex: 1;
-  min-height: 0;
-  max-height: min(74svh, 720px);
-  overflow: hidden;
-}
-
-.is-drifting .taping-band__window {
-  overflow-y: hidden;
-  /* Softens both ends, so the photographs read as continuing past the frame
-     rather than being cut off at it. */
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    transparent 0,
-    #000 12%,
-    #000 88%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg,
-    transparent 0,
-    #000 12%,
-    #000 88%,
-    transparent 100%
-  );
-}
-
-/* flow-root, so the last shot's bottom margin is contained rather than
-   collapsing out through the track. Left to collapse, the track measures one
-   gap short of the list it holds, and the loop wraps by that measurement — so
-   the column would jump a gap every time round. */
-.taping-band__track {
-  display: flow-root;
-}
-
-/* Butted together, so each column is one continuous strip of photographs. */
-.taping-band__shot {
+.st-taping-figure {
+  padding: clamp(16px, 2vw, 26px);
   margin: 0;
-  overflow: hidden;
-  background: var(--surface-2);
-}
-
-.taping-band__shot img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-}
-
-.taping-band__content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(28px, 4vw, 64px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
   background: var(--paper);
 }
-
-.taping-band__content h2 {
-  margin: 0 0 14px;
-  font-family: var(--font-serif);
-  font-size: var(--step-2);
-  line-height: var(--lh-head);
-  letter-spacing: var(--tracking-display);
+.st-taping-figure img {
+  width: 100%;
+  border-radius: calc(var(--radius-card) - 8px);
 }
-
-.taping-band__content > p {
-  margin: 0 0 16px;
+.st-taping-figure figcaption {
+  padding-top: 14px;
   color: var(--ink-soft);
-  line-height: var(--lh-body);
-}
-
-/* Below the width drift-columns.js works at, the columns stop being columns:
-   the copy leads and the photographs follow as one row underneath. */
-@media (max-width: 900px) {
-  .taping-band {
-    grid-template-columns: 1fr;
-  }
-  /* The drift is off at this width, but the class it leaves behind must not
-     take the band's height with it. */
-  .taping-band.is-drifting {
-    height: auto;
-  }
-  .is-drifting .taping-band__window {
-    overflow: visible;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-  .taping-band__content {
-    order: -1;
-  }
-  .taping-band__window {
-    max-height: none;
-  }
-  .taping-band__track {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+  font-size: var(--step-00);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 

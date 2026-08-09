@@ -26,7 +26,7 @@ export const STORY = [
 export const PRACTICE = {
   specialism:
     "I specialise in the treatment and prevention of all musculoskeletal injuries.",
-  aim: "My aim is to help you become pain free and get you back to fully functioning fitness. Each client is unique — whatever your goal, whether you are a Sunday stroller or an elite athlete I will help you every step of the way.",
+  aim: "My aim is to help you become pain free and get you back to fully functioning fitness. Each client is unique. Whatever your goal, whether you are a Sunday stroller or an elite athlete, I will help you every step of the way.",
   breadth:
     "Sports Therapy &amp; Pilates is not just for sports injuries. I treat clients from age 8 to over 80 years of age.",
 };
@@ -84,7 +84,7 @@ export const QUALIFICATIONS = [
   {
     title: "Certified STOTT Pilates Instructor",
     short: "STOTT Pilates Instructor",
-    body: "Merrithew — REPS registered, Level 3",
+    body: "Merrithew, REPS registered, Level 3",
     note: "",
     logo: { src: "/images/logos/stott-pilates.svg", alt: "STOTT PILATES" },
   },
@@ -95,7 +95,7 @@ export const QUALIFICATIONS = [
 export const AFFILIATIONS = [
   { name: "London School of Sports Massage", logo: "/images/legacy/lssm-mark.gif" },
   { name: "Institute of Sport & Remedial Massage", logo: "/images/legacy/isrm-logo.jpg" },
-  { name: "Merrithew — STOTT Pilates", logo: "/images/legacy/merrithew-logo.png" },
+  { name: "Merrithew STOTT Pilates", logo: "/images/legacy/merrithew-logo.png" },
 ];
 
 /* The career change, as a sequence. Deliberately unnumbered and undated —
@@ -114,7 +114,7 @@ export const CHAPTERS = [
   {
     label: "Training",
     title: "London School of Sports Massage",
-    text: "A Diploma at the London School of Sports Massage — the pioneer and leader in Sport and Remedial Massage training since 1989 — led to a new and exciting career as a Sports Therapist.",
+    text: "A Diploma at the London School of Sports Massage, the pioneer and leader in Sport and Remedial Massage training since 1989, led to a new and exciting career as a Sports Therapist.",
   },
   {
     label: "Then",

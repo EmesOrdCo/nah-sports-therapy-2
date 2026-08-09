@@ -100,7 +100,7 @@ export function buildEnquiryEmail(fields) {
 </head>
 <body style="margin:0;padding:0;background:#f4f5f9;">
 <!-- Shown in the inbox list under the subject, before the email is opened. -->
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${safeName}${service ? ` — ${escapeHtml(service)}` : ""}</div>
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${safeName}${service ? ` - ${escapeHtml(service)}` : ""}</div>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f5f9;padding:24px 12px;">
 <tr><td align="center">

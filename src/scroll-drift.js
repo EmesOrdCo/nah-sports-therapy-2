@@ -147,8 +147,8 @@ export function initScrollDrift(selector = "[data-drift]") {
      uncropped and is not asked to promote layers to their own compositor tiles
      for an effect it is not going to show.
 
-     Not "is-drifting": drift-columns.js owns that name for the looping bands,
-     and two mechanisms answering to one class is a trap for whoever greps next.
+     Not "is-drifting": the home page's looping quote run owns that name, and
+     two mechanisms answering to one class is a trap for whoever greps next.
 
      Set before the first draw so the class and the offsets land together. */
   groups.forEach((group) => group.el.classList.add("is-adrift"));
