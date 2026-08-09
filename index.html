@@ -21,7 +21,9 @@
     <link
       rel="preload"
       as="image"
-      href="/images/pilates-mat-stretch.jpg"
+      href="/images/home-hero-1400.webp"
+      imagesrcset="/images/home-hero-1400.webp 1400w, /images/home-hero-2128.webp 2128w"
+      imagesizes="100vw"
       fetchpriority="high"
     />
     <!-- The loader markup is inline in the body, so it exists before the
@@ -197,16 +199,21 @@
 
     <main>
       <section class="home-hero" aria-labelledby="hero-title">
-        <!-- PLACEHOLDER PHOTOGRAPH. Generic stock that already ships with the
-             repo, standing in until Natasha's own shoot lands. Replace the src
-             and fill in the srcset widths then; nothing else here changes. -->
+        <!-- Natasha's own photograph of the Studham studio, mats laid out and
+             the bifolds open onto the garden (source in legacy/studio-hero.jpg,
+             re-encoded at 2128 and 1400). It replaced generic stock. -->
         <div class="home-hero__media" aria-hidden="true">
           <img
             class="home-hero__photo"
-            src="/images/pilates-mat-stretch.jpg"
+            src="/images/home-hero-1400.webp"
+            srcset="
+              /images/home-hero-1400.webp 1400w,
+              /images/home-hero-2128.webp 2128w
+            "
+            sizes="100vw"
             alt=""
-            width="1400"
-            height="933"
+            width="2128"
+            height="1346"
             fetchpriority="high"
           />
           <div class="home-hero__scrim"></div>
