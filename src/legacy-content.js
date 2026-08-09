@@ -602,6 +602,12 @@ You don’t have to be an athlete to use NJH Sports Therapy & Pilates. I get as 
   },
   "/kinesiology-taping": {
     parent: "therapy",
+    /* The old site's contact sheet — four cells at 178px across, captioned in
+       the JPEG itself. Kept here as the record of what the page was; the live
+       section no longer shows it. The taping band on /sports-therapy carries
+       the Pexels set in /images/taping instead, which is the same subject at a
+       size that can actually be looked at. See TAPING_SLIDES in
+       site-content.js. */
     images: [
       {
         src: "/images/legacy/kinesiology-taping.jpg",

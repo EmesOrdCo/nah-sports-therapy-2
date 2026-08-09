@@ -1418,8 +1418,80 @@ const fasciaMap = (items) =>
         ${fasciaMapColumn(items.slice(3), "right", 4)}
       </figure>`;
 
-const tapingFigure = () =>
-  `<figure class="st-taping-figure" data-reveal>${legacyImage("/kinesiology-taping", 0)}<figcaption>Examples of kinesiology taping</figcaption></figure>`;
+/* The photographs the taping band flicks through.
+
+   The old site had one contact sheet — four cells 178px across, captions
+   printed into the JPEG — which is the size at which you cannot see the one
+   thing the picture is there to show. These are 1100x1650, so the band can give
+   them half the width of the page and they still hold up. Pexels, free for
+   commercial use with no attribution required, same terms as the rest of the
+   stock on the site.
+
+   Three frames from one shoot rather than three separate ones, which is what
+   lets them sit in a strip: the same room, the same light, the same pair of
+   people, so moving between them reads as moving through one appointment. The
+   tape is blue, which is the only colour it comes in that belongs next to this
+   page — an earlier set in hot pink and black fought the navy at every step.
+
+   Ordered as a sequence: the room and the first strip going on, then the fuller
+   application, then the hands finishing it. `label` is what names the dot for a
+   screen reader — nothing renders it on screen. */
+const TAPING_SLIDES = [
+  {
+    src: "/images/taping/taping-5794056.webp",
+    label: "Applied over the shoulder",
+    alt: "A therapist smoothing a strip of blue kinesiology tape over the top of a seated client’s shoulder in a treatment room",
+  },
+  {
+    src: "/images/taping/taping-5794060.webp",
+    label: "A low back application",
+    alt: "Blue kinesiology tape laid in crossing strips across a client’s lower back as they lean forward on a treatment couch",
+  },
+  {
+    src: "/images/taping/taping-5794053.webp",
+    label: "Smoothed into place",
+    alt: "A therapist pressing a length of blue tape along a client’s lower back with both hands, cut strips resting on the couch beside them",
+  },
+];
+
+/* The taping band: one photograph at a time down the left, the copy on the
+   right, and no boxes — the same single-band shape as Pilates for golfers,
+   turned so the picture is a column rather than the backdrop.
+
+   The track is a scroll-snap strip, so it swipes on a phone and takes the
+   trackpad on a laptop with nothing running. main.js adds the arrows' and dots'
+   behaviour on top — see the [data-taping-gallery] block there — and the
+   controls are written here rather than there so that they inherit the same
+   markup the rest of the page is built from. Without the script the strip still
+   scrolls; the controls are the enhancement, not the mechanism.
+
+   Every slide is in the accessibility tree at once: this is a list of
+   photographs, not competing panels, and a screen reader is better served
+   reading it as one.
+
+   Nothing is captioned on screen. The picture runs edge to edge of its column,
+   so the only controls over it are the arrows and the dots, both of which carry
+   their own ground rather than needing a strip drawn for them. The labels are
+   still written into the dots, where a screen reader reads them. */
+const tapingGallery = () =>
+  `<div class="taping-band__media" data-taping-gallery>
+        <ul class="taping-band__track" data-taping-track>
+          ${TAPING_SLIDES.map(
+            (slide) =>
+              `<li class="taping-band__slide" data-taping-slide>
+              <img src="${slide.src}" alt="${escapeContent(slide.alt)}" width="1100" height="1650" loading="lazy" decoding="async">
+            </li>`,
+          ).join("")}
+        </ul>
+        <button class="taping-band__arrow taping-band__arrow--prev" type="button" data-taping-step="-1" aria-label="Previous taping photograph" hidden>←</button>
+        <button class="taping-band__arrow taping-band__arrow--next" type="button" data-taping-step="1" aria-label="Next taping photograph" hidden>→</button>
+        <div class="taping-band__dots" data-taping-dots hidden>
+          ${TAPING_SLIDES.map(
+            (slide, index) =>
+              `<button class="taping-band__dot" type="button" data-taping-go="${index}" aria-label="Show ${escapeContent(slide.label)}"><span>${escapeContent(slide.label)}</span></button>`,
+          ).join("")}
+        </div>
+      </div>`;
 
 /* ---------- Variant A — card grid ---------- */
 
@@ -1482,11 +1554,19 @@ function therapyVariantA() {
     </div>
   </section>
 
-  <section class="st-section" id="kinesiology-taping" aria-labelledby="taping-title">
-    <div class="section-shell st-split">
-      ${tapingFigure()}
-      <div class="st-card" data-reveal><h2 id="taping-title">Kinesiology taping</h2><p>Taping can aid pain relief, reduce swelling and support postural awareness. It can be included in an appointment or booked as a standalone 15–20 minute session.</p>${rows(taping)}</div>
+  <!-- One band, not two cards. The copy comes first in the source so the
+       heading is what a screen reader reaches first; the stylesheet orders it
+       to the right and puts the photographs down the left. -->
+  <section class="taping-band" id="kinesiology-taping" aria-labelledby="taping-title">
+    <div class="taping-band__copy" data-reveal>
+      <div class="taping-band__copy-inner">
+        ${eyebrow("Sports therapy")}
+        <h2 id="taping-title" class="title-rule">Kinesiology taping</h2>
+        <p>Taping can aid pain relief, reduce swelling and support postural awareness. It can be included in an appointment or booked as a standalone 15–20 minute session.</p>
+        ${rows(taping, "st-rows--onDark")}
+      </div>
     </div>
+    ${tapingGallery()}
   </section>
 
   <div class="st-section st-section--tint st-section--act">

@@ -7306,7 +7306,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    The line sits well under --on-dark-quiet: that figure is set for text at
    caption size, and a 1px rule carrying the same alpha reads as a border. */
 .st-section--dark .title-rule,
-.pilates-golf .title-rule {
+.pilates-golf .title-rule,
+.taping-band .title-rule {
   --title-rule-brand: var(--periwinkle);
   --title-rule-line: color-mix(in oklch, var(--on-dark) 22%, transparent);
 }
@@ -8219,23 +8220,228 @@ p.fascia-map__claim {
 .st-split--text p {
   line-height: var(--lh-body);
 }
-.st-taping-figure {
-  padding: clamp(16px, 2vw, 26px);
-  margin: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  background: var(--paper);
+/* ---- Taping band ----
+
+   One band rather than the pair of cards this section used to be: photographs
+   down the left, copy on the right, nothing boxed. The shape is Pilates for
+   golfers turned ninety degrees — there the photograph is the backdrop and the
+   copy sits on it; here the photograph is a column of its own, because it
+   changes as you move through it and a backdrop that swapped under the type
+   would take the type with it.
+
+   The photographs are bright studio shots on white and the band is navy, so
+   the picture reads as a window cut into the band. */
+
+/* The band's height is set here rather than left to the photographs. They are
+   4:5 portraits, and a column half the page wide filled at that ratio comes out
+   at 800px on a laptop whatever the copy beside it needs — a number nobody
+   chose. Stated here, the picture crops to the band instead of the band
+   stretching to the picture. */
+.taping-band {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  min-height: clamp(480px, 56vw, 780px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  color: var(--on-dark);
+  background: var(--navy);
 }
-.st-taping-figure img {
+
+/* Ordered here rather than by moving the markup, so the heading still comes
+   first for a screen reader. Page gutter on the outside, the narrower gap
+   inboard — the same measure the home page's chapters are set on. */
+.taping-band__copy {
+  display: flex;
+  order: 1;
+  align-items: center;
+  padding: clamp(48px, 6vw, 96px) var(--page-gutter) clamp(48px, 6vw, 96px)
+    clamp(32px, 4.5vw, 72px);
+}
+
+.taping-band__copy-inner {
   width: 100%;
-  border-radius: calc(var(--radius-card) - 8px);
+  max-width: 46ch;
 }
-.st-taping-figure figcaption {
-  padding-top: 14px;
-  color: var(--ink-soft);
-  font-size: var(--step-00);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+
+.taping-band__copy h2 {
+  margin: 0 0 var(--space-s);
+  color: var(--on-dark);
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-weight: 400;
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+}
+
+.taping-band__copy p {
+  margin: 0 0 var(--space-m);
+  color: var(--on-dark-soft);
+  line-height: var(--lh-body);
+}
+
+.taping-band__copy .st-eyebrow {
+  color: var(--periwinkle);
+}
+
+/* The picture column. It takes its height from the band rather than giving the
+   band its own, which is why the track below is taken out of the flow: an
+   in-flow image would put its intrinsic height back into the grid row and the
+   min-height above would never be the thing deciding. */
+.taping-band__media {
+  position: relative;
+}
+
+.taping-band__track {
+  position: absolute;
+  display: flex;
+  inset: 0;
+  /* Snap points, so a flick lands on a photograph rather than between two.
+     scroll-behavior lives here rather than on the calls in main.js so that a
+     drag and a button press come to rest the same way. */
+  overflow-x: auto;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  /* The bar would sit across the photographs and is redundant next to the
+     dots, which say the same thing and say it more precisely. */
+  scrollbar-width: none;
+}
+.taping-band__track::-webkit-scrollbar {
+  display: none;
+}
+
+.taping-band__slide {
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+/* The column is the frame and the photograph fills it; the HTML width and
+   height only hold the ratio until the file lands. All three are the same 2:3
+   portrait, so cover crops the same amount off each and the band does not
+   shuffle as you move along. */
+.taping-band__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.taping-band__arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: oklch(100% 0 0 / 0.9);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  place-items: center;
+  transform: translateY(-50%);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+.taping-band__arrow:hover {
+  background: oklch(100% 0 0);
+  color: var(--brand);
+}
+.taping-band__arrow--prev {
+  left: clamp(12px, 1.6vw, 22px);
+}
+.taping-band__arrow--next {
+  right: clamp(12px, 1.6vw, 22px);
+}
+/* Disabled rather than removed at the two ends: a control that disappears
+   moves the other one, and the reader loses the place they were aiming at. */
+.taping-band__arrow[disabled] {
+  cursor: default;
+  opacity: 0.28;
+}
+
+/* Straight onto the photograph, with no strip drawn behind them. */
+.taping-band__dots {
+  position: absolute;
+  bottom: clamp(16px, 2vw, 26px);
+  left: 50%;
+  display: flex;
+  gap: 9px;
+  transform: translateX(-50%);
+}
+
+/* The label is the accessible name and is read out; on screen the dot is the
+   whole control, so the text is taken out of the flow rather than out of the
+   markup.
+
+   Each dot carries its own contrast rather than relying on what is behind it:
+   white with a dark ring on the pale studio ground these photographs mostly
+   are, and still legible where one goes dark. The ring is a shadow rather than
+   a border so it does not eat into the 9px the dot is. */
+.taping-band__dot {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: oklch(100% 0 0 / 0.8);
+  box-shadow: 0 0 0 1px oklch(23.2% 0.055 277 / 0.4);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+.taping-band__dot span {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.taping-band__dot:hover {
+  background: oklch(100% 0 0);
+}
+.taping-band__dot.is-active {
+  background: var(--brand);
+  box-shadow: 0 0 0 2px oklch(100% 0 0 / 0.85);
+}
+
+/* Stacked, the picture goes on top: it is what tells you what the section is
+   about before you have read a word of it. */
+@media (max-width: 900px) {
+  .taping-band {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .taping-band__copy {
+    order: 0;
+    padding: clamp(36px, 8vw, 56px) var(--page-gutter);
+  }
+  /* Stacked, the column has no row height to take, so it states its own. Not
+     the photographs' full 2:3 — that is 585px of picture before a phone reaches
+     a word of the copy. 4:5 takes a tenth off the top and bottom of frames
+     whose subject is centred anyway, and buys back 100px. */
+  .taping-band__media {
+    order: -1;
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* Asked for less motion, the strip stops sliding — it still moves between
+   photographs, it just arrives rather than travels. */
+@media (prefers-reduced-motion: reduce) {
+  .taping-band__track {
+    scroll-behavior: auto;
+  }
 }
 
 

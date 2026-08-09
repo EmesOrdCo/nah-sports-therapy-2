@@ -507,6 +507,90 @@ if (studioTabs.length) {
   });
 }
 
+/* The taping band on /sports-therapy: four photographs in a snapping strip down
+   the left of the band — see .taping-band in site-content.js and the
+   stylesheet.
+
+   The strip is the mechanism and it needs none of this: it scrolls, it snaps,
+   and on a phone a swipe is already the natural way through it. What is added
+   here is the way through it on a laptop, where there is nothing to swipe and
+   an unlabelled scrollable strip does not announce that it has three more
+   pictures in it. So the arrows and the dots are shipped [hidden] and unhidden
+   from here — with the script off the reader gets a plain scrollable strip
+   rather than controls that do nothing.
+
+   Position is read back off the scroll rather than held in a variable: a drag
+   and a button press then agree by construction, because there is only one
+   place either of them can be read from. */
+const tapingGallery = document.querySelector("[data-taping-gallery]");
+if (tapingGallery) {
+  const track = tapingGallery.querySelector("[data-taping-track]");
+  const slides = [...tapingGallery.querySelectorAll("[data-taping-slide]")];
+  const dotRow = tapingGallery.querySelector("[data-taping-dots]");
+  const dots = [...tapingGallery.querySelectorAll("[data-taping-go]")];
+  const arrows = [...tapingGallery.querySelectorAll("[data-taping-step]")];
+
+  // Whichever slide's left edge is nearest the track's own left edge. Compared
+  // as distances rather than by dividing by the slide width, so a track that is
+  // mid-flick between two snap points still answers with one of them.
+  const currentIndex = () => {
+    let nearest = 0;
+    slides.forEach((slide, index) => {
+      if (
+        Math.abs(slide.offsetLeft - track.scrollLeft) <
+        Math.abs(slides[nearest].offsetLeft - track.scrollLeft)
+      )
+        nearest = index;
+    });
+    return nearest;
+  };
+
+  const goTo = (index) => {
+    const target = slides[Math.max(0, Math.min(index, slides.length - 1))];
+    track.scrollTo({ left: target.offsetLeft });
+  };
+
+  const syncControls = () => {
+    const index = currentIndex();
+    dots.forEach((dot, position) => {
+      dot.classList.toggle("is-active", position === index);
+      dot.setAttribute("aria-current", position === index ? "true" : "false");
+    });
+    arrows.forEach((arrow) => {
+      const step = Number(arrow.dataset.tapingStep);
+      const spent = step < 0 ? index === 0 : index === slides.length - 1;
+      /* A disabled button drops the focus that was on it, and a keyboard reader
+         arriving at the last photograph would be put back at the top of the
+         document mid-gallery. So the arrow that is still live takes the focus
+         as the one being pressed goes out of service. */
+      if (spent && !arrow.disabled && document.activeElement === arrow)
+        arrows.find((other) => other !== arrow)?.focus();
+      arrow.disabled = spent;
+    });
+  };
+
+  arrows.forEach((arrow) => {
+    arrow.hidden = false;
+    arrow.addEventListener("click", () =>
+      goTo(currentIndex() + Number(arrow.dataset.tapingStep)),
+    );
+  });
+  if (dotRow) dotRow.hidden = false;
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => goTo(Number(dot.dataset.tapingGo)));
+  });
+
+  /* The strip is a list, not a widget, so it is not its own tab stop and there
+     is nothing here to give arrow keys to: a keyboard reader tabs onto the
+     controls and presses them. What the keyboard does need is for a control it
+     has just used not to vanish under it — hence disabled ends rather than
+     hidden ones, in the stylesheet. */
+  track.addEventListener("scroll", syncControls, { passive: true });
+  // The snap point is measured off laid-out boxes, so a resize moves it.
+  window.addEventListener("resize", syncControls);
+  syncControls();
+}
+
 /* The quote band under the studio flies up as you scroll down to it and sinks
    back as you scroll away, one half leading the other. Scrubbed
    against the band's own position rather than fired at a moment — see
