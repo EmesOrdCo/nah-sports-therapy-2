@@ -268,7 +268,7 @@ const timetable = page(
     "Before joining",
     "Start with a one-to-one assessment.",
     `<p>An initial individual assessment, including postural analysis, is required before joining a small-group class. This gives Natasha the context to guide and adapt your exercises safely and effectively.</p>
-     <p>Classes are deliberately small so posture, control and movement can be observed and corrected where needed.</p>
+     <p>Classes are deliberately small (maximum 7) so posture, control and movement can be observed and corrected where needed.</p>
      <a class="text-link" href="/prices">View current prices <span>→</span></a>`,
     "editorial-section--tint",
   )}${cta("Ask about class availability.")}`,
@@ -893,12 +893,15 @@ function buildPilatesContinuousPage() {
       <section class="pilates-feature pilates-feature--equipment" id="reformer" aria-labelledby="reformer-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-feature__content" data-reveal>
-            ${eyebrow("Pilates")}<h2 id="reformer-title" class="title-rule">Reformer Pilates</h2>
-            <p class="pilates-feature__lead">Spring-assisted work, adjusted to what your body will do today rather than what it ought to do.</p>
-            <p>Because the springs carry part of the load, you can move through a full, controlled range before you have the strength to do it unaided, a forgiving way back into exercise after a lay-off, and a way to keep working around a joint that is stiff or sore.</p>
-            <p>Most people come for posture and deep core control, for hips, shoulders and lower backs gone tight at a desk, and for the steadiness that comes with both. It works upwards too: once the control holds, the springs load it.</p>
+            ${eyebrow("Pilates")}<h2 id="reformer-title" class="title-rule">STOTT Reformer Pilates</h2>
+            <p class="pilates-feature__lead">A contemporary, scientifically-optimized approach to the traditional teaching of Joseph Pilates.</p>
+            <p>Performed on a specialized sliding carriage, the Reformer machine uses spring-based resistance, emphasising modern biomechanics, spinal rehabilitation and helps restore the spine's natural curves.</p>
+            <p>1:1 STOTT Reformer Pilates is a fantastic tool to strengthen and lengthen specific muscle groups. It is suitable for all ages and abilities. Each exercise can be modified to help those recovering from an injury or to challenge the elite athletes. Heavier doesn't always mean harder. Multiple springs can offer support and stability where needed whereas lighter springs will challenge your abdominals.</p>
             <dl class="pilates-facts">
-              <div><dt>Good for</dt><dd>Posture and core control, joint mobility, returning to exercise</dd></div>
+              <div><dt>Good for</dt><dd>Posture and core strength, joint mobility, movement with precision</dd></div>
+              <div><dt>Rehabilitation</dt><dd>Spinal, hip, knee, ankle, shoulder rehabilitation; stroke rehabilitation</dd></div>
+              <div><dt>Also for</dt><dd>Athletes targeting muscular imbalances, e.g. cricket, cycling, fencing, golf, tennis</dd></div>
+              <div><dt>Bone density</dt><dd>Improves bone density helping those with osteopenia/osteoporosis</dd></div>
               <div><dt>Format</dt><dd>One-to-one</dd></div>
             </dl>
             <a class="pilates-arrow-link" href="#contact">Ask about a Reformer session <span>→</span></a>
@@ -930,11 +933,11 @@ function buildPilatesContinuousPage() {
         <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first">
           <div class="pilates-feature__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="chair-title" class="title-rule">Stability Chair</h2>
-            <p class="pilates-feature__lead">Upright work that builds the strength and balance you actually use standing up.</p>
-            <p>It works you in the positions ordinary days are made of (seated, standing, on one leg), so what you gain transfers straight to stairs, lifting and getting up off the floor. There is nothing to lean on, which is why it is so good for balance and for confidence on your feet.</p>
-            <p>It is precise, too: a short range under controlled resistance builds strength around one joint at a time, which suits a knee, hip, ankle or shoulder that has been weak or guarded. It usually comes once mat and Reformer work have laid the groundwork.</p>
+            <p class="pilates-feature__lead">A multifunctional Pilates machine that can be adjusted to train most muscle groups.</p>
+            <p>This sturdy piece of equipment helps you achieve upper- and lower-body strength and conditioning, enhances stability, and helps to improve posture. Independent pedal movement highlights and helps rebalance strength or flexibility disparities between the left and right sides of the body. The smaller base of support forces deep core engagement and improves overall proprioception and body control, and the dual pedals also allow for bilateral, unilateral and reciprocal movements to increase intensity and overall balance.</p>
+            <p>It is ideal for post-rehab or individuals who need to remain in an upright or seated position due to limited mobility or joint injuries. Its adjustable resistance and controlled movements allow for gentle, low-impact exercises that promote healing and strengthening without exacerbating injuries. From beginner-friendly movements to challenging advanced exercises, including advanced high-performance exercises for athletes and fitness enthusiasts, the Stability Chair has something for everyone. Its exercises often mimic daily activities and movements, which helps build functional strength that translates to everyday life, and its adjustable resistance and varied exercises ensure that workouts remain engaging and fun.</p>
             <dl class="pilates-facts">
-              <div><dt>Good for</dt><dd>Balance, strength around a single joint, everyday upright movement</dd></div>
+              <div><dt>Good for</dt><dd>Upper- and lower-body strength and conditioning, stability, posture, core engagement, balance</dd></div>
               <div><dt>Format</dt><dd>One-to-one or 2:1</dd></div>
             </dl>
             <a class="pilates-arrow-link" href="#contact">Ask about a Chair session <span>→</span></a>
@@ -974,8 +977,9 @@ function buildPilatesContinuousPage() {
              an initial in a ring, which is decoration drawn from the name. -->
         <div class="section-shell pilates-group__grid">
           <header class="pilates-section-heading pilates-group__intro" data-reveal>
-            ${eyebrow("Pilates")}<h2 id="group-title" class="title-rule">Small group Pilates</h2>
-            <p>Class sizes are small to ensure close attention to posture and movement during each exercise where necessary. Sessions focus on precise, controlled movement to improve your joint range of movement and help you feel stronger.</p>
+            ${eyebrow("Pilates")}<h2 id="group-title" class="title-rule">STOTT Small Group Pilates</h2>
+            <p>Incorporates modern theories of exercise, science and spinal rehabilitation through five basic principles: Breathing, Pelvic placement, Rib cage placement, Scapular movement and stabilisation, Head and cervical placement. These principles help integrate body awareness and proper alignment for safe and effective exercises that improve your movement and mindfulness.</p>
+            <p>Class sizes are small (maximum 7) to ensure close attention to posture and movement during each exercise where necessary. Sessions focus on precise, controlled movement, to improve your joint range of movement and help you feel stronger.</p>
             <p class="pilates-group__note">Sessions are 55 minutes unless noted. An initial one-to-one assessment including postural analysis is required before joining Small Group Pilates.</p>
           </header>
           <div class="pilates-timetable" data-reveal>
@@ -1257,13 +1261,13 @@ function buildStudioContinuousPage() {
       <section class="pilates-feature pilates-feature--equipment" id="reformer" aria-labelledby="studio-reformer-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-feature__content" data-reveal>
-            <h2 id="studio-reformer-title">The Reformer</h2>
-            <p class="pilates-feature__lead">A padded carriage running on rails inside a long timber frame, drawn back and forth against a bank of springs.</p>
-            <p>You lie, sit, kneel or stand on it, moving the carriage against the footbar or the ropes and straps at the far end. The springs clip on and off underneath: how many are on decides how much of the movement the frame gives you and how much you carry yourself.</p>
-            <p>Footbar, ropes, headrest and shoulder rests all reposition, and the springs change in seconds, which is what lets one machine hold a whole hour of different work. It stands at the studio's far end, under the windows, with the mat space kept clear beside it.</p>
+            <h2 id="studio-reformer-title">The STOTT Merrithew Reformer</h2>
+            <p class="pilates-feature__lead">Comprises of a padded, rolling platform that moves back and forth along the frame tracks.</p>
+            <p>Colour coded springs provide adjustable resistance levels for concentric and eccentric muscle contractions. An adjustable foot bar is used for pushing off with feet or hands during foundational movements. The ropes and straps create a pulley system attached to the top used for arm and leg coordination exercises.</p>
+            <p>You lie, sit, kneel or stand on the Reformer moving the carriage against the footbar or the ropes and straps at the far end. The springs clip on and off underneath. Footbar, ropes, headrest and shoulder rests all reposition, and the springs change in seconds, making the Reformer a great rehabilitation tool but also fantastic to challenge those working at a more advanced level.</p>
             <dl class="pilates-facts">
-              <div><dt>What it is</dt><dd>Sprung carriage on rails, with footbar, ropes and straps</dd></div>
-              <div><dt>Adjusts</dt><dd>Spring tension, footbar, rope length, headrest</dd></div>
+              <div><dt>What it is</dt><dd>Padded rolling platform on the frame tracks, with footbar, ropes and straps</dd></div>
+              <div><dt>Adjusts</dt><dd>Colour coded springs, foot bar, ropes, headrest and shoulder rests</dd></div>
             </dl>
             <a class="pilates-arrow-link" href="/pilates#reformer">How a Reformer session runs <span>→</span></a>
           </div>
@@ -1312,13 +1316,13 @@ function buildStudioContinuousPage() {
       <section class="pilates-feature pilates-feature--equipment" id="stability-chair" aria-labelledby="studio-chair-title">
         <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first">
           <div class="pilates-feature__content" data-reveal>
-            <h2 id="studio-chair-title">The Stability Chair</h2>
-            <p class="pilates-feature__lead">A padded box, roughly the size of a low stool, with a sprung pedal hinged along one side.</p>
-            <p>The pedal is the whole machine. Springs hook onto a bracket at different heights, setting how heavily it resists across a short arc, and you press it with a foot or a hand: sitting on the seat, standing beside it or lying across it.</p>
-            <p>There is nothing else to it: no rails, no ropes, no rest position built into the frame. Whatever holds you up is your own position, which is why the plainest machine in the room is the demanding one.</p>
+            <h2 id="studio-chair-title">The STOTT Split-Pedal Stability Chair</h2>
+            <p class="pilates-feature__lead">A multi-functional Pilates apparatus by Merrithew, featuring a dual-pedal system that can lock together or move independently.</p>
+            <p>The split pedals can function as a single unified pedal or split apart to perform unilateral, bilateral and reciprocal limb movements. It is typically equipped with two heavy and two light springs using a hook-on attachment system for scaled resistance. Fully adjustable side handles lock securely for exercises like lunges and dips, or detach for seated/lying work.</p>
+            <p>Its compact footprint offers a smaller base of support than a Reformer, intensifying balance and stability challenges, and the double-steel frame provides structural durability during high-intensity or body-weight-bearing exercises. It challenges core stability, balance, and upper or lower body strength through adjustable spring resistance, making it valuable for both athletic conditioning and physical rehabilitation.</p>
             <dl class="pilates-facts">
-              <div><dt>What it is</dt><dd>Padded box seat with a hinged, spring-loaded pedal</dd></div>
-              <div><dt>Adjusts</dt><dd>Spring position and number, which sets the pedal's resistance</dd></div>
+              <div><dt>What it is</dt><dd>A dual-pedal system that can lock together or move independently</dd></div>
+              <div><dt>Adjusts</dt><dd>Two heavy and two light hook-on springs; removable side handles</dd></div>
             </dl>
             <a class="pilates-arrow-link" href="/pilates#stability-chair">How a Chair session runs <span>→</span></a>
           </div>
@@ -1569,7 +1573,8 @@ const TAPING_SLIDES = [
 
    The track is a scroll-snap strip, so it swipes on a phone and takes the
    trackpad on a laptop with nothing running. main.js adds the arrows' and dots'
-   behaviour on top — see the [data-taping-gallery] block there — and the
+   behaviour on top — see the [data-gallery] block there, shared with the home
+   page's story chapters — and the
    controls are written here rather than there so that they inherit the same
    markup the rest of the page is built from. Without the script the strip still
    scrolls; the controls are the enhancement, not the mechanism.
@@ -1583,21 +1588,21 @@ const TAPING_SLIDES = [
    their own ground rather than needing a strip drawn for them. The labels are
    still written into the dots, where a screen reader reads them. */
 const tapingGallery = () =>
-  `<div class="taping-band__media" data-taping-gallery>
-        <ul class="taping-band__track" data-taping-track>
+  `<div class="taping-band__media" data-gallery>
+        <ul class="taping-band__track" data-gallery-track>
           ${TAPING_SLIDES.map(
             (slide) =>
-              `<li class="taping-band__slide" data-taping-slide>
+              `<li class="taping-band__slide" data-gallery-slide>
               <img src="${slide.src}" alt="${escapeContent(slide.alt)}" width="1100" height="1650" loading="lazy" decoding="async">
             </li>`,
           ).join("")}
         </ul>
-        <button class="taping-band__arrow taping-band__arrow--prev" type="button" data-taping-step="-1" aria-label="Previous taping photograph" hidden>←</button>
-        <button class="taping-band__arrow taping-band__arrow--next" type="button" data-taping-step="1" aria-label="Next taping photograph" hidden>→</button>
-        <div class="taping-band__dots" data-taping-dots hidden>
+        <button class="taping-band__arrow taping-band__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous taping photograph" hidden>←</button>
+        <button class="taping-band__arrow taping-band__arrow--next" type="button" data-gallery-step="1" aria-label="Next taping photograph" hidden>→</button>
+        <div class="taping-band__dots" data-gallery-dots hidden>
           ${TAPING_SLIDES.map(
             (slide, index) =>
-              `<button class="taping-band__dot" type="button" data-taping-go="${index}" aria-label="Show ${escapeContent(slide.label)}"><span>${escapeContent(slide.label)}</span></button>`,
+              `<button class="taping-band__dot" type="button" data-gallery-go="${index}" aria-label="Show ${escapeContent(slide.label)}"><span>${escapeContent(slide.label)}</span></button>`,
           ).join("")}
         </div>
       </div>`;
