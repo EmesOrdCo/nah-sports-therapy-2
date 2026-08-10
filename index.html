@@ -383,8 +383,8 @@
               aria-label="Inside the Studham studio"
             >
               <!-- One drawing per view rather than the same mark four times:
-                   the open floor, the couch, the door you arrive at, the
-                   window. All are stroked in currentColor, so each one dims
+                   the open floor, the Reformer, the Stability Chair, the
+                   couch. All are stroked in currentColor, so each one dims
                    and lifts with the label it belongs to. -->
               <button
                 class="studio-look__tab is-active"
@@ -417,8 +417,64 @@
                 class="studio-look__tab"
                 type="button"
                 role="tab"
-                id="studio-view-treatment-tab"
-                aria-controls="studio-view-treatment"
+                id="studio-view-reformer-tab"
+                aria-controls="studio-view-reformer"
+                aria-selected="false"
+                tabindex="-1"
+              >
+                <svg
+                  class="studio-look__tab-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <rect x="2.5" y="9.5" width="19" height="5" rx="1.25" />
+                  <rect x="5" y="10.9" width="8" height="2.7" rx="1" />
+                  <path d="M18.5 9.5V6" />
+                  <path d="M16.75 6h3.5" />
+                  <path d="M5 14.5V17" />
+                  <path d="M19 14.5V17" />
+                </svg>
+                <span class="studio-look__tab-label">The Reformer</span>
+              </button>
+              <button
+                class="studio-look__tab"
+                type="button"
+                role="tab"
+                id="studio-view-chair-tab"
+                aria-controls="studio-view-chair"
+                aria-selected="false"
+                tabindex="-1"
+              >
+                <svg
+                  class="studio-look__tab-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <rect x="8.5" y="8" width="9" height="9.5" rx="1.25" />
+                  <path d="M11 8V4.5" />
+                  <path d="M15 8V4.5" />
+                  <path d="M8.5 13.75 4 15.75" />
+                </svg>
+                <span class="studio-look__tab-label">The Stability Chair</span>
+              </button>
+              <button
+                class="studio-look__tab"
+                type="button"
+                role="tab"
+                id="studio-view-couch-tab"
+                aria-controls="studio-view-couch"
                 aria-selected="false"
                 tabindex="-1"
               >
@@ -438,66 +494,27 @@
                   <path d="M5 15.5v3.5" />
                   <path d="M19 15.5v3.5" />
                 </svg>
-                <span class="studio-look__tab-label">Couch and Mat</span>
-              </button>
-              <button
-                class="studio-look__tab"
-                type="button"
-                role="tab"
-                id="studio-view-arrival-tab"
-                aria-controls="studio-view-arrival"
-                aria-selected="false"
-                tabindex="-1"
-              >
-                <svg
-                  class="studio-look__tab-icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.25"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <path d="M6.5 20.5V4.5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16" />
-                  <path d="M3.5 20.5h17" />
-                  <circle cx="14.75" cy="12.5" r="0.9" />
-                </svg>
-                <span class="studio-look__tab-label">Private Arrival</span>
-              </button>
-              <button
-                class="studio-look__tab"
-                type="button"
-                role="tab"
-                id="studio-view-light-tab"
-                aria-controls="studio-view-light"
-                aria-selected="false"
-                tabindex="-1"
-              >
-                <svg
-                  class="studio-look__tab-icon"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.25"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <rect x="4" y="4" width="16" height="16" rx="1.5" />
-                  <path d="M12 4v16" />
-                  <path d="M4 12h16" />
-                </svg>
-                <span class="studio-look__tab-label">Light and Quiet</span>
+                <span class="studio-look__tab-label">Treatment Couch</span>
               </button>
             </div>
           </div>
 
           <!-- No captions over the photographs: the label you picked is
                already sitting directly above the panel naming what you are
-               looking at, and the alt text carries the description. -->
+               looking at, and the alt text carries the description.
+
+               The three photographs are the studio's own — the plates from
+               /studio's three sections, in the order that page runs them: the
+               room, the Reformer, the Chair. They are square where the stage
+               is 2:1, so each panel carries its own --view-focus: the band the
+               crop keeps differs per photograph, and one shared value either
+               loses the garden doors or cuts somebody's face.
+
+               The largest candidate in each srcset is the whole of what the
+               camera file holds — the same square, re-cut from the original at
+               1346 and 1536 rather than resampled up from the 1000. Nothing
+               here is upscaled, so those are the ceilings; a sharper band than
+               this needs a new photograph, not a bigger file. -->
           <div class="studio-look__stage" data-reveal>
             <div
               class="studio-look__view"
@@ -505,65 +522,105 @@
               role="tabpanel"
               aria-labelledby="studio-view-floor-tab"
               tabindex="0"
+              style="--view-focus: 45%"
             >
               <img
-                src="/images/legacy/pilates-studio-main.jpg"
-                alt="The open wooden floor of the Studham studio, with mats, rollers and stability balls to one side"
-                width="1600"
-                height="1200"
+                src="/images/pilates/room-mats-1000.webp"
+                srcset="
+                  /images/pilates/room-mats-500.webp   500w,
+                  /images/pilates/room-mats-1000.webp 1000w,
+                  /images/pilates/room-mats-1346.webp 1346w
+                "
+                sizes="(max-width: 980px) 92vw, 880px"
+                alt="The studio laid out for a mat class, a roller and a pair of weighted balls on each mat, with the garden doors folded open at the far end"
+                width="1000"
+                height="1000"
                 loading="lazy"
               />
             </div>
 
             <div
               class="studio-look__view"
-              id="studio-view-treatment"
+              id="studio-view-reformer"
               role="tabpanel"
-              aria-labelledby="studio-view-treatment-tab"
+              aria-labelledby="studio-view-reformer-tab"
               tabindex="0"
+              style="--view-focus: 50%"
               hidden
             >
               <img
-                src="/images/legacy/pilates-studio-4.jpg"
-                alt="The treatment couch in the studio, with mats laid out on the floor beside it"
-                width="1600"
-                height="1200"
+                src="/images/pilates/reformer-carriage-1000.webp"
+                srcset="
+                  /images/pilates/reformer-carriage-500.webp   500w,
+                  /images/pilates/reformer-carriage-1000.webp 1000w,
+                  /images/pilates/reformer-carriage-1536.webp 1536w
+                "
+                sizes="(max-width: 980px) 92vw, 880px"
+                alt="A client lying back on the Reformer carriage, knees bent and feet resting on the jump board at the far end"
+                width="1000"
+                height="1000"
                 loading="lazy"
               />
             </div>
 
             <div
               class="studio-look__view"
-              id="studio-view-arrival"
+              id="studio-view-chair"
               role="tabpanel"
-              aria-labelledby="studio-view-arrival-tab"
+              aria-labelledby="studio-view-chair-tab"
               tabindex="0"
+              style="--view-focus: 55%"
               hidden
             >
               <img
-                src="/images/legacy/pilates-studio-1.jpg"
-                alt="The studio's own entrance door, with a table, chair and coat hooks beside it"
-                width="1600"
-                height="1200"
+                src="/images/pilates/chair-doors-1000.webp"
+                srcset="
+                  /images/pilates/chair-doors-500.webp   500w,
+                  /images/pilates/chair-doors-1000.webp 1000w,
+                  /images/pilates/chair-doors-1536.webp 1536w
+                "
+                sizes="(max-width: 980px) 92vw, 880px"
+                alt="A client balanced along the Stability Chair with one leg raised, the studio's garden doors open behind her"
+                width="1000"
+                height="1000"
                 loading="lazy"
               />
             </div>
 
+            <!-- The couch has no photograph of its own yet. The tab stays
+                 anyway — half of what the room is for is treatment, and a
+                 three-label row that never mentions the couch is a quieter
+                 kind of wrong. The panel says so in as many words, at the
+                 stage's own size. When the photograph arrives it becomes an
+                 <img> like the three above and the modifier goes with it. -->
             <div
-              class="studio-look__view"
-              id="studio-view-light"
+              class="studio-look__view studio-look__view--soon"
+              id="studio-view-couch"
               role="tabpanel"
-              aria-labelledby="studio-view-light-tab"
+              aria-labelledby="studio-view-couch-tab"
               tabindex="0"
               hidden
             >
-              <img
-                src="/images/legacy/pilates-studio-3.jpg"
-                alt="A calm, uncluttered studio wall with orchids in two alcoves and daylight from the side"
-                width="1600"
-                height="1200"
-                loading="lazy"
-              />
+              <svg
+                class="studio-look__soon-mark"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <rect x="2.5" y="11.5" width="19" height="4" rx="1.5" />
+                <rect x="3.5" y="7.5" width="6" height="4" rx="1.5" />
+                <path d="M5 15.5v3.5" />
+                <path d="M19 15.5v3.5" />
+              </svg>
+              <p class="studio-look__soon-label">Coming soon</p>
+              <p class="studio-look__soon-line">
+                A photograph of the treatment couch is on its way.
+              </p>
             </div>
           </div>
 

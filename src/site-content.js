@@ -879,9 +879,17 @@ function buildPilatesContinuousPage() {
            They alternate sides so the run from #individual to #small-group has
            a rhythm rather than three left-hand figures in a column.
 
-           Every photograph here is Pexels stock, free for commercial use with
-           no attribution required — placeholders for Studham. Swapping them is
-           the six files under public/images/pilates and nothing else. -->
+           Both photographs are the studio's own now, and both are galleries:
+           the same files, the same module and the same arrangement /studio
+           gives its two machine sections. There is one Reformer and one Chair,
+           so a separate set for this page would be the same two objects shot
+           again — what these pages owe each other is different words, not
+           different pictures. The stock that stood here (six Pexels files) is
+           gone with them.
+
+           Everything else on this page is still Pexels stock, free for
+           commercial use with no attribution required — placeholders for
+           Studham, under public/images/pilates. -->
       <section class="pilates-feature pilates-feature--equipment" id="reformer" aria-labelledby="reformer-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-feature__content" data-reveal>
@@ -895,13 +903,25 @@ function buildPilatesContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="#contact">Ask about a Reformer session <span>→</span></a>
           </div>
-          <div class="pilates-feature__media" data-reveal data-drift>
-            <figure class="pilates-feature__shot">
-              <img data-drift-lag="0.07" src="/images/pilates/reformer-25596677.webp" srcset="/images/pilates/reformer-25596677-700.webp 700w, /images/pilates/reformer-25596677.webp 1400w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying on the Reformer carriage, working through an exercise with the straps" width="1400" height="933" loading="lazy">
+          <!-- The gallery /studio#reformer carries, whole: same three
+               photographs of the studio's own machine, same classes, same
+               module. Why it is built the way it is — the square plate, the
+               corner row, what --frame-count counts — is written out over
+               there and not repeated here. -->
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 3" data-reveal data-drift data-equipment-gallery>
+            <figure class="pilates-feature__shot pilates-gallery__plate">
+              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/reformer-carriage-500.webp" data-large="/images/pilates/reformer-carriage-1000.webp" data-xl="/images/pilates/reformer-carriage-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-carriage-1000.webp" srcset="/images/pilates/reformer-carriage-500.webp 500w, /images/pilates/reformer-carriage-1000.webp 1000w, /images/pilates/reformer-carriage-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying back on the Reformer carriage, knees bent and feet resting on the jump board at the far end" width="1000" height="1000" loading="lazy">
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Reformer photograph" hidden>←</button>
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next Reformer photograph" hidden>→</button>
             </figure>
-            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
-              <img src="/images/pilates/reformer-detail-25596680.webp" alt="Closer view of the Reformer carriage, straps and springs during a session" width="640" height="640" loading="lazy">
-            </figure>
+            <div class="pilates-gallery__picks" data-drift-lead="0.2">
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-straps-500.webp" data-large="/images/pilates/reformer-straps-1000.webp" data-xl="/images/pilates/reformer-straps-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-straps-500.webp" alt="Natasha guiding a client's foot into the Reformer strap, the ropes running back to the carriage" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-legs-500.webp" data-large="/images/pilates/reformer-legs-1000.webp" data-xl="/images/pilates/reformer-legs-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-legs-500.webp" alt="A client lying on the Reformer with both feet in the straps, legs raised straight above the carriage" width="500" height="500" loading="lazy">
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -919,13 +939,30 @@ function buildPilatesContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="#contact">Ask about a Chair session <span>→</span></a>
           </div>
-          <div class="pilates-feature__media" data-reveal data-drift>
-            <figure class="pilates-feature__shot">
-              <img data-drift-lag="0.07" src="/images/pilates/stability-chair-5473893.webp" srcset="/images/pilates/stability-chair-5473893-700.webp 700w, /images/pilates/stability-chair-5473893.webp 1400w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client holding a supported position along the top of the Stability Chair" width="1400" height="933" loading="lazy">
+          <!-- And the five-frame gallery from /studio#stability-chair. The
+               section is media-first here as it is there, so the row lands on
+               the left edge; the stylesheet mirrors it the way it already
+               mirrors the lone inset. -->
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 5" data-reveal data-drift data-equipment-gallery>
+            <figure class="pilates-feature__shot pilates-gallery__plate">
+              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/chair-doors-500.webp" data-large="/images/pilates/chair-doors-1000.webp" data-xl="/images/pilates/chair-doors-1536.webp" data-xl-width="1536" src="/images/pilates/chair-doors-1000.webp" srcset="/images/pilates/chair-doors-500.webp 500w, /images/pilates/chair-doors-1000.webp 1000w, /images/pilates/chair-doors-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client balanced along the Stability Chair with one leg raised, the studio's garden doors open behind her" width="1000" height="1000" loading="lazy">
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Stability Chair photograph" hidden>←</button>
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next Stability Chair photograph" hidden>→</button>
             </figure>
-            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
-              <img src="/images/pilates/stability-chair-standing-5473901.webp" alt="A client working the Stability Chair pedal from a standing position, hands on the seat" width="640" height="640" loading="lazy">
-            </figure>
+            <div class="pilates-gallery__picks" data-drift-lead="0.2">
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/chair-seated-500.webp" data-large="/images/pilates/chair-seated-1000.webp" data-xl="/images/pilates/chair-seated-1536.webp" data-xl-width="1536" src="/images/pilates/chair-seated-500.webp" alt="Two clients sitting on Stability Chairs side by side, each holding a leg out straight in front of them" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/chair-standing-pair-500.webp" data-large="/images/pilates/chair-standing-pair-1000.webp" data-xl="/images/pilates/chair-standing-pair-1536.webp" data-xl-width="1536" src="/images/pilates/chair-standing-pair-500.webp" alt="Two clients standing on the seats of their Stability Chairs, hands on the handles" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/chair-guided-500.webp" data-large="/images/pilates/chair-guided-1000.webp" data-xl="/images/pilates/chair-guided-1536.webp" data-xl-width="1536" src="/images/pilates/chair-guided-500.webp" alt="One client steadying another by the shoulder as she sits on the Stability Chair" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/chair-class-500.webp" data-large="/images/pilates/chair-class-1000.webp" data-xl="/images/pilates/chair-class-1536.webp" data-xl-width="1536" src="/images/pilates/chair-class-500.webp" alt="An instructor talking two clients through a standing exercise on the Stability Chairs, the Reformer and mats behind them" width="500" height="500" loading="lazy">
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -982,10 +1019,10 @@ function buildPilatesContinuousPage() {
           </div>
           <figure class="story__media">
             <img
-              src="/images/natal/prenatal-7155356.webp"
-              alt="A pregnant client holding a supported squat against an exercise ball"
-              width="1200"
-              height="1500"
+              src="/images/natal/prenatal-2001092777.webp"
+              alt="A prenatal class seated cross-legged on mats, reaching one arm overhead in a side stretch"
+              width="684"
+              height="855"
               loading="lazy"
             />
           </figure>
@@ -1012,10 +1049,10 @@ function buildPilatesContinuousPage() {
           </div>
           <figure class="story__media">
             <img
-              src="/images/natal/postnatal-3094222.webp"
-              alt="A client on a mat after birth, holding her child above her on straight legs"
-              width="1200"
-              height="1500"
+              src="/images/natal/postnatal-bridge-baby.webp"
+              alt="A client lying on a mat after birth, hips lifted, holding her baby above her"
+              width="1068"
+              height="1335"
               loading="lazy"
             />
           </figure>
@@ -1031,17 +1068,20 @@ function buildPilatesContinuousPage() {
         </div>
       </section>
 
-      <!-- The two stock shots (anatomy diagram, swing sequence) are gone. The
-           section now carries a single photograph behind the copy, with a navy
-           wash that is near-solid on the left so the text stays legible and
-           clears to the right so the picture reads. -->
+      <!-- One picture: the muscles a golf swing drives, knocked out of the navy
+           beside the copy. The band is the one place on /pilates that says what
+           the work is FOR, so it is the one place that shows the inside of the
+           movement rather than somebody doing it.
+
+           There was a photograph of a swing here too, four frames of it off the
+           left edge. It is gone. The file is 612px wide, which is every pixel
+           there is, so it was always going to be the smaller of the two — and a
+           small photograph of a man swinging says nothing the labelled drawing
+           does not say better.
+
+           The drawing is line and flat colour, so it goes in as an SVG rather
+           than a photograph — it stays sharp at any width. -->
       <section class="pilates-golf" id="golfers" aria-labelledby="golf-title" data-drift>
-        <!-- The only single-layer group on the site. It works because the copy
-             on top of it does not move: the backdrop drifts against the page
-             itself, which is the other half of the pair everywhere else. The
-             stylesheet overhangs it past the band under .is-adrift so there is
-             somewhere to drift to. -->
-        <div class="pilates-golf__backdrop" aria-hidden="true" data-drift-lag="0.07"></div>
         <div class="section-shell pilates-golf__grid">
           <div class="pilates-golf__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="golf-title" class="title-rule">Pilates for golfers</h2>
@@ -1049,6 +1089,9 @@ function buildPilatesContinuousPage() {
             <p>Core strength can improve hip rotation, range of motion in the shoulders and back stability, leading to improved performance.</p>
             <ul class="pilates-golf__benefits"><li>Improve balance and flexibility</li><li>Strengthen your core to avoid injury</li><li>Work on overall breathing and focus</li></ul>
           </div>
+          <figure class="pilates-golf__figure" data-drift-lead="0.05">
+            <img src="/images/golfer-anatomy-navy.svg" alt="A golfer at the top of the backswing with the working muscles picked out and named: pectoralis major, deltoid, latissimus dorsi, triceps, the abdominals, quadriceps, the adductors and tibialis anterior." width="1537" height="1693" loading="lazy" decoding="async" />
+          </figure>
         </div>
       </section>
 
@@ -1163,13 +1206,27 @@ function buildStudioContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="#reformer">See what is in the room <span>→</span></a>
           </div>
-          <div class="pilates-feature__media" data-reveal data-drift>
-            <figure class="pilates-feature__shot">
-              <img data-drift-lag="0.07" src="/images/legacy/pilates-studio-4.jpg" alt="The studio looking towards the window, with the treatment couch, the mat space and the exercise balls all in one room" width="1600" height="1200" loading="lazy">
+          <!-- The third gallery, and the smallest: two photographs of the room
+               itself, so the corner carries one frame and it is the plate's
+               opposite number rather than a row. That is what the section had
+               before — a plate and one inset — with the inset now pressable.
+
+               At two frames the row's width share works out wider than the
+               corner should hold and the 168px ceiling is what actually sizes
+               it; see the stylesheet. Deliberate, not a coincidence being
+               relied on: a lone frame should be the size the corner was drawn
+               for however the share is retuned. -->
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 2" data-reveal data-drift data-equipment-gallery>
+            <figure class="pilates-feature__shot pilates-gallery__plate">
+              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/room-mats-500.webp" data-large="/images/pilates/room-mats-1000.webp" data-xl="/images/pilates/room-mats-1346.webp" data-xl-width="1346" src="/images/pilates/room-mats-1000.webp" srcset="/images/pilates/room-mats-500.webp 500w, /images/pilates/room-mats-1000.webp 1000w, /images/pilates/room-mats-1346.webp 1346w" sizes="(max-width: 960px) 92vw, 52vw" alt="The studio laid out for a mat class, a roller and a pair of weighted balls on each mat, with the garden doors folded open at the far end" width="1000" height="1000" loading="lazy">
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous photograph of the room" hidden>←</button>
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next photograph of the room" hidden>→</button>
             </figure>
-            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
-              <img src="/images/legacy/pilates-studio-1.jpg" alt="The studio entrance, with the garden door, coat hooks and the balls and rollers stacked beyond" width="1600" height="1200" loading="lazy">
-            </figure>
+            <div class="pilates-gallery__picks" data-drift-lead="0.2">
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/room-rings-500.webp" data-large="/images/pilates/room-rings-1000.webp" src="/images/pilates/room-rings-500.webp" alt="The room from the other end, mats laid out with a magic circle and weighted balls on each, the folding doors closed onto the terrace" width="500" height="500" loading="lazy">
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1193,8 +1250,10 @@ function buildStudioContinuousPage() {
            this point, as .clinics- is on this page; both are older names the
            rest of the stylesheet still answers to.
 
-           Photographs are the same six Pexels files /pilates uses. Swapping
-           them for Studham is public/images/pilates and nothing else. -->
+           Photographs are Pexels stock, except the two machine sections below:
+           the Reformer carries three of the studio's own and the Chair five,
+           each as a gallery, and /pilates carries both galleries too. Swapping
+           the rest for Studham is public/images/pilates and nothing else. -->
       <section class="pilates-feature pilates-feature--equipment" id="reformer" aria-labelledby="studio-reformer-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-feature__content" data-reveal>
@@ -1208,13 +1267,44 @@ function buildStudioContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="/pilates#reformer">How a Reformer session runs <span>→</span></a>
           </div>
-          <div class="pilates-feature__media" data-reveal data-drift>
-            <figure class="pilates-feature__shot">
-              <img data-drift-lag="0.07" src="/images/pilates/reformer-25596677.webp" srcset="/images/pilates/reformer-25596677-700.webp 700w, /images/pilates/reformer-25596677.webp 1400w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying on the Reformer carriage, working through an exercise with the straps" width="1400" height="933" loading="lazy">
+          <!-- The gallery, written out here because this is where it was
+               first built; /pilates#reformer and /pilates#stability-chair
+               carry the same two, photograph for photograph. Three of the
+               studio's own Reformer, any of which can hold the plate: the two
+               that are not in it sit where the lapped inset sits in every
+               other section, and clicking one trades it with the plate's. The
+               arrows on the plate are the other way through: they move every
+               photograph along one place, round and round, and they are there
+               because a small frame does not announce that it is pressable and
+               a pair of arrows does.
+
+               Square, unlike the landscape plates elsewhere. Two of the three
+               photographs are portrait, and a switcher whose frames are not one
+               shape reflows the section on every click; square is the only crop
+               all three survive whole. The inset was already square, so the
+               arrangement still reads as a plate with small frames lapped over
+               its corner.
+
+               Sizes live in the markup rather than in the module: the module
+               trades attributes between two <img> elements and never learns
+               which photographs exist. --frame-count is here for the same
+               reason — it is every photograph in the section, the one in the
+               plate included, and the stylesheet sizes and places the corner
+               row off it. -->
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 3" data-reveal data-drift data-equipment-gallery>
+            <figure class="pilates-feature__shot pilates-gallery__plate">
+              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/reformer-carriage-500.webp" data-large="/images/pilates/reformer-carriage-1000.webp" data-xl="/images/pilates/reformer-carriage-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-carriage-1000.webp" srcset="/images/pilates/reformer-carriage-500.webp 500w, /images/pilates/reformer-carriage-1000.webp 1000w, /images/pilates/reformer-carriage-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying back on the Reformer carriage, knees bent and feet resting on the jump board at the far end" width="1000" height="1000" loading="lazy">
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Reformer photograph" hidden>←</button>
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next Reformer photograph" hidden>→</button>
             </figure>
-            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
-              <img src="/images/pilates/reformer-detail-25596680.webp" alt="Closer view of the Reformer carriage, straps and springs during a session" width="640" height="640" loading="lazy">
-            </figure>
+            <div class="pilates-gallery__picks" data-drift-lead="0.2">
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-straps-500.webp" data-large="/images/pilates/reformer-straps-1000.webp" data-xl="/images/pilates/reformer-straps-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-straps-500.webp" alt="Natasha guiding a client's foot into the Reformer strap, the ropes running back to the carriage" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-legs-500.webp" data-large="/images/pilates/reformer-legs-1000.webp" data-xl="/images/pilates/reformer-legs-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-legs-500.webp" alt="A client lying on the Reformer with both feet in the straps, legs raised straight above the carriage" width="500" height="500" loading="lazy">
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1232,13 +1322,32 @@ function buildStudioContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="/pilates#stability-chair">How a Chair session runs <span>→</span></a>
           </div>
-          <div class="pilates-feature__media" data-reveal data-drift>
-            <figure class="pilates-feature__shot">
-              <img data-drift-lag="0.07" src="/images/pilates/stability-chair-5473893.webp" srcset="/images/pilates/stability-chair-5473893-700.webp 700w, /images/pilates/stability-chair-5473893.webp 1400w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client holding a supported position along the top of the Stability Chair" width="1400" height="933" loading="lazy">
+          <!-- The Reformer gallery above, five photographs instead of three.
+               Nothing here is a second implementation of it: same classes,
+               same module, same square frames, and the row thins itself to fit
+               off --frame-count. The section is media-first, so the row lands
+               on the left edge — the stylesheet mirrors it the way it already
+               mirrors the lone inset. -->
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 5" data-reveal data-drift data-equipment-gallery>
+            <figure class="pilates-feature__shot pilates-gallery__plate">
+              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/chair-doors-500.webp" data-large="/images/pilates/chair-doors-1000.webp" data-xl="/images/pilates/chair-doors-1536.webp" data-xl-width="1536" src="/images/pilates/chair-doors-1000.webp" srcset="/images/pilates/chair-doors-500.webp 500w, /images/pilates/chair-doors-1000.webp 1000w, /images/pilates/chair-doors-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client balanced along the Stability Chair with one leg raised, the studio's garden doors open behind her" width="1000" height="1000" loading="lazy">
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Stability Chair photograph" hidden>←</button>
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next Stability Chair photograph" hidden>→</button>
             </figure>
-            <figure class="pilates-feature__shot pilates-feature__shot--inset" data-drift-lead="0.2">
-              <img src="/images/pilates/stability-chair-standing-5473901.webp" alt="A client working the Stability Chair pedal from a standing position, hands on the seat" width="640" height="640" loading="lazy">
-            </figure>
+            <div class="pilates-gallery__picks" data-drift-lead="0.2">
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/chair-seated-500.webp" data-large="/images/pilates/chair-seated-1000.webp" data-xl="/images/pilates/chair-seated-1536.webp" data-xl-width="1536" src="/images/pilates/chair-seated-500.webp" alt="Two clients sitting on Stability Chairs side by side, each holding a leg out straight in front of them" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/chair-standing-pair-500.webp" data-large="/images/pilates/chair-standing-pair-1000.webp" data-xl="/images/pilates/chair-standing-pair-1536.webp" data-xl-width="1536" src="/images/pilates/chair-standing-pair-500.webp" alt="Two clients standing on the seats of their Stability Chairs, hands on the handles" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/chair-guided-500.webp" data-large="/images/pilates/chair-guided-1000.webp" data-xl="/images/pilates/chair-guided-1536.webp" data-xl-width="1536" src="/images/pilates/chair-guided-500.webp" alt="One client steadying another by the shoulder as she sits on the Stability Chair" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/chair-class-500.webp" data-large="/images/pilates/chair-class-1000.webp" data-xl="/images/pilates/chair-class-1536.webp" data-xl-width="1536" src="/images/pilates/chair-class-500.webp" alt="An instructor talking two clients through a standing exercise on the Stability Chairs, the Reformer and mats behind them" width="500" height="500" loading="lazy">
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1997,11 +2106,177 @@ function initStudioReel() {
   ).observe(reel);
 }
 
+/* The equipment galleries: the Reformer and the Chair, on /studio and again on
+ * /pilates, and the pair of room shots on /studio. One plate each, and the
+ * photographs that are out of it sit lapped over the plate's corner as small
+ * frames. Two ways through them, and they are two ways through the same thing:
+ * press a frame and it trades with the plate, press an arrow and every
+ * photograph moves along one place.
+ *
+ * The arrows are why the section reads as a gallery at all. The corner frames
+ * are what else there is, but a reader has to work out that they are pressable
+ * before they say so; a pair of arrows on the picture is the one gesture
+ * everybody already knows, and it is the same pair the taping band on
+ * /sports-therapy carries. They go round rather than stopping at an end —
+ * there is no first or last photograph here, only the one in the plate.
+ *
+ * No list of photographs and no index. Both moves are the same operation: read
+ * what each frame is holding, deal the same photographs back into the frames in
+ * a different order. So the markup stays the single record of what exists,
+ * another photograph is another <button> and nothing here, and five galleries
+ * of three different counts run on this one function without it being told any
+ * of the counts.
+ *
+ * Every frame is square (see the note in the markup), so the plate's box is the
+ * same before and after and the section never reflows under the reader's
+ * thumb. The two sizes ride along in data- attributes because the plate wants
+ * the 1000 and a pick wants the 500, and which is which changes with each move.
+ *
+ * Without JS the plate holds one photograph and the picks show the rest: every
+ * photograph still on the page, no switching, nothing missing. The arrows ship
+ * hidden and are unhidden from here, so they never appear as controls that do
+ * nothing.
+ */
+function initEquipmentGallery() {
+  document.querySelectorAll("[data-equipment-gallery]").forEach((gallery) => {
+    const plate = gallery.querySelector("[data-gallery-plate]");
+    const picks = [...gallery.querySelectorAll("[data-gallery-pick]")];
+    const pickShots = picks.map((button) => button.querySelector("img"));
+    if (!plate || !picks.length || pickShots.some((shot) => !shot)) return;
+
+    /* The ring, in the order the reader sees it: the plate, then the corner
+       frames left to right. Everything below is a permutation of this. */
+    const frames = [plate, ...pickShots];
+
+    /* A pick's picture is already described by its <img> alt, but the button's
+       job is not "here is a photograph", it is "put this one in the plate".
+       Set here rather than in the markup so the no-JS rendering — where the
+       button does nothing — keeps the plain description instead. */
+    const label = (button) =>
+      button.setAttribute(
+        "aria-label",
+        `Show as the main photograph: ${button.querySelector("img").alt}`,
+      );
+    picks.forEach(label);
+
+    /* xl is the photograph at the size the camera actually shot it, and it is
+       optional: most of these were re-cut from their originals at 1346 or 1536,
+       but any whose original has gone missing carries small and large only. Its
+       width travels with it because the sizes differ per photograph — the
+       descriptor cannot be a constant the way 500 and 1000 can. */
+    const read = (shot) => ({
+      small: shot.dataset.small,
+      large: shot.dataset.large,
+      xl: shot.dataset.xl,
+      xlWidth: shot.dataset.xlWidth,
+      alt: shot.alt,
+    });
+
+    /* Which size a frame takes is a property of the frame, not of the
+       photograph: the plate is ~580 wide and the corner frames are a sixth of
+       that, and that stays true whatever is in them. */
+    const paint = (shot, photo) => {
+      shot.src = shot === plate ? photo.large : photo.small;
+      if (shot === plate) {
+        const candidates = [`${photo.small} 500w`, `${photo.large} 1000w`];
+        if (photo.xl) candidates.push(`${photo.xl} ${photo.xlWidth}w`);
+        shot.srcset = candidates.join(", ");
+      }
+      shot.alt = photo.alt;
+      shot.dataset.small = photo.small;
+      shot.dataset.large = photo.large;
+      /* Assigning an absent one writes the string "undefined" into the
+         attribute, which reads back as a truthy path on the next trade. */
+      if (photo.xl) {
+        shot.dataset.xl = photo.xl;
+        shot.dataset.xlWidth = photo.xlWidth;
+      } else {
+        delete shot.dataset.xl;
+        delete shot.dataset.xlWidth;
+      }
+    };
+
+    const deal = async (photos) => {
+      /* Fetch before swapping. The plate's photographs are lazy, so the one
+         being promoted has only ever been asked for at 500 wide; assigning the
+         1000 straight into a 580px frame leaves that frame empty for as long
+         as the network takes. Only the plate's is waited on — the frames it is
+         moving between are all showing 500s that are already here.
+
+         Waited on with load/error rather than decode(). decode() is the tidier
+         call and it is the wrong one here: on an <img> that was never put in
+         the document its promise can simply never settle — it did not settle
+         in testing, on a file that had already finished loading — and the swap
+         is behind this await, so a promise that never settles is a button that
+         does nothing. A failed load resolves too: the swap should still happen
+         and show the browser's own broken-image handling rather than silently
+         refusing to switch. */
+      await new Promise((resolve) => {
+        const warm = new Image();
+        warm.onload = resolve;
+        warm.onerror = resolve;
+        warm.src = photos[0].large;
+        if (warm.complete) resolve();
+      });
+
+      frames.forEach((shot, index) => paint(shot, photos[index]));
+      picks.forEach(label);
+    };
+
+    /* Presses queue rather than race. Each one reads the ring when its turn
+       comes and not when the button went down, so two quick taps on an arrow
+       are two steps along; read at press time they would both have read the
+       same ring and the second would have undone the first. */
+    let waiting = Promise.resolve();
+    const enqueue = (move) => {
+      waiting = waiting.then(move).catch(() => {});
+    };
+
+    /* The plate and one frame change hands; nothing else moves. */
+    const trade = (button) => {
+      const photos = frames.map(read);
+      const at = picks.indexOf(button) + 1;
+      [photos[0], photos[at]] = [photos[at], photos[0]];
+      return deal(photos);
+    };
+
+    /* Everything moves one place round the ring. Forwards, the plate takes the
+       frame nearest it, each frame takes the one after it, and the photograph
+       that was in the plate goes to the back of the row — the whole corner
+       shuffles along, which is what makes an arrow read as travel through a
+       set rather than as a second way of picking one out. */
+    const rotate = (step) => {
+      const photos = frames.map(read);
+      return deal(
+        photos.map(
+          (_, index) => photos[(index + step + photos.length) % photos.length],
+        ),
+      );
+    };
+
+    gallery.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-gallery-pick]");
+      if (button && gallery.contains(button)) {
+        enqueue(() => trade(button));
+        return;
+      }
+      const arrow = event.target.closest("[data-gallery-step]");
+      if (arrow && gallery.contains(arrow))
+        enqueue(() => rotate(Number(arrow.dataset.galleryStep)));
+    });
+
+    gallery
+      .querySelectorAll("[data-gallery-step]")
+      .forEach((arrow) => (arrow.hidden = false));
+  });
+}
+
 export function initPageFeatures() {
   // Ahead of the form guard: /studio carries the hero reel and no enquiry
   // form. (initStudioCarousel lived here too, until the carousel was replaced
   // by the two photographs now standing in the room section.)
   initStudioReel();
+  initEquipmentGallery();
 
   const form = document.querySelector("[data-enquiry-form]");
   if (!form) return;

@@ -4357,7 +4357,8 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    both directions, and scaling from anywhere else would put all the runway at
    one end and none at the other. */
 .pilates-feature__media.is-adrift .pilates-feature__shot img,
-.pilates-feature__media.is-adrift .pilates-feature__shot--inset {
+.pilates-feature__media.is-adrift .pilates-feature__shot--inset,
+.pilates-feature__media.is-adrift .pilates-gallery__picks {
   transform-origin: 50% 50%;
   will-change: transform;
 }
@@ -4385,6 +4386,188 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 .pilates-feature__grid--media-first .pilates-feature__shot--inset {
   right: auto;
   left: 0;
+}
+
+/* ---- The equipment galleries ---------------------------------------------
+   The Reformer and the Chair on /studio, the same two again on /pilates, and
+   the room shots on /studio: one rule set, and the only switchable media on
+   the site. It borrows the equipment layout wholesale and changes three
+   things: the plate is square, the corner carries small frames instead of the
+   lone inset, each of them a button that trades its photograph into the plate,
+   and the plate carries a pair of arrows that move the whole set along one.
+
+   Square because two of the three photographs are portrait. A frame that took
+   each source's own shape would change the plate's height on every press and
+   walk the rest of the page up and down under the reader; a landscape crop of
+   a portrait photograph loses the client. Square is the shape all three
+   survive, and it was already the inset's shape, so the arrangement is the
+   same arrangement. */
+.pilates-gallery__plate img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+/* The arrows sit inside the plate's own frame rather than in the media box
+   around it. The box reserves a strip underneath for the corner row, so its
+   middle is not the picture's middle — hung off the box the pair came out low
+   by half that strip. Hung off the frame, 50% is 50% of what the reader sees.
+
+   The frame already clips (the photograph inside it is scaled for the scroll
+   drift), so the pair is inside a clipping box on purpose: an arrow can never
+   end up outside the picture it belongs to. */
+.pilates-gallery__plate {
+  position: relative;
+}
+
+/* The same control the taping band on /sports-therapy uses, to the pixel: a
+   44px white disc straight onto the photograph with no strip drawn behind it.
+   Two galleries on two pages that both mean "there are more of these" should
+   not be two different objects.
+
+   What is not borrowed is the disabled state. That band is a strip and a strip
+   has two ends; this is a ring, so → never runs out, and an arrow that cannot
+   be spent needs no way of saying it has been. */
+.pilates-gallery__arrow {
+  position: absolute;
+  top: 50%;
+  /* The photograph under it is a compositor layer of its own while the drift
+     is running, so the arrows say where they sit rather than relying on being
+     later in the markup. */
+  z-index: 2;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: oklch(100% 0 0 / 0.9);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  place-items: center;
+  transform: translateY(-50%);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.pilates-gallery__arrow:hover {
+  background: oklch(100% 0 0);
+  color: var(--brand);
+}
+
+.pilates-gallery__arrow--prev {
+  left: clamp(12px, 1.6vw, 22px);
+}
+
+.pilates-gallery__arrow--next {
+  right: clamp(12px, 1.6vw, 22px);
+}
+
+/* How far the row hangs past the foot of the plate, and the whole reason the
+   frames are sized here rather than on the button.
+
+   .pilates-feature__media reserves a fixed clamp(46px, 6vw, 88px) below the
+   plate, which is right for the lone inset — that one is 27% of the plate and
+   the reserved strip is about half its height, so it laps the corner half in,
+   half out. A gallery's frames are smaller than that and get smaller again as
+   the count goes up, so against a fixed strip they slid downwards: the
+   Reformer's three kept a third of themselves on the plate and the Chair's
+   five cleared its bottom edge entirely and sat in the margin below, touching
+   nothing. They read as having fallen off.
+
+   So the strip is derived from the frame instead of the frame being left to
+   the strip: half a frame's height, whatever a frame currently is. Every count
+   then laps the corner the same way the single inset does, and --frame-count
+   is free to change without anything else being retuned.
+
+   --pick-size carries a percentage, which resolves against the containing
+   block's width in both places it is used — the row for the button, the grid
+   track for the padding. Those are the same width, so the two agree. */
+.pilates-feature__media.pilates-gallery {
+  --pick-size: clamp(56px, calc(84% / var(--frame-count, 3)), 168px);
+  /* Half a frame. Boxes are border-box here, so --pick-size is the whole
+     frame, paper border included, and half of it is what hangs below. */
+  padding-bottom: calc(var(--pick-size) / 2);
+}
+
+/* Spans the plate rather than hugging the corner, and pushes its contents to
+   the outer edge instead. An absolutely positioned row would otherwise be
+   shrink-to-fit, which leaves the picks' percentage width resolving against a
+   box their own width is deciding — they collapsed to their borders. Stretched
+   edge to edge, the percentage has the plate to measure against. The row is
+   then transparent to the cursor so only the frames themselves are pressable. */
+.pilates-gallery__picks {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: clamp(8px, 1.2vw, 16px);
+  pointer-events: none;
+}
+
+.pilates-feature__grid--media-first .pilates-gallery__picks {
+  justify-content: flex-start;
+}
+
+/* Sized off --pick-size above. --frame-count counts every photograph in the
+   section, the one in the plate included, because that is what decides how
+   crowded the corner gets: 84% split that many ways puts the Reformer's three
+   at 28% — a shade over the lone inset's 27%, which is the size this corner
+   was drawn for — and lets the Chair's five fall to 17% on their own. The
+   floor is what a five-up row can hold on a phone without overrunning the
+   plate; the ceiling stops a two-up row growing into the text column on a very
+   wide screen. */
+.pilates-gallery__pick {
+  width: var(--pick-size);
+  padding: 0;
+  border: 8px solid var(--paper);
+  background: var(--paper);
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    transform 0.32s ease,
+    filter 0.32s ease;
+}
+
+.pilates-gallery__pick img {
+  display: block;
+  width: 100%;
+  /* Not redundant beside aspect-ratio. The width and height attributes on an
+     <img> are presentational hints, so the 500 in the markup wins over a
+     height the ratio would otherwise work out, and the frames came out 500
+     tall inside a 107-wide button. The plates get this from
+     .pilates-feature__shot img; the picks are not inside one. */
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  /* The same grade the plates carry, so a photograph does not change colour on
+     its way into the plate. */
+  filter: saturate(0.68) contrast(0.96);
+}
+
+/* The affordance. These read as photographs first and controls second, which
+   is the point — but a photograph that does nothing when pressed and one that
+   swaps the plate should not look identical, so the hover lifts the frame the
+   way the cursor already promises. */
+.js .pilates-gallery__pick:hover {
+  transform: translateY(-4px);
+}
+
+.js .pilates-gallery__pick:hover img {
+  filter: saturate(0.86) contrast(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pilates-gallery__pick {
+    transition: none;
+  }
+
+  .js .pilates-gallery__pick:hover {
+    transform: none;
+  }
 }
 
 .pilates-feature__content {
@@ -4719,77 +4902,83 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   overflow: hidden;
   color: var(--on-dark);
   background: var(--navy);
-  isolation: isolate;
 }
 
-/* Photograph plus a left-to-right navy wash: near-solid behind the copy,
-   clearing across to the right so the picture comes through. The wash is the
-   ::after so the image can be swapped by changing one background-image.
+/* Two columns: the copy, then the drawing. There was a photograph of a golf
+   swing in this band as well, four frames of it, and it is gone — 612px was all
+   the picture there ever was, so it could only ever be small, and small next to
+   a labelled drawing it had nothing to add. One picture, given the room the two
+   were sharing.
 
-   The photograph is a golfer at the top of the follow-through, shot from
-   behind against a soft evening sky — the whole body turned around its
-   centre, which is the sentence this band is making. It replaces an empty
-   fairway: a course with nobody on it said where golf happens, not what
-   this section is for.
-
-   Where he sits in the file is deliberate. The band is always taller than
-   the picture's 2.18, so cover scales it by height and the crop is
-   horizontal only — nothing is ever taken off the top or bottom, and 72%
-   below decides which slice of the width is on screen. He is cut to sit at
-   about 0.68 across so he lands in the part of the band the wash has
-   cleared, and stays in frame down to the narrow slice a phone shows. Any
-   replacement needs the same: subject two thirds across, or he disappears
-   behind the solid end of the wash. */
-.pilates-golf__backdrop {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background-image: url("/images/golf-backdrop-6256591-1600.webp");
-  background-position: 72% center;
-  background-size: cover;
+   Even halves. The drawing carries fifteen labels and its type scales with the
+   column, so the column width IS the type size, and this is the widest it can
+   be without leaving the copy short of a comfortable measure. */
+.pilates-golf__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(40px, 4.2vw, 72px);
+  align-items: center;
 }
 
-/* Scroll drift (see scroll-drift.js). Nothing is scaled here — the backdrop is
-   a box with a cover background rather than an <img>, so the runway is bought
-   by overhanging the box past the band instead: 10% of the band's height above
-   and 10% below, against the 7% of its own (now 120%) height that the markup
-   spends, which comes to 8.4%. The band is overflow:hidden, so the overhang
-   never shows.
-
-   The wash lives on this element's ::after and so travels with it, which is
-   what stops the picture arriving un-dimmed at the edges under the copy. */
-.pilates-golf.is-adrift .pilates-golf__backdrop {
-  inset: -10% 0;
-  will-change: transform;
+.pilates-golf__content {
+  grid-column: 1;
 }
 
-/* The 1600 crop is already soft at 2x on a wide desktop, and the band runs
-   the full viewport — but it sits under a heavy wash, so the larger file is
-   only worth loading where it is actually visible. */
-@media (min-width: 1100px) {
-  .pilates-golf__backdrop {
-    background-image: url("/images/golf-backdrop-6256591-2400.webp");
+/* Knocked out of the navy with no plate behind it: no border, no card, no
+   panel. The band is one colour and the body is drawn straight onto it. */
+.pilates-golf__figure {
+  margin: 0;
+  grid-column: 2;
+}
+
+.pilates-golf__figure img {
+  display: block;
+  width: min(100%, 620px);
+  height: auto;
+  margin-inline: auto;
+}
+
+/* 1000 is where the drawing's column falls under ~410px and the muscle names go
+   under 13px — measured, not guessed. Below it the copy and the drawing give up
+   the split and run one under the other, the drawing at a width that keeps its
+   labels legible. */
+@media (max-width: 1000px) {
+  .pilates-golf__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--pilates-block);
+  }
+
+  .pilates-golf__content,
+  .pilates-golf__figure {
+    grid-column: 1;
+  }
+
+  .pilates-golf__figure img {
+    width: min(100%, 420px);
   }
 }
 
-.pilates-golf__backdrop::after {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    oklch(17.4% 0.048 275) 0%,
-    oklch(19% 0.052 276 / 0.96) 34%,
-    oklch(21.5% 0.055 277 / 0.74) 62%,
-    oklch(21.5% 0.055 277 / 0.34) 100%
-  );
-  content: "";
-}
+/* On a phone the column is narrower than the drawing needs, and the labels are
+   the first thing to go: inside the gutters they land around 10px. So the
+   drawing alone breaks out to the full width of the screen, which buys back
+   about a sixth and puts them near 12. That is the ceiling for this file —
+   fifteen labels do not fit a phone at a comfortable size, and the real fix is
+   a second drawing carrying only the muscles this section's copy names, with
+   the leader lines of the dropped ones erased rather than left pointing at
+   nothing. Worth doing; it needs a decision about which ones survive. */
+@media (max-width: 700px) {
+  /* Narrow enough that the picture is as wide as the screen, so the gutter it
+     was set against would only push it off the right edge. It goes back to
+     centre and takes the whole width. */
+  .pilates-golf__photo {
+    background-position: center;
+  }
 
-.pilates-golf__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.58fr) minmax(0, 0.42fr);
-  gap: clamp(70px, 10vw, 155px);
-  align-items: center;
+  .pilates-golf__figure img {
+    width: 100vw;
+    max-width: none;
+    margin-inline: calc(50% - 50vw);
+  }
 }
 
 .pilates-golf .section-kicker {
@@ -4867,8 +5056,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 @media (max-width: 1200px) {
   .pilates-hero__grid,
-  .pilates-feature__grid,
-  .pilates-golf__grid {
+  .pilates-feature__grid {
     gap: 55px;
   }
 
@@ -4885,7 +5073,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   /* Stacked, the `gap` that was separating two columns is now separating the
      two halves of a section top to bottom, so it takes the page's own block
      step rather than the 55px left over from the wide layout. */
-  .pilates-hero__grid, .pilates-feature__grid, .pilates-golf__grid {
+  .pilates-hero__grid, .pilates-feature__grid {
     grid-template-columns: 1fr;
     gap: var(--pilates-block);
   }
@@ -4951,16 +5139,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
   .pilates-feature__media {
     width: 100%;
-  }
-
-  /* Stacked, the copy sits over the whole photograph rather than the dark
-     left third of it, so the wash goes flat and opaque. */
-  .pilates-golf__backdrop::after {
-    background: linear-gradient(
-      180deg,
-      oklch(17.4% 0.048 275 / 0.94) 0%,
-      oklch(21.5% 0.055 277 / 0.9) 100%
-    );
   }
 }
 
@@ -5603,23 +5781,26 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 /* The same two chapters again on /pilates, pre- and postnatal. These two used
    to be the softest photographs on the site — legacy stock at 412x291 and
-   500x302 blown up to fill a panel several times that. They are Pexels stock
-   now, cut 4:5 from portrait originals, which is the way round a half-width
-   full-height panel wants and enough resolution to be sharp on it.
+   500x302 blown up to fill a panel several times that. Both are cut 4:5 now,
+   which is the way round a half-width full-height panel wants.
 
    Neither sits centred, because a near-square panel takes a fifth of the
    height out of a 4:5 photograph and both of these fill their frame top to
-   bottom. The prenatal client is a standing figure, so the crop is pinned to
-   the top — that keeps her head and takes the floor instead, where centring
-   it cut her across the eyes. The postnatal pair run from the child at the
-   top to the mother's head at the very foot, so that one is held just below
-   centre to keep her face in. */
+   bottom. The prenatal photograph is cut tight — raised fingertips nearly
+   touch the top edge and the folded shins the bottom — so a short panel has
+   to lose something either way. Pinned to the bottom it lets the arms run
+   out of the top of the frame, which reads as an editorial crop, and keeps
+   every face, bump and mat; pinned top or centred it would cut into heads
+   or slice the crossed legs instead.
+   The postnatal frame runs from the child held up at the top to the mat at
+   the foot, so it is held above centre: what a short window takes off the
+   bottom is bare floor, and what it would take off the top is the child. */
 #prenatal .story__media img {
-  object-position: center top;
+  object-position: center bottom;
 }
 
 #postnatal .story__media img {
-  object-position: center 55%;
+  object-position: center 40%;
 }
 
 /* A short window still has to hold a whole chapter on the fold, so the copy
@@ -5770,9 +5951,60 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* The room is at the far end of every one of these; the near floor is not
-     what the photograph is about. */
-  object-position: center 38%;
+  /* Square photographs on a 2:1 stage, so the crop keeps half the height and
+     which half is a per-photograph decision — the room wants the open doors,
+     the two machine shots want the person on them. Each panel sets its own
+     --view-focus in the markup; 50% is the plain middle if one ever doesn't. */
+  object-position: center var(--view-focus, 50%);
+}
+
+/* The panels are switched with [hidden], and the modifier below sets a
+   display, so the stack needs this: a display of any kind on a [hidden]
+   element beats the UA sheet's display: none and the panel shows through the
+   photograph on the cell beneath it. */
+.studio-look__view[hidden] {
+  display: none;
+}
+
+/* The view with no photograph in it yet. It fills the stage like the others,
+   so nothing about the band's height or the row above it changes when the
+   couch is the one you picked. */
+.studio-look__view--soon {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 10px;
+  padding: var(--space-s);
+  /* The stage's own white would read as a photograph that failed to load, so
+     the panel takes the faintest wash of brand and a hairline to sit in. */
+  border-radius: inherit;
+  background: oklch(41.9% 0.117 275 / 0.045);
+  box-shadow: inset 0 0 0 1px var(--line);
+  text-align: center;
+}
+
+.studio-look__soon-mark {
+  width: 40px;
+  height: 40px;
+  color: var(--brand);
+  opacity: 0.35;
+}
+
+.studio-look__soon-label {
+  margin: 0;
+  color: var(--brand);
+  font-size: var(--label-lg);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-lg-track);
+  text-transform: uppercase;
+}
+
+.studio-look__soon-line {
+  max-width: 26ch;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
 }
 
 .studio-look__view.is-entering {
