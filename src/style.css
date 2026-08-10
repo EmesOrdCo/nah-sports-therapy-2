@@ -4710,14 +4710,18 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 /* Heading left, timetable right. The accent rule is drawn on the grid rather
    than the heading block, so it runs the height of the taller column — top of
-   the title down to the last line of the note under the card. */
+   the title down to the last line of the note under the card. The timetable is
+   the shorter column, so it centres against that rule rather than hanging from
+   the top of it. */
 .pilates-group__grid {
   display: grid;
-  margin-top: var(--pilates-block);
-  grid-template-columns: minmax(0, 0.78fr) minmax(0, 2fr);
+  /* No block margin of its own: the section's own padding then sets the space
+     above and below equally, so the block sits centred in its band. */
+  margin-top: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
   gap: clamp(36px, 5vw, 90px);
   border-left: 2px solid var(--brand);
-  align-items: start;
+  align-items: center;
 }
 
 .pilates-group__intro {
@@ -4740,6 +4744,23 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 .pilates-timetable {
   margin-top: 0;
+}
+
+/* Side by side, it is the navy card that should sit level with the middle of
+   the accent rule, so the caption is lifted out of the flow above it — left in
+   the flow it pushes the card half its own height below centre. Stacked, the
+   caption goes back to being an ordinary block (see the 960px breakpoint). */
+@media (min-width: 961px) {
+  .pilates-timetable {
+    position: relative;
+  }
+
+  .pilates-timetable > .pilates-detail-label {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    left: 0;
+  }
 }
 
 /* Caption above the card rather than a bordered band across it, so the card
@@ -5061,7 +5082,17 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   }
 
   .pilates-group__grid {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.8fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.38fr);
+  }
+
+  /* The card is narrower here, so the day panel gives up width first — the
+     three time tracks need it more than the day label does. */
+  .pilates-timetable__row {
+    grid-template-columns: minmax(0, 128px) minmax(0, 1fr);
+  }
+
+  .pilates-timetable__row p {
+    padding: 28px 16px;
   }
 }
 
@@ -5775,6 +5806,15 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   object-position: center top;
 }
 
+/* Only the opening portrait wants the top pin — a near-square panel would cut
+   the crown of Natasha's head. The treatment photographs that follow are
+   landscape and hold the hands in the middle of the frame, so a centred crop
+   keeps the working hands whichever way the panel goes short; pinned top it
+   is exactly those hands, low in the frame, that would be lost. */
+#sports-therapy .story__slide + .story__slide img {
+  object-position: center;
+}
+
 #pilates .story__media img {
   object-position: 48% 42%;
 }
@@ -5801,6 +5841,109 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 #postnatal .story__media img {
   object-position: center 40%;
+}
+
+/* The home page's two chapters hold a strip of photographs rather than one:
+   the same snap-scrolling gallery as the taping band on /sports-therapy —
+   see the [data-gallery] block in main.js — dressed for this panel. The
+   track is absolute so the panel keeps taking its height from the chapter
+   rather than from whichever photograph is showing; the sticky panel is
+   already positioned, so the track has its containing block. The img rules
+   above (fill the frame, cover, the per-chapter object-position) apply to
+   every slide unchanged. */
+.story__track {
+  position: absolute;
+  display: flex;
+  inset: 0;
+  overflow-x: auto;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  /* The bar would sit across the photographs and is redundant next to the
+     dots, which say the same thing and say it more precisely. */
+  scrollbar-width: none;
+}
+.story__track::-webkit-scrollbar {
+  display: none;
+}
+
+.story__slide {
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+.story__arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: oklch(100% 0 0 / 0.9);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  place-items: center;
+  transform: translateY(-50%);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+.story__arrow:hover {
+  background: oklch(100% 0 0);
+  color: var(--brand);
+}
+.story__arrow--prev {
+  left: clamp(12px, 1.6vw, 22px);
+}
+.story__arrow--next {
+  right: clamp(12px, 1.6vw, 22px);
+}
+/* Disabled rather than removed at the two ends: a control that disappears
+   moves the other one, and the reader loses the place they were aiming at. */
+.story__arrow[disabled] {
+  cursor: default;
+  opacity: 0.28;
+}
+
+/* Straight onto the photograph, with no strip drawn behind them. Each dot
+   carries its own contrast rather than relying on what is behind it — the
+   ring is a shadow rather than a border so it does not eat into the 9px. */
+.story__dots {
+  position: absolute;
+  bottom: clamp(16px, 2vw, 26px);
+  left: 50%;
+  display: flex;
+  gap: 9px;
+  transform: translateX(-50%);
+}
+
+.story__dot {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: oklch(100% 0 0 / 0.8);
+  box-shadow: 0 0 0 1px oklch(23.2% 0.055 277 / 0.4);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+.story__dot:hover {
+  background: oklch(100% 0 0);
+}
+.story__dot.is-active {
+  background: var(--brand);
+  box-shadow: 0 0 0 2px oklch(100% 0 0 / 0.85);
 }
 
 /* A short window still has to hold a whole chapter on the fold, so the copy
@@ -7204,6 +7347,21 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     aspect-ratio: 4 / 5;
   }
 
+  /* Unpinned, the gallery panel has no chapter height to take, so it states
+     its own — the same 4:3 the single photographs above get. Relative rather
+     than the static the rule above leaves, because the track inside is
+     absolute and needs its box back. The slides then fill that frame; the
+     aspect-ratio belongs to the panel here, not to each photograph. */
+  .story__media--gallery {
+    position: relative;
+    aspect-ratio: 4 / 3;
+  }
+
+  .story__media--gallery img {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
   .story__copy {
     padding: var(--space-l) var(--page-gutter);
   }
@@ -7289,6 +7447,18 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 .pilates-feature--equipment,
 .pilates-feature--group {
   background: var(--paper);
+}
+
+/* These three share one ground, so there is no band edge to read — the eye
+   measures this block against the neighbouring content instead. The equipment
+   section's closing space already sits above it, so its own top padding was
+   being counted twice and the block hung low between its neighbours. Only
+   side by side: stacked, the equipment gallery runs to its own bottom edge and
+   this padding is the whole of the space above. */
+@media (min-width: 961px) {
+  .pilates-feature--group {
+    padding-top: 0;
+  }
 }
 
 .pilates-retreats {
@@ -8675,10 +8845,11 @@ p.fascia-map__claim {
   }
 }
 
-/* Asked for less motion, the strip stops sliding — it still moves between
-   photographs, it just arrives rather than travels. */
+/* Asked for less motion, the strips stop sliding — they still move between
+   photographs, they just arrive rather than travel. */
 @media (prefers-reduced-motion: reduce) {
-  .taping-band__track {
+  .taping-band__track,
+  .story__track {
     scroll-behavior: auto;
   }
 }

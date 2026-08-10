@@ -463,7 +463,10 @@ if (studioTabs.length) {
     document.getElementById(tab.getAttribute("aria-controls")),
   );
 
+  let studioAt = 0;
+
   const showStudioView = (index, { focus = false } = {}) => {
+    studioAt = index;
     studioTabs.forEach((tab, position) => {
       const active = position === index;
       tab.classList.toggle("is-active", active);
@@ -487,8 +490,93 @@ if (studioTabs.length) {
     if (focus) studioTabs[index].focus();
   };
 
+  /* The four views advance on their own, so the band shows what it has without
+     waiting to be clicked — most visitors never touch a tablist, and three of
+     these four were only ever reachable that way.
+
+     It stops for the pointer resting on the band, for focus inside it, and for
+     good once the visitor picks a view themselves — after that the band moving
+     on its own is the page arguing with them.
+
+     studioSeen starts true and the observer only ever narrows it. Failing open
+     matters more than the saved work: an observer that never reports — a
+     document the browser considers hidden does not run them at all — leaves a
+     band that sits on one photograph forever, and nothing about that looks
+     like a bug worth investigating. Cycling unseen costs a class toggle. */
+  const studioBand = document.getElementById("studio-look");
+  const STUDIO_DWELL = 5000;
+  let studioTimer = 0;
+  let studioTaken = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let studioSeen = true;
+  let studioHeld = false;
+
+  const studioHalt = () => {
+    if (studioTimer) {
+      clearTimeout(studioTimer);
+      studioTimer = 0;
+    }
+  };
+
+  /* A chain of timeouts rather than an interval: every pause and resume then
+     starts a whole dwell, so a view never flicks past because the timer had
+     most of its run behind it when the pointer left. */
+  const studioRun = () => {
+    studioHalt();
+    if (studioTaken || !studioSeen || studioHeld) return;
+    studioTimer = window.setTimeout(() => {
+      showStudioView((studioAt + 1) % studioTabs.length);
+      studioRun();
+    }, STUDIO_DWELL);
+  };
+
+  const studioSurrender = () => {
+    studioTaken = true;
+    studioHalt();
+  };
+
+  if (studioBand) {
+    new IntersectionObserver(
+      ([entry]) => {
+        studioSeen = entry.isIntersecting;
+        studioRun();
+      },
+      /* Overlap with the middle of the viewport, not a fraction of the band.
+         The band is taller than a laptop viewport — 943px against 860 here —
+         so a ratio threshold is measured against a whole that never fits on
+         screen: at 0.4 it happens to pass, and on any window shorter than 40%
+         of the band it silently never fires and the views never advance. This
+         asks the question that is actually meant, and it stays answerable at
+         every window size. */
+      { rootMargin: "-15% 0px -15% 0px" },
+    ).observe(studioBand);
+
+    const hold = (held) => {
+      studioHeld = held;
+      studioRun();
+    };
+    /* The labels, not the band. The band is taller than the window it is read
+       in, so it passes under a resting cursor on the way up the screen and
+       pointerenter fires without anyone reaching for anything — hang the pause
+       on the whole thing and it stops the first time it is scrolled to and
+       never starts again, which looks exactly like a feature that was never
+       built. Over the labels a hovering pointer means something: that is the
+       one part of the band a reader points at on purpose. */
+    const studioRow = studioBand.querySelector(".studio-look__tabs");
+    if (studioRow) {
+      studioRow.addEventListener("pointerenter", () => hold(true));
+      studioRow.addEventListener("pointerleave", () => hold(false));
+    }
+    studioBand.addEventListener("focusin", () => hold(true));
+    studioBand.addEventListener("focusout", () => hold(false));
+  }
+
+  studioRun();
+
   studioTabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => showStudioView(index));
+    tab.addEventListener("click", () => {
+      studioSurrender();
+      showStudioView(index);
+    });
     tab.addEventListener("keydown", (event) => {
       const step =
         event.key === "ArrowRight" || event.key === "ArrowDown"
@@ -502,14 +590,15 @@ if (studioTabs.length) {
       else if (event.key === "End") next = studioTabs.length - 1;
       if (next === null) return;
       event.preventDefault();
+      studioSurrender();
       showStudioView(next, { focus: true });
     });
   });
 }
 
-/* The taping band on /sports-therapy: four photographs in a snapping strip down
-   the left of the band — see .taping-band in site-content.js and the
-   stylesheet.
+/* Photographs in a snapping strip: the taping band on /sports-therapy and the
+   two story chapters on the home page — see .taping-band in site-content.js,
+   the story chapters in index.html, and both in the stylesheet.
 
    The strip is the mechanism and it needs none of this: it scrolls, it snaps,
    and on a phone a swipe is already the natural way through it. What is added
@@ -522,13 +611,13 @@ if (studioTabs.length) {
    Position is read back off the scroll rather than held in a variable: a drag
    and a button press then agree by construction, because there is only one
    place either of them can be read from. */
-const tapingGallery = document.querySelector("[data-taping-gallery]");
-if (tapingGallery) {
-  const track = tapingGallery.querySelector("[data-taping-track]");
-  const slides = [...tapingGallery.querySelectorAll("[data-taping-slide]")];
-  const dotRow = tapingGallery.querySelector("[data-taping-dots]");
-  const dots = [...tapingGallery.querySelectorAll("[data-taping-go]")];
-  const arrows = [...tapingGallery.querySelectorAll("[data-taping-step]")];
+document.querySelectorAll("[data-gallery]").forEach((gallery) => {
+  const track = gallery.querySelector("[data-gallery-track]");
+  const slides = [...gallery.querySelectorAll("[data-gallery-slide]")];
+  const dotRow = gallery.querySelector("[data-gallery-dots]");
+  const dots = [...gallery.querySelectorAll("[data-gallery-go]")];
+  const arrows = [...gallery.querySelectorAll("[data-gallery-step]")];
+  if (!track || slides.length < 2) return;
 
   // Whichever slide's left edge is nearest the track's own left edge. Compared
   // as distances rather than by dividing by the slide width, so a track that is
@@ -557,7 +646,7 @@ if (tapingGallery) {
       dot.setAttribute("aria-current", position === index ? "true" : "false");
     });
     arrows.forEach((arrow) => {
-      const step = Number(arrow.dataset.tapingStep);
+      const step = Number(arrow.dataset.galleryStep);
       const spent = step < 0 ? index === 0 : index === slides.length - 1;
       /* A disabled button drops the focus that was on it, and a keyboard reader
          arriving at the last photograph would be put back at the top of the
@@ -572,12 +661,12 @@ if (tapingGallery) {
   arrows.forEach((arrow) => {
     arrow.hidden = false;
     arrow.addEventListener("click", () =>
-      goTo(currentIndex() + Number(arrow.dataset.tapingStep)),
+      goTo(currentIndex() + Number(arrow.dataset.galleryStep)),
     );
   });
   if (dotRow) dotRow.hidden = false;
   dots.forEach((dot) => {
-    dot.addEventListener("click", () => goTo(Number(dot.dataset.tapingGo)));
+    dot.addEventListener("click", () => goTo(Number(dot.dataset.galleryGo)));
   });
 
   /* The strip is a list, not a widget, so it is not its own tab stop and there
@@ -589,7 +678,7 @@ if (tapingGallery) {
   // The snap point is measured off laid-out boxes, so a resize moves it.
   window.addEventListener("resize", syncControls);
   syncControls();
-}
+});
 
 /* The quote band under the studio flies up as you scroll down to it and sinks
    back as you scroll away, one half leading the other. Scrubbed

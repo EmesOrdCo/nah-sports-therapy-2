@@ -321,14 +321,107 @@
               >
             </div>
           </div>
-          <figure class="story__media">
-            <img
-              src="/images/natasha-therapy-1011.webp"
-              alt="Natasha Hadland in NJH kit, standing in the studio"
-              width="1011"
-              height="1264"
-              loading="lazy"
-            />
+          <!-- The panel is a strip of photographs rather than one: it scrolls
+               and snaps on its own, and main.js unhides the arrows and dots —
+               the way through it on a laptop, where there is nothing to swipe.
+               See the [data-gallery] block there. -->
+          <figure class="story__media story__media--gallery" data-gallery>
+            <ul class="story__track" data-gallery-track>
+              <li class="story__slide" data-gallery-slide>
+                <img
+                  src="/images/natasha-therapy-1011.webp"
+                  alt="Natasha Hadland in NJH kit, standing in the studio"
+                  width="1011"
+                  height="1264"
+                  loading="lazy"
+                />
+              </li>
+              <li class="story__slide" data-gallery-slide>
+                <img
+                  src="/images/therapy/back-release-1000.webp"
+                  srcset="
+                    /images/therapy/back-release-500.webp   500w,
+                    /images/therapy/back-release-1000.webp 1000w,
+                    /images/therapy/back-release-1504.webp 1504w
+                  "
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt="One hand stacked over the other, pressing along the length of a client&#8217;s back on the treatment couch"
+                  width="1504"
+                  height="938"
+                  loading="lazy"
+                />
+              </li>
+              <!-- The same photograph the taping band on /sports-therapy opens
+                   its low-back application with; one file, no responsive set. -->
+              <li class="story__slide" data-gallery-slide>
+                <img
+                  src="/images/taping/taping-5794060.webp"
+                  alt="Blue kinesiology tape laid in crossing strips across a client&#8217;s lower back as they lean forward on a treatment couch"
+                  width="1100"
+                  height="1650"
+                  loading="lazy"
+                />
+              </li>
+              <li class="story__slide" data-gallery-slide>
+                <img
+                  src="/images/therapy/calf-release-1000.webp"
+                  srcset="
+                    /images/therapy/calf-release-500.webp   500w,
+                    /images/therapy/calf-release-1000.webp 1000w,
+                    /images/therapy/calf-release-1590.webp 1590w
+                  "
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt="Both hands working into a client&#8217;s calf, the ankle resting on a rolled white towel"
+                  width="1590"
+                  height="1061"
+                  loading="lazy"
+                />
+              </li>
+            </ul>
+            <button
+              class="story__arrow story__arrow--prev"
+              type="button"
+              data-gallery-step="-1"
+              aria-label="Previous Sports Therapy photograph"
+              hidden
+            >
+              &#8592;
+            </button>
+            <button
+              class="story__arrow story__arrow--next"
+              type="button"
+              data-gallery-step="1"
+              aria-label="Next Sports Therapy photograph"
+              hidden
+            >
+              &#8594;
+            </button>
+            <div class="story__dots" data-gallery-dots hidden>
+              <button
+                class="story__dot"
+                type="button"
+                data-gallery-go="0"
+                aria-label="Show Natasha in the studio"
+              ></button>
+              <button
+                class="story__dot"
+                type="button"
+                data-gallery-go="1"
+                aria-label="Show soft tissue work along the back"
+              ></button>
+              <button
+                class="story__dot"
+                type="button"
+                data-gallery-go="2"
+                aria-label="Show kinesiology tape applied to the lower back"
+              ></button>
+              <button
+                class="story__dot"
+                type="button"
+                data-gallery-go="3"
+                aria-label="Show soft tissue work on the calf"
+              ></button>
+            </div>
           </figure>
         </article>
 
@@ -351,14 +444,128 @@
               >
             </div>
           </div>
-          <figure class="story__media">
-            <img
-              src="/images/pilates-class-1050.webp"
-              alt="Natasha guiding a small group Pilates class in the Studham studio, mats laid out and the garden doors open"
-              width="1050"
-              height="1400"
-              loading="lazy"
-            />
+          <figure class="story__media story__media--gallery" data-gallery>
+            <ul class="story__track" data-gallery-track>
+              <li class="story__slide" data-gallery-slide>
+                <img
+                  src="/images/pilates-class-1050.webp"
+                  alt="Natasha guiding a small group Pilates class in the Studham studio, mats laid out and the garden doors open"
+                  width="1050"
+                  height="1400"
+                  loading="lazy"
+                />
+              </li>
+              <li class="story__slide" data-gallery-slide>
+                <img
+                  src="/images/pilates/reformer-carriage-1000.webp"
+                  srcset="
+                    /images/pilates/reformer-carriage-500.webp   500w,
+                    /images/pilates/reformer-carriage-1000.webp 1000w,
+                    /images/pilates/reformer-carriage-1536.webp 1536w
+                  "
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt="A client lying back on the Reformer carriage, knees bent and feet resting on the jump board at the far end"
+                  width="1000"
+                  height="1000"
+                  loading="lazy"
+                />
+              </li>
+              <li class="story__slide" data-gallery-slide>
+                <img
+                  src="/images/pilates/chair-doors-1000.webp"
+                  srcset="
+                    /images/pilates/chair-doors-500.webp   500w,
+                    /images/pilates/chair-doors-1000.webp 1000w,
+                    /images/pilates/chair-doors-1536.webp 1536w
+                  "
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt="A client balanced along the Stability Chair with one leg raised, the studio&#8217;s garden doors open behind her"
+                  width="1000"
+                  height="1000"
+                  loading="lazy"
+                />
+              </li>
+              <li class="story__slide" data-gallery-slide>
+                <img
+                  src="/images/pilates/reformer-straps-1000.webp"
+                  srcset="
+                    /images/pilates/reformer-straps-500.webp   500w,
+                    /images/pilates/reformer-straps-1000.webp 1000w,
+                    /images/pilates/reformer-straps-1536.webp 1536w
+                  "
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt="Natasha guiding a client&#8217;s foot into the Reformer strap, the ropes running back to the carriage"
+                  width="1000"
+                  height="1000"
+                  loading="lazy"
+                />
+              </li>
+              <li class="story__slide" data-gallery-slide>
+                <img
+                  src="/images/pilates/room-mats-1000.webp"
+                  srcset="
+                    /images/pilates/room-mats-500.webp   500w,
+                    /images/pilates/room-mats-1000.webp 1000w,
+                    /images/pilates/room-mats-1346.webp 1346w
+                  "
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt="The studio laid out for a mat class, a roller and a pair of weighted balls on each mat, with the garden doors folded open at the far end"
+                  width="1000"
+                  height="1000"
+                  loading="lazy"
+                />
+              </li>
+            </ul>
+            <button
+              class="story__arrow story__arrow--prev"
+              type="button"
+              data-gallery-step="-1"
+              aria-label="Previous Pilates photograph"
+              hidden
+            >
+              &#8592;
+            </button>
+            <button
+              class="story__arrow story__arrow--next"
+              type="button"
+              data-gallery-step="1"
+              aria-label="Next Pilates photograph"
+              hidden
+            >
+              &#8594;
+            </button>
+            <div class="story__dots" data-gallery-dots hidden>
+              <button
+                class="story__dot"
+                type="button"
+                data-gallery-go="0"
+                aria-label="Show a mat class in session"
+              ></button>
+              <button
+                class="story__dot"
+                type="button"
+                data-gallery-go="1"
+                aria-label="Show the Reformer carriage"
+              ></button>
+              <button
+                class="story__dot"
+                type="button"
+                data-gallery-go="2"
+                aria-label="Show the Stability Chair"
+              ></button>
+              <button
+                class="story__dot"
+                type="button"
+                data-gallery-go="3"
+                aria-label="Show the Reformer straps"
+              ></button>
+              <button
+                class="story__dot"
+                type="button"
+                data-gallery-go="4"
+                aria-label="Show the room laid out for mat work"
+              ></button>
+            </div>
           </figure>
         </article>
       </section>
@@ -462,10 +669,10 @@
                   aria-hidden="true"
                   focusable="false"
                 >
-                  <rect x="8.5" y="8" width="9" height="9.5" rx="1.25" />
-                  <path d="M11 8V4.5" />
-                  <path d="M15 8V4.5" />
-                  <path d="M8.5 13.75 4 15.75" />
+                  <rect x="5.75" y="8.25" width="9.5" height="2.25" rx="1.1" />
+                  <path d="M7.25 10.5v5.75a1.25 1.25 0 0 0 1.25 1.25h4a1.25 1.25 0 0 0 1.25-1.25V10.5" />
+                  <path d="M10.5 3.25h2.6a1.15 1.15 0 0 1 1.15 1.15v3.85" />
+                  <path d="M14 11 17.75 17.25" />
                 </svg>
                 <span class="studio-look__tab-label">The Stability Chair</span>
               </button>
