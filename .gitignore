@@ -34,3 +34,6 @@ email-preview.html
 
 # Netlify CLI's local link and cached function build
 .netlify/
+
+# Python bytecode from scripts/
+__pycache__/

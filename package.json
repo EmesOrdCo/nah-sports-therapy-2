@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "dev:netlify": "netlify dev",
-    "email:preview": "node scripts/email-preview.mjs"
+    "email:preview": "node scripts/email-preview.mjs",
+    "images:sources": "python3 scripts/image-sources.py"
   },
   "devDependencies": {
     "@fontsource/parisienne": "^5.3.0",
