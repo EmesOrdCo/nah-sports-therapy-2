@@ -24,10 +24,10 @@ const BUSINESS = {
   person: "Natasha Hadland",
   role: "Sports Therapist &amp; STOTT Pilates Instructor",
   phone: "07881 821 901",
-  /* Client-supplied for print, and deliberately NOT the address on the live
-     site, which still publishes natasha@njhsportstherapy.co.uk in
-     src/contact/content.js. Worth reconciling the two. */
-  email: "njhpilates@gmail.com",
+  /* The address the site publishes, in src/contact/content.js and its two
+     siblings. NJH gave njhpilates@gmail.com for print; one address across
+     print and web is worth more than the distinction. */
+  email: "natasha@njhsportstherapy.co.uk",
   web: "njhsportstherapy.co.uk",
   where: "Studham, near Whipsnade",
 };
