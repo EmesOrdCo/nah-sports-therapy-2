@@ -24,7 +24,10 @@ const BUSINESS = {
   person: "Natasha Hadland",
   role: "Sports Therapist &amp; STOTT Pilates Instructor",
   phone: "07881 821 901",
-  email: "natasha@njhsportstherapy.co.uk",
+  /* Client-supplied for print, and deliberately NOT the address on the live
+     site, which still publishes natasha@njhsportstherapy.co.uk in
+     src/contact/content.js. Worth reconciling the two. */
+  email: "njhpilates@gmail.com",
   web: "njhsportstherapy.co.uk",
   where: "Studham, near Whipsnade",
 };
@@ -196,8 +199,8 @@ const poster = {
                 font-weight: 700; color: var(--navy); margin-top: 4mm; }
 
   /* -------------------------------------------------------------- services */
-  .services { display: grid; grid-template-columns: 1fr 1fr; gap: 0 15mm; padding: 8mm 13mm 0; flex: 0 0 auto; }
-  .services > article + article { padding-left: 15mm; border-left: 0.2mm solid var(--line); margin-left: -15mm; }
+  .services { display: grid; grid-template-columns: 1fr 1fr; gap: 0 11mm; padding: 8mm 13mm 0; flex: 0 0 auto; }
+  .services > article + article { padding-left: 11mm; border-left: 0.2mm solid var(--line); margin-left: -11mm; }
   .services h2 { font-size: 12.5pt; line-height: 1.32; letter-spacing: -0.01em; margin: 3mm 0 3.4mm; }
   .services > article > p { font-size: 8.8pt; line-height: 1.55; color: var(--body); }
 
@@ -273,7 +276,7 @@ const poster = {
       </article>
       <article>
         <span class="label">Clinical Pilates</span>
-        <h2>Movement that teaches<br>the body to support itself.</h2>
+        <h2>Teaching the body to support itself.</h2>
         <p>Slow, precise, controlled work that strengthens the deep postural muscles, adapted to your starting point.</p>
         <ul class="ticks">${PILATES_FORMS.map((t) => `<li>${t}</li>`).join("")}</ul>
       </article>
