@@ -389,6 +389,89 @@
   background: var(--brand);
 }
 
+/* ---- The welcome film ----
+   The frame itself — 9:16 box, hairline border, poster overlay — is the
+   site-wide films component styled in style.css; nothing about the player is
+   restated here. This block only arranges the section around it: film and
+   words stacked and centred on a phone, side by side from 900px with the film
+   on the left — the mirror of the hero, so the photograph and the film
+   bracket the conversation between them.
+
+   The 380px cap is the films-lead cap, and for the same reason: a 9:16 box
+   grows in height twice as fast as in width, and past this it stops being a
+   film on the page and becomes the page. */
+
+.av-e .av-e__film {
+  padding-block: var(--space-section);
+}
+
+.av-e .av-e__film-grid {
+  display: grid;
+  gap: clamp(2rem, 1.4rem + 3vw, 4.5rem);
+  justify-items: center;
+}
+
+.av-e .av-e__film-figure {
+  width: min(380px, 100%);
+  margin: 0;
+}
+
+.av-e .av-e__film-intro {
+  max-width: 46ch;
+  text-align: center;
+}
+
+/* The same voice as the charity heading — serif at --step-2h — so the two
+   asides below the conversation speak at the same size. */
+.av-e .av-e__film-intro h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-2h);
+  font-weight: 400;
+  line-height: var(--lh-head);
+  letter-spacing: var(--tracking-display);
+}
+
+.av-e .av-e__film-lead {
+  max-width: 40ch;
+  margin: var(--space-s) auto 0;
+  color: var(--ink);
+  font-size: var(--step-1);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.av-e .av-e__film .pilates-arrow-link {
+  margin-top: var(--space-m);
+}
+
+@media (min-width: 900px) {
+  /* The words keep the right-hand column, sized to their own measure; the
+     film takes everything left of them and floats centred in it rather than
+     sitting pinned to the shell edge — hard left, the band of paper between
+     the two read as a gap rather than as spacing. Centred in its own column
+     the film finds the same balanced position at every window width. */
+  .av-e .av-e__film-grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    justify-items: start;
+    gap: clamp(3rem, 2rem + 5vw, 7rem);
+  }
+
+  .av-e .av-e__film-figure {
+    justify-self: center;
+  }
+
+  .av-e .av-e__film-intro {
+    text-align: left;
+  }
+
+  .av-e .av-e__film-lead {
+    margin-inline: 0;
+  }
+}
+
 /* ---- Charity work ----
    Moved off the Studio page, where it was a full navy band at the foot of the
    page sitting straight on the navy-deep footer — no bottom edge, half the

@@ -220,6 +220,22 @@ export const POLICIES = [
   },
 ];
 
+/* The welcome film. Natasha's own footage, supplied by NJH ("Use this
+   video.MP4", shot June 2022): she opens the studio door, shows the visitor
+   in, and speaks to camera from the mat in NJH kit. Portrait 9:16 off a phone
+   held upright, 53 seconds — re-encoded from the 21MB original to the same
+   720×1280 / ~0.6Mbps norm as the client films, poster taken from the film's
+   own first frame so the hand-off when it starts is invisible.
+
+   No `captions` yet, and the rule in films.js applies here too: she is
+   speaking throughout, so a .vtt transcribed from the film is a gap to close,
+   not a decision. Point `captions` at it when it exists. */
+export const WELCOME_FILM = {
+  poster: "/images/about-welcome-poster.webp",
+  sources: [{ src: "/videos/about-welcome.mp4" }],
+  ariaLabel: "Play Natasha&rsquo;s welcome film",
+};
+
 /* The portrait. Sourced from the practice's own Facebook page — Natasha in NJH
    kit in front of the muscular-system chart. Square original is 1536px. */
 export const PORTRAIT = {

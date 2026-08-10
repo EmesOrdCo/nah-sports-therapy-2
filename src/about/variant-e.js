@@ -1,5 +1,6 @@
 import "./variant-e.css";
 import { initSpine } from "./spine.js";
+import { filmFrame } from "../films.js";
 import {
   NAME,
   STORY,
@@ -7,6 +8,7 @@ import {
   PULLQUOTES,
   QUALIFICATIONS,
   PORTRAIT,
+  WELCOME_FILM,
   ATHLETE_QUOTE,
   CHARITY,
 } from "./content.js";
@@ -160,6 +162,42 @@ export function build() {
         <blockquote><p>${ATHLETE_QUOTE}</p></blockquote>
         <figcaption><span aria-hidden="true"></span>${NAME}</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <!-- The welcome film, directly under the sentence that turns from her to
+       you: the quote speaks to the reader, and the film is the same gesture
+       made physical — Natasha at the studio door, showing you in — before the
+       conversation below settles back into her recorded sentences. It stands
+       outside the spine rather than as a pair on it: the pairs are questions
+       with her sentences for answers, and this answer is a film.
+
+       The frame, the poster overlay and the one-at-a-time playback are the
+       client-films component (filmFrame / initFilmShelf in films.js), so a
+       film here behaves exactly like a film on /client-stories. Only the
+       section around it is this page's: film on the left where the hero put
+       the photograph on the right, so the two figures bracket the page's
+       opening act between them. -->
+  <section class="av-e__film" aria-labelledby="about-film-title">
+    <div class="section-shell av-e__film-grid">
+      <!-- films__card as well as this page's own class: the "overlay comes
+           off once started" rule in style.css is scoped to the shelf's two
+           shapes (.films__card / .films__lead), and initFilmShelf hangs the
+           is-playing state off whichever of those wraps the video. To the
+           player this IS a film card — only the section around it is ours. -->
+      <figure class="av-e__film-figure films__card" data-reveal>
+        ${filmFrame(WELCOME_FILM, "about")}
+      </figure>
+      <div class="av-e__film-intro">
+        <h2 id="about-film-title" data-reveal>Step inside the studio</h2>
+        <p class="av-e__film-lead" data-reveal>
+          Under a minute of film: Natasha opens the studio door and shows you
+          around, so your first visit already feels familiar.
+        </p>
+        <a class="pilates-arrow-link" href="/studio" data-reveal>
+          Look around the studio <span>&#8599;</span>
+        </a>
+      </div>
     </div>
   </section>
 

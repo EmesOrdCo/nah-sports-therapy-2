@@ -142,11 +142,17 @@ const sourceTag = ({ src, type = "video/mp4", media }) =>
    the part that needs JS, and CSS keeps it hidden until the `js` class the
    boot sequence sets says there is some — and where there is some, that same
    module takes the controls straight back off until they are wanted. */
-/* The player itself, which is the same object in the lead slot and in the list
-   below it — one 9:16 frame, one poster, one overlay. Only the size around it
-   changes, and that is the stylesheet's business rather than this function's:
-   two markup shapes for one thing is two things to keep in step. */
-const filmFrame = (film, index) => {
+/* The player itself, which is the same object in the lead slot, in the list
+   below it, and in the welcome film on /about — one 9:16 frame, one poster,
+   one overlay. Only the size around it changes, and that is the stylesheet's
+   business rather than this function's: two markup shapes for one thing is two
+   things to keep in step. Exported for exactly that reason: the about page
+   builds its own section around the frame instead of copying the frame.
+
+   initFilmShelf below asks the document for every .films__video rather than
+   for the contents of any particular shelf, so a frame placed by another page
+   is wired up by the same module without that page doing anything. */
+export const filmFrame = (film, index) => {
   /* The name goes on the button, not just on the caption below it: "Play",
      four times down a page, tells somebody listening to it nothing about which
      film is which. As an aria-label rather than as clipped text inside the
@@ -157,10 +163,16 @@ const filmFrame = (film, index) => {
      A film with no name yet has nothing to state, and "Play this client's
      film" three times over is the same nothing the bare "Play" was — so the
      fallback numbers them instead. A number is a poor name but it is a
-     distinct one, and it holds a film that has been shot but not yet named. */
-  const label = film.name
-    ? `Play ${film.name}&rsquo;s story`
-    : `Play client film ${index + 1}`;
+     distinct one, and it holds a film that has been shot but not yet named.
+
+     `ariaLabel` on the film wins over both: "…'s story" is the client-shelf
+     wording, and the welcome film on /about is not a story about Natasha but
+     Natasha herself, saying hello. */
+  const label =
+    film.ariaLabel ??
+    (film.name
+      ? `Play ${film.name}&rsquo;s story`
+      : `Play client film ${index + 1}`);
   return `<div class="films__frame">
         <video
           class="films__video"
