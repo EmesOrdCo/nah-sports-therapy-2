@@ -885,12 +885,13 @@ function buildPilatesContinuousPage() {
            They alternate sides so the run from #individual to #small-group has
            a rhythm rather than three left-hand figures in a column.
 
-           Both photographs are the studio's own now, and both are galleries:
-           the same files, the same module and the same arrangement /studio
-           gives its two machine sections. There is one Reformer and one Chair,
-           so a separate set for this page would be the same two objects shot
-           again — what these pages owe each other is different words, not
-           different pictures. The stock that stood here (six Pexels files) is
+           Both photographs are the studio's own now, and both are galleries.
+           The Chair's is the set /studio carries, photograph for photograph:
+           there is one Chair and it was shot once, so a separate set would be
+           the same object shot again. The Reformer's is not — the August 2026
+           1:1 gave enough frames to divide, so the ones that read as a person
+           working are here and the ones that read as the machine's parts in
+           use are on /studio. The stock that stood here (six Pexels files) is
            gone with them.
 
            Everything else on this page is still Pexels stock, free for
@@ -912,25 +913,44 @@ function buildPilatesContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="#contact">Ask about a Reformer session <span>→</span></a>
           </div>
-          <!-- The gallery /studio#reformer carries, less its plate: that page
-               leads with the empty machine standing in the room, which belongs
-               to the object and not to the session, so it stays off here. Same
-               three photographs of the studio's own machine otherwise, same
-               classes, same module. Why it is built the way it is — the square
-               plate, the corner row, what --frame-count counts — is written
-               out over there and not repeated here. -->
-          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 3" data-reveal data-drift data-equipment-gallery>
+          <!-- Six photographs of one advanced 1:1, August 2026 — the same
+               module and square frames /studio#reformer is built with, and the
+               reason its build is written out over there rather than here.
+               The two pages divide the shoot rather than share it: the ones
+               that read as a person working sit here, where the page is about
+               the session, and the ones that read as the machine's parts in
+               use sit there, where the page is about the object. Nothing on
+               either side is the other's photograph shown twice.
+
+               The copy above says the Reformer suits all ages and abilities
+               and can challenge the elite athlete; the client in these is in
+               his seventies doing jackknife, side star and standing balance,
+               which is the claim made in pictures. -->
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 6" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
-              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/reformer-carriage-500.webp" data-large="/images/pilates/reformer-carriage-1000.webp" data-xl="/images/pilates/reformer-carriage-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-carriage-1000.webp" srcset="/images/pilates/reformer-carriage-500.webp 500w, /images/pilates/reformer-carriage-1000.webp 1000w, /images/pilates/reformer-carriage-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying back on the Reformer carriage, knees bent and feet resting on the jump board at the far end" width="1000" height="1000" loading="lazy">
+              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/reformer-tabletop-500.webp" data-large="/images/pilates/reformer-tabletop-1000.webp" data-xl="/images/pilates/reformer-tabletop-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-tabletop-1000.webp" srcset="/images/pilates/reformer-tabletop-500.webp 500w, /images/pilates/reformer-tabletop-1000.webp 1000w, /images/pilates/reformer-tabletop-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying on the Reformer with knees folded to tabletop, holding the straps in both hands" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Reformer photograph" hidden>←</button>
               <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next Reformer photograph" hidden>→</button>
             </figure>
             <div class="pilates-gallery__picks" data-drift-lead="0.2">
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
-                <img data-small="/images/pilates/reformer-straps-500.webp" data-large="/images/pilates/reformer-straps-1000.webp" data-xl="/images/pilates/reformer-straps-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-straps-500.webp" alt="Natasha guiding a client's foot into the Reformer strap, the ropes running back to the carriage" width="500" height="500" loading="lazy">
+                <img data-small="/images/pilates/reformer-jackknife-500.webp" data-large="/images/pilates/reformer-jackknife-1000.webp" data-xl="/images/pilates/reformer-jackknife-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-jackknife-500.webp" alt="A client in jackknife on the Reformer, shoulders on the carriage and both legs lifted straight above him in the straps" width="500" height="500" loading="lazy">
               </button>
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
-                <img data-small="/images/pilates/reformer-legs-500.webp" data-large="/images/pilates/reformer-legs-1000.webp" data-xl="/images/pilates/reformer-legs-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-legs-500.webp" alt="A client lying on the Reformer with both feet in the straps, legs raised straight above the carriage" width="500" height="500" loading="lazy">
+                <img data-small="/images/pilates/reformer-star-500.webp" data-large="/images/pilates/reformer-star-1000.webp" data-xl="/images/pilates/reformer-star-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-star-500.webp" alt="A client holding a side star over the box on the Reformer, top arm reaching overhead" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-plank-500.webp" data-large="/images/pilates/reformer-plank-1000.webp" data-xl="/images/pilates/reformer-plank-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-plank-500.webp" alt="A client in a long plank along the Reformer, hands on the footbar and feet against the shoulder rests" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-lunge-500.webp" data-large="/images/pilates/reformer-lunge-1000.webp" data-xl="/images/pilates/reformer-lunge-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-lunge-500.webp" alt="A client reaching along his front leg in a kneeling lunge stretch on the Reformer, back foot on the carriage" width="500" height="500" loading="lazy">
+              </button>
+              <!-- The standing balance came over at 640px and nothing larger
+                   exists for it, so all three attributes point at the one
+                   file. It is a small frame here and only softens if someone
+                   trades it into the plate. -->
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-balance-500.webp" data-large="/images/pilates/reformer-balance-500.webp" data-xl="/images/pilates/reformer-balance-500.webp" data-xl-width="500" src="/images/pilates/reformer-balance-500.webp" alt="A client standing upright on the Reformer carriage with both arms held out level, balancing" width="500" height="500" loading="lazy">
               </button>
             </div>
           </div>
@@ -1296,21 +1316,21 @@ function buildStudioContinuousPage() {
           </div>
           <!-- The gallery, written out here because this is where it was
                first built; /pilates#stability-chair carries the Chair's
-               photograph for photograph, and /pilates#reformer carries all of
-               this one except its plate: the empty machine standing in the
-               room (Mark's shot, August 2026) leads here because this page is
-               about the object, and stays off /pilates because that page is
-               about the session. Four of the studio's own Reformer, any of
-               which can hold the plate: the three that are not in it sit
-               where the lapped inset sits in every other section, and
-               clicking one trades it with the plate's. The
+               photograph for photograph. The Reformer's is split between the
+               pages instead: the empty machine standing in the room (Mark's
+               shot, August 2026) leads here because this page is about the
+               object, and the frames that show a person working rather than
+               the apparatus are on /pilates#reformer. Seven of the studio's
+               own Reformer, any of which can hold the plate: the six that are
+               not in it sit where the lapped inset sits in every other
+               section, and clicking one trades it with the plate's. The
                arrows on the plate are the other way through: they move every
                photograph along one place, round and round, and they are there
                because a small frame does not announce that it is pressable and
                a pair of arrows does.
 
-               Square, unlike the landscape plates elsewhere. Two of the four
-               photographs are portrait and the room shot landscape, and a
+               Square, unlike the landscape plates elsewhere. The shoot mixes
+               portrait and landscape and the room shot is landscape, and a
                switcher whose frames are not one shape reflows the section on
                every click; square is the one crop they all meet, the room shot
                cut down to the footbar end of the machine. The inset was
@@ -1323,7 +1343,7 @@ function buildStudioContinuousPage() {
                reason — it is every photograph in the section, the one in the
                plate included, and the stylesheet sizes and places the corner
                row off it. -->
-          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 4" data-reveal data-drift data-equipment-gallery>
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 7" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
               <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/reformer-room-500.webp" data-large="/images/pilates/reformer-room-1000.webp" data-xl="/images/pilates/reformer-room-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-room-1000.webp" srcset="/images/pilates/reformer-room-500.webp 500w, /images/pilates/reformer-room-1000.webp 1000w, /images/pilates/reformer-room-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="The Reformer standing empty along the studio wall, springs and footbar at the near end, the Advanced Reformer chart framed beside the window" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Reformer photograph" hidden>←</button>
@@ -1338,6 +1358,20 @@ function buildStudioContinuousPage() {
               </button>
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
                 <img data-small="/images/pilates/reformer-legs-500.webp" data-large="/images/pilates/reformer-legs-1000.webp" data-xl="/images/pilates/reformer-legs-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-legs-500.webp" alt="A client lying on the Reformer with both feet in the straps, legs raised straight above the carriage" width="500" height="500" loading="lazy">
+              </button>
+              <!-- Three from the August 2026 shoot, chosen for the part of the
+                   machine each one puts to work: the ropes and straps at the
+                   far end, and the box sat across the carriage. The rest of
+                   that shoot is on /pilates#reformer, where the page is about
+                   the session rather than the apparatus. -->
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-leg-lift-500.webp" data-large="/images/pilates/reformer-leg-lift-1000.webp" data-xl="/images/pilates/reformer-leg-lift-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-leg-lift-500.webp" alt="A client lying on the carriage with one leg raised into the strap, the ropes running back over the pulleys" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-box-reach-500.webp" data-large="/images/pilates/reformer-box-reach-1000.webp" data-xl="/images/pilates/reformer-box-reach-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-box-reach-500.webp" alt="A client sitting on the box across the Reformer, both arms reaching overhead with a dowel" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-box-lean-500.webp" data-large="/images/pilates/reformer-box-lean-1000.webp" data-xl="/images/pilates/reformer-box-lean-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-box-lean-500.webp" alt="A client sitting back against the box on the Reformer, feet in the straps at the footbar end" width="500" height="500" loading="lazy">
               </button>
             </div>
           </div>
