@@ -57,13 +57,12 @@ const INTRO_TITLE = "One room, since 2016.";
 const INTRO_BODY =
   "After years working in physio clinics, January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio &mdash; a tranquil, light and airy space to switch off and focus on you.";
 
-/* The hero, minus the <video>. A still capture cannot show a loop, and the
-   poster is frame one of that loop, so this is exactly what the page looks
-   like in the moment before it plays. */
+/* The hero. It was "minus the <video>" while the page still opened on the
+   stock loop; the slot is a photograph now, so this is simply it. */
 function hero() {
   return `<section class="clinics-hero" aria-labelledby="sg-title">
     <div class="clinics-hero__media" aria-hidden="true">
-      <img class="clinics-hero__still" src="/images/studio-hero-still-1600.webp" alt="" width="1600" height="900" />
+      <img class="clinics-hero__still" src="/images/studio-hero-1600.webp" alt="" width="1600" height="1248" />
       <div class="clinics-hero__scrim"></div>
     </div>
     <div class="clinics-hero__inner">

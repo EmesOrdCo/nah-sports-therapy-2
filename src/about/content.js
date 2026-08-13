@@ -237,8 +237,21 @@ export const WELCOME_FILM = {
 };
 
 /* The portrait. Sourced from the practice's own Facebook page — Natasha in NJH
-   kit in front of the muscular-system chart. Square original is 1536px. */
+   kit in front of the muscular-system chart. Square original is 1536px.
+
+   hero* is the same photograph cut for the page's full-bleed hero (August
+   2026, from a 447px web thumbnail of this exact frame Harry sent — matched
+   to the square by pixel comparison, so the repo's own copy is the source
+   rather than the thumbnail). The square is cropped from the bottom to the
+   studio hero's 1600:1248 frame, keeping her head and the chart's title,
+   then upscaled ×4 with Real-ESRGAN (Upscayl's remacri-4x — high-fidelity-4x
+   left painterly artifacts in her hair) from the 1200px copy — the 1536px
+   original predates the repo and is not on disk — and cut to the studio
+   hero's own 800/1600/2400 ladder. */
 export const PORTRAIT = {
+  hero800: "/images/about-hero-800.webp",
+  hero1600: "/images/about-hero-1600.webp",
+  hero2400: "/images/about-hero-2400.webp",
   portrait900: "/images/natasha-portrait-900.webp",
   portrait540: "/images/natasha-portrait-540.webp",
   square1200: "/images/natasha-square-1200.webp",

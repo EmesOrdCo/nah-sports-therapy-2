@@ -3,7 +3,13 @@ import { buildAboutPage } from "./about/index.js";
 import { buildContactPage } from "./contact/index.js";
 import { buildFaqPage } from "./faq/index.js";
 import { routePath } from "./base-path.js";
-import { filmLead, filmsMore, hasFilms, FILMS_TITLE } from "./films.js";
+import {
+  filmFrame,
+  filmLead,
+  filmsMore,
+  hasFilms,
+  FILMS_TITLE,
+} from "./films.js";
 import { journeysList, hasJourneys } from "./journeys.js";
 
 const BUSINESS = {
@@ -906,11 +912,13 @@ function buildPilatesContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="#contact">Ask about a Reformer session <span>→</span></a>
           </div>
-          <!-- The gallery /studio#reformer carries, whole: same three
-               photographs of the studio's own machine, same classes, same
-               module. Why it is built the way it is — the square plate, the
-               corner row, what --frame-count counts — is written out over
-               there and not repeated here. -->
+          <!-- The gallery /studio#reformer carries, less its plate: that page
+               leads with the empty machine standing in the room, which belongs
+               to the object and not to the session, so it stays off here. Same
+               three photographs of the studio's own machine otherwise, same
+               classes, same module. Why it is built the way it is — the square
+               plate, the corner row, what --frame-count counts — is written
+               out over there and not repeated here. -->
           <div class="pilates-feature__media pilates-gallery" style="--frame-count: 3" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
               <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/reformer-carriage-500.webp" data-large="/images/pilates/reformer-carriage-1000.webp" data-xl="/images/pilates/reformer-carriage-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-carriage-1000.webp" srcset="/images/pilates/reformer-carriage-500.webp 500w, /images/pilates/reformer-carriage-1000.webp 1000w, /images/pilates/reformer-carriage-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying back on the Reformer carriage, knees bent and feet resting on the jump board at the far end" width="1000" height="1000" loading="lazy">
@@ -1125,6 +1133,20 @@ function buildPilatesContinuousPage() {
 
 const pilatesContinuous = buildPilatesContinuousPage();
 
+/* The walk-through film on /studio. Harry's own footage of the real room
+   (IMG_1941.MOV, shot 13 Aug 2026): thirty-five seconds of phone-held
+   walkthrough, in at the front door and once around, ending on the garden
+   doors. Encoded to the site's film norm — 720×1280, ~0.85 Mbps — with the
+   audio stripped, because the track was silence to -27dB peaks; no speech
+   means no .vtt owed, and nobody is in frame, so the consent rule in films.js
+   does not bite. The poster is the film's own first frame, same as every
+   other film on the site. */
+const STUDIO_WALKTHROUGH_FILM = {
+  poster: "/images/studio-walkthrough-poster.webp",
+  sources: [{ src: "/videos/studio-walkthrough.mp4" }],
+  ariaLabel: "Play the studio walk-through film",
+};
+
 /* Was /clinics. There has only ever been one location, and the studio copy
    that used to sit halfway down /pilates now lives here, so the page is named
    for its subject rather than for a set of clinics that does not exist. */
@@ -1135,30 +1157,25 @@ function buildStudioContinuousPage() {
       "The NJH Sports Therapy and Pilates studio in Studham, near Whipsnade.",
     canonical: "/studio",
     html: `<div class="clinics-longform">
-      <!-- The hero is footage of a room rather than a drawing of a treatment,
-           because the room is what the page is about. The clip is stock, not
-           Studham — swap public/videos/studio-tour.mp4 (and the still beside
-           it, which is frame one of that same clip) the day there is footage
-           of the real studio, and nothing else here has to change.
+      <!-- The hero is the studio itself, photographed from the terrace with
+           the doors folded open onto the lit room — the Reformer and the
+           Stability Chair both in frame, which is the page's whole argument
+           made in one picture. It replaced a stock walkthrough clip that had
+           stood in until there was something of the real place; the still
+           that clip needed as a buffering fallback went with it, because a
+           photograph needs none. The room in motion is further down the page
+           — the walk-through film above the closing card — so the hero no
+           longer owes anyone footage.
 
-           The still is the real fallback: it is what shows before the clip
-           buffers, when reduced motion is asked for, and if the file is
-           missing — so the hero is never a black rectangle. It is taken from
-           the clip's first frame so the hand-off is invisible; a photograph
-           of a different room would cross-fade like a bug. -->
+           The frame ships whole rather than pre-cropped: the hero is
+           object-fit: cover, so every viewport cuts its own window, and a
+           4:3 source has the height a phone's tall window needs where a 16:9
+           pre-crop would have run out. The stylesheet nudges the window
+           right of centre so a narrow screen keeps the lit doorway rather
+           than the tree beside it — see .clinics-hero__still. -->
       <section class="clinics-hero" id="overview" aria-labelledby="clinics-title">
         <div class="clinics-hero__media" aria-hidden="true">
-          <img class="clinics-hero__still" src="/images/studio-hero-still-1600.webp" alt="" width="1600" height="900" fetchpriority="high" />
-          <video class="clinics-hero__reel" data-studio-reel muted loop playsinline preload="none" disablepictureinpicture tabindex="-1">
-            <!-- media on <source> is read once, when the element picks a file,
-                 and never re-evaluated on resize. That is the wrong behaviour
-                 for a responsive image and exactly the right one here: the
-                 narrow file exists so a phone on mobile data is not made to
-                 fetch 2.9MB of background loop, and a phone does not become a
-                 desktop mid-visit. -->
-            <source src="/videos/studio-tour-900.mp4" type="video/mp4" media="(max-width: 700px)" />
-            <source src="/videos/studio-tour.mp4" type="video/mp4" />
-          </video>
+          <img class="clinics-hero__still" src="/images/studio-hero-1600.webp" srcset="/images/studio-hero-800.webp 800w, /images/studio-hero-1600.webp 1600w, /images/studio-hero-2400.webp 2400w" sizes="100vw" alt="" width="1600" height="1248" fetchpriority="high" />
           <div class="clinics-hero__scrim"></div>
         </div>
         <div class="clinics-hero__inner">
@@ -1172,19 +1189,20 @@ function buildStudioContinuousPage() {
       </section>
 
       <!-- The room, told the same way as the two machines below it: one wide
-           plate of the space with a second photograph lapped over its corner,
-           and the copy beside it rather than under a rule.
+           plate of the space with a row of smaller frames lapped over its
+           corner, and the copy beside it rather than under a rule.
 
            It used to be a full-width heading, a column of prose, then a
            four-photograph carousel under a second heading — a different shape
            from anything else on the page, and the only interactive component
            on the site that asked the reader to press a button to see the room.
-           Four photographs of one small studio was three more than the point
-           needed, and three of them could only be reached by clicking. Two
-           show it, and both are on screen at once.
+           It was cut to two frames for that, and the August 2026 shoot brings
+           it back to four — the difference from the carousel is that every
+           frame is on screen at once, none behind a press.
 
            Media-first here so the run down the page alternates: the room's
-           plate sits left, the Reformer's right, the Chair's left again. -->
+           plate sits left, the Reformer's right, the Chair's left again,
+           the couch's right. -->
       <section class="pilates-feature pilates-feature--equipment" id="studio" aria-labelledby="studio-title">
         <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first">
           <div class="pilates-feature__content" data-reveal>
@@ -1210,17 +1228,15 @@ function buildStudioContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="#reformer">See what is in the room <span>→</span></a>
           </div>
-          <!-- The third gallery, and the smallest: two photographs of the room
-               itself, so the corner carries one frame and it is the plate's
-               opposite number rather than a row. That is what the section had
-               before — a plate and one inset — with the inset now pressable.
-
-               At two frames the row's width share works out wider than the
-               corner should hold and the 168px ceiling is what actually sizes
-               it; see the stylesheet. Deliberate, not a coincidence being
-               relied on: a lone frame should be the size the corner was drawn
-               for however the share is retuned. -->
-          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 2" data-reveal data-drift data-equipment-gallery>
+          <!-- The third gallery: four photographs of the room itself, the
+               corner row three frames like the Reformer's below. The mat
+               layouts from either end came first; the shoot of August 2026
+               added the room seen from the open doors with both machines
+               standing in it, and the building from the terrace at dusk —
+               the hero's view, after dark. Square like every frame in these
+               galleries: the dusk photograph is cut down to the doorway and
+               the lit room, the fuchsias kept as its near corner. -->
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 4" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
               <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/room-mats-500.webp" data-large="/images/pilates/room-mats-1000.webp" data-xl="/images/pilates/room-mats-1346.webp" data-xl-width="1346" src="/images/pilates/room-mats-1000.webp" srcset="/images/pilates/room-mats-500.webp 500w, /images/pilates/room-mats-1000.webp 1000w, /images/pilates/room-mats-1346.webp 1346w" sizes="(max-width: 960px) 92vw, 52vw" alt="The studio laid out for a mat class, a roller and a pair of weighted balls on each mat, with the garden doors folded open at the far end" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous photograph of the room" hidden>←</button>
@@ -1229,6 +1245,12 @@ function buildStudioContinuousPage() {
             <div class="pilates-gallery__picks" data-drift-lead="0.2">
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
                 <img data-small="/images/pilates/room-rings-500.webp" data-large="/images/pilates/room-rings-1000.webp" src="/images/pilates/room-rings-500.webp" alt="The room from the other end, mats laid out with a magic circle and weighted balls on each, the folding doors closed onto the terrace" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/room-machines-500.webp" data-large="/images/pilates/room-machines-1000.webp" data-xl="/images/pilates/room-machines-1536.webp" data-xl-width="1536" src="/images/pilates/room-machines-500.webp" alt="The room from the open garden doors, mats down the centre and the Reformer and Stability Chair standing ready beyond them" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/studio-dusk-500.webp" data-large="/images/pilates/studio-dusk-1000.webp" data-xl="/images/pilates/studio-dusk-1536.webp" data-xl-width="1536" src="/images/pilates/studio-dusk-500.webp" alt="The studio from the terrace at dusk, the garden doors folded open onto the lit room, fuchsias in the foreground" width="500" height="500" loading="lazy">
               </button>
             </div>
           </div>
@@ -1254,10 +1276,11 @@ function buildStudioContinuousPage() {
            this point, as .clinics- is on this page; both are older names the
            rest of the stylesheet still answers to.
 
-           Photographs are Pexels stock, except the two machine sections below:
-           the Reformer carries three of the studio's own and the Chair five,
-           each as a gallery, and /pilates carries both galleries too. Swapping
-           the rest for Studham is public/images/pilates and nothing else. -->
+           Every photograph on the page is the studio's own now — hero, room,
+           both machines, the couch — where it once opened on stock while the
+           real place was photographed. /pilates carries both machine galleries
+           too. The room's and machines' frames live in public/images/pilates,
+           the couch's in public/images/therapy. -->
       <section class="pilates-feature pilates-feature--equipment" id="reformer" aria-labelledby="studio-reformer-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-feature__content" data-reveal>
@@ -1272,22 +1295,27 @@ function buildStudioContinuousPage() {
             <a class="pilates-arrow-link" href="/pilates#reformer">How a Reformer session runs <span>→</span></a>
           </div>
           <!-- The gallery, written out here because this is where it was
-               first built; /pilates#reformer and /pilates#stability-chair
-               carry the same two, photograph for photograph. Three of the
-               studio's own Reformer, any of which can hold the plate: the two
-               that are not in it sit where the lapped inset sits in every
-               other section, and clicking one trades it with the plate's. The
+               first built; /pilates#stability-chair carries the Chair's
+               photograph for photograph, and /pilates#reformer carries all of
+               this one except its plate: the empty machine standing in the
+               room (Mark's shot, August 2026) leads here because this page is
+               about the object, and stays off /pilates because that page is
+               about the session. Four of the studio's own Reformer, any of
+               which can hold the plate: the three that are not in it sit
+               where the lapped inset sits in every other section, and
+               clicking one trades it with the plate's. The
                arrows on the plate are the other way through: they move every
                photograph along one place, round and round, and they are there
                because a small frame does not announce that it is pressable and
                a pair of arrows does.
 
-               Square, unlike the landscape plates elsewhere. Two of the three
-               photographs are portrait, and a switcher whose frames are not one
-               shape reflows the section on every click; square is the only crop
-               all three survive whole. The inset was already square, so the
-               arrangement still reads as a plate with small frames lapped over
-               its corner.
+               Square, unlike the landscape plates elsewhere. Two of the four
+               photographs are portrait and the room shot landscape, and a
+               switcher whose frames are not one shape reflows the section on
+               every click; square is the one crop they all meet, the room shot
+               cut down to the footbar end of the machine. The inset was
+               already square, so the arrangement still reads as a plate with
+               small frames lapped over its corner.
 
                Sizes live in the markup rather than in the module: the module
                trades attributes between two <img> elements and never learns
@@ -1295,13 +1323,16 @@ function buildStudioContinuousPage() {
                reason — it is every photograph in the section, the one in the
                plate included, and the stylesheet sizes and places the corner
                row off it. -->
-          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 3" data-reveal data-drift data-equipment-gallery>
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 4" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
-              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/reformer-carriage-500.webp" data-large="/images/pilates/reformer-carriage-1000.webp" data-xl="/images/pilates/reformer-carriage-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-carriage-1000.webp" srcset="/images/pilates/reformer-carriage-500.webp 500w, /images/pilates/reformer-carriage-1000.webp 1000w, /images/pilates/reformer-carriage-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client lying back on the Reformer carriage, knees bent and feet resting on the jump board at the far end" width="1000" height="1000" loading="lazy">
+              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/reformer-room-500.webp" data-large="/images/pilates/reformer-room-1000.webp" data-xl="/images/pilates/reformer-room-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-room-1000.webp" srcset="/images/pilates/reformer-room-500.webp 500w, /images/pilates/reformer-room-1000.webp 1000w, /images/pilates/reformer-room-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="The Reformer standing empty along the studio wall, springs and footbar at the near end, the Advanced Reformer chart framed beside the window" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Reformer photograph" hidden>←</button>
               <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next Reformer photograph" hidden>→</button>
             </figure>
             <div class="pilates-gallery__picks" data-drift-lead="0.2">
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/reformer-carriage-500.webp" data-large="/images/pilates/reformer-carriage-1000.webp" data-xl="/images/pilates/reformer-carriage-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-carriage-500.webp" alt="A client lying back on the Reformer carriage, knees bent and feet resting on the jump board at the far end" width="500" height="500" loading="lazy">
+              </button>
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
                 <img data-small="/images/pilates/reformer-straps-500.webp" data-large="/images/pilates/reformer-straps-1000.webp" data-xl="/images/pilates/reformer-straps-1536.webp" data-xl-width="1536" src="/images/pilates/reformer-straps-500.webp" alt="Natasha guiding a client's foot into the Reformer strap, the ropes running back to the carriage" width="500" height="500" loading="lazy">
               </button>
@@ -1326,13 +1357,13 @@ function buildStudioContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="/pilates#stability-chair">How a Chair session runs <span>→</span></a>
           </div>
-          <!-- The Reformer gallery above, five photographs instead of three.
+          <!-- The Reformer gallery above, six photographs instead of four.
                Nothing here is a second implementation of it: same classes,
                same module, same square frames, and the row thins itself to fit
                off --frame-count. The section is media-first, so the row lands
                on the left edge — the stylesheet mirrors it the way it already
                mirrors the lone inset. -->
-          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 5" data-reveal data-drift data-equipment-gallery>
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 6" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
               <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/chair-doors-500.webp" data-large="/images/pilates/chair-doors-1000.webp" data-xl="/images/pilates/chair-doors-1536.webp" data-xl-width="1536" src="/images/pilates/chair-doors-1000.webp" srcset="/images/pilates/chair-doors-500.webp 500w, /images/pilates/chair-doors-1000.webp 1000w, /images/pilates/chair-doors-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client balanced along the Stability Chair with one leg raised, the studio's garden doors open behind her" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Stability Chair photograph" hidden>←</button>
@@ -1351,8 +1382,89 @@ function buildStudioContinuousPage() {
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
                 <img data-small="/images/pilates/chair-class-500.webp" data-large="/images/pilates/chair-class-1000.webp" data-xl="/images/pilates/chair-class-1536.webp" data-xl-width="1536" src="/images/pilates/chair-class-500.webp" alt="An instructor talking two clients through a standing exercise on the Stability Chairs, the Reformer and mats behind them" width="500" height="500" loading="lazy">
               </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/chair-room-500.webp" data-large="/images/pilates/chair-room-1000.webp" data-xl="/images/pilates/chair-room-1536.webp" data-xl-width="1536" src="/images/pilates/chair-room-500.webp" alt="Both Stability Chairs standing ready in the empty studio, the Reformer and mats laid out beside them" width="500" height="500" loading="lazy">
+              </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- The treatment couch, after the two machines: the page's lead
+           promises Sports Therapy as well as Pilates, and this is the piece
+           of the room that side happens on. Same section anatomy as the two
+           above it, media on the right so the plates keep alternating.
+
+           The first paragraph is Natasha's line from her email, verbatim —
+           the "tag" the photo folder's name said to remember. The rest is
+           held to what the photographs can vouch for — the badge on the
+           frame, the pedal, the lift, the castors — and any further wording
+           she sends replaces it verbatim, the way the Reformer's and the
+           Chair's replaced theirs. -->
+      <section class="pilates-feature pilates-feature--equipment" id="physio-couch" aria-labelledby="studio-couch-title">
+        <div class="section-shell pilates-feature__grid">
+          <div class="pilates-feature__content" data-reveal>
+            <h2 id="studio-couch-title">The Hydraulic Physio Couch</h2>
+            <p class="pilates-feature__lead">A padded treatment couch by Metron, raised and lowered on a hydraulic lift.</p>
+            <p>The space easily transforms from a Pilates studio to Soft Tissue treatment clinic with a clever partition wall.</p>
+            <p>The lift is worked by a foot pedal, so the couch's height can change during a treatment — with a client already lying on it — rather than only being set before one. The frame stands on castors that lock, holding the couch in place while it is worked around.</p>
+            <dl class="pilates-facts">
+              <div><dt>What it is</dt><dd>A padded treatment couch on a foot-pumped hydraulic lift</dd></div>
+              <div><dt>Adjusts</dt><dd>Height, by foot pedal, mid-treatment</dd></div>
+            </dl>
+            <a class="pilates-arrow-link" href="/sports-therapy">What happens on it <span>→</span></a>
+          </div>
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 3" data-reveal data-drift data-equipment-gallery>
+            <figure class="pilates-feature__shot pilates-gallery__plate">
+              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/therapy/couch-window-500.webp" data-large="/images/therapy/couch-window-1000.webp" data-xl="/images/therapy/couch-window-1536.webp" data-xl-width="1536" src="/images/therapy/couch-window-1000.webp" srcset="/images/therapy/couch-window-500.webp 500w, /images/therapy/couch-window-1000.webp 1000w, /images/therapy/couch-window-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="The hydraulic physio couch side-on in the treatment corner, the muscular and skeletal charts on the wall behind it and the corner sink beside the door" width="1000" height="1000" loading="lazy">
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous couch photograph" hidden>←</button>
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next couch photograph" hidden>→</button>
+            </figure>
+            <div class="pilates-gallery__picks" data-drift-lead="0.2">
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/therapy/couch-doors-500.webp" data-large="/images/therapy/couch-doors-1000.webp" data-xl="/images/therapy/couch-doors-1536.webp" data-xl-width="1536" src="/images/therapy/couch-doors-500.webp" alt="The couch angled toward the studio's folding garden doors, towels rolled at its head" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/therapy/couch-posters-500.webp" data-large="/images/therapy/couch-posters-1000.webp" data-xl="/images/therapy/couch-posters-1536.webp" data-xl-width="1536" src="/images/therapy/couch-posters-500.webp" alt="The couch from its foot end, a rolled towel laid across it and the wall clock above" width="500" height="500" loading="lazy">
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The room in motion, after the four still views of it. Portrait
+           9:16, which is why it is not the hero — a 16:9 window on a 9:16
+           frame keeps a third of it, and that slot is the terrace
+           photograph's now — and
+           deliberately not a fifth .pilates-feature either: the act above is
+           four siblings in one layout, and a portrait film in a landscape
+           plate's grid would be the odd one out inside the run rather than
+           the page's own coda after it. It stands alone between the act and
+           the invitation, so the page reads: the room, the Reformer, the
+           Chair, the couch, then walk through the place they stand in — and
+           "Come and see the room." lands directly under half a minute of
+           doing exactly that.
+
+           The player is the shared films component (filmFrame/initFilmShelf
+           in films.js), so it behaves exactly like a film on /client-stories.
+           films__card on the figure is load-bearing: the "overlay comes off
+           once started" rule and initFilmShelf's is-playing state are both
+           scoped to the shelf's two shapes, and a figure without one of them
+           keeps the play mark over a running film.
+
+           Words left, film right: the run above alternates room-left,
+           Reformer-right, Chair-left, couch-right. The film is not the next
+           sibling in that run — it is a coda in its own shape — so it holds
+           the right edge the run finished on rather than swinging back. -->
+      <section class="clinics-film" id="walkthrough" aria-labelledby="studio-film-title">
+        <div class="section-shell clinics-film__grid">
+          <div class="clinics-film__intro" data-reveal>
+            <h2 id="studio-film-title">Walk through the room.</h2>
+            <p>Thirty-five seconds, one take, no sound: in at the front door and once around the room — mats down, the Reformer and the Stability Chair in place, and the garden doors folded open to the terrace.</p>
+          </div>
+          <figure class="clinics-film__figure films__card" data-reveal>
+            ${filmFrame(STUDIO_WALKTHROUGH_FILM, "studio")}
+          </figure>
         </div>
       </section>
 
@@ -1363,7 +1475,7 @@ function buildStudioContinuousPage() {
         <div class="section-shell">
           <section class="st-card" id="visit" aria-labelledby="studio-contact-title" data-reveal>
             <h2 id="studio-contact-title">Come and see the room.</h2>
-            <p>For directions, availability, or to talk through which of the two would suit you, contact Natasha Hadland.</p>
+            <p>For directions, availability, or to talk through which of them would suit you, contact Natasha Hadland.</p>
             <div class="st-card__actions">
               <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay} <span>↗</span></a>
               <a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a>
@@ -2058,59 +2170,6 @@ export function renderRoute() {
   return { path, isHome: false };
 }
 
-/* The looping walkthrough behind the /studio hero.
-
-   The clip is not in the markup's load path — the <video> ships preload="none"
-   — so nothing is fetched until this decides to fetch it. Asked for reduced
-   motion, it never is: the poster still under it is the hero, and a few MB of
-   footage is not downloaded to sit paused on the first frame.
-
-   It also only runs while the hero is on screen. A muted background loop
-   decoding for the whole length of the page is a laptop fan for no reason. */
-function initStudioReel() {
-  const reel = document.querySelector("[data-studio-reel]");
-  if (!reel) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  // Set on the element as well as in markup: autoplay policies read the
-  // property, and a muted attribute that arrived via innerHTML is worth not
-  // relying on.
-  reel.muted = true;
-  reel.playsInline = true;
-
-  // Only reveal the video once it can actually play. Until then — and for
-  // good if the file is missing or the codec is refused — the still shows.
-  reel.addEventListener(
-    "canplay",
-    () => reel.classList.add("is-ready"),
-    { once: true },
-  );
-
-  reel.preload = "auto";
-  reel.load();
-
-  if (!("IntersectionObserver" in window)) {
-    reel.play().catch(() => {});
-    return;
-  }
-
-  new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // Autoplay can still be refused (low power mode, data saver). The
-          // still is already behind it, so a rejected promise needs no
-          // handling beyond not throwing.
-          reel.play().catch(() => {});
-        } else {
-          reel.pause();
-        }
-      });
-    },
-    { threshold: 0.05 },
-  ).observe(reel);
-}
-
 /* The equipment galleries: the Reformer and the Chair, on /studio and again on
  * /pilates, and the pair of room shots on /studio. One plate each, and the
  * photographs that are out of it sit lapped over the plate's corner as small
@@ -2277,10 +2336,10 @@ function initEquipmentGallery() {
 }
 
 export function initPageFeatures() {
-  // Ahead of the form guard: /studio carries the hero reel and no enquiry
-  // form. (initStudioCarousel lived here too, until the carousel was replaced
-  // by the two photographs now standing in the room section.)
-  initStudioReel();
+  // Ahead of the form guard: /studio carries the galleries and no enquiry
+  // form. (initStudioReel and initStudioCarousel lived here too, until the
+  // hero's stock clip gave way to the terrace photograph and the carousel to
+  // the two photographs now standing in the room section.)
   initEquipmentGallery();
 
   const form = document.querySelector("[data-enquiry-form]");

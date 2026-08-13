@@ -91,38 +91,43 @@ function pair(question, body, index) {
 
 export function build() {
   return `
-  <section class="av-e__hero">
-    <div class="section-shell av-e__hero-grid">
-      <div class="av-e__intro">
-        <nav class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="/">Home</a><span aria-hidden="true">/</span><span>About</span>
-        </nav>
-        <h1 data-reveal>Meet<br />Natasha</h1>
-        <span class="av-e__intro-rule" aria-hidden="true" data-reveal></span>
-        <p class="av-e__framing" data-reveal>
+  <!-- The photo hero the home page and /studio open on, on the studio's own
+       component — full bleed behind the transparent header, the weighted
+       scrim, a left column of light type. The photograph is the portrait
+       this hero used to hold in a two-column grid: Natasha against the
+       muscular-system chart, recut from its square to the studio hero's
+       frame (see PORTRAIT in content.js for the cut). The breadcrumbs went
+       with the columns — neither of the other two photo heroes carries any.
+
+       No aria-hidden on the media, unlike /studio: there the photograph is
+       the room the h1 already names, here it is the person the page is
+       about, so it keeps its description. -->
+  <section class="clinics-hero" aria-labelledby="about-title">
+    <div class="clinics-hero__media">
+      <img
+        class="clinics-hero__still"
+        src="${PORTRAIT.hero1600}"
+        srcset="${PORTRAIT.hero800} 800w, ${PORTRAIT.hero1600} 1600w, ${PORTRAIT.hero2400} 2400w"
+        sizes="100vw"
+        width="1600"
+        height="1248"
+        alt="${PORTRAIT.alt}"
+        fetchpriority="high"
+      />
+      <div class="clinics-hero__scrim" aria-hidden="true"></div>
+    </div>
+    <div class="clinics-hero__inner">
+      <p class="clinics-hero__eyebrow"><i aria-hidden="true"></i>About Natasha</p>
+      <h1 id="about-title">Meet Natasha.</h1>
+      <div class="clinics-hero__footer">
+        <p>
           ${NAME} is a Sports Therapist and Certified STOTT Pilates instructor
           in Studham. Where she trained, what she treats and why she does it.
         </p>
-        <a class="av-e__intro-cta" href="/contact" data-reveal>
-          Book an appointment <span aria-hidden="true">&#8599;</span>
+        <a class="pilates-arrow-link" href="/contact">
+          Book an appointment <span>&#8599;</span>
         </a>
       </div>
-
-      <figure class="av-e__portrait-figure" data-reveal>
-        <div class="av-e__portrait">
-          <img
-            class="av-portrait"
-            src="${PORTRAIT.portrait900}"
-            srcset="${PORTRAIT.portrait540} 540w, ${PORTRAIT.portrait900} 900w"
-            sizes="(max-width: 899px) 100vw, 52vw"
-            width="900"
-            height="1200"
-            alt="${PORTRAIT.alt}"
-            loading="eager"
-            decoding="async"
-          />
-        </div>
-      </figure>
     </div>
   </section>
 

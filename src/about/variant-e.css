@@ -5,177 +5,34 @@
    a transcript. No panels, no cards — the Q/A rhythm is the layout. */
 
 /* ---- Hero ----
-   Two columns on white. The words hold the shell's left line — the same line
-   every question below starts on — and the photograph runs off the right edge
-   of the window at the full height of the frame. Nothing else is in it: an
-   introduction, one hairline rule, one sentence, one link. */
+   The full-bleed photo hero the home page and /studio open on, reused rather
+   than restated: the markup carries the studio's own .clinics-hero classes —
+   the same way /studio kept its .clinics-* names through the /clinics →
+   /studio rename — so the header's on-photo treatment, the hero query in
+   main.js and every breakpoint of the type column resolve from the one
+   definition in style.css. The two rules below are all this page adds.
 
-.av-e .av-e__hero {
-  /* The photograph bleeds to the right edge of the window. Clip rather than
-     hidden: `overflow: hidden` on an ancestor would kill position:sticky
-     elsewhere on the page, and clip does the same job without establishing a
-     scroll port. */
-  overflow-x: clip;
-  padding-top: var(--av-header-clear);
-  /* Short, because the credentials strip follows: its own top pad and a full
-     section interval here would open a hole between the two. The photograph's
-     bottom fade is already carrying some of this gap. */
-  padding-bottom: var(--space-l);
-}
+   /studio's h1 takes its serif from .clinics-longform. This page has no such
+   wrapper, so the hero states it itself. */
 
-/* The global .breadcrumbs bottom margin (~90px) was tuned for a full-bleed
-   hero. Above her name in this column it just opens a hole. Scoped, so it
-   cannot leak to the other pages that still want the original. */
-.av-e .av-e__intro .breadcrumbs {
-  margin-bottom: var(--space-m);
-}
-
-/* The largest type on the site after the home page's own headline. Two short
-   words on two lines, so it can be set this big in a half-width column and
-   still keep her portrait beside it rather than under it. */
-.av-e .av-e__intro h1 {
-  margin: 0;
+.av-e .clinics-hero h1 {
   font-family: var(--font-serif);
-  font-size: var(--step-4h);
   letter-spacing: var(--tracking-display);
-  line-height: 1.02;
 }
 
-/* The only mark in the hero that is neither type nor photograph. It separates
-   the name from the sentence without a panel, a card or a box. */
-.av-e .av-e__intro-rule {
-  display: block;
-  width: 54px;
-  height: 2px;
-  margin-top: var(--space-m);
-  background: var(--brand);
-}
-
-.av-e .av-e__framing {
-  max-width: 34ch;
-  margin: var(--space-s) 0 0;
-  color: var(--ink-soft);
-  font-size: var(--step-0);
-  line-height: 1.55;
-}
-
-/* The one call to action above the fold. A label over a hairline rather than a
-   filled button: the hero is a name, a photograph and a sentence, and a block
-   of brand fill would be the loudest thing in it by some distance. */
-.av-e .av-e__intro-cta {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  margin-top: var(--space-m);
-  padding-bottom: 10px;
-  gap: 12px;
-  color: var(--brand-strong);
-  font-family: var(--font-sans);
-  font-size: var(--label-lg);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-lg-track);
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.av-e .av-e__intro-cta::after {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 1px;
-  background: currentColor;
-  content: "";
-  opacity: 0.38;
-  transition: opacity var(--dur-fast) ease;
-}
-
-.av-e .av-e__intro-cta:hover::after,
-.av-e .av-e__intro-cta:focus-visible::after {
-  opacity: 1;
-}
-
-.av-e .av-e__intro-cta span {
-  font-size: 1.25em;
-  line-height: 1;
-  transition: transform var(--dur-fast) var(--ease-out);
-}
-
-.av-e .av-e__intro-cta:hover span,
-.av-e .av-e__intro-cta:focus-visible span {
-  transform: translate(3px, -3px);
-}
-
-.av-e .av-e__hero-grid {
-  display: grid;
-  gap: var(--space-l);
-}
-
-/* ---- Portrait ----
-   A plain rectangle running to the edge of the window. It was a masked organic
-   crest with a paler echo behind it; the picture now carries the hero on its
-   own, and a shape cut around her competes with the type for the one gesture
-   the page is allowed. */
-
-.av-e .av-e__portrait-figure {
-  margin: 0;
-  /* Past 1440px the shell stops growing and centres, so the run to the window
-     edge is half the leftover rather than the gutter. */
-  margin-right: calc(-1 * max(var(--page-gutter), (100vw - 1440px) / 2));
-}
-
-.av-e .av-e__portrait {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 4 / 5;
-}
-
-/* The picture dissolves into the paper rather than sitting on it in a box: a
-   long fade off the left edge, where it meets the white the type is set on,
-   and a short one along the top and the foot. The right edge is left alone —
-   the window cuts that one.
-
-   Both fades are drawn as their own mask layer and then intersected. The
-   default composite is `add`, which unions two half-transparent layers into
-   something close to no fade at all, so the composite has to be stated: the
-   standard property for current browsers, the old WebKit one behind it for
-   Safari before 15.4. Nothing here is load-bearing — a browser that supports
-   neither shows the photograph as a plain rectangle. */
-.av-e .av-e__portrait {
-  -webkit-mask-image: var(--av-e-fade-x), var(--av-e-fade-y);
-  mask-image: var(--av-e-fade-x), var(--av-e-fade-y);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
-
-/* Stopped rather than linear at both ends. A straight ramp reads as a grey
-   wash laid over the edge of the picture; easing the middle of the fade makes
-   it read as the picture running out. */
-.av-e {
-  --av-e-fade-x: linear-gradient(
-    to right,
-    transparent 0%,
-    rgb(0 0 0 / 0.18) 8%,
-    rgb(0 0 0 / 0.55) 15%,
-    rgb(0 0 0 / 0.86) 22%,
-    #000 30%
-  );
-  --av-e-fade-y: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgb(0 0 0 / 0.6) 4%,
-    #000 10%,
-    #000 90%,
-    rgb(0 0 0 / 0.6) 96%,
-    transparent 100%
-  );
-}
-
-/* The frame is close to square once it runs to the window edge, and the source
-   is 3:4 — centred, cover crops straight through the top of her head. Hold the
-   crop high. */
-.av-e .av-e__portrait img {
-  object-position: 50% 12%;
+/* Where each viewport's window lands on the frame. Natasha's head spans
+   roughly the 22nd to 48th hundredth of the width, and a phone's tall
+   window keeps ~36% of it — at 20% the strip runs from the pale wall to
+   just past her hair, so she stands in the right half of a phone screen
+   with the wall behind the type instead of her face under it. Desktop
+   windows show the full width, so the bias costs them nothing; 22% on the
+   vertical keeps her head rather than her shoulder when a shallow window
+   cuts the height. The filter is the whisper of cooling the two-column
+   hero gave the same photograph (it was .av-portrait in about.css) — the
+   frame's warm cast, not the treatment, is what changed shape. */
+.av-e .clinics-hero__still {
+  filter: saturate(0.94) contrast(1.02);
+  object-position: 20% 22%;
 }
 
 /* ---- The conversation ----
@@ -544,30 +401,9 @@
   line-height: 1.6;
 }
 
-/* ---- Desktop: the words beside the photograph ---- */
+/* ---- Desktop: the conversation opens out ---- */
 
 @media (min-width: 900px) {
-  .av-e .av-e__hero-grid {
-    /* Centred, not start-aligned: the text block is short and the picture is
-       tall, and hanging the words off the top of a 600px frame leaves the
-       column looking abandoned. */
-    align-items: center;
-    /* Close to an even split, type side ahead. The headline is the largest
-       thing on the page and the column has to hold "Natasha" on one line at
-       that size; the photograph takes what is left and then some, because it
-       carries on past the right edge of the shell. */
-    grid-template-columns: minmax(0, 1.04fr) minmax(0, 1fr);
-    gap: clamp(2.5rem, 5vw, 5rem);
-  }
-
-  /* Height rather than ratio here: the frame runs to the window edge, so its
-     width is whatever is left over and a ratio would let it grow to any
-     height it liked on a wide monitor. */
-  .av-e .av-e__portrait {
-    aspect-ratio: auto;
-    height: min(78svh, 680px);
-  }
-
   /* The conversation opens out. The axis moves to the middle, the questions
      alternate either side of it, and the swing grows to match — 58px inside a
      168px centre column, which leaves the line clear of the type on both sides

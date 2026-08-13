@@ -5272,11 +5272,12 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 }
 
 /* ---- /studio hero ----
-   Footage of the room, not a drawing of a treatment: the page is about a
-   place, so the hero walks through one. Built on the home hero's terms —
-   full bleed behind the header, weighted scrim, a left column of light type
-   — because that is already this site's language for a hero the bar sits on,
-   and a second dialect of it would only drift.
+   The room itself, not a drawing of a treatment: the page is about a place,
+   so the hero is a photograph of one — the studio from its own terrace,
+   doors folded open. Built on the home hero's terms — full bleed behind the
+   header, weighted scrim, a left column of light type — because that is
+   already this site's language for a hero the bar sits on, and a second
+   dialect of it would only drift.
 
    The box is the home hero's, to the pixel — same height, same centring —
    and the type block inside it shares that hero's positioning rules outright
@@ -5300,43 +5301,33 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   pointer-events: none;
 }
 
-.clinics-hero__still,
-.clinics-hero__reel {
+/* The photograph ships as its full 4:3 frame and this is where each screen's
+   window is cut. 62% and not center: a phone's tall window keeps barely a
+   third of the width, and dead centre that third is mostly the bay tree —
+   biased right it is the open doorway with the lit room behind it, which is
+   the picture. Desktop shows the full width either way, so the bias costs
+   the wide screens nothing. */
+.clinics-hero__still {
   position: absolute;
   display: block;
   width: 100%;
   height: 100%;
   inset: 0;
   object-fit: cover;
-  object-position: center;
+  object-position: 62% 50%;
 }
 
-/* The still is the load-bearing layer, not a placeholder: it is what shows
-   before the clip has buffered, when reduced motion is asked for, and if the
-   file is missing. The video is held at zero until it can actually play —
-   JS adds .is-ready on canplay — so a stalled clip never blanks the hero. */
-.clinics-hero__reel {
-  opacity: 0;
-  transition: opacity 900ms var(--ease-out);
-}
+/* Three layers, each answering something the photograph does not promise on
+   its own. The wedge guarantees contrast under the column of type — the left
+   of this frame is fuchsias over pale paving, not a dark ground; the foot
+   vignette holds the low-sitting type over the terrace stones; the head
+   vignette is for the header, white type all the way across a top edge that
+   runs from dark roof tiles into white gable.
 
-.clinics-hero__reel.is-ready {
-  opacity: 1;
-}
-
-/* Three layers, each answering something the footage will not promise. The
-   wedge guarantees contrast under the column of type wherever the shot
-   happens to be at that moment; the foot vignette holds the low-sitting type
-   over what is usually a bright floor; the head vignette is for the header,
-   which is white type all the way across a frame whose top edge is generally
-   a lit ceiling. The still hero on the home page can do without that last
-   one — its photograph never changes. This one's does, every frame.
-
-   The wedge falls off hard rather than tapering across the frame. The room
-   in the clip is close to white, and a gentle taper over a near-white room
-   does not read as shadow — it reads as fog, the whole hero going flat
-   lavender-grey. Held to the left half, the type gets its dark ground and
-   the room stays a bright room. */
+   The wedge falls off hard rather than tapering across the frame. A gentle
+   taper over the pale paving and the lit room does not read as shadow — it
+   reads as fog, the whole hero going flat lavender-grey. Held to the left
+   half, the type gets its dark ground and the room stays a lit room. */
 .clinics-hero__scrim {
   position: absolute;
   inset: 0;
@@ -5405,14 +5396,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 .clinics-hero .pilates-arrow-link span {
   color: var(--periwinkle);
-}
-
-/* Asked for stillness, the clip is never fetched at all — see initStudioReel.
-   This is the belt to that braces: nothing here should fade or move. */
-@media (prefers-reduced-motion: reduce) {
-  .clinics-hero__reel {
-    transition: none;
-  }
 }
 
 /* Continuous Sports Therapy page */
@@ -6099,55 +6082,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
      the two machine shots want the person on them. Each panel sets its own
      --view-focus in the markup; 50% is the plain middle if one ever doesn't. */
   object-position: center var(--view-focus, 50%);
-}
-
-/* The panels are switched with [hidden], and the modifier below sets a
-   display, so the stack needs this: a display of any kind on a [hidden]
-   element beats the UA sheet's display: none and the panel shows through the
-   photograph on the cell beneath it. */
-.studio-look__view[hidden] {
-  display: none;
-}
-
-/* The view with no photograph in it yet. It fills the stage like the others,
-   so nothing about the band's height or the row above it changes when the
-   couch is the one you picked. */
-.studio-look__view--soon {
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  gap: 10px;
-  padding: var(--space-s);
-  /* The stage's own white would read as a photograph that failed to load, so
-     the panel takes the faintest wash of brand and a hairline to sit in. */
-  border-radius: inherit;
-  background: oklch(41.9% 0.117 275 / 0.045);
-  box-shadow: inset 0 0 0 1px var(--line);
-  text-align: center;
-}
-
-.studio-look__soon-mark {
-  width: 40px;
-  height: 40px;
-  color: var(--brand);
-  opacity: 0.35;
-}
-
-.studio-look__soon-label {
-  margin: 0;
-  color: var(--brand);
-  font-size: var(--label-lg);
-  font-weight: var(--label-weight);
-  letter-spacing: var(--label-lg-track);
-  text-transform: uppercase;
-}
-
-.studio-look__soon-line {
-  max-width: 26ch;
-  margin: 0;
-  color: var(--ink-soft);
-  font-size: var(--step-0);
-  line-height: var(--lh-body);
 }
 
 .studio-look__view.is-entering {
@@ -7517,15 +7451,17 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   --space-section: var(--gap-act);
 }
 
-/* One act, three siblings: the room, the Reformer, the Chair. They are three
-   views of the same place in the same layout, so they sit a --gap-close apart
-   and the act's air goes on the outside of the run only — the shape the offer
-   act has on /pilates, where .pilates-feature--individual opens it and
-   .pilates-golf closes it.
+/* One act, four siblings: the room, the Reformer, the Chair, the couch. They
+   are four views of the same place in the same layout, so they sit a
+   --gap-close apart and the act's air goes on the outside of the run only —
+   the shape the offer act has on /pilates, where .pilates-feature--individual
+   opens it and .pilates-golf closes it.
 
    Keyed to ids rather than to :first-of-type/:last-of-type, which would both
-   land on the wrong element: the hero is a section too, and the closing band
-   is a div, so the run's real ends are not the parent's. */
+   land on the wrong element: the hero is a section too, and the walk-through
+   film below the run is its own shape, so the run's real ends are not the
+   parent's. The act-end padding moved from #stability-chair to #physio-couch
+   the day the couch joined the run — chair is an inner sibling now. */
 .clinics-longform .pilates-feature {
   padding-block: var(--gap-close);
 }
@@ -7534,8 +7470,90 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   padding-top: var(--gap-act);
 }
 
-.clinics-longform #stability-chair {
+.clinics-longform #physio-couch {
   padding-bottom: var(--gap-act);
+}
+
+/* ---- The walk-through film ----
+   The frame itself — 9:16 box, hairline border, poster overlay — is the
+   site-wide films component; nothing about the player is restated here, same
+   deal as .av-e__film on /about. This block only arranges the section: words
+   and film stacked and centred on a phone, side by side from 900px with the
+   film on the RIGHT — /about mirrors its hero and puts the film left; here
+   the film is the coda after the four-sibling run, not its next member, so
+   it holds the right edge the run finished on (couch-right) rather than
+   swinging back. See the markup comment on the section.
+
+   No top padding: the act's air below #physio-couch is already the
+   --gap-act the run ends on, and a second helping here would open a hole in
+   the page where the film is supposed to answer the photographs. The bottom
+   --gap-act is the same air the act used to hold above the closing band.
+
+   The 380px cap is the films-lead cap, for the films-lead reason: a 9:16 box
+   grows in height twice as fast as in width, and past this it stops being a
+   film on the page and becomes the page. */
+
+.clinics-film {
+  padding-block: 0 var(--gap-act);
+}
+
+.clinics-film__grid {
+  display: grid;
+  gap: clamp(2rem, 1.4rem + 3vw, 4.5rem);
+  justify-items: center;
+}
+
+.clinics-film__figure {
+  width: min(380px, 100%);
+  margin: 0;
+}
+
+.clinics-film__intro {
+  max-width: 46ch;
+  text-align: center;
+}
+
+/* The same voice as the three sections above: serif lands from the page-wide
+   h2 rule, and the size is theirs too, so the film's heading reads as the
+   fourth view of the room rather than as a smaller aside about it. */
+.clinics-film__intro h2 {
+  margin: 0;
+  font-size: var(--step-3);
+  line-height: var(--lh-head);
+  text-wrap: balance;
+}
+
+.clinics-film__intro p {
+  margin: var(--space-s) auto 0;
+  color: var(--ink-soft);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+@media (min-width: 900px) {
+  /* The mirror of the /about arrangement: the words keep the left-hand
+     column, sized to their own measure, and the film takes everything right
+     of them, floating centred in it rather than sitting pinned to the shell
+     edge — hard right, the band of paper between the two would read as a gap
+     rather than as spacing. */
+  .clinics-film__grid {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    gap: clamp(3rem, 2rem + 5vw, 7rem);
+  }
+
+  .clinics-film__figure {
+    justify-self: center;
+  }
+
+  .clinics-film__intro {
+    text-align: left;
+  }
+
+  .clinics-film__intro p {
+    margin-inline: 0;
+  }
 }
 
 /* ============================================================
