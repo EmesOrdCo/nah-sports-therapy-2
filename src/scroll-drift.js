@@ -31,8 +31,9 @@
  *
  * There is deliberately no default share. The number is not a matter of taste,
  * it is bounded by how much overspill that particular component's CSS provides
- * — 7% against a 1.16 scale, and no more. A default would be right for one
- * component and would quietly overrun the next one it was used on.
+ * — 2.5% against the gallery plate's 1.06 scale, and no more. A default would
+ * be right for one component and would quietly overrun the next one it was
+ * used on.
  */
 
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)");

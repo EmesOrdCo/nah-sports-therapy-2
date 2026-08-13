@@ -4346,11 +4346,20 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 .pilates-feature__media.is-adrift
   .pilates-feature__shot:not(.pilates-feature__shot--inset)
   img {
-  /* The runway. 8% of the frame's height spills above and 8% below, which is
-     what the module's PLATE_TRAVEL (7%) is allowed to spend. Raising this
-     without raising that just crops the photograph for nothing; raising that
-     without raising this shows the frame's own edge at the extremes. */
-  scale: 1.16;
+  /* The runway. 3% of the frame's height spills above and 3% below, which is
+     what the drift shares in the markup (2.5%) are allowed to spend. Raising
+     this without raising those just crops the photograph for nothing; raising
+     those without raising this shows the frame's own edge at the extremes.
+
+     It was 1.16 against a 7% travel, and the ceiling on it is not taste but
+     the widest photograph the plates carry. A scale-up is uniform: runway
+     above and below is the same measure off each SIDE, and every plate here is
+     a switcher that the Reformer room shot can be traded into — a machine
+     photographed along its length, wider than its own frame is tall. At 1.16
+     both ends of it were outside the picture. The drift is a third of what it
+     was, which is the honest price: the runway past 3% is bought by cutting
+     the ends off the subject, and the subject is the point. */
+  scale: 1.06;
 }
 
 /* Centre origin on both. The picture is scaled inside a frame it overflows in
@@ -4485,6 +4494,12 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    block's width in both places it is used — the row for the button, the grid
    track for the padding. Those are the same width, so the two agree. */
 .pilates-feature__media.pilates-gallery {
+  --pick-gap: clamp(8px, 1.2vw, 16px);
+  /* --frame-count is how many frames stand across the corner at once, not how
+     many the section holds: the Reformer's thirteen and the Chair's ten do not
+     fit on one line at a size worth looking at, so the strip scrolls and the
+     rest wait off the edge. A section whose photographs all fit sets it to its
+     whole count, as every one of them did before, and nothing changes for it. */
   --pick-size: clamp(56px, calc(84% / var(--frame-count, 3)), 168px);
   /* Half a frame. Boxes are border-box here, so --pick-size is the whole
      frame, paper border included, and half of it is what hangs below. */
@@ -4495,33 +4510,60 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    the outer edge instead. An absolutely positioned row would otherwise be
    shrink-to-fit, which leaves the picks' percentage width resolving against a
    box their own width is deciding — they collapsed to their borders. Stretched
-   edge to edge, the percentage has the plate to measure against. The row is
-   then transparent to the cursor so only the frames themselves are pressable. */
+   edge to edge, the percentage has the plate to measure against.
+
+   One line, however many photographs are in it: past the plate's width the
+   strip scrolls sideways rather than wrapping onto a second row, which kept
+   climbing up the plate and covering the photograph it belongs to. So the row
+   takes the cursor after all — a scroller that ignores the pointer cannot be
+   dragged or wheeled — and the scrollbar is hidden, because this reads as a
+   row of photographs and a trough ruled under it would say otherwise.
+
+   `safe` on the alignment is what makes the two agree: flex-end on a scroller
+   whose contents overflow pushes the start of the row off the near edge and
+   out of reach, and the safe keyword drops back to flex-start exactly when
+   that would happen. Short rows still sit against the outer edge. */
 .pilates-gallery__picks {
   position: absolute;
   right: 0;
   bottom: 0;
   left: 0;
   display: flex;
-  justify-content: flex-end;
-  gap: clamp(8px, 1.2vw, 16px);
-  pointer-events: none;
+  flex-wrap: nowrap;
+  justify-content: safe flex-end;
+  gap: var(--pick-gap, clamp(8px, 1.2vw, 16px));
+  overflow-x: auto;
+  /* A scroller clips what leaves it on the cross axis too, and the frame the
+     cursor is on rises 4px. Room overhead for that, taken off the top edge —
+     the row is pinned by its bottom, so it grows upward onto the plate. */
+  padding-top: 6px;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.pilates-gallery__picks::-webkit-scrollbar {
+  display: none;
 }
 
 .pilates-feature__grid--media-first .pilates-gallery__picks {
-  justify-content: flex-start;
+  justify-content: safe flex-start;
 }
 
-/* Sized off --pick-size above. --frame-count counts every photograph in the
-   section, the one in the plate included, because that is what decides how
-   crowded the corner gets: 84% split that many ways puts the Reformer's three
-   at 28% — a shade over the lone inset's 27%, which is the size this corner
-   was drawn for — and lets the Chair's five fall to 17% on their own. The
-   floor is what a five-up row can hold on a phone without overrunning the
-   plate; the ceiling stops a two-up row growing into the text column on a very
-   wide screen. */
+/* Sized off --pick-size above. --frame-count is what decides how crowded the
+   corner gets: 84% split that many ways puts three frames at 28% — a shade
+   over the lone inset's 27%, which is the size this corner was drawn for — and
+   lets a five-up row fall to 17% on its own. The floor is what a five-up row
+   can hold on a phone without overrunning the plate; the ceiling stops a
+   two-up row growing into the text column on a very wide screen.
+
+   Fixed rather than merely wide: a flex item in a scroller is still free to
+   shrink, and the frames of a strip that overflows would otherwise be squeezed
+   thinner than the ones of a strip that fits. */
 .pilates-gallery__pick {
+  flex: 0 0 var(--pick-size);
   width: var(--pick-size);
+  scroll-snap-align: start;
   padding: 0;
   border: 8px solid var(--paper);
   background: var(--paper);
@@ -5317,6 +5359,27 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   object-position: 62% 50%;
 }
 
+/* The tour, laid exactly over the still and cut the same way. It is cropped
+   wider than the photograph, so on a phone it reaches for the same right-of-
+   centre bias for the same reason. It fades up only once it can play — see
+   initStudioReel — so a slow connection shows the photograph rather than a
+   black rectangle, and a refused codec shows it for good. */
+.clinics-hero__reel {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  object-position: 62% 50%;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out);
+}
+
+.clinics-hero__reel.is-ready {
+  opacity: 1;
+}
+
 /* Three layers, each answering something the photograph does not promise on
    its own. The wedge guarantees contrast under the column of type — the left
    of this frame is fuchsias over pale paving, not a dark ground; the foot
@@ -5396,6 +5459,14 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 .clinics-hero .pilates-arrow-link span {
   color: var(--periwinkle);
+}
+
+/* Asked for stillness, the clip is never fetched at all — see initStudioReel.
+   This is the belt to that braces: nothing here should fade or move. */
+@media (prefers-reduced-motion: reduce) {
+  .clinics-hero__reel {
+    transition: none;
+  }
 }
 
 /* Continuous Sports Therapy page */
