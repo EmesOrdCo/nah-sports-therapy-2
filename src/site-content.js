@@ -27,7 +27,8 @@ const navGroups = [
     href: "/pilates",
     links: [
       ["Overview", "/pilates#overview"],
-      ["Individual Pilates", "/pilates#individual"],
+      ["Your Pilates session", "/pilates#individual"],
+      ["1:1 Mat Pilates", "/pilates#mat"],
       ["Reformer Pilates", "/pilates#reformer"],
       ["Stability Chair", "/pilates#stability-chair"],
       ["Small-group timetable", "/pilates#small-group"],
@@ -840,6 +841,14 @@ function buildPilatesContinuousPage() {
       <!-- "The Studham studio" moved to /studio, which is now the one page
            about the room. -->
 
+      <!-- This section used to be "Individual Pilates" and carried the whole
+           description of a private session. The three that follow it are each
+           one way of working (Mat, Reformer, Stability Chair), and a private
+           session is common to all three rather than an alternative to them,
+           so it says what a session is like here and leaves each way of
+           working to its own section. The anchor stays #individual: it is
+           linked from the hub cards, the nav submenu and the home page, and
+           renaming it would break every one of those for no reader's benefit. -->
       <section class="pilates-feature pilates-feature--individual" id="individual" aria-labelledby="individual-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-orbit-figure" data-reveal>
@@ -869,21 +878,71 @@ function buildPilatesContinuousPage() {
             </dl>
           </div>
           <div class="pilates-feature__content" data-reveal>
-            ${eyebrow("Pilates")}<h2 id="individual-title" class="title-rule">Individual Pilates</h2>
+            ${eyebrow("Pilates")}<h2 id="individual-title" class="title-rule">Your Pilates session</h2>
             <p class="pilates-feature__lead">One-to-one Pilates, or a duet session with a friend, tailored to suit your needs and objectives.</p>
             <p>Your session focuses on restoring muscular balance, with specific exercises designed for your posture type or medical conditions such as osteoporosis, frozen shoulder, and neck, knee or lower-back issues.</p>
-            <a class="pilates-arrow-link" href="#contact">Discuss your requirements <span>→</span></a>
+            <p>Sessions work on the mat, the Reformer or the Stability Chair, and often move between them. Which you use is decided from your assessment rather than booked in advance.</p>
+            <a class="pilates-arrow-link" href="#mat">See how a session works <span>→</span></a>
           </div>
         </div>
       </section>
 
-      <!-- Reformer and Stability Chair. Individual Pilates above says what a
-           private session is; these two say what each machine is *for* — what
-           it does for you and who it suits. Deliberately no description of the
-           hardware here: /studio#reformer and /studio#stability-chair carry
-           that, and the two pages should not read as one text printed twice.
-           They alternate sides so the run from #individual to #small-group has
-           a rhythm rather than three left-hand figures in a column.
+      <!-- Mat, then Reformer, then Stability Chair: the three ways of working,
+           in the order a client meets them. Mat comes first because it needs
+           no apparatus and because the five basic principles quoted under
+           Small Group Pilates are taught on it before anything with springs.
+
+           Photographs from a 1:1 mat session, August 2026, in the main room
+           with the garden doors folded open. The small equipment on the floor
+           is the section's subject as much as the client is: the ring, the
+           weighted balls and the arc barrel are what "mat" means here, and
+           they are in every frame without being posed. -->
+      <section class="pilates-feature pilates-feature--equipment" id="mat" aria-labelledby="mat-title">
+        <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first">
+          <div class="pilates-feature__content" data-reveal>
+            ${eyebrow("Pilates")}<h2 id="mat-title" class="title-rule">1:1 Mat Pilates</h2>
+            <p class="pilates-feature__lead">Pilates as it was first taught, on the mat, with your own body weight for resistance.</p>
+            <p>Mat work builds the control everything else is built on. Without springs to support or assist you, the deep abdominal and back muscles do the holding, which is what makes precise, unhurried movement the point rather than repetition.</p>
+            <p>Small equipment is added as it helps: the Pilates ring, weighted balls, a roller or the arc barrel to support the spine, change the leverage of an exercise or give you something to work against. Every exercise scales, so the same movement suits a first session and a client who has been coming for years.</p>
+            <dl class="pilates-facts">
+              <div><dt>Good for</dt><dd>Core control, posture, spinal mobility, movement with precision</dd></div>
+              <div><dt>Equipment</dt><dd>Pilates ring, weighted balls, roller, arc barrel</dd></div>
+              <div><dt>Format</dt><dd>One-to-one or duet</dd></div>
+            </dl>
+            <a class="pilates-arrow-link" href="#contact">Ask about a mat session <span>→</span></a>
+          </div>
+          <!-- Same module, same square frames and same corner row as the two
+               machine sections below. Media-first, so the row lands on the
+               left edge the way the Chair's does. Four frames, all from the
+               one session, the plate included in the count. -->
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 4" data-reveal data-drift data-equipment-gallery>
+            <figure class="pilates-feature__shot pilates-gallery__plate">
+              <img data-drift-lag="0.07" data-gallery-plate data-small="/images/pilates/mat-ab-curl-500.webp" data-large="/images/pilates/mat-ab-curl-1000.webp" data-xl="/images/pilates/mat-ab-curl-1536.webp" data-xl-width="1536" src="/images/pilates/mat-ab-curl-1000.webp" srcset="/images/pilates/mat-ab-curl-500.webp 500w, /images/pilates/mat-ab-curl-1000.webp 1000w, /images/pilates/mat-ab-curl-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client holding a curled sit-up position on the mat, legs lifted, the studio's garden doors folded open behind her" width="1000" height="1000" loading="lazy">
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous mat Pilates photograph" hidden>←</button>
+              <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next mat Pilates photograph" hidden>→</button>
+            </figure>
+            <div class="pilates-gallery__picks" data-drift-lead="0.2">
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/mat-tabletop-500.webp" data-large="/images/pilates/mat-tabletop-1000.webp" data-xl="/images/pilates/mat-tabletop-1536.webp" data-xl-width="1536" src="/images/pilates/mat-tabletop-500.webp" alt="A client lying on the mat with both knees folded to tabletop, the Pilates ring and weighted balls on the floor beside her" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/mat-leg-lift-500.webp" data-large="/images/pilates/mat-leg-lift-1000.webp" data-xl="/images/pilates/mat-leg-lift-1536.webp" data-xl-width="1536" src="/images/pilates/mat-leg-lift-500.webp" alt="A client lying on the mat with one leg extended towards the ceiling and the other foot planted" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/pilates/mat-barrel-seated-500.webp" data-large="/images/pilates/mat-barrel-seated-1000.webp" data-xl="/images/pilates/mat-barrel-seated-1536.webp" data-xl-width="1536" src="/images/pilates/mat-barrel-seated-500.webp" alt="A client sitting upright against the arc barrel on the mat, looking out through the open garden doors" width="500" height="500" loading="lazy">
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reformer and Stability Chair, after Mat. Each says what its machine
+           is *for*, meaning what it does for you and who it suits.
+           Deliberately no description of the hardware here: /studio#reformer
+           and /studio#stability-chair carry that, and the two pages should not
+           read as one text printed twice. The three ways of working alternate
+           sides, Mat left, Reformer right, Chair left, so the run down to
+           #small-group has a rhythm rather than three figures in a column.
 
            Both photographs are the studio's own now, and both are galleries.
            The Chair's is the set /studio carries, photograph for photograph:
