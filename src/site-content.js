@@ -1058,7 +1058,7 @@ function buildPilatesContinuousPage() {
               <div><dt>Asymmetry correction</dt><dd>Independent pedal movement highlights and helps rebalance strength or flexibility disparities between the left and right sides of the body</dd></div>
               <div><dt>Functional balance</dt><dd>The compact base of support forces deep core engagement and improves proprioception and body control; the dual pedals allow bilateral, unilateral and reciprocal movements to increase intensity and overall balance</dd></div>
               <div><dt>Injury rehabilitation</dt><dd>Ideal after rehab, or for anyone who needs to stay upright or seated because of limited mobility or joint injuries: adjustable resistance and controlled movement make for gentle, low-impact exercises that promote healing and strengthening without exacerbating injuries</dd></div>
-              <div><dt>Versatility</dt><dd>A wide range of exercises catering to different fitness levels, goals and needs — from beginner-friendly movements to challenging advanced exercises, including high-performance work for athletes and fitness enthusiasts</dd></div>
+              <div><dt>Versatility</dt><dd>A wide range of exercises catering to different fitness levels, goals and needs, from beginner-friendly movements to challenging advanced exercises, including high-performance work for athletes and fitness enthusiasts</dd></div>
               <div><dt>Core engagement</dt><dd>Unparalleled in its ability to engage the core: the Chair's design requires you to maintain control and stability throughout each exercise, which effectively targets the deep core muscles</dd></div>
               <div><dt>Functional strength</dt><dd>Its exercises often mimic daily activities and movements, building strength that translates to everyday life</dd></div>
               <div><dt>Challenging and fun</dt><dd>Adjustable resistance and varied exercises keep workouts engaging, reducing the risk of plateaus</dd></div>
@@ -1178,7 +1178,7 @@ function buildPilatesContinuousPage() {
               <p class="story__index" aria-hidden="true">02</p>
               <h2>Postnatal Pilates</h2>
               <p class="story__lede">
-                A careful return after birth, from the six-week GP check &mdash;
+                A careful return after birth, from the six-week GP check,
                 or eight to twelve weeks following a Caesarean section.
               </p>
               <ul class="story__list">
@@ -1279,6 +1279,20 @@ const STUDIO_WALKTHROUGH_FILM = {
   ariaLabel: "Play the studio walk-through film",
 };
 
+/* Its pair. Natasha's own footage this time (IMG_1199.MP4, sent 13 Aug
+   2026): no walking, one slow pan from the Stability Chair corner across
+   the room set for a mat class — a mat, roller, ring and ball at every
+   place — out to the garden doors at dusk and back. Where the walk-through
+   shows the room as a visitor meets it, this shows it as a class does.
+   Same norm, same crf 28, and the track was stripped for the same reason:
+   silence to -36dB peaks. Nobody in frame, so the consent rule in films.js
+   does not bite here either. Poster is its own first frame. */
+const STUDIO_CLASS_FILM = {
+  poster: "/images/studio-set-for-class-poster.webp",
+  sources: [{ src: "/videos/studio-set-for-class.mp4" }],
+  ariaLabel: "Play the film of the room set for a class",
+};
+
 /* Was /clinics. There has only ever been one location, and the studio copy
    that used to sit halfway down /pilates now lives here, so the page is named
    for its subject rather than for a set of clinics that does not exist. */
@@ -1305,6 +1319,13 @@ function buildStudioContinuousPage() {
            not to a room behind a page's type. The audio went with them; a
            muted background loop has no use for a track.
 
+           The footage arrived WhatsApp-compressed at 832px, too soft
+           stretched across a desktop. Every frame went through Real-ESRGAN
+           at 4x (upscayl-lite-4x — on this footage it resolved better than
+           remacri and at twenty times the speed) and the loop was re-encoded
+           from those frames at double the source width, 1664, the phone file
+           supersampled down from the same set.
+
            The still ships as its whole 4:3 frame rather than pre-cropped:
            both layers are object-fit: cover, so every viewport cuts its own
            window, and 4:3 has the height a phone's tall window needs where a
@@ -1319,7 +1340,7 @@ function buildStudioContinuousPage() {
                  and never re-evaluated on resize. That is the wrong behaviour
                  for a responsive image and exactly the right one here: the
                  narrow file exists so a phone on mobile data is not made to
-                 fetch 1.8MB of background loop, and a phone does not become a
+                 fetch 5.3MB of background loop, and a phone does not become a
                  desktop mid-visit. -->
             <source src="/videos/studio-tour-640.mp4" type="video/mp4" media="(max-width: 700px)" />
             <source src="/videos/studio-tour.mp4" type="video/mp4" />
@@ -1608,21 +1629,25 @@ function buildStudioContinuousPage() {
            above it, media on the right so the plates keep alternating.
 
            The first paragraph is Natasha's line from her email, verbatim —
-           the "tag" the photo folder's name said to remember. The rest is
-           held to what the photographs can vouch for — the badge on the
-           frame, the pedal, the lift, the castors — and any further wording
-           she sends replaces it verbatim, the way the Reformer's and the
-           Chair's replaced theirs. -->
+           the "tag" the photo folder's name said to remember. The rest was
+           first written to what the photographs vouch for — the badge, the
+           pedal, the lift, the castors — which made three mentions of a
+           foot pedal in one short section: a description of plumbing, not
+           of treatment. Rewritten (Harry, 14 Aug 2026) around what happens
+           on the couch, with the mechanism down to one word in the facts;
+           still interim, and any wording Natasha sends replaces it
+           verbatim, the way the Reformer's and the Chair's replaced
+           theirs. -->
       <section class="pilates-feature pilates-feature--equipment" id="physio-couch" aria-labelledby="studio-couch-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-feature__content" data-reveal>
             <h2 id="studio-couch-title">The Hydraulic Physio Couch</h2>
             <p class="pilates-feature__lead">The space easily transforms from a Pilates studio to Soft Tissue treatment clinic with a clever partition wall.</p>
-            <p>A padded treatment couch by Metron, raised and lowered on a hydraulic lift.</p>
-            <p>The lift is worked by a foot pedal, so the couch's height can change during a treatment — with a client already lying on it — rather than only being set before one. The frame stands on castors that lock, holding the couch in place while it is worked around.</p>
+            <p>A padded treatment couch by Metron, standing in the studio's treatment corner between the anatomy charts and the corner sink.</p>
+            <p>This is where the Sports Therapy side of the practice happens: assessment, massage and Soft Tissue Release, with the couch set to the height each treatment calls for and adjusted at any point in a session.</p>
             <dl class="pilates-facts">
-              <div><dt>What it is</dt><dd>A padded treatment couch on a foot-pumped hydraulic lift</dd></div>
-              <div><dt>Adjusts</dt><dd>Height, by foot pedal, mid-treatment</dd></div>
+              <div><dt>What it is</dt><dd>A padded hydraulic treatment couch by Metron</dd></div>
+              <div><dt>Adjusts</dt><dd>Height, at any point in a treatment</dd></div>
             </dl>
             <a class="pilates-arrow-link" href="/sports-therapy">What happens on it <span>→</span></a>
           </div>
@@ -1664,19 +1689,44 @@ function buildStudioContinuousPage() {
            scoped to the shelf's two shapes, and a figure without one of them
            keeps the play mark over a running film.
 
-           Words left, film right: the run above alternates room-left,
-           Reformer-right, Chair-left, couch-right. The film is not the next
-           sibling in that run — it is a coda in its own shape — so it holds
-           the right edge the run finished on rather than swinging back. -->
+           Words left, films right: the run above alternates room-left,
+           Reformer-right, Chair-left, couch-right. The films are not the next
+           sibling in that run — they are a coda in their own shape — so they
+           hold the right edge the run finished on rather than swinging back.
+
+           Two films now, not one: Harry's walk in and Natasha's pan of the
+           room set for a class. They stand as a pair with the second frame
+           dropped a step — the same lapped offset the photo sections above
+           use — and each carries a films__name line underneath, because two
+           portrait stills of the same room side by side need the half-line
+           that says which is which. The labels reuse the client-shelf
+           caption classes rather than inventing a local style: same label,
+           same job.
+
+           The figures carry no data-reveal: that one fires once and is
+           done, and this pair plays both ways — it flies up as you scroll
+           down to it and sinks back as you scroll away, the home page's
+           quote band rather than the site's one-shot reveal. main.js
+           scrubs .clinics-film__pair; the travels the fractions are spent
+           on live with .clinics-film__figure in the stylesheet. The intro
+           keeps its reveal — words are read once, and rewinding them adds
+           nothing. -->
       <section class="clinics-film" id="walkthrough" aria-labelledby="studio-film-title">
         <div class="section-shell clinics-film__grid">
           <div class="clinics-film__intro" data-reveal>
             <h2 id="studio-film-title">Walk through the room.</h2>
-            <p>Thirty-five seconds, one take, no sound: in at the front door and once around the room — mats down, the Reformer and the Stability Chair in place, and the garden doors folded open to the terrace.</p>
+            <p>Welcome to our studio tour. Two short films to help you get a feel for the space, from the front door to the room set up and ready for a class.</p>
           </div>
-          <figure class="clinics-film__figure films__card" data-reveal>
-            ${filmFrame(STUDIO_WALKTHROUGH_FILM, "studio")}
-          </figure>
+          <div class="clinics-film__pair">
+            <figure class="clinics-film__figure films__card">
+              ${filmFrame(STUDIO_WALKTHROUGH_FILM, "studio")}
+              <figcaption class="films__caption"><p class="films__name">The walk in</p></figcaption>
+            </figure>
+            <figure class="clinics-film__figure clinics-film__figure--set films__card">
+              ${filmFrame(STUDIO_CLASS_FILM, "studio-class")}
+              <figcaption class="films__caption"><p class="films__name">Set for a class</p></figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 

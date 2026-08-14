@@ -7545,27 +7545,41 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   padding-bottom: var(--gap-act);
 }
 
-/* ---- The walk-through film ----
+/* ---- The walk-through films ----
    The frame itself — 9:16 box, hairline border, poster overlay — is the
    site-wide films component; nothing about the player is restated here, same
    deal as .av-e__film on /about. This block only arranges the section: words
-   and film stacked and centred on a phone, side by side from 900px with the
-   film on the RIGHT — /about mirrors its hero and puts the film left; here
-   the film is the coda after the four-sibling run, not its next member, so
-   it holds the right edge the run finished on (couch-right) rather than
+   and films stacked and centred on a phone, side by side from 900px with the
+   films on the RIGHT — /about mirrors its hero and puts the film left; here
+   the films are the coda after the four-sibling run, not its next member, so
+   they hold the right edge the run finished on (couch-right) rather than
    swinging back. See the markup comment on the section.
+
+   Two films since Natasha's class-set pan joined Harry's walk in. They are a
+   pair, not a shelf: side by side from 560px with the second frame dropped a
+   step — the lapped offset the photo sections above lean on, and the drop
+   also keeps the two play marks off a shared horizon. Below 560px they
+   stack, and the offset comes off with the second column: a staggered stack
+   just reads as a margin gone wrong.
 
    No top padding: the act's air below #physio-couch is already the
    --gap-act the run ends on, and a second helping here would open a hole in
-   the page where the film is supposed to answer the photographs. The bottom
-   --gap-act is the same air the act used to hold above the closing band.
+   the page where the films are supposed to answer the photographs. The
+   bottom --gap-act is the same air the act used to hold above the closing
+   band.
 
    The 380px cap is the films-lead cap, for the films-lead reason: a 9:16 box
    grows in height twice as fast as in width, and past this it stops being a
-   film on the page and becomes the page. */
+   film on the page and becomes the page. Side by side the cap is 340px a
+   frame — two full-cap films in a row would be the page twice over. */
 
 .clinics-film {
   padding-block: 0 var(--gap-act);
+  /* A film waiting its turn sits up to 20vh below its resting place, which
+     is deeper than the section's own bottom air — unclipped it would paint
+     over the closing band while the fold's foot still shows both. Clipped,
+     the pair rises up out of the page the way the quote band's halves do. */
+  overflow: clip;
 }
 
 .clinics-film__grid {
@@ -7574,9 +7588,78 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   justify-items: center;
 }
 
+.clinics-film__pair {
+  display: grid;
+  gap: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  justify-items: center;
+  width: 100%;
+}
+
 .clinics-film__figure {
   width: min(380px, 100%);
   margin: 0;
+}
+
+/* The label under each frame is the client-shelf caption, centred here
+   because everything in this section stands on its own axis rather than on
+   a shelf's left edge. */
+.clinics-film .films__caption {
+  text-align: center;
+}
+
+/* The pair flies up as you scroll down to it and sinks back as you scroll
+   away — the home page's quote band, not the site's one-shot reveal, which
+   is why the figures carry no data-reveal: a reveal fires once and is done,
+   and this pair plays both ways. main.js writes --film-in and
+   --film-in-late every frame from where the pair's top sits in the fold;
+   the defaults of 1 are the resting state, so no JS and reduced motion
+   paint the films exactly where the grid put them.
+
+   Left leads on the shallow travel and right follows on the deep one — the
+   reading order the lapped offset already sets. Stacked below 560px the
+   left film is the top one, so the same assignment reads top-then-bottom
+   and the pair skips the property swap the voice band needs on a phone.
+
+   The figures are load-bearing pairs with the ranges in main.js: the
+   leader starts 0.9 of a fold down, so its 14vh of displacement holds it
+   under the fold's edge with 4vh to spare; the follower's 0.78 start wants
+   22vh against these 20, and the shortfall is covered by the lapped
+   offset's margin-top below — its resting place is already a step down, so
+   the travel has less fold to clear. Stacked under 560px the offset is off
+   and the left film itself is the cover. See scrub-in.js for why both ends
+   of each range matter, and main.js for why the runs sit where they do. */
+.clinics-film__figure {
+  transform: translateY(calc((1 - var(--film-in, 1)) * 14vh));
+}
+
+.clinics-film__figure--set {
+  transform: translateY(calc((1 - var(--film-in-late, 1)) * 20vh));
+}
+
+/* Moved every frame while the pair crosses the screen, so each film is held
+   on its own compositor tile rather than rastered again per frame — keyed
+   to .is-scrubbing, which scrub-in.js sets on start-up, so no-JS and
+   reduced motion are not asked to hold tiles for an effect they will never
+   show. Same bargain as the voice band's halves. */
+.clinics-film__pair.is-scrubbing .clinics-film__figure {
+  will-change: transform;
+}
+
+@media (min-width: 560px) {
+  .clinics-film__pair {
+    grid-template-columns: repeat(2, minmax(0, 340px));
+    justify-content: center;
+    align-items: start;
+    gap: clamp(1rem, 0.5rem + 1.5vw, 1.75rem);
+  }
+
+  .clinics-film__figure {
+    width: 100%;
+  }
+
+  .clinics-film__figure--set {
+    margin-top: clamp(1.75rem, 1rem + 2.5vw, 3rem);
+  }
 }
 
 .clinics-film__intro {
@@ -7603,7 +7686,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 @media (min-width: 900px) {
   /* The mirror of the /about arrangement: the words keep the left-hand
-     column, sized to their own measure, and the film takes everything right
+     column, sized to their own measure, and the pair takes everything right
      of them, floating centred in it rather than sitting pinned to the shell
      edge — hard right, the band of paper between the two would read as a gap
      rather than as spacing. */
@@ -7614,7 +7697,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
     gap: clamp(3rem, 2rem + 5vw, 7rem);
   }
 
-  .clinics-film__figure {
+  .clinics-film__pair {
     justify-self: center;
   }
 

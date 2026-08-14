@@ -757,6 +757,29 @@ initScrubIn(document.querySelector(".st-pair"), [
   { property: "--pair-in-late", from: 0.86, to: 0.6 },
 ]);
 
+/* The walk-through films on /studio arrive the same way once more: left film
+   leading, right following a stretch behind, and both sinking back out as
+   you scroll away. Cards, not a strip, so the runs sit up the fold like the
+   .st-pair's rather than the quote band's — but a tenth of a fold later
+   than the .st-pair's own: these started at the .st-pair figures and the
+   films were setting off the moment their top edge showed, which read as
+   the page moving before it had been asked to. Starting at 0.9 leaves the
+   pair standing in the door a beat before it sets off.
+
+   A later start is a thinner hiding place — the leader now clears the fold
+   by 10vh of its 14vh travel instead of by all of it, and the follower's
+   0.78 start wants 22vh against its 20: the two or three vh it is short are
+   what the lapped offset's own margin-top covers, its resting place already
+   a step below the pair's top. Stacked under 560px the offset is off, but
+   there the whole left film stands between the follower and the pair's top,
+   which is cover no travel arithmetic has to buy. The ranges are stretched
+   to match — 0.18 and 0.26 of a fold — so both panels hold the .st-pair's
+   three quarters of a pixel per pixel of scroll. */
+initScrubIn(document.querySelector(".clinics-film__pair"), [
+  { property: "--film-in", from: 0.9, to: 0.72 },
+  { property: "--film-in-late", from: 0.78, to: 0.52 },
+]);
+
 const sectionLinks = [
   ...(navigation?.querySelectorAll('a[href*="#"]') || []),
 ].filter((link) => {
