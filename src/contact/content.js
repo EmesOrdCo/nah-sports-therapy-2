@@ -7,7 +7,10 @@
 export const BUSINESS = {
   phoneDisplay: "07881 821 901",
   phoneHref: "tel:+447881821901",
-  email: "natasha@njhsportstherapy.co.uk",
+  /* Client-supplied, and the same inbox enquiry notifications already go to
+     (DEFAULT_TO in netlify/functions/enquiry.js). The co.uk address this
+     replaced was displayed on the site but was not where the form delivered. */
+  email: "njhpilates@gmail.com",
 };
 
 /* The studio is also a private home, so it is named by village only — no

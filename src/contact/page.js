@@ -284,8 +284,6 @@ function enhanceSelect(wrap, triggerFor) {
   list.id = listId;
   list.hidden = true;
   list.setAttribute("role", "listbox");
-  // The weighted-scrolling module hands wheel events back inside this.
-  list.setAttribute("data-native-scroll", "");
   if (label) list.setAttribute("aria-labelledby", label.id);
 
   const items = options.map((option, index) => {

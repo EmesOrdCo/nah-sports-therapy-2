@@ -20,7 +20,7 @@ const page = await browser.newPage({
 });
 
 const files = readdirSync(outDir)
-  .filter((f) => /^poster\.html$/.test(f))
+  .filter((f) => /^poster(-alt-[a-z]-[a-z]+|-l\d\d-[a-z-]+)?\.html$/.test(f))
   .sort();
 
 for (const file of files) {

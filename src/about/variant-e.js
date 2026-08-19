@@ -38,11 +38,6 @@ import {
 
 export const meta = { label: "Interview", tone: "light" };
 
-/* The travel from the hero to the quote is the site-wide opening move, wired
-   up per route in main.js — see opening-move.js. It used to live here in full;
-   /prices and /client-stories wanted the same gesture, and three copies of a
-   scroll takeover is three ways for it to drift apart. */
-
 export function init() {
   initSpine();
 }

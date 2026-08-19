@@ -11,7 +11,10 @@ export const NAME = "Natasha Hadland";
 export const CONTACT = {
   tel: "07881 821901",
   telHref: "tel:+447881821901",
-  email: "natasha@njhsportstherapy.co.uk",
+  /* Client-supplied, and the same inbox enquiry notifications already go to
+     (DEFAULT_TO in netlify/functions/enquiry.js). The co.uk address this
+     replaced was displayed on the site but was not where the form delivered. */
+  email: "njhpilates@gmail.com",
 };
 
 /* Verbatim from the current /about page, in her voice. */

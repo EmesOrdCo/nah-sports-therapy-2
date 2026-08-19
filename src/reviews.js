@@ -26,6 +26,42 @@ export const SERVICE_LABELS = {
   [PILATES]: "Pilates",
 };
 
+/* The long one, and the only one of its kind here.
+ *
+ * Every entry in REVIEWS below is a paragraph or less, because the one place
+ * they are shown — the drifting run on the home page — takes the short ones
+ * and main.js filters the rest out at 190 characters. Kay's is three
+ * paragraphs: not a review of a class but the arc of a five-year recovery,
+ * which is the shape /client-stories is for. It stands at the foot of that
+ * page, under the shelf of films and inside their band, as the written voice
+ * among the spoken ones — set as a display pull-quote. See storyQuote() in
+ * site-content.js. Every paragraph is rendered and the block grows with the
+ * words, so adding a fourth is safe; it is only worth a look at how tall the
+ * quote gets before the closing card.
+ *
+ * Separate export rather than a flag on an entry in REVIEWS: everything in
+ * that array is one string, and this is an ordered set of paragraphs. A
+ * consumer that took `quote` off this would render three paragraphs run
+ * together into one.
+ *
+ * Wording is Kay's. Two corrections and nothing else, on the standing rule at
+ * the head of the Google block below — spelling and punctuation to house
+ * style, never a rewrite: "getting me knee stronger" to "my knee", and the
+ * comma in "stronger, more resilient".
+ *
+ * Same consent rule as the films and the journeys: a named client describing
+ * an injury and a surgery is disclosing health information, and withdrawal
+ * means deleting this. */
+export const FEATURED_REVIEW = {
+  name: "Kay",
+  services: [PILATES],
+  paragraphs: [
+    "Five years ago I suffered an ACL injury and surgery which completely changed the way I moved and exercised. Recovery wasn't just about getting my knee stronger — it was about rebuilding my confidence and trusting my body again.",
+    "Natasha has played a huge role in that journey. She has helped me improve my strength, balance, flexibility and stability, especially around my knee and core. Rather than focusing on high impact movements, Natasha has taught me the importance of control, alignment and moving with purpose.",
+    "Five years on, I still include Pilates and more recently chair Pilates in my routine. Chair Pilates has added a new dimension to my exercise routine. It's shown me how to build a stronger, more resilient and healthy body for the future.",
+  ],
+};
+
 export const REVIEWS = [
   {
     name: "Penny",

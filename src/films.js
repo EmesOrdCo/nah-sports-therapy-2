@@ -248,8 +248,16 @@ const earlierFilm = (film, index) => {
 
    The heading is deliberately not "Previously" and not a date — see the note
    at the top of this file about what a date does to a page nobody updates for
-   eight months. Returns nothing at all when there is only the lead. */
-export function filmsMore() {
+   eight months. Returns nothing at all when there is only the lead.
+
+   `after` is a slot under the shelf, inside the same band. It exists because
+   the written client story on this page belongs WITH the films rather than
+   between them and the lead, and a section of its own would have put a full
+   section's padding either side of it — two bands of white for one change of
+   voice. Whatever is passed lands under the row on the same paper. It is a
+   slot and not a parameter about reviews: films.js has no opinion on what goes
+   in it, and an empty one changes nothing. */
+export function filmsMore({ after = "" } = {}) {
   const earlier = FILMS.slice(1);
   if (!earlier.length) return "";
   return `<section class="films" aria-label="Earlier client films">
@@ -258,6 +266,7 @@ export function filmsMore() {
       <div class="films__shelf" data-count="${Math.min(earlier.length, 4)}" aria-labelledby="films-more">
         ${earlier.map((film, i) => earlierFilm(film, i + 1)).join("\n        ")}
       </div>
+      ${after}
     </div>
   </section>`;
 }

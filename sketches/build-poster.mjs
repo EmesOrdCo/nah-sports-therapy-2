@@ -9,14 +9,25 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve, extname } from "node:path";
-import { VARIANTS, FOUNDATION_CSS } from "./poster.js";
+import { VARIANTS as MAIN, FOUNDATION_CSS } from "./poster.js";
+import { LAB_VARIANTS } from "./poster-lab.js";
+
+const VARIANTS = [...MAIN, ...LAB_VARIANTS];
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
 const outDir = resolve(here, "out");
 mkdirSync(outDir, { recursive: true });
 
-const b64 = (p) => readFileSync(resolve(root, p)).toString("base64");
+/* Memoised: every variant re-references the same fonts and photographs, and
+   on a machine where cold reads stall (iCloud eviction), reading each file
+   once instead of once per variant is the difference between two seconds and
+   several minutes. */
+const b64cache = new Map();
+const b64 = (p) => {
+  if (!b64cache.has(p)) b64cache.set(p, readFileSync(resolve(root, p)).toString("base64"));
+  return b64cache.get(p);
+};
 
 const FONTS = [
   ["STIX Two Text", 400, "normal", "node_modules/@fontsource/stix-two-text/files/stix-two-text-latin-400-normal.woff2"],

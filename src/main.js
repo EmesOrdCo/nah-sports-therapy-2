@@ -3,14 +3,12 @@ import "./style.css";
 import "./about/about.css";
 import { initPageFeatures, renderRoute } from "./site-content.js";
 import { observeBase, routePath } from "./base-path.js";
-import { initSmoothScroll } from "./smooth-scroll.js";
 import { initScrollDrift } from "./scroll-drift.js";
 import { initScrubIn } from "./scrub-in.js";
 import { initDrawnSequence } from "./drawn-sequence.js";
 import { initStepWave } from "./step-wave.js";
 import { initFaqJourney } from "./faq/index.js";
 import { initAboutPage } from "./about/index.js";
-import { initOpeningMove } from "./opening-move.js";
 import { initContactSelects } from "./contact/index.js";
 import { initFilmShelf } from "./films.js";
 import { REVIEWS, SERVICE_LABELS } from "./reviews.js";
@@ -891,38 +889,7 @@ if (initialSection) {
   );
 }
 
-/* The opening move: on these three routes the first scroll down carries the
-   reader from the head of the page to the thing the page is for, and stops
-   there. One entry per route, naming that thing — see opening-move.js.
-
-   BEFORE initSmoothScroll(): the move takes a qualifying wheel tick out of
-   circulation entirely, and when an event's target is window itself the
-   listeners run in registration order rather than capture-then-bubble, so
-   being registered first is what makes stopping the tick reliable.
-
-   Not armed at all when the route has already asked for a section:
-   /charity-work and the legacy anchors land the reader somewhere deliberate,
-   and this would set off from under them. */
-const openingMoveTargets = {
-  "/about": ".av-e__opening", // the quote that turns from her to you
-  "/prices": ".prices-page", // the fees
-  "/price-list": ".prices-page",
-  /* The lead film, which on this page is the head — so the one scroll centres
-     it in the window rather than carrying the reader anywhere. Not ".films":
-     that is now only the EARLIER films, and travelling to it would carry the
-     reader straight past the lead. The switch under it is not a target either:
-     it is one row of links, and stopping there would stop the reader short of
-     the thing they came for. */
-  "/client-stories": ".films__lead",
-  "/client-stories/journeys": ".journeys",
-};
-if (!initialSection) {
-  const opening = openingMoveTargets[routePath()];
-  if (opening) initOpeningMove(opening);
-}
-
 initAboutPage();
-initSmoothScroll();
 /* Only ever reads the window's scroll position, so it follows whatever moved
    it. No-ops wherever nothing is marked data-drift, which today is /studio's
    three media columns. */

@@ -1355,7 +1355,11 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 [data-reveal].pre-reveal {
   opacity: 0;
-  transform: translateY(18px);
+  /* 18px is the site-wide settle. An element that wants a proper fly-up sets
+     --reveal-lift on itself (see the films shelf and the client story) rather
+     than writing its own transform rule — one transform rule means the
+     reduced-motion block's `transform: none` always wins, whatever the lift. */
+  transform: translateY(var(--reveal-lift, 18px));
 }
 
 /* Stagger grouped items so a row settles in sequence rather than snapping
@@ -6909,6 +6913,26 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 .films__card {
   margin: 0;
+  /* The earlier films fly up into the row rather than settling the site-wide
+     18px: three tall stills arriving together need a rise the eye can catch.
+     The lift is a custom property read by the shared .pre-reveal rule, so
+     reduced motion still lands on `transform: none` — see the reveal block. */
+  --reveal-lift: 56px;
+}
+
+/* The row settles left to right rather than as one slab. The delay stays
+   harmless after the reveal: items are unobserved once visible, so it never
+   replays — same reasoning as the credentials strip. */
+.films__shelf .films__card:nth-child(2) {
+  transition-delay: 110ms;
+}
+
+.films__shelf .films__card:nth-child(3) {
+  transition-delay: 220ms;
+}
+
+.films__shelf .films__card:nth-child(4) {
+  transition-delay: 330ms;
 }
 
 /* 9:16 — short form, the way these are shot and the way they are watched. The
@@ -7029,6 +7053,130 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   font-family: var(--font-serif);
   font-size: var(--step-0s);
   line-height: 1.5;
+}
+
+/* ---- The written story under the shelf: the pull-quote ----
+
+   One client at length, at the foot of the page, inside the shelf's own band —
+   see storyQuote() in site-content.js for why it ends the page rather than
+   interrupting it, and for what it replaced.
+
+   Set the way the site's other display quotation is set: the words large and
+   centred in the serif, oversized periwinkle marks hung at the corners, a
+   short rule and the name in tracked caps underneath. The marks are the only
+   decoration and they are drawn here rather than typed into the copy, so a
+   screen reader gets Kay's sentences and her name and nothing else.
+
+   No scroll machinery of any kind. It arrives on the site's ordinary reveal
+   and then it simply sits there and is read. */
+.story-quote {
+  margin: clamp(52px, 6.5vw, 104px) auto 0;
+  max-width: 880px;
+  padding: 0 clamp(34px, 5vw, 72px);
+  text-align: center;
+  --reveal-lift: 40px;
+}
+
+/* The marks hang off the corners of the block, so it needs to be their
+   containing block and needs room for them at the top and the tail. */
+.story-quote__body {
+  position: relative;
+  margin: 0;
+  padding: clamp(24px, 3.2vw, 44px) 0 0;
+}
+
+.story-quote__p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 0.9rem + 0.92vw, 1.75rem);
+  line-height: 1.38;
+  letter-spacing: -0.006em;
+  text-wrap: pretty;
+}
+
+/* Kay wrote in paragraphs and every one of them is set. The break between
+   them is a beat, not a new block, so it is looser than the leading and
+   nothing like a section gap. */
+.story-quote__p + .story-quote__p {
+  margin-top: 0.62em;
+}
+
+/* Periwinkle, oversized, and out at the corners where a printed pull-quote
+   hangs them. Absolutely positioned so they never join the measure: the
+   words stay optically centred and the marks sit outside the text block
+   rather than indenting its first and last lines. */
+.story-quote__mark {
+  position: absolute;
+  color: var(--periwinkle);
+  font-family: var(--font-serif);
+  font-size: clamp(2.25rem, 1.55rem + 2.9vw, 4.375rem);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.story-quote__mark--open {
+  top: 0;
+  left: clamp(-56px, -4.5vw, -18px);
+}
+
+.story-quote__mark--close {
+  right: clamp(-56px, -4.5vw, -18px);
+  bottom: clamp(-24px, -2vw, -6px);
+}
+
+.story-quote__cite {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 2vw, 24px);
+  margin: clamp(34px, 4.2vw, 58px) 0 0;
+  color: var(--brand);
+  font-size: var(--label);
+  font-weight: var(--label-weight);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.story-quote__rule {
+  width: 46px;
+  height: 1px;
+  background: var(--brand);
+  opacity: 0.55;
+}
+
+/* Phone: there is no gutter left to hang the marks in, so instead of sitting
+   OUTSIDE the measure they get their own band above and below it — the body's
+   padding is opened to exactly one mark's height at each end. Hanging them at
+   the corners here would drop them straight onto the first and last lines,
+   which is what a centred full-width measure guarantees. */
+@media (max-width: 699px) {
+  .story-quote {
+    padding: 0 2px;
+  }
+
+  .story-quote__body {
+    padding: clamp(2.5rem, 11vw, 4rem) 0 clamp(2.6rem, 11.5vw, 4.2rem);
+  }
+
+  .story-quote__mark {
+    font-size: clamp(2.5rem, 11vw, 4rem);
+  }
+
+  .story-quote__mark--open {
+    top: 0;
+    left: 0;
+  }
+
+  .story-quote__mark--close {
+    right: 0;
+    bottom: 0;
+  }
+
+  .story-quote__cite {
+    margin-top: clamp(20px, 5vw, 30px);
+  }
 }
 
 /* ============================================================

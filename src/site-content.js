@@ -11,11 +11,15 @@ import {
   FILMS_TITLE,
 } from "./films.js";
 import { journeysList, hasJourneys } from "./journeys.js";
+import { FEATURED_REVIEW } from "./reviews.js";
 
 const BUSINESS = {
   phoneDisplay: "07881 821 901",
   phoneHref: "tel:+447881821901",
-  email: "natasha@njhsportstherapy.co.uk",
+  /* Client-supplied, and the same inbox enquiry notifications already go to
+     (DEFAULT_TO in netlify/functions/enquiry.js). The co.uk address this
+     replaced was displayed on the site but was not where the form delivered. */
+  email: "njhpilates@gmail.com",
 };
 
 const escapePath = (path) => path.replace(/\/+$/, "") || "/";
@@ -658,6 +662,58 @@ function filmsHero() {
   </section>`;
 }
 
+/* The written client story at the foot of /client-stories, under the shelf.
+ *
+ * A page of films is a page of stills until somebody presses play, and what a
+ * still cannot carry is the shape of a recovery — Kay's runs five years, an
+ * ACL surgery to chair Pilates. So the one written voice among the spoken
+ * ones is set as a pull-quote at display size: her words large enough to be
+ * the thing you read, oversized periwinkle marks holding them at the corners,
+ * a hairline and her name in tracked caps beneath.
+ *
+ * This replaced a scroll-opened 3D casebook on 19 Aug 2026. That book — six
+ * bindings, real board thickness, a hinged lid — is preserved in
+ * sketches/book-lab.js and can be rebuilt with `node sketches/build-book-lab.mjs`,
+ * but nothing on the page depends on it any more. What the section needed was
+ * for Kay to be READ, and a quotation set well does that better than an
+ * object the reader has to operate.
+ *
+ * It goes at the BOTTOM, with the earlier films rather than between them and
+ * the lead: the films are all together and the story is what the page ends on
+ * before it asks for a booking, laid inside the shelf's own section via the
+ * `after` slot in filmsMore().
+ *
+ * The marks are aria-hidden and drawn by CSS, not typed into the copy: a
+ * screen reader announcing "left double quotation mark" before a testimonial
+ * is noise, and <blockquote> already carries the semantics. Paragraph breaks
+ * are Kay's own — every paragraph is set, none is dropped, so the block grows
+ * with the words instead of clipping them.
+ *
+ * Renders nothing if the review has no paragraphs — no empty frame, the same
+ * rule the shelf and the journeys are built on. */
+function storyQuote() {
+  const { name, paragraphs = [] } = FEATURED_REVIEW;
+  if (!paragraphs.length) return "";
+  const copy = paragraphs
+    .map((text) => `<p class="story-quote__p">${text}</p>`)
+    .join("\n            ");
+  return `<figure class="story-quote" data-reveal>
+        <blockquote class="story-quote__body">
+          <span class="story-quote__mark story-quote__mark--open" aria-hidden="true">&ldquo;</span>
+          ${copy}
+          <span class="story-quote__mark story-quote__mark--close" aria-hidden="true">&rdquo;</span>
+        </blockquote>
+        ${
+          name
+            ? `<figcaption class="story-quote__cite">
+          <span class="story-quote__rule" aria-hidden="true"></span>
+          ${name}
+        </figcaption>`
+            : ""
+        }
+      </figure>`;
+}
+
 /* Not through page(), because that prepends hero() — and this page's head is
    filmsHero() above. Everything else in the object is what page() would have
    spread out of the config anyway: renderRoute reads canonical, description,
@@ -670,7 +726,7 @@ const clientFilms = {
   eyebrow: "Client Stories",
   tone: "light",
   html: `${filmsHero()}
-  ${filmsMore()}
+  ${filmsMore({ after: storyQuote() })}
   ${cta(
     "Would you like to be next?",
     "Tell Natasha what you would like help with and she will guide you towards the right place to start.",
