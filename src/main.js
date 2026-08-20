@@ -1,7 +1,7 @@
 import "./fonts.css";
 import "./style.css";
 import "./about/about.css";
-import { initPageFeatures, renderRoute } from "./site-content.js";
+import { initPageFeatures, renderRoute, storyQuotes } from "./site-content.js";
 import { observeBase, routePath } from "./base-path.js";
 import { initScrollDrift } from "./scroll-drift.js";
 import { initScrubIn } from "./scrub-in.js";
@@ -11,7 +11,7 @@ import { initFaqJourney } from "./faq/index.js";
 import { initAboutPage } from "./about/index.js";
 import { initContactSelects } from "./contact/index.js";
 import { initFilmShelf } from "./films.js";
-import { REVIEWS, SERVICE_LABELS } from "./reviews.js";
+import { FEATURED_REVIEWS, REVIEWS, SERVICE_LABELS } from "./reviews.js";
 
 observeBase();
 const routeState = renderRoute();
@@ -61,6 +61,27 @@ const siteHeader = document.querySelector(".site-header");
 const hero = document.querySelector(
   ".home-hero, .page-hero, .pilates-hero, .clinics-hero, .therapy-hero, .cv__hero",
 );
+/* Ava at display size, above the drifting run — see .voice-run in index.html.
+   Same function /client-stories builds its headliners with, given the one
+   review reviews.js flags for here, so "the same style" is literally the same
+   markup and a change to the figure lands on both pages at once.
+
+   UP HERE, and not down with the run it stands above, because the figure comes
+   out of storyQuotes() carrying data-reveal and the shared reveal below takes
+   its list of elements ONCE. Injected after that line this arrives unobserved:
+   harmless, since .pre-reveal is only ever added to what is about to be
+   observed and unobserved content simply stays visible, but it would sit
+   there while everything around it flew up. Written before the snapshot, it
+   joins the reveal like any other element on the page.
+
+   Renders nothing if no review carries the flag — an empty slot is an empty
+   slot, never an empty frame. And .voice-run collapses on :not(:has(li)), so
+   an empty run cannot leave this quote stranded in a section by itself. */
+const voiceLead = document.querySelector("[data-voice-lead]");
+if (voiceLead) {
+  voiceLead.innerHTML = storyQuotes(FEATURED_REVIEWS.filter((r) => r.home));
+}
+
 const revealItems = [...document.querySelectorAll("[data-reveal]")];
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -435,7 +456,11 @@ initMarquee({
 
    Selected by length, then rendered in the file's own order — reviews.js is
    written in the order NJH wants reviews to appear, and a length sort on
-   screen would throw that away as well. */
+   screen would throw that away as well.
+
+   The pool is REVIEWS and only REVIEWS. A headliner is not a candidate here:
+   Ava's is on this page too, but set as the display quote above rather than
+   dealt into the run — see the block above this section. */
 const RUN_CARDS = 9;
 const voiceRunStrip = document.querySelector(".voice-run__strip");
 if (voiceRunStrip) {

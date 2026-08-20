@@ -46,8 +46,14 @@ export const SERVICE_LABELS = {
  * their sport and their selection is disclosing personal information, and
  * withdrawal means deleting this. */
 export const FEATURED_REVIEWS = [
+  /* `home` marks the one headliner that also stands on the home page, set the
+     same way it is set here — see storyQuotes() in site-content.js. NJH asked
+     for Ava's there on 20 Aug 2026. It is a flag on the review rather than an
+     index or a name matched in main.js so that the choice lives with the data:
+     move the flag and the home page follows, and nothing else has to know. */
   {
     name: "Ava D",
+    home: true,
     services: [PILATES],
     paragraphs: [
       "Since starting Pilates, I have improved massively in my sport and have been selected for Team GB U17. I would thoroughly recommend Pilates with Natasha to any sports person as it really benefits me and has made a real difference to my performance.",
@@ -240,6 +246,15 @@ export const REVIEWS = [
    *     The single surviving exception is capitalising "Pilates" as a proper
    *     noun. Two entries below also carry a deliberate editorial change, each
    *     noted at the entry: Kay (FEATURED_REVIEW) and the last Kim.
+   *
+   *     THE HYPHEN SWEEP DID NOT COME IN HERE. On 20 Aug 2026 Natasha asked for
+   *     the hyphens out of the site's compound modifiers — "hands-on" to "hands
+   *     on", "soft-tissue" to "soft tissue" — and it ran across every page of
+   *     NJH's own copy. Reviews were excluded, because a review is quoted, not
+   *     styled: "rear-view", "life-saver", "eye-opening" and "spot-on" all
+   *     still stand in the wall, spelt the way the client spelt them. A house
+   *     style applies to the house's words. If the two ever look inconsistent
+   *     on the page, that is what a quotation looks like, and it is correct.
    */
   {
     name: "David",
@@ -314,9 +329,10 @@ export const REVIEWS = [
       "I went to Natasha because she specialises in postpartum Pilates. She guided me through specific Pilates exercises to help with my diastasis recti problem that occurred through pregnancy. She knew the very specific movements that would draw my stomach muscles back together (some exercises can make it worse). She was very gentle and patient with me and helped build up my core strength and ability. Thank you Natasha, I no longer suffer from diastasis recti and have my waistline back!",
   },
   /* Posted under the Google handle "MrMEC 1", which is not a name. Same
-     situation as the two above, and the same fix: a first name from NJH. */
+     situation as the two above, and the same fix: a first name from NJH.
+     Stood as "Pilates client" until NJH supplied the name on 20 Aug 2026. */
   {
-    name: "Pilates client",
+    name: "Sharon",
     services: [PILATES],
     quote:
       "Natasha takes the greatest care in making sure you are working safely and at the correct level. Natasha's classes are friendly and professional, I would recommend her to anyone who wants small class sizes and personal attention.",

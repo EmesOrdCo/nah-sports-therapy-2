@@ -35,7 +35,7 @@ const navGroups = [
       ["1:1 Mat Pilates", "/pilates#mat"],
       ["Reformer Pilates", "/pilates#reformer"],
       ["Stability Chair", "/pilates#stability-chair"],
-      ["Small-group timetable", "/pilates#small-group"],
+      ["Small group timetable", "/pilates#small-group"],
       ["Pre & postnatal Pilates", "/pilates#pre-postnatal"],
       ["Pilates for golfers", "/pilates#golfers"],
       // "Practical details" was the last item here, pointing at a section of
@@ -217,8 +217,8 @@ const pilatesHub = page(
   <section class="card-section"><div class="section-shell">
     <header class="section-intro" data-reveal><h2>Ways to practise</h2></header>
     ${cards([
-      { title: "Individual Pilates", text: "One-to-one or duet sessions designed around your posture, goals and medical history.", href: "/pilates#individual", icon: "control" },
-      { title: "Small groups", text: "Attentive, welcoming classes with an initial one-to-one assessment before joining.", href: "/pilates#small-group", icon: "movement" },
+      { title: "Individual Pilates", text: "One to one or duet sessions designed around your posture, goals and medical history.", href: "/pilates#individual", icon: "control" },
+      { title: "Small groups", text: "Attentive, welcoming classes with an initial one to one assessment before joining.", href: "/pilates#small-group", icon: "movement" },
       { title: "Pre & postnatal", text: "Supportive movement for pregnancy and a careful return after birth.", href: "/pilates#pre-postnatal", icon: "hands" },
       { title: "For golfers", text: "Build rotation, balance, flexibility and control to support your game.", href: "/pilates#golfers", icon: "assess" },
     ])}
@@ -246,13 +246,13 @@ const studio = page(
     "The studio",
     "A calm setting for personal care.",
     `<p>The NJH studio opened in 2016 as a dedicated place to step away from daily demands and focus on your movement and wellbeing.</p>
-     <p>It hosts Sports Therapy appointments, individual Pilates and small-group Pilates. The setting is private and relaxed, with the space and equipment needed to tailor each session.</p>
+     <p>It hosts Sports Therapy appointments, individual Pilates and small group Pilates. The setting is private and relaxed, with the space and equipment needed to tailor each session.</p>
      <div class="inline-contact"><span>Discuss your needs</span><a href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div>`,
   )}
   ${cards([
-    { title: "Sports Therapy", text: "Assessment-led, hands-on care and practical rehabilitation.", href: "/what-is-what-are-the-benifits", icon: "hands" },
+    { title: "Sports Therapy", text: "Assessment led, hands on care and practical rehabilitation.", href: "/what-is-what-are-the-benifits", icon: "hands" },
     { title: "Individual Pilates", text: "Focused sessions adapted to you and your goals.", href: "/pilates#individual", icon: "control" },
-    { title: "Small groups", text: "Close guidance in a welcoming small-class setting.", href: "/pilates#small-group", icon: "movement" },
+    { title: "Small groups", text: "Close guidance in a welcoming small class setting.", href: "/pilates#small-group", icon: "movement" },
   ], "editorial-cards--contained")}${cta("Find your place to begin.")}`,
 );
 
@@ -260,8 +260,8 @@ const timetable = page(
   {
     title: "Small Group Pilates Timetable | NJH",
     description:
-      "Current NJH small-group Pilates timetable and joining information.",
-    eyebrow: "Small-group Pilates",
+      "Current NJH small group Pilates timetable and joining information.",
+    eyebrow: "Small group Pilates",
     title: "Small group Pilates, kept personal",
     intro:
       "Small classes give you the energy of practising with others without losing the individual attention that good movement needs.",
@@ -277,8 +277,8 @@ const timetable = page(
   </div></section>
   ${section(
     "Before joining",
-    "Start with a one-to-one assessment.",
-    `<p>An initial individual assessment, including postural analysis, is required before joining a small-group class. This gives Natasha the context to guide and adapt your exercises safely and effectively.</p>
+    "Start with a one to one assessment.",
+    `<p>An initial individual assessment, including postural analysis, is required before joining a small group class. This gives Natasha the context to guide and adapt your exercises safely and effectively.</p>
      <p>Classes are deliberately small (maximum 7) so posture, control and movement can be observed and corrected where needed.</p>
      <a class="text-link" href="/prices">View current prices <span>→</span></a>`,
     "editorial-section--tint",
@@ -289,11 +289,11 @@ const individual = page(
   {
     title: "Individual Pilates | NJH",
     description:
-      "Private one-to-one and duet Pilates sessions tailored to your needs.",
+      "Private one to one and duet Pilates sessions tailored to your needs.",
     eyebrow: "Individual Pilates",
     title: "Individual Pilates sessions",
     intro:
-      "One-to-one Pilates, or a duet session with a friend, shaped around your posture, health, confidence and objectives.",
+      "One to one Pilates, or a duet session with a friend, shaped around your posture, health, confidence and objectives.",
     parent: crumbs.pilates,
   },
   `${section(
@@ -338,7 +338,7 @@ const natal = page(
   {
     title: "Pre & Postnatal Pilates | NJH",
     description:
-      "Individual and small-group Pilates during pregnancy and after birth.",
+      "Individual and small group Pilates during pregnancy and after birth.",
     eyebrow: "Pre & postnatal Pilates",
     title: "Pre- and postnatal Pilates",
     intro:
@@ -352,7 +352,7 @@ const natal = page(
       "Develop pelvic-floor awareness",
       "Release unwanted tension",
     ])}</article>
-    <article data-reveal><span>02</span><h2>After birth</h2><p>Sessions can begin after your six-week GP check, or typically 8–12 weeks following a caesarean birth, subject to individual medical advice.</p>${list([
+    <article data-reveal><span>02</span><h2>After birth</h2><p>Sessions can begin after your six week GP check, or typically 8–12 weeks following a caesarean birth, subject to individual medical advice.</p>${list([
       "Reconnect with abdominal strength",
       "Rebuild movement confidence gradually",
       "Adapt around concerns such as diastasis recti",
@@ -362,7 +362,7 @@ const natal = page(
   ${section(
     "Session options",
     "Individual or your own small group.",
-    `<p>Practise one-to-one or with your own group of antenatal or postnatal friends. Groups are capped at seven so everyone can receive close attention and correction where needed.</p>
+    `<p>Practise one to one or with your own group of antenatal or postnatal friends. Groups are capped at seven so everyone can receive close attention and correction where needed.</p>
      <p>Always discuss new or changing symptoms with your GP, midwife or relevant healthcare professional before exercise.</p>`,
     "editorial-section--tint",
   )}${cta("Discuss what feels right for you.")}`,
@@ -372,7 +372,7 @@ const policies = page(
   {
     title: "Clinic Policies | NJH",
     description:
-      "NJH appointment, cancellation and small-group Pilates policies.",
+      "NJH appointment, cancellation and small group Pilates policies.",
     eyebrow: "Clinic policies",
     title: "What to expect",
     intro:
@@ -381,9 +381,9 @@ const policies = page(
   },
   `<section class="policy-section"><div class="section-shell policy-list">
     <article data-reveal><span>01</span><div><h2>Clients under 16</h2><p>A parent or guardian must accompany clients under 16 and will be asked to sign a parental consent form.</p></div></article>
-    <article data-reveal><span>02</span><div><h2>Changes and cancellations</h2><p>Missed Sports Therapy, one-to-one or duet Pilates appointments are chargeable unless at least 24 hours' notice is provided. A 50% charge applies where less than 48 hours' notice is given.</p></div></article>
+    <article data-reveal><span>02</span><div><h2>Changes and cancellations</h2><p>Missed Sports Therapy, one to one or duet Pilates appointments are chargeable unless at least 24 hours' notice is provided. A 50% charge applies where less than 48 hours' notice is given.</p></div></article>
     <article data-reveal><span>03</span><div><h2>Arriving late</h2><p>Your appointment still finishes at its scheduled time. If the practitioner misses a scheduled individual appointment, you will receive a replacement session at no charge.</p></div></article>
-    <article data-reveal><span>04</span><div><h2>Small-group blocks</h2><p>Small-group Pilates is paid in termly blocks. Once payment is received, your place is reserved for the block and fees are non-refundable.</p></div></article>
+    <article data-reveal><span>04</span><div><h2>Small group blocks</h2><p>Small group Pilates is paid in termly blocks. Once payment is received, your place is reserved for the block and fees are non-refundable.</p></div></article>
   </div></section>${cta("Have a question about a policy?")}`,
 );
 
@@ -391,21 +391,21 @@ const therapyHub = page(
   {
     title: "Sports Therapy | NJH",
     description:
-      "Assessment-led Sports Therapy for musculoskeletal pain, movement and recovery.",
+      "Assessment led Sports Therapy for musculoskeletal pain, movement and recovery.",
     eyebrow: "Sports Therapy",
     title: "Sports Therapy at NJH",
     intro:
-      "Personal assessment, hands-on soft-tissue techniques and practical rehabilitation for musculoskeletal pain, restriction and recovery.",
+      "Personal assessment, hands on soft tissue techniques and practical rehabilitation for musculoskeletal pain, restriction and recovery.",
   },
   `${section(
     "What is Sports Therapy?",
     "Care built around the whole picture.",
     `<p>Sports Therapy is not only for athletes. It can help people of different ages and activity levels understand and manage musculoskeletal pain, tension and movement restriction.</p>
-     <p>Your care starts with listening and assessment. Hands-on techniques may be used where appropriate, alongside movement and exercises that help you build confidence beyond the treatment room.</p>`,
+     <p>Your care starts with listening and assessment. Hands on techniques may be used where appropriate, alongside movement and exercises that help you build confidence beyond the treatment room.</p>`,
   )}
   <section class="card-section"><div class="section-shell">${cards([
     { title: "Assess", text: "Understand your history, symptoms, posture and movement.", icon: "assess" },
-    { title: "Treat", text: "Use appropriate hands-on techniques to address sensitive or restricted tissue.", icon: "hands" },
+    { title: "Treat", text: "Use appropriate hands on techniques to address sensitive or restricted tissue.", icon: "hands" },
     { title: "Rebuild", text: "Develop useful strength, mobility and confidence through a clear plan.", icon: "movement" },
   ])}</div></section>
   ${band("How treatment may help", "Potential benefits", [
@@ -434,14 +434,14 @@ const treatment = page(
     eyebrow: "Treatment",
     title: "Treatment techniques",
     intro:
-      "Treatment can combine hands-on soft-tissue work, joint mobilisation and carefully chosen exercises according to your assessment.",
+      "Treatment can combine hands on soft tissue work, joint mobilisation and carefully chosen exercises according to your assessment.",
     parent: crumbs.therapy,
   },
   `<section class="dual-list-section"><div class="section-shell dual-list">
     <article data-reveal><h2>Techniques</h2>${list([
       "Deep-tissue massage",
       "Muscle energy techniques (MET)",
-      "Soft-tissue release (STR)",
+      "Soft tissue release (STR)",
       "Deep friction techniques",
       "Neuromuscular techniques (NMT)",
       "Myofascial and connective-tissue work",
@@ -450,19 +450,19 @@ const treatment = page(
     ])}</article>
     <article data-reveal><h2>Common concerns</h2>${list([
       "Recurring postural pain",
-      "Lower-back and sciatic-type symptoms",
-      "Upper-back, neck and whiplash concerns",
-      "Hip, groin, knee, ankle and upper-limb problems",
+      "Lower back and sciatic type symptoms",
+      "Upper back, neck and whiplash concerns",
+      "Hip, groin, knee, ankle and upper limb problems",
       "Muscular strains and ligament sprains",
       "Tendon pain and joint stiffness",
-      "Soft-tissue rehabilitation",
+      "Soft tissue rehabilitation",
       "Scar restriction before or after surgery",
     ])}</article>
   </div></section>
   ${section(
     "Beyond the appointment",
     "Treatment continues through movement.",
-    `<p>Hands-on work is often paired with exercises to stretch, strengthen or improve control. Your home plan is kept practical so it can support the effects of treatment and fit into daily life.</p><p>NJH welcomes professional referrals from GPs, consultants, physiotherapists, osteopaths and podiatrists.</p>`,
+    `<p>Hands on work is often paired with exercises to stretch, strengthen or improve control. Your home plan is kept practical so it can support the effects of treatment and fit into daily life.</p><p>NJH welcomes professional referrals from GPs, consultants, physiotherapists, osteopaths and podiatrists.</p>`,
     "editorial-section--tint",
   )}${cta()}`,
 );
@@ -475,7 +475,7 @@ const fascia = page(
     eyebrow: "Myofascial release",
     title: "Myofascial release",
     intro:
-      "A slow, hands-on approach intended to reduce restriction and help soft tissue move more comfortably.",
+      "A slow, hands on approach intended to reduce restriction and help soft tissue move more comfortably.",
     parent: crumbs.therapy,
   },
   `${section(
@@ -492,7 +492,7 @@ const fascia = page(
     "editorial-section--tint",
   )}
   ${band("It may be considered for", "Common applications", [
-    "Lower-back pain and postural discomfort",
+    "Lower back pain and postural discomfort",
     "Neck stiffness, headaches and shoulder restriction",
     "Sports injuries and recurring muscular tension",
     "Scar tissue and restricted movement",
@@ -514,7 +514,7 @@ const expect = page(
   `<section class="process-section"><div class="section-shell process-list">
     <article data-reveal><span>01</span><div><h2>Listen</h2><p>Discuss your medical history, current symptoms, activity and goals.</p></div></article>
     <article data-reveal><span>02</span><div><h2>Assess</h2><p>Look at the area, relevant joints, posture and movement to understand the wider picture.</p></div></article>
-    <article data-reveal><span>03</span><div><h2>Plan</h2><p>Agree an individual treatment approach, which may include hands-on care and home exercises.</p></div></article>
+    <article data-reveal><span>03</span><div><h2>Plan</h2><p>Agree an individual treatment approach, which may include hands on care and home exercises.</p></div></article>
   </div></section>
   ${section(
     "What to wear",
@@ -539,7 +539,7 @@ const taping = page(
   `<section class="card-section"><div class="section-shell">${cards([
     { title: "Symptom support", text: "Applied to support a painful muscle or joint without rigid restriction.", icon: "hands" },
     { title: "Swelling support", text: "Specific applications may help manage acute or persistent swelling.", icon: "movement" },
-    { title: "Postural awareness", text: "A tactile cue for shoulder, thoracic, pelvic or lower-limb positioning.", icon: "assess" },
+    { title: "Postural awareness", text: "A tactile cue for shoulder, thoracic, pelvic or lower limb positioning.", icon: "assess" },
     { title: "Movement support", text: "Applied to complement flexibility, balance and confident movement.", icon: "control" },
   ])}</div></section>
   ${section(
@@ -569,7 +569,7 @@ const about = page(
     "A career shaped by curiosity about movement.",
     `<p>After a ten-year career in fashion and time focused on her young family, Natasha pursued a longstanding interest in sport, anatomy and physiology.</p>
      <p>Training at the London School of Sports Massage led to a new career in Sports Therapy. A growing interest in rehabilitation and postural issues then led to certification as a STOTT Pilates instructor.</p>
-     <p>Today, Natasha combines advanced soft-tissue techniques with precise Pilates exercise to provide professional, personal care for injuries, postural concerns and long-term movement goals.</p>`,
+     <p>Today, Natasha combines advanced soft tissue techniques with precise Pilates exercise to provide professional, personal care for injuries, postural concerns and long-term movement goals.</p>`,
   )}
   <section class="qualification-section"><div class="section-shell">
     <header class="section-intro" data-reveal><h2>Qualifications &amp; training</h2></header>
@@ -691,8 +691,15 @@ function filmsHero() {
  *
  * Renders nothing if the review has no paragraphs — no empty frame, the same
  * rule the shelf and the journeys are built on. */
-function storyQuote() {
-  const featured = FEATURED_REVIEWS.filter((review) => review.paragraphs?.length);
+/* Exported because the home page sets Ava the same way — see index.html's
+   .voice-run and the block that fills it in main.js. NJH asked on 20 Aug 2026
+   for her Team GB selection on the home page "in the same style as the Client
+   story page", and the same style means the same function: a second hand-built
+   figure carrying the same class names would be this markup written twice, and
+   the two would drift apart the first time either was touched. Takes whichever
+   reviews it is given, so the home page can pass one and this page all three. */
+export function storyQuotes(reviews) {
+  const featured = reviews.filter((review) => review.paragraphs?.length);
   return featured
     .map((review, index) => {
       const copy = review.paragraphs
@@ -721,6 +728,10 @@ function storyQuote() {
       </figure>`;
     })
     .join("\n      ");
+}
+
+function storyQuote() {
+  return storyQuotes(FEATURED_REVIEWS);
 }
 
 /* The written reviews, at the foot of /client-stories.
@@ -955,11 +966,11 @@ const prices = page(
     </div>
     <div class="prices-group" data-reveal>
       <h2 class="prices-group__title">Pilates</h2>
-      <p class="prices-row"><span class="prices-row__label">Small-group session</span><span class="prices-row__lead"></span><span class="prices-row__fee">£22</span></p>
-      <p class="prices-row"><span class="prices-row__label">One-to-one, 1 hour</span><span class="prices-row__lead"></span><span class="prices-row__fee">£85</span></p>
+      <p class="prices-row"><span class="prices-row__label">Small group session</span><span class="prices-row__lead"></span><span class="prices-row__fee">£22</span></p>
+      <p class="prices-row"><span class="prices-row__label">One to one, 1 hour</span><span class="prices-row__lead"></span><span class="prices-row__fee">£85</span></p>
       <p class="prices-row"><span class="prices-row__label">Initial assessment before small group</span><span class="prices-row__lead"></span><span class="prices-row__fee">£85</span></p>
       <p class="prices-row"><span class="prices-row__label">Duet, shared with a friend or partner</span><span class="prices-row__lead"></span><span class="prices-row__fee">£95</span></p>
-      <p class="prices-note">Small-group classes are paid in termly blocks and are non-refundable once your place is reserved.</p>
+      <p class="prices-note">Small group classes are paid in termly blocks and are non-refundable once your place is reserved.</p>
       <a class="text-link" href="/pilates">How Pilates sessions run <span>→</span></a>
     </div>
   </div>
@@ -968,7 +979,7 @@ const prices = page(
        it applies to both. -->
   <div class="section-shell prices-terms" data-reveal>
     <h2 class="prices-terms__title">Cancellations</h2>
-    <p class="prices-note">Missed Sports Therapy, one-to-one or duet Pilates appointments are chargeable unless at least 24 hours' notice is provided. A 50% charge applies where less than 48 hours' notice is given.</p>
+    <p class="prices-note">Missed Sports Therapy, one to one or duet Pilates appointments are chargeable unless at least 24 hours' notice is provided. A 50% charge applies where less than 48 hours' notice is given.</p>
     <a class="text-link" href="/clinic-policies">Read the clinic policies <span>→</span></a>
   </div></section>
   ${section(
@@ -998,7 +1009,7 @@ function buildPilatesContinuousPage() {
   return {
     title: "NJH Pilates",
     description:
-      "Individual and small-group Pilates in Studham, including pre and postnatal Pilates and Pilates for golfers.",
+      "Individual and small group Pilates in Studham, including pre and postnatal Pilates and Pilates for golfers.",
     canonical: "/pilates",
     html: `<div class="pilates-longform">
       <section class="pilates-hero" id="overview" aria-labelledby="pilates-title">
@@ -1088,14 +1099,14 @@ function buildPilatesContinuousPage() {
               </svg>
             </div>
             <dl class="pilates-orbit-facts">
-              <div class="pilates-orbit-fact pilates-orbit-fact--format"><dt>Format</dt><dd>One-to-one or duet</dd></div>
+              <div class="pilates-orbit-fact pilates-orbit-fact--format"><dt>Format</dt><dd>One to one or duet</dd></div>
               <div class="pilates-orbit-fact pilates-orbit-fact--length"><dt>Length</dt><dd>One hour</dd></div>
               <div class="pilates-orbit-fact pilates-orbit-fact--available"><dt>Available</dt><dd>Monday to Friday, Sunday am</dd></div>
             </dl>
           </div>
           <div class="pilates-feature__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="individual-title" class="title-rule">Your Pilates session</h2>
-            <p class="pilates-feature__lead">One-to-one Pilates, or a duet session with a friend, tailored to suit your needs and objectives.</p>
+            <p class="pilates-feature__lead">One to one Pilates, or a duet session with a friend, tailored to suit your needs and objectives.</p>
             <p>Your session focuses on restoring muscular balance, with specific exercises designed for your posture type to help improve medical conditions such as osteopenia/osteoporosis, frozen shoulder, rotator cuff injuries, stroke rehabilitation, breast cancer rehab, pelvic floor strengthening, pre and post natal Pilates, neck, knee, hip or lower back issues.</p>
             <p>Sessions work on the mat, the Reformer or the Stability Chair, and often move between them. Which you use is decided from your assessment rather than booked in advance.</p>
             <a class="pilates-arrow-link" href="#mat">See how a session works <span>→</span></a>
@@ -1119,11 +1130,11 @@ function buildPilatesContinuousPage() {
             ${eyebrow("Pilates")}<h2 id="mat-title" class="title-rule">1:1 Mat Pilates</h2>
             <p class="pilates-feature__lead">Pilates as it was first taught, on the mat, with your own body weight for resistance.</p>
             <p>Mat work builds the control everything else is built on. Without springs to support or assist you, the deep abdominal and back muscles do the holding, which is what makes precise, unhurried movement the point rather than repetition.</p>
-            <p>Small equipment is added as it helps: the Pilates ring, weighted balls, a roller or the arc barrel to support the spine, change the leverage of an exercise or give you something to work against. Every exercise scales, so the same movement suits a first session and a client who has been coming for years.</p>
+            <p>Small equipment modifications can be added to help support or challenge you further: the Pilates ring, hand weights, soft balls, stability balls, foam rollers, resistance bands or the arc barrel to support the spine. Every exercise scales, so the same movement suits a first session and a client who has been coming for years.</p>
             <dl class="pilates-facts">
               <div><dt>Good for</dt><dd>Core control, posture, spinal mobility, movement with precision</dd></div>
-              <div><dt>Equipment</dt><dd>Pilates ring, weighted balls, roller, arc barrel</dd></div>
-              <div><dt>Format</dt><dd>One-to-one or duet</dd></div>
+              <div><dt>Equipment</dt><dd>Pilates ring, hand weights, soft balls, stability balls, foam rollers, resistance bands, arc barrel</dd></div>
+              <div><dt>Format</dt><dd>One to one or duet</dd></div>
             </dl>
             <a class="pilates-arrow-link" href="#contact">Ask about a mat session <span>→</span></a>
           </div>
@@ -1133,7 +1144,7 @@ function buildPilatesContinuousPage() {
                one session, the plate included in the count. -->
           <div class="pilates-feature__media pilates-gallery" style="--frame-count: 4" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
-              <img data-drift-lag="0.025" data-gallery-plate data-small="/images/pilates/mat-ab-curl-500.webp" data-large="/images/pilates/mat-ab-curl-1000.webp" data-xl="/images/pilates/mat-ab-curl-1536.webp" data-xl-width="1536" src="/images/pilates/mat-ab-curl-1000.webp" srcset="/images/pilates/mat-ab-curl-500.webp 500w, /images/pilates/mat-ab-curl-1000.webp 1000w, /images/pilates/mat-ab-curl-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client holding a curled sit-up position on the mat, legs lifted, the studio's garden doors folded open behind her" width="1000" height="1000" loading="lazy">
+              <img data-drift-lag="0.025" data-gallery-plate data-small="/images/pilates/mat-ab-curl-500.webp" data-large="/images/pilates/mat-ab-curl-1000.webp" data-xl="/images/pilates/mat-ab-curl-1536.webp" data-xl-width="1536" src="/images/pilates/mat-ab-curl-1000.webp" srcset="/images/pilates/mat-ab-curl-500.webp 500w, /images/pilates/mat-ab-curl-1000.webp 1000w, /images/pilates/mat-ab-curl-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client holding a curled sit up position on the mat, legs lifted, the studio's garden doors folded open behind her" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous mat Pilates photograph" hidden>←</button>
               <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next mat Pilates photograph" hidden>→</button>
             </figure>
@@ -1176,15 +1187,15 @@ function buildPilatesContinuousPage() {
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-feature__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="reformer-title" class="title-rule">STOTT Reformer Pilates</h2>
-            <p class="pilates-feature__lead">A contemporary, scientifically-optimized approach to the traditional teaching of Joseph Pilates.</p>
-            <p>Performed on a specialized sliding carriage, the Reformer machine uses spring-based resistance, emphasising modern biomechanics, spinal rehabilitation and helps restore the spine's natural curves.</p>
+            <p class="pilates-feature__lead">A contemporary, scientifically optimized approach to the traditional teaching of Joseph Pilates.</p>
+            <p>Performed on a specialized sliding carriage, the Reformer machine uses spring based resistance, emphasising modern biomechanics, spinal rehabilitation and helps restore the spine's natural curves.</p>
             <p>1:1 STOTT Reformer Pilates is a fantastic tool to strengthen and lengthen specific muscle groups. It is suitable for all ages and abilities. Each exercise can be modified to help those recovering from an injury or to challenge the elite athletes. Heavier doesn't always mean harder. Multiple springs can offer support and stability where needed whereas lighter springs will challenge your abdominals.</p>
             <dl class="pilates-facts">
               <div><dt>Good for</dt><dd>Posture and core strength, joint mobility, movement with precision</dd></div>
               <div><dt>Rehabilitation</dt><dd>Spinal, hip, knee, ankle, shoulder rehabilitation; stroke rehabilitation</dd></div>
               <div><dt>Also for</dt><dd>Athletes targeting muscular imbalances, e.g. cricket, cycling, fencing, golf, tennis</dd></div>
               <div><dt>Bone density</dt><dd>Improves bone density helping those with osteopenia/osteoporosis</dd></div>
-              <div><dt>Format</dt><dd>One-to-one</dd></div>
+              <div><dt>Format</dt><dd>One to one</dd></div>
             </dl>
             <a class="pilates-arrow-link" href="#contact">Ask about a Reformer session <span>→</span></a>
           </div>
@@ -1263,7 +1274,7 @@ function buildPilatesContinuousPage() {
           <div class="pilates-feature__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="chair-title" class="title-rule">Stability Chair</h2>
             <p class="pilates-feature__lead">A multifunctional Pilates machine that can be adjusted to train multiple muscle groups.</p>
-            <p>This sturdy piece of equipment helps you achieve upper- and lower-body strength and conditioning, enhances stability, and helps to improve posture.</p>
+            <p>This sturdy piece of equipment helps you achieve upper and lower body strength and conditioning, enhances stability, and helps to improve posture.</p>
             <!-- The client's uses and benefits, line by line, in the same rows
                  /studio#stability-chair sets out the machine's parts in. The
                  two lists are the halves of one email and they read as a pair:
@@ -1273,12 +1284,12 @@ function buildPilatesContinuousPage() {
             <dl class="pilates-facts">
               <div><dt>Asymmetry correction</dt><dd>Independent pedal movement highlights and helps rebalance strength or flexibility disparities between the left and right sides of the body</dd></div>
               <div><dt>Functional balance</dt><dd>The compact base of support forces deep core engagement and improves proprioception and body control; the dual pedals allow bilateral, unilateral and reciprocal movements to increase intensity and overall balance</dd></div>
-              <div><dt>Injury rehabilitation</dt><dd>Ideal after rehab, or for anyone who needs to stay upright or seated because of limited mobility or joint injuries: adjustable resistance and controlled movement make for gentle, low-impact exercises that promote healing and strengthening without exacerbating injuries</dd></div>
-              <div><dt>Versatility</dt><dd>A wide range of exercises catering to different fitness levels, goals and needs, from beginner-friendly movements to challenging advanced exercises, including high-performance work for athletes and fitness enthusiasts</dd></div>
+              <div><dt>Injury rehabilitation</dt><dd>Ideal after rehab, or for anyone who needs to stay upright or seated because of limited mobility or joint injuries: adjustable resistance and controlled movement make for gentle, low impact exercises that promote healing and strengthening without exacerbating injuries</dd></div>
+              <div><dt>Versatility</dt><dd>A wide range of exercises catering to different fitness levels, goals and needs, from beginner friendly movements to challenging advanced exercises, including high performance work for athletes and fitness enthusiasts</dd></div>
               <div><dt>Core engagement</dt><dd>Unparalleled in its ability to engage the core: the Chair's design requires you to maintain control and stability throughout each exercise, which effectively targets the deep core muscles</dd></div>
               <div><dt>Functional strength</dt><dd>Its exercises often mimic daily activities and movements, building strength that translates to everyday life</dd></div>
               <div><dt>Challenging and fun</dt><dd>Adjustable resistance and varied exercises keep workouts engaging, reducing the risk of plateaus</dd></div>
-              <div><dt>Format</dt><dd>One-to-one or 2:1</dd></div>
+              <div><dt>Format</dt><dd>One to one or 2:1</dd></div>
             </dl>
             <a class="pilates-arrow-link" href="#contact">Ask about a Chair session <span>→</span></a>
           </div>
@@ -1289,7 +1300,7 @@ function buildPilatesContinuousPage() {
                mirrors the lone inset. -->
           <div class="pilates-feature__media pilates-gallery" style="--frame-count: 5" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
-              <img data-drift-lag="0.025" data-gallery-plate data-small="/images/pilates/chair-doors-500.webp" data-large="/images/pilates/chair-doors-1000.webp" data-xl="/images/pilates/chair-doors-1536.webp" data-xl-width="1536" src="/images/pilates/chair-doors-1000.webp" srcset="/images/pilates/chair-doors-500.webp 500w, /images/pilates/chair-doors-1000.webp 1000w, /images/pilates/chair-doors-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client balanced along the Stability Chair with one leg raised, the studio's garden doors open behind her" width="1000" height="1000" loading="lazy">
+              <img data-drift-lag="0.025" data-gallery-plate data-small="/images/pilates/chair-doors-500.webp" data-large="/images/pilates/chair-doors-1000.webp" data-xl="/images/pilates/chair-doors-1254.webp" data-xl-width="1254" src="/images/pilates/chair-doors-1000.webp" srcset="/images/pilates/chair-doors-500.webp 500w, /images/pilates/chair-doors-1000.webp 1000w, /images/pilates/chair-doors-1254.webp 1254w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client balanced along the Stability Chair with one leg raised, the studio's garden doors open behind her" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Stability Chair photograph" hidden>←</button>
               <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next Stability Chair photograph" hidden>→</button>
             </figure>
@@ -1316,10 +1327,10 @@ function buildPilatesContinuousPage() {
                 <img data-small="/images/pilates/chair-room-500.webp" data-large="/images/pilates/chair-room-1000.webp" data-xl="/images/pilates/chair-room-1536.webp" data-xl-width="1536" src="/images/pilates/chair-room-500.webp" alt="Both Stability Chairs standing ready in the empty studio, the Reformer and mats laid out beside them" width="500" height="500" loading="lazy">
               </button>
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
-                <img data-small="/images/pilates/chair-springs-lunge-500.webp" data-large="/images/pilates/chair-springs-lunge-1000.webp" data-xl="/images/pilates/chair-springs-lunge-1536.webp" data-xl-width="1536" src="/images/pilates/chair-springs-lunge-500.webp" alt="A client leaning into the locked side handles with her feet on the pedal, the hook-on springs stretched out below" width="500" height="500" loading="lazy">
+                <img data-small="/images/pilates/chair-springs-lunge-500.webp" data-large="/images/pilates/chair-springs-lunge-1000.webp" data-xl="/images/pilates/chair-springs-lunge-1536.webp" data-xl-width="1536" src="/images/pilates/chair-springs-lunge-500.webp" alt="A client leaning into the locked side handles with her feet on the pedal, the hook on springs stretched out below" width="500" height="500" loading="lazy">
               </button>
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
-                <img data-small="/images/pilates/chair-standing-assist-500.webp" data-large="/images/pilates/chair-standing-assist-1000.webp" data-xl="/images/pilates/chair-standing-assist-1536.webp" data-xl-width="1536" src="/images/pilates/chair-standing-assist-500.webp" alt="A client standing on the Chair's seat, steadied at the hand, the double-steel frame taking her weight" width="500" height="500" loading="lazy">
+                <img data-small="/images/pilates/chair-standing-assist-500.webp" data-large="/images/pilates/chair-standing-assist-1000.webp" data-xl="/images/pilates/chair-standing-assist-1536.webp" data-xl-width="1536" src="/images/pilates/chair-standing-assist-500.webp" alt="A client standing on the Chair's seat, steadied at the hand, the double steel frame taking her weight" width="500" height="500" loading="lazy">
               </button>
             </div>
           </div>
@@ -1336,7 +1347,7 @@ function buildPilatesContinuousPage() {
             ${eyebrow("Pilates")}<h2 id="group-title" class="title-rule">STOTT Small Group Pilates</h2>
             <p>Incorporates modern theories of exercise, science and spinal rehabilitation through five basic principles: Breathing, Pelvic placement, Rib cage placement, Scapular movement and stabilisation, Head and cervical placement. These principles help integrate body awareness and proper alignment for safe and effective exercises that improve your movement and mindfulness.</p>
             <p>Class sizes are small (maximum 7) to ensure close attention to posture and movement during each exercise where necessary. Sessions focus on precise, controlled movement, to improve your joint range of movement and help you feel stronger.</p>
-            <p class="pilates-group__note">Sessions are 55 minutes unless noted. An initial one-to-one assessment including postural analysis is required before joining Small Group Pilates.</p>
+            <p class="pilates-group__note">Sessions are 55 minutes unless noted. An initial one to one assessment including postural analysis is required before joining Small Group Pilates.</p>
           </header>
           <div class="pilates-timetable" data-reveal>
             <div class="pilates-detail-label"><span>Weekly timetable</span><small>Confirm availability before booking</small></div>
@@ -1363,7 +1374,7 @@ function buildPilatesContinuousPage() {
             <div class="story__copy-inner" data-reveal>
               <h2>Prenatal Pilates</h2>
               <p class="story__lede">
-                Low-impact, closely watched movement through pregnancy, adapted
+                Low impact, closely watched movement through pregnancy, adapted
                 each trimester as your body changes shape around you.
               </p>
               <ul class="story__list">
@@ -1379,7 +1390,7 @@ function buildPilatesContinuousPage() {
           <figure class="story__media">
             <img
               src="/images/natal/prenatal-2001092777.webp"
-              alt="A prenatal class seated cross-legged on mats, reaching one arm overhead in a side stretch"
+              alt="A prenatal class seated cross legged on mats, reaching one arm overhead in a side stretch"
               width="684"
               height="855"
               loading="lazy"
@@ -1392,7 +1403,7 @@ function buildPilatesContinuousPage() {
             <div class="story__copy-inner" data-reveal>
               <h2>Postnatal Pilates</h2>
               <p class="story__lede">
-                A careful return after birth, from the six-week GP check,
+                A careful return after birth, from the six week GP check,
                 or eight to twelve weeks following a Caesarean section.
               </p>
               <ul class="story__list">
@@ -1493,7 +1504,7 @@ const pilatesContinuous = buildPilatesContinuousPage();
 const STUDIO_WALKTHROUGH_FILM = {
   poster: "/images/studio-walkthrough-poster.webp",
   sources: [{ src: "/videos/studio-walkthrough.mp4" }],
-  ariaLabel: "Play the studio walk-through film",
+  ariaLabel: "Play the studio walk through film",
 };
 
 /* Its pair. Natasha's own footage this time (IMG_1199.MP4, sent 13 Aug
@@ -1568,7 +1579,7 @@ function buildStudioContinuousPage() {
         <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first">
           <div class="pilates-feature__content" data-reveal>
             <h2 id="studio-title">The Studham Studio</h2>
-            <p class="pilates-feature__lead">Sports Therapy, individual Pilates and small-group Pilates, all in one private studio.</p>
+            <p class="pilates-feature__lead">Sports Therapy, individual Pilates and small group Pilates, all in one private studio.</p>
             <p>After working in physio clinics for many years, January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
             <p>Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, Individual or Small Group Pilates sessions, this is a place to restore muscular wellbeing and improve posture.</p>
             <!-- The room was described as having "the space and equipment
@@ -1578,7 +1589,7 @@ function buildStudioContinuousPage() {
                  .text-link is a standalone component (inline-flex, 44px tall)
                  that breaks the leading of the column it lands in. The arrow
                  link under this column carries the reader instead. -->
-            <p>Alongside the mat work, the studio is equipped with a Reformer, worked one-to-one, and a Stability Chair, which takes one-to-one or 2:1 sessions.</p>
+            <p>Alongside the mat work, the studio is equipped with a Reformer, worked one to one, and a Stability Chair, which takes one to one or 2:1 sessions.</p>
             <!-- The directions line was the tail of the opening paragraph,
                  where the one fact a visitor actually needs sat behind three
                  clauses about what the studio offers. It is a fact, so it goes
@@ -1678,7 +1689,7 @@ function buildStudioContinuousPage() {
                small frames lapped over its corner.
 
                The room shot is the one that square costs something. The
-               machine is eight feet of it photographed side-on, wider than the
+               machine is eight feet of it photographed side on, wider than the
                frame it was shot in is tall, so no square cut out of that
                photograph holds the whole thing — the ends went off both edges.
                Its asset is built taller than the frame instead, the wall above
@@ -1752,8 +1763,8 @@ function buildStudioContinuousPage() {
       <section class="pilates-feature pilates-feature--equipment" id="stability-chair" aria-labelledby="studio-chair-title">
         <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first">
           <div class="pilates-feature__content" data-reveal>
-            <h2 id="studio-chair-title">Split-Pedal Stability Chair</h2>
-            <p class="pilates-feature__lead">A multi-functional Pilates apparatus by Merrithew, featuring a dual-pedal system that can lock together or move independently.</p>
+            <h2 id="studio-chair-title">Split Pedal Stability Chair</h2>
+            <p class="pilates-feature__lead">A multi functional Pilates apparatus by Merrithew, featuring a dual pedal system that can lock together or move independently.</p>
             <p>It challenges core stability, balance, and upper or lower body strength through adjustable spring resistance, making it valuable for both athletic conditioning and physical rehabilitation.</p>
             <!-- The client's spec of the machine, part by part, in the rows the
                  other sections use for their facts: the five lines are the five
@@ -1763,10 +1774,10 @@ function buildStudioContinuousPage() {
                  job, as with the Reformer above. -->
             <dl class="pilates-facts">
               <div><dt>Split pedals</dt><dd>Function as a single unified pedal, or split apart for unilateral, bilateral and reciprocal limb movements</dd></div>
-              <div><dt>Adjustable springs</dt><dd>Two heavy and two light springs on a hook-on attachment system, for scaled resistance</dd></div>
+              <div><dt>Adjustable springs</dt><dd>Two heavy and two light springs on a hook on attachment system, for scaled resistance</dd></div>
               <div><dt>Removable handles</dt><dd>Fully adjustable side handles that lock securely for exercises like lunges and dips, or detach for seated and lying work</dd></div>
               <div><dt>Compact footprint</dt><dd>A smaller base of support than a Reformer, intensifying the balance and stability challenge</dd></div>
-              <div><dt>Double-steel frame</dt><dd>Structural durability during high-intensity or body-weight-bearing exercises</dd></div>
+              <div><dt>Double steel frame</dt><dd>Structural durability during high intensity or body weight bearing exercises</dd></div>
             </dl>
             <a class="pilates-arrow-link" href="/pilates#stability-chair">How a Chair session runs <span>→</span></a>
           </div>
@@ -1778,7 +1789,7 @@ function buildStudioContinuousPage() {
                mirrors the lone inset. -->
           <div class="pilates-feature__media pilates-gallery" style="--frame-count: 5" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
-              <img data-drift-lag="0.025" data-gallery-plate data-small="/images/pilates/chair-doors-500.webp" data-large="/images/pilates/chair-doors-1000.webp" data-xl="/images/pilates/chair-doors-1536.webp" data-xl-width="1536" src="/images/pilates/chair-doors-1000.webp" srcset="/images/pilates/chair-doors-500.webp 500w, /images/pilates/chair-doors-1000.webp 1000w, /images/pilates/chair-doors-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client balanced along the Stability Chair with one leg raised, the studio's garden doors open behind her" width="1000" height="1000" loading="lazy">
+              <img data-drift-lag="0.025" data-gallery-plate data-small="/images/pilates/chair-doors-500.webp" data-large="/images/pilates/chair-doors-1000.webp" data-xl="/images/pilates/chair-doors-1254.webp" data-xl-width="1254" src="/images/pilates/chair-doors-1000.webp" srcset="/images/pilates/chair-doors-500.webp 500w, /images/pilates/chair-doors-1000.webp 1000w, /images/pilates/chair-doors-1254.webp 1254w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client balanced along the Stability Chair with one leg raised, the studio's garden doors open behind her" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous Stability Chair photograph" hidden>←</button>
               <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next Stability Chair photograph" hidden>→</button>
             </figure>
@@ -1805,10 +1816,10 @@ function buildStudioContinuousPage() {
                 <img data-small="/images/pilates/chair-room-500.webp" data-large="/images/pilates/chair-room-1000.webp" data-xl="/images/pilates/chair-room-1536.webp" data-xl-width="1536" src="/images/pilates/chair-room-500.webp" alt="Both Stability Chairs standing ready in the empty studio, the Reformer and mats laid out beside them" width="500" height="500" loading="lazy">
               </button>
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
-                <img data-small="/images/pilates/chair-springs-lunge-500.webp" data-large="/images/pilates/chair-springs-lunge-1000.webp" data-xl="/images/pilates/chair-springs-lunge-1536.webp" data-xl-width="1536" src="/images/pilates/chair-springs-lunge-500.webp" alt="A client leaning into the locked side handles with her feet on the pedal, the hook-on springs stretched out below" width="500" height="500" loading="lazy">
+                <img data-small="/images/pilates/chair-springs-lunge-500.webp" data-large="/images/pilates/chair-springs-lunge-1000.webp" data-xl="/images/pilates/chair-springs-lunge-1536.webp" data-xl-width="1536" src="/images/pilates/chair-springs-lunge-500.webp" alt="A client leaning into the locked side handles with her feet on the pedal, the hook on springs stretched out below" width="500" height="500" loading="lazy">
               </button>
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
-                <img data-small="/images/pilates/chair-standing-assist-500.webp" data-large="/images/pilates/chair-standing-assist-1000.webp" data-xl="/images/pilates/chair-standing-assist-1536.webp" data-xl-width="1536" src="/images/pilates/chair-standing-assist-500.webp" alt="A client standing on the Chair's seat, steadied at the hand, the double-steel frame taking her weight" width="500" height="500" loading="lazy">
+                <img data-small="/images/pilates/chair-standing-assist-500.webp" data-large="/images/pilates/chair-standing-assist-1000.webp" data-xl="/images/pilates/chair-standing-assist-1536.webp" data-xl-width="1536" src="/images/pilates/chair-standing-assist-500.webp" alt="A client standing on the Chair's seat, steadied at the hand, the double steel frame taking her weight" width="500" height="500" loading="lazy">
               </button>
             </div>
           </div>
@@ -1845,7 +1856,7 @@ function buildStudioContinuousPage() {
           </div>
           <div class="pilates-feature__media pilates-gallery" style="--frame-count: 3" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
-              <img data-drift-lag="0.025" data-gallery-plate data-small="/images/therapy/couch-window-500.webp" data-large="/images/therapy/couch-window-1000.webp" data-xl="/images/therapy/couch-window-1536.webp" data-xl-width="1536" src="/images/therapy/couch-window-1000.webp" srcset="/images/therapy/couch-window-500.webp 500w, /images/therapy/couch-window-1000.webp 1000w, /images/therapy/couch-window-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="The hydraulic physio couch side-on in the treatment corner, the muscular and skeletal charts on the wall behind it and the corner sink beside the door" width="1000" height="1000" loading="lazy">
+              <img data-drift-lag="0.025" data-gallery-plate data-small="/images/therapy/couch-window-500.webp" data-large="/images/therapy/couch-window-1000.webp" data-xl="/images/therapy/couch-window-1536.webp" data-xl-width="1536" src="/images/therapy/couch-window-1000.webp" srcset="/images/therapy/couch-window-500.webp 500w, /images/therapy/couch-window-1000.webp 1000w, /images/therapy/couch-window-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="The hydraulic physio couch side on in the treatment corner, the muscular and skeletal charts on the wall behind it and the corner sink beside the door" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous couch photograph" hidden>←</button>
               <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next couch photograph" hidden>→</button>
             </figure>
@@ -1961,11 +1972,11 @@ const THERAPY = {
   ],
   injuries: [
     "Recurring postural pain",
-    "Lower-back pain and sciatica",
-    "Upper-back, neck, headache and whiplash concerns",
+    "Lower back pain and sciatica",
+    "Upper back, neck, headache and whiplash concerns",
     "Thoracic tightness and acute or chronic pain",
-    "Hip, groin, knee, ankle and upper-limb problems",
-    "Soft-tissue rehabilitation and joint stiffness",
+    "Hip, groin, knee, ankle and upper limb problems",
+    "Soft tissue rehabilitation and joint stiffness",
     "Muscular strains, ligament sprains and tendonitis",
     "Scar tissue restriction post surgery",
   ],
@@ -1982,11 +1993,11 @@ const THERAPY = {
     "Repetitive strain injury",
     "Tension headaches",
     "Migraines and sinusitis",
-    "Pregnancy-related issues",
+    "Pregnancy related issues",
     "Carpal tunnel syndrome",
   ],
   fascia: [
-    "Lower-back pain and headaches",
+    "Lower back pain and headaches",
     "Neck stiffness and shoulder injuries",
     "Sports injuries and postural pain",
     "Muscle spasms and recurring restriction",
@@ -2045,7 +2056,7 @@ function eyebrow(text) {
    off, so only its responsive type was touched (see .therapy-hero h1). */
 const therapyHero = () => `<section class="therapy-hero" id="overview" aria-labelledby="therapy-title">
   <div class="section-shell therapy-hero__grid">
-    <div class="therapy-hero__content"><h1 id="therapy-title">Find what’s driving the pain, then treat it and rebuild.</h1><p>Sports Therapy provides relief from musculoskeletal pain and dysfunction through the use of various massage and soft-tissue techniques.</p><a class="pilates-arrow-link" href="#treatment">Explore treatment <span>↓</span></a></div>
+    <div class="therapy-hero__content"><h1 id="therapy-title">Find what’s driving the pain, then treat it and rebuild.</h1><p>Sports Therapy provides relief from musculoskeletal pain and dysfunction through the use of various massage and soft tissue techniques.</p><a class="pilates-arrow-link" href="#treatment">Explore treatment <span>↓</span></a></div>
     <figure class="therapy-hero__media therapy-hero__media--figure"><object class="therapy-hero__figure" type="image/svg+xml" data="/images/njh-signature-motion-figure-animated.svg" aria-label="Animated line drawing of a figure within orbiting rings" tabindex="-1"></object></figure>
   </div>
 </section>`;
@@ -2228,7 +2239,7 @@ function therapyVariantA() {
       <header class="st-head title-rule" data-reveal><div class="st-head__title">${eyebrow("Sports therapy")}<h2 id="treatment-title">Treatment techniques</h2></div></header>
       <div class="st-index">
         <section class="st-index__group" data-reveal aria-labelledby="treatment-delivery-title">
-          <div class="st-index__label">${eyebrow("Hands-on techniques")}<h3 id="treatment-delivery-title">How treatment is delivered</h3></div>
+          <div class="st-index__label">${eyebrow("Hands on techniques")}<h3 id="treatment-delivery-title">How treatment is delivered</h3></div>
           ${rows(techniques, "st-rows--split")}
         </section>
         <section class="st-index__group" data-reveal aria-labelledby="treatment-concerns-title">
@@ -2266,7 +2277,7 @@ function buildSportsTherapyContinuousPage() {
   return {
     title: "NJH Sports Therapy",
     description:
-      "Sports Therapy, soft-tissue treatment, myofascial release and kinesiology taping with NJH.",
+      "Sports Therapy, soft tissue treatment, myofascial release and kinesiology taping with NJH.",
     canonical: "/sports-therapy",
     html: `<div class="therapy-longform">
       ${therapyHero()}

@@ -6463,6 +6463,27 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   background: var(--paper);
 }
 
+/* The headliner above the run, set by storyQuotes() — the same figure
+   /client-stories carries at the foot of its film shelf, on the same paper as
+   the cards below it.
+
+   The figure's own top margin is the gap it needs from a film shelf, and here
+   there is nothing above it but the section's opening padding, so it is zeroed
+   rather than added to. What separates it from the run is set below instead,
+   larger than the mark's own lead-in: the opening mark leans into the cards it
+   introduces, and it should read as belonging to them and not as the tail of
+   Ava's quotation.
+
+   :empty and it is gone, margin and all — no review flagged for the home page
+   means no gap where a quote would have been. */
+.voice-run__lead > .story-quote {
+  margin-top: 0;
+}
+
+.voice-run__lead:not(:empty) {
+  margin-bottom: clamp(56px, 7vw, 112px);
+}
+
 /* Aligned to the page gutter, not the fade: the opening mark sits over the
    same line the first card's rule starts on. */
 .voice-run__mark {

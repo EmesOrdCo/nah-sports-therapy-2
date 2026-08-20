@@ -25,7 +25,7 @@ export const PLACES = [
   {
     name: "Studham Pilates Studio",
     lines: ["Studham, near Whipsnade"],
-    note: "Sports Therapy, individual and small-group Pilates. Full directions are sent when your appointment is confirmed.",
+    note: "Sports Therapy, individual and small group Pilates. Full directions are sent when your appointment is confirmed.",
     href: "/studio#studio",
     linkLabel: "Studio details",
   },
@@ -76,7 +76,9 @@ export const REASSURANCE = [
   {
     /* Natasha's wording, and the third item is hers verbatim bar the standing
        correction — punctuation and spelling to house style, never a rewrite:
-       the comma after "needs", and "cross-referral" for "cross Referral".
+       the comma after "needs", and "cross referral" for "cross Referral".
+       (It read "cross-referral" between those two corrections; the hyphen went
+       on 20 Aug 2026 with the site-wide sweep — see the note in reviews.js.)
 
        Note for anyone editing the site's other referral copy: this is the only
        place the word runs outward. The three "professional referrals are
@@ -84,7 +86,7 @@ export const REASSURANCE = [
        sent TO NJH. Same word, opposite direction, and the two should not be
        made to sound like one sentence about one thing. */
     heading: "Asking is not booking",
-    body: "A first message is a conversation. If NJH is not quite the right fit for your specific needs, Natasha will suggest an alternative cross-referral.",
+    body: "A first message is a conversation. If NJH is not quite the right fit for your specific needs, Natasha will suggest an alternative cross referral.",
   },
 ];
 
@@ -92,12 +94,12 @@ export const SERVICES = [
   {
     value: "Sports Therapy",
     label: "Sports Therapy",
-    hint: "Pain, injury or restricted movement you would like treated hands-on.",
+    hint: "Pain, injury or restricted movement you would like treated hands on.",
   },
   {
     value: "Pilates",
     label: "Pilates",
-    hint: "Individual or small-group movement work, including pre and postnatal.",
+    hint: "Individual or small group movement work, including pre and postnatal.",
   },
   {
     value: "Other / not sure",

@@ -72,7 +72,7 @@ function firstVisitAnswer() {
    the question in shape (what the fee depends on) and hands over to the one
    page that carries the numbers. */
 function priceAnswer() {
-  return `<p>It depends on the appointment: how long we need, and whether it is Sports Therapy, one-to-one Pilates, a duet or a small-group class. The recommended length is agreed before you book, so you always know the fee in advance.</p>
+  return `<p>It depends on the appointment: how long we need, and whether it is Sports Therapy, one to one Pilates, a duet or a small group class. The recommended length is agreed before you book, so you always know the fee in advance.</p>
     <p><a class="faq-inline-link" href="/prices">See the full price list <span aria-hidden="true">&#8599;</span></a></p>`;
 }
 
