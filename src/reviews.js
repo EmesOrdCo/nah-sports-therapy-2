@@ -60,6 +60,28 @@ export const FEATURED_REVIEWS = [
       "Natasha has helped me understand the imbalances in my muscles and how to gain strength and prevent injury. I started Pilates 4 months ago and I can already see and feel a huge difference. Natasha is always kind and welcoming and makes sure that you are doing everything correctly and creates a really safe and positive environment.",
     ],
   },
+  /* Kay's, back where it was. It headlined this page until 20 Aug 2026, spent
+     part of that day in the wall as an ordinary review, and now stands third
+     in the run — which is what the `paragraphs` shape was always for: not a
+     review of a class but the arc of a five-year recovery, and every paragraph
+     of it is set.
+
+     Wording is Kay's, untouched through both moves. Two corrections and
+     nothing else, made when it was first transcribed: "getting me knee
+     stronger" to "my knee", and the comma in "stronger, more resilient".
+
+     Same consent rule as the films and the journeys: a named client describing
+     an injury and a surgery is disclosing health information, and withdrawal
+     means deleting this. */
+  {
+    name: "Kay",
+    services: [PILATES],
+    paragraphs: [
+      "Five years ago I suffered an ACL injury and surgery which completely changed the way I moved and exercised. Recovery wasn't just about getting my knee stronger — it was about rebuilding my confidence and trusting my body again.",
+      "Natasha has played a huge role in that journey. She has helped me improve my strength, balance, flexibility and stability, especially around my knee and core. Rather than focusing on high impact movements, Natasha has taught me the importance of control, alignment and moving with purpose.",
+      "Five years on, I still include Pilates and more recently chair Pilates in my routine. Chair Pilates has added a new dimension to my exercise routine. It's shown me how to build a stronger, more resilient and healthy body for the future.",
+    ],
+  },
 ];
 
 export const REVIEWS = [
@@ -149,27 +171,6 @@ export const REVIEWS = [
     services: [SPORTS_THERAPY, PILATES],
     quote:
       "I have been seeing Natasha for three years now and she has been amazing. Her sports therapy sessions have been a life-saver when my back and shoulders were particularly bad and she is one of the most knowledgeable and professional therapists I have ever visited. More recently I have been lucky enough to be trained by Natasha in Pilates (both on a 1-1 basis and in her small group classes) and she is again outstanding. Her attention to detail is second to none and she always manages to suit each exercise to everyone's individual needs, while ensuring proper discipline in the Pilates groundwork. Her classes are challenging but also relaxing in her beautiful new studio. She is remarkably flexible in accommodating makeup classes whenever she can, although we always appreciate that this is her doing us a favour rather than a right! All in all, Natasha is fabulous — my life would be a lot more stressful and painful without the hard work that Natasha has put in to helping me and I can't thank her enough for her efforts",
-  },
-
-  /* Kay's, which stood as the page's headliner until 20 Aug 2026 and is now an
-     ordinary review like any other. Three paragraphs rather than one — not a
-     review of a class but the arc of a five-year recovery — so the blank lines
-     are load-bearing: reviewsWall() splits a quote on them and sets each as its
-     own paragraph, which is the only reason a review of this shape can stand in
-     the wall at all.
-
-     Wording is Kay's, unchanged by the move. Two corrections and nothing else,
-     made when it was first transcribed: "getting me knee stronger" to "my
-     knee", and the comma in "stronger, more resilient".
-
-     Same consent rule as the films and the journeys: a named client describing
-     an injury and a surgery is disclosing health information, and withdrawal
-     means deleting this. */
-  {
-    name: "Kay",
-    services: [PILATES],
-    quote:
-      "Five years ago I suffered an ACL injury and surgery which completely changed the way I moved and exercised. Recovery wasn't just about getting my knee stronger — it was about rebuilding my confidence and trusting my body again.\n\nNatasha has played a huge role in that journey. She has helped me improve my strength, balance, flexibility and stability, especially around my knee and core. Rather than focusing on high impact movements, Natasha has taught me the importance of control, alignment and moving with purpose.\n\nFive years on, I still include Pilates and more recently chair Pilates in my routine. Chair Pilates has added a new dimension to my exercise routine. It's shown me how to build a stronger, more resilient and healthy body for the future.",
   },
 
   /* The five the first import left behind, added 20 Aug 2026. They were on the

@@ -6728,9 +6728,10 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   line-height: var(--lh-body);
 }
 
-/* Only Kay's review has a second paragraph. Space between them rather than an
-   indent: the review above and below is separated by a rule and air, and an
-   indent inside one of them would read as a different kind of break. */
+/* No review in the wall runs to a second paragraph today; this is here so one
+   can. Space between them rather than an indent: the reviews above and below
+   are separated by a rule and air, and an indent inside one of them would read
+   as a different kind of break. */
 .review-wall__item blockquote p + p {
   margin-top: var(--space-s);
 }
@@ -7165,9 +7166,10 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   text-align: center;
   --reveal-lift: 40px;
 
-  /* When two of these stand together they stagger — the first sits a step
-     left of centre, the second a step right, so the pair reads as a diagonal
-     composition down the page rather than one block repeated.
+  /* A run of these staggers left, right, left — so the headliners read as one
+     diagonal composition down the page rather than as the same block set three
+     times. Which way each leans is --quote-side, written onto the figure by
+     storyQuote() as -1, 0 or 1; a single headliner gets 0 and stays centred.
 
      The step is whatever slack the shell actually has around an 880px figure,
      capped: on a wide screen the full 96px, and as the shell narrows the
@@ -7178,14 +7180,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
      already spoken for by the centring. */
   position: relative;
   --quote-stagger: max(0px, min(96px, calc((100% - 880px) / 2)));
-}
-
-.story-quote:has(+ .story-quote) {
-  left: calc(-1 * var(--quote-stagger));
-}
-
-.story-quote + .story-quote {
-  left: var(--quote-stagger);
+  left: calc(var(--quote-side, 0) * var(--quote-stagger));
 }
 
 /* The marks hang off the corners of the block, so it needs to be their

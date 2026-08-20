@@ -692,12 +692,19 @@ function filmsHero() {
  * Renders nothing if the review has no paragraphs — no empty frame, the same
  * rule the shelf and the journeys are built on. */
 function storyQuote() {
-  return FEATURED_REVIEWS.filter((review) => review.paragraphs?.length)
-    .map((review) => {
+  const featured = FEATURED_REVIEWS.filter((review) => review.paragraphs?.length);
+  return featured
+    .map((review, index) => {
       const copy = review.paragraphs
         .map((text) => `<p class="story-quote__p">${text}</p>`)
         .join("\n            ");
-      return `<figure class="story-quote" data-reveal>
+      /* Which way this one leans, as a multiplier the stylesheet spends on the
+         stagger. Alternating from the index rather than from the markup: these
+         figures are siblings of the film shelf, so an :nth-child() would be
+         counting the wrong things, and a :has()-based pair rule only ever knew
+         about two. A lone headliner leans nowhere and stays centred. */
+      const side = featured.length < 2 ? 0 : index % 2 === 0 ? -1 : 1;
+      return `<figure class="story-quote" style="--quote-side: ${side}" data-reveal>
         <blockquote class="story-quote__body">
           <span class="story-quote__mark story-quote__mark--open" aria-hidden="true">&ldquo;</span>
           ${copy}
@@ -834,11 +841,10 @@ function reviewsWall() {
            reading it off the DOM beats matching on a quote. */
         const order = REVIEWS.indexOf(review);
         const pin = review === REVIEWS.find((r) => r.quote.startsWith(FOOT_OF_FIRST_COLUMN));
-        /* Almost every review is one paragraph and this is a no-op for them.
-           Kay's is three — the arc of a five-year recovery rather than a note
-           about a class — and running them together would be a change to how
-           she wrote it, which this file does not get to make. A blank line in
-           the quote is a paragraph break, and it is set as one. */
+        /* Every review in the wall is one paragraph today, so this is a
+           no-op — but a review is quoted as its author wrote it, and if one
+           arrives in paragraphs it is set in paragraphs rather than run
+           together. A blank line in the quote is a paragraph break. */
         const body = review.quote
           .split(/\n\s*\n/)
           .map((paragraph) => `<p>${paragraph}</p>`)
