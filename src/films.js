@@ -83,7 +83,7 @@ export const FILMS = [
     /* Shot 13 Aug 2026 (Harry's IMG_1152.MOV). Blurb to come from NJH — see
        the note above: it is what she actually says on camera, not a caption
        invented for the still. */
-    name: "Susanna",
+    name: "Suzannah",
     poster: "/images/films/client-story-4.webp",
     sources: [{ src: "/videos/films/client-story-4.mp4" }],
   },

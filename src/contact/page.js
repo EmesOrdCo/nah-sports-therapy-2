@@ -4,6 +4,8 @@ import {
   PLACES,
   SERVICES,
   REPLY_OPTIONS,
+  REPLY_BY_PHONE,
+  WHATSAPP_NOTE,
   REASSURANCE,
   SAFETY_NOTE,
   honeypotAndSubject,
@@ -92,11 +94,22 @@ function hero() {
       <p class="cv__lede">Get in touch to ask a question, discuss what you need or arrange an appointment.</p>
 
       <div class="cv__doors">
-        <a class="cv__door cv__door--call" href="${BUSINESS.phoneHref}" data-reveal>
+        ${/* The call tile holds two links now — the number and the WhatsApp
+              line — so it cannot itself be one: an anchor inside an anchor is
+              dropped by the parser, and the WhatsApp words would dial. It is
+              a div whose number link is stretched over the whole tile by a
+              pseudo-element instead, so tapping anywhere in the blue still
+              rings Natasha, and the WhatsApp line sits above that layer and
+              takes its own taps. The write tile is one link and stays one. */ ""}
+        <div class="cv__door cv__door--call" data-reveal>
           <span class="cv__door-icon">${icon("phone")}</span>
-          <span class="cv__door-value">${BUSINESS.phoneDisplay}</span>
-          <span class="cv__door-note">Call Natasha</span>
-        </a>
+          ${/* No "Call Natasha" line under the number any more: the WhatsApp
+                sentence took that slot, and a tile captioned twice reads as
+                two instructions where there is one. The number in a tile with
+                a phone icon on it does not need to be told it is for calling. */ ""}
+          <a class="cv__door-value cv__door-dial" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a>
+          <p class="cv__door-aside">${WHATSAPP_NOTE.before} <a href="${WHATSAPP_NOTE.href}">${WHATSAPP_NOTE.label}</a>.</p>
+        </div>
         <a class="cv__door cv__door--write" href="#enquiry" data-reveal>
           <span class="cv__door-icon">${icon("mail")}</span>
           <h2 class="cv__door-value" id="enquiry-title">Send an enquiry</h2>
@@ -127,7 +140,11 @@ function form() {
     <div class="cv__fields">
       <div class="form-field"><label for="name">Name</label><input id="name" name="name" autocomplete="name" required><span class="form-error">Please enter your name.</span></div>
       <div class="form-field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required><span class="form-error">Please enter a valid email.</span></div>
-      <div class="form-field"><label for="phone">Phone <small>optional</small></label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+      ${/* "optional" is true only while the reply is coming by email, so the
+            marker is hidden rather than written into the label for good, and
+            the field carries an error line it can show when it is not. See
+            bindPhoneRequirement(). */ ""}
+      <div class="form-field"><label for="phone">Phone <small data-phone-optional>optional</small></label><input id="phone" name="phone" type="tel" autocomplete="tel"><span class="form-error">Please enter a number Natasha can call you on.</span></div>
       ${selectField({
         id: "service",
         name: "service",
@@ -163,6 +180,11 @@ function form() {
   </form>`;
 }
 
+/* `action` is optional and only the first item carries one — the WhatsApp
+   line. The anchor is the two words that say what tapping does, not the whole
+   sentence: a link named "For speedy replies during clinic time, please
+   WhatsApp directly" is a mouthful in a list of links read out on its own,
+   and "WhatsApp directly" is not. */
 function assurances() {
   return `<ul class="cv__assurances" data-reveal>
     ${REASSURANCE.map(
@@ -171,6 +193,11 @@ function assurances() {
         <div>
           <h3>${item.heading}</h3>
           <p>${item.body}</p>
+          ${
+            item.action
+              ? `<p class="cv__assurance-action">${item.action.before} <a href="${item.action.href}">${item.action.label}</a>.</p>`
+              : ""
+          }
         </div>
       </li>`,
     ).join("")}
@@ -447,7 +474,49 @@ function enhanceSelect(wrap, triggerFor) {
   paint();
 }
 
+/* ---- Phone required when the reply is meant to come by phone ----
+
+   The number is optional on a form whose one required contact route is the
+   email address — until somebody asks to be rung, at which point an enquiry
+   with no number in it is one Natasha cannot answer the way it was asked to
+   be answered. Preferred reply now defaults to Phone (see REPLY_OPTIONS), so
+   this is the ordinary path through the form rather than a corner of it.
+
+   Done by setting `required` on the native input, which is the whole of it:
+   the submit handler in site-content.js validates with form.checkValidity()
+   and the stylesheet paints :invalid, so both pick this up with no other
+   change. The "optional" marker in the label goes while it is required —
+   a field labelled optional that refuses to submit empty is worse than an
+   unlabelled one.
+
+   Bound to `change` on the native select, so it hears the enhanced dropdown
+   too: commit() writes to the select and dispatches `change`. The same event
+   is what carries a form.reset() back here — see the reset handler below,
+   which republishes it once the browser has cleared the controls.
+
+   Runs before the early return above it: the requirement is the form's, not
+   the custom dropdown's, and it must hold on a page where the enhancement
+   never ran. */
+function bindPhoneRequirement() {
+  const reply = document.querySelector('select[name="preferred reply"]');
+  const phone = document.querySelector("#phone");
+  if (!reply || !phone) return;
+
+  const optional = document.querySelector("[data-phone-optional]");
+
+  const sync = () => {
+    const wanted = reply.value === REPLY_BY_PHONE;
+    phone.required = wanted;
+    if (optional) optional.hidden = wanted;
+  };
+
+  reply.addEventListener("change", sync);
+  sync();
+}
+
 export function initContactSelects() {
+  bindPhoneRequirement();
+
   const wraps = [...document.querySelectorAll("[data-select]")];
   if (!wraps.length) return;
 

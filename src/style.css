@@ -5363,27 +5363,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   object-position: 62% 50%;
 }
 
-/* The tour, laid exactly over the still and cut the same way. It is cropped
-   wider than the photograph, so on a phone it reaches for the same right-of-
-   centre bias for the same reason. It fades up only once it can play — see
-   initStudioReel — so a slow connection shows the photograph rather than a
-   black rectangle, and a refused codec shows it for good. */
-.clinics-hero__reel {
-  position: absolute;
-  display: block;
-  width: 100%;
-  height: 100%;
-  inset: 0;
-  object-fit: cover;
-  object-position: 62% 50%;
-  opacity: 0;
-  transition: opacity 900ms var(--ease-out);
-}
-
-.clinics-hero__reel.is-ready {
-  opacity: 1;
-}
-
 /* Three layers, each answering something the photograph does not promise on
    its own. The wedge guarantees contrast under the column of type — the left
    of this frame is fuchsias over pale paving, not a dark ground; the foot
@@ -5463,14 +5442,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 .clinics-hero .pilates-arrow-link span {
   color: var(--periwinkle);
-}
-
-/* Asked for stillness, the clip is never fetched at all — see initStudioReel.
-   This is the belt to that braces: nothing here should fade or move. */
-@media (prefers-reduced-motion: reduce) {
-  .clinics-hero__reel {
-    transition: none;
-  }
 }
 
 /* Continuous Sports Therapy page */
@@ -5678,7 +5649,9 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
    ============================================================ */
 
 .story {
-  --story-radius: clamp(14px, 1.4vw, 22px);
+  /* Square corners. The clip-path below still rounds by this figure, so the
+     seam machinery is untouched — it just has nothing to round off. */
+  --story-radius: 0px;
 }
 
 /* Every length here is one panel: the fold less the header, because a panel
@@ -5794,14 +5767,6 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 .story__copy-inner {
   width: 100%;
   max-width: 46ch;
-}
-
-.story__index {
-  margin: 0 0 var(--space-s);
-  color: var(--brand);
-  font-size: var(--label);
-  font-weight: 600;
-  letter-spacing: 0.18em;
 }
 
 .story__copy h2 {
@@ -6123,7 +6088,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
      labels instead of just cropping. */
   width: 100%;
   margin-top: clamp(20px, 2.2vw, 34px);
-  border-radius: clamp(5px, 0.5vw, 8px);
+  border-radius: 0;
   /* Letterboxed rather than 16:9 so the whole band — title through photograph
      — clears a laptop fold without the page having to scroll through it. The
      cap is what makes that a guarantee rather than a size that happens to work:
@@ -6656,6 +6621,118 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 
 /* ============================================================
+   The written reviews wall — /client-stories, under the films
+   Everything in reviews.js at full length, which is the half
+   the home page's drifting run cannot carry: that run caps a
+   quote at 190 characters because its cards travel past, and
+   the longest reviews are the ones somebody deciding whether
+   to book actually wants. Built by reviewsWall() in
+   site-content.js.
+   ============================================================ */
+
+/* Columns, not a card grid. These run from one line to a full paragraph, and
+   a grid sized to the longest strands the short ones in white; columns pack
+   whatever height each one turns out to be. The break rule is what stops a
+   review being cut in half across the fold of a column — without it the name
+   at the foot of one arrives at the head of the next. */
+.review-wall__list {
+  padding: 0;
+  margin: 0;
+  columns: 1;
+  column-gap: clamp(24px, 3vw, 48px);
+  list-style: none;
+}
+
+@media (min-width: 700px) {
+  .review-wall__list {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1100px) {
+  .review-wall__list {
+    columns: 3;
+  }
+
+  /* Where a column ends is ours to decide, not the browser's — left alone,
+     multi-column balances by height and nothing can be PLACED: an item sits at
+     the foot of a column only because the flow ran out there. reviewColumns()
+     in site-content.js deals the reviews into three runs so that Kim's review
+     can close the first column, and these are the ends of those runs.
+
+     Scoped to the width that actually has three columns. A break class is
+     never allowed to survive into a narrower layout — two forced breaks inside
+     a two-column box ask for a third column there is no room for, and the wall
+     would scroll sideways. Hence a class per breakpoint rather than one shared
+     one: --break-lg only bites here, --break-md only between 700 and 1100, and
+     a single column carries neither. */
+  .review-wall__item--break-lg {
+    break-after: column;
+  }
+}
+
+/* Two columns. Nothing is marked here on the server — the three-run deal it
+   renders is wrong at this width — so these come from main.js, which re-deals
+   the wall to whatever column count is actually on screen. Without JS the two
+   columns simply balance themselves, which is where this started. */
+@media (min-width: 700px) and (max-width: 1099.98px) {
+  .review-wall__item--break-md {
+    break-after: column;
+  }
+}
+
+/* The hairline over each is the whole separator — the same one the home run's
+   cards take, so a review reads as a review on either page rather than as a
+   box here and a column there. margin-bottom rather than a gap: in a column
+   layout the gap is horizontal only. */
+.review-wall__item {
+  break-inside: avoid;
+  padding-top: clamp(18px, 1.8vw, 24px);
+  margin-bottom: clamp(28px, 3vw, 44px);
+  border-top: 1px solid var(--brand);
+}
+
+.review-wall__service {
+  margin: 0 0 clamp(10px, 1.2vw, 14px);
+  color: var(--ink-soft);
+  font-size: var(--label-sm);
+  font-weight: var(--meta-weight);
+  letter-spacing: var(--label-sm-track);
+  text-transform: uppercase;
+}
+
+.review-wall__item blockquote {
+  margin: 0 0 var(--space-s);
+}
+
+/* A step below the home run's quotes. There the card is the unit and the type
+   carries it; here a reader has settled on the page and there are thirty of
+   them, so the size that reads best is the one you would set a paragraph at. */
+.review-wall__item blockquote p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: var(--lh-body);
+}
+
+/* Only Kay's review has a second paragraph. Space between them rather than an
+   indent: the review above and below is separated by a rule and air, and an
+   indent inside one of them would read as a different kind of break. */
+.review-wall__item blockquote p + p {
+  margin-top: var(--space-s);
+}
+
+.review-wall__item cite {
+  display: block;
+  color: var(--brand);
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  font-style: normal;
+}
+
+
+/* ============================================================
    Client stories — the switch between the two sides
    Films on /client-stories, the wall of quotes on
    /client-stories/reviews, and this sits under the head of
@@ -6944,7 +7021,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   overflow: hidden;
   aspect-ratio: 9 / 16;
   border: 1px solid var(--line);
-  border-radius: var(--radius-card);
+  border-radius: 0;
   background: var(--ink);
 }
 
@@ -7075,6 +7152,28 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   padding: 0 clamp(34px, 5vw, 72px);
   text-align: center;
   --reveal-lift: 40px;
+
+  /* When two of these stand together they stagger — the first sits a step
+     left of centre, the second a step right, so the pair reads as a diagonal
+     composition down the page rather than one block repeated.
+
+     The step is whatever slack the shell actually has around an 880px figure,
+     capped: on a wide screen the full 96px, and as the shell narrows the
+     stagger narrows with it and reaches nothing exactly when the figure fills
+     the shell — which is why there is no media query here, and why the offset
+     can never push a quote out of the page. Relative position rather than a
+     transform or margins: the reveal animates `transform`, and margins are
+     already spoken for by the centring. */
+  position: relative;
+  --quote-stagger: max(0px, min(96px, calc((100% - 880px) / 2)));
+}
+
+.story-quote:has(+ .story-quote) {
+  left: calc(-1 * var(--quote-stagger));
+}
+
+.story-quote + .story-quote {
+  left: var(--quote-stagger);
 }
 
 /* The marks hang off the corners of the block, so it needs to be their
@@ -9050,10 +9149,10 @@ p.fascia-map__claim {
 }
 
 /* The column is the frame and the photograph fills it; the HTML width and
-   height only hold the ratio until the file lands. All three are the same 4:5
-   portrait — re-cut from the 2:3 originals to take the practitioner's head
-   (and her jeans) out of frame — so cover crops the same amount off each and
-   the band does not shuffle as you move along. */
+   height only hold the ratio until the file lands. All three ship 4:5 —
+   re-cut from the 2:3 originals to take the practitioner's head (and her
+   jeans) out of frame — so cover crops the same amount off each and the band
+   does not shuffle as you move along. */
 .taping-band__slide img {
   display: block;
   width: 100%;

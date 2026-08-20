@@ -414,15 +414,37 @@ initMarquee({
   prefix: "creds",
 });
 
-/* The client voices under the quote panel, and the only place written reviews
-   are shown. The cards are written from reviews.js rather than into
-   index.html: that file is the single source of truth for a review. The
-   shortest ones lead — these cards go past, and a review that needs a second
-   look is one the reader loses. */
+/* The client voices under the quote panel. The cards are written from
+   reviews.js rather than into index.html: that file is the single source of
+   truth for a review, and the full written set stands on /client-stories.
+
+   THIS RUN SELECTS. IT DOES NOT SHORTEN. The distinction is the whole history
+   of this component. It used to drop any quote over 190 characters, which was
+   itself harmless — every card still carried a complete review. What was not
+   harmless is what happened behind it: reviews in reviews.js were cut down by
+   hand until they fitted the cap, with no ellipsis to show it, so the site
+   showed a third of a testimonial as though it were the whole. Ten of them
+   were restored on 20 Aug 2026 against the old site's own copy.
+
+   So the rule, on Harry's instruction: the run shows the naturally SHORTEST
+   reviews, whole, and shows nothing else. A review that will not fit is not
+   shown here — it is never edited to fit here. There is deliberately no
+   character threshold to tune, because a threshold is what somebody once
+   edited a review to satisfy: the run asks for the shortest that exist, and if
+   every review in the file were long it would simply carry long ones.
+
+   Selected by length, then rendered in the file's own order — reviews.js is
+   written in the order NJH wants reviews to appear, and a length sort on
+   screen would throw that away as well. */
+const RUN_CARDS = 9;
 const voiceRunStrip = document.querySelector(".voice-run__strip");
 if (voiceRunStrip) {
-  const runReviews = REVIEWS.filter((review) => review.quote.length <= 190)
-    .slice(0, 9)
+  const shortest = new Set(
+    [...REVIEWS]
+      .sort((a, b) => a.quote.length - b.quote.length)
+      .slice(0, RUN_CARDS),
+  );
+  const runReviews = REVIEWS.filter((review) => shortest.has(review))
     .map((review) => {
       /* The one label reviews.js allows. A reader scanning the run wants to
          know which half of the practice a review is about before they read
@@ -447,6 +469,107 @@ if (voiceRunStrip) {
     // not a logo to recognise.
     speed: 30,
     prefix: "voice-run",
+  });
+}
+
+/* The written reviews wall on /client-stories, re-dealt to the column count
+   actually on screen.
+
+   NJH asked for Kim's triathlon review at the foot of the first column rather
+   than dangling alone at the bottom of the last. Multi-column will not do
+   that on its own — it balances by height, so an item lands at the foot of a
+   column only because the flow ran out there — so site-content.js deals the
+   reviews into runs and marks where each one ends.
+
+   It can only render one deal, though, and it renders the three-column one.
+   That is the right default (it needs no JS, and desktop never jumps on load)
+   but it is the wrong answer at two columns and at one, and no single order of
+   the markup can be right at all three: the foot of the first of three runs,
+   the foot of the first of two, and the end of a single column are three
+   different places in the list. So the other two are dealt here.
+
+   Measured, not estimated. The server has to guess a review's height from its
+   character count; by the time this runs the reviews are on the page and can
+   simply be asked, which is why the columns come out level.
+
+   Falls back to nothing at all: with no JS the wall is the three-run deal
+   above 1100px and an ordinary balanced flow below it, which is where this
+   component started and is perfectly readable. */
+const reviewWallList = document.querySelector(".review-wall__list");
+if (reviewWallList) {
+  const BREAK_CLASS = { 2: "review-wall__item--break-md", 3: "review-wall__item--break-lg" };
+  const columnsNow = () =>
+    parseInt(getComputedStyle(reviewWallList).columnCount, 10) || 1;
+
+  /* reviews.js's order, recovered from the markup rather than kept in a second
+     list that could fall out of step with it. */
+  const inFileOrder = () =>
+    [...reviewWallList.children].sort(
+      (a, b) => a.dataset.reviewOrder - b.dataset.reviewOrder,
+    );
+
+  let dealtFor = columnsNow();
+
+  const deal = (columns) => {
+    const items = inFileOrder();
+    items.forEach((item) => {
+      item.classList.remove(BREAK_CLASS[2], BREAK_CLASS[3]);
+    });
+
+    /* One column has no foot but its own end, which is where the file already
+       puts this review — so the file's order IS the answer, and a forced break
+       would invent a second column to overflow into. */
+    if (columns < 2) {
+      items.forEach((item) => reviewWallList.append(item));
+      return;
+    }
+
+    const pinned = items.find((item) => "reviewPin" in item.dataset);
+    const rest = pinned ? items.filter((item) => item !== pinned) : items;
+    const height = (item) => item.getBoundingClientRect().height;
+    const total = items.reduce((sum, item) => sum + height(item), 0);
+    const target = total / columns;
+
+    const runs = Array.from({ length: columns }, () => []);
+    let at = 0;
+    let run = 0;
+    for (const item of rest) {
+      /* The first run closes early by what is going to be added to its foot,
+         or pinning a review there makes it the long column, not the short. */
+      const budget = at === 0 && pinned ? target - height(pinned) : target;
+      const over = run + height(item) - budget;
+      /* Break on whichever side of the target leaves this run nearer to it —
+         waiting until the budget is passed always overshoots by most of an
+         item. */
+      if (at < columns - 1 && over > 0 && over > budget - run) {
+        at += 1;
+        run = 0;
+      }
+      runs[at].push(item);
+      run += height(item);
+    }
+    if (pinned) runs[0].push(pinned);
+
+    runs.forEach((items, index) => {
+      items.forEach((item) => reviewWallList.append(item));
+      const last = items[items.length - 1];
+      if (last && index < runs.length - 1) last.classList.add(BREAK_CLASS[columns]);
+    });
+  };
+
+  /* The server already dealt for three, so leave that alone on a desktop
+     first paint and only step in for the widths it could not render. */
+  if (dealtFor !== 3) deal(dealtFor);
+
+  let resizing;
+  addEventListener("resize", () => {
+    clearTimeout(resizing);
+    resizing = setTimeout(() => {
+      const columns = columnsNow();
+      if (columns === dealtFor) return;
+      dealtFor = columns;
+      deal(columns);
+    }, 150);
   });
 }
 

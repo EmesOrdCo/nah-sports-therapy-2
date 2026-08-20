@@ -1775,30 +1775,40 @@ const l21 = {
     </footer>
   </div>`,
 };
-
 /* ==================================================== 22 portrait, text right
-   L21 mirrored in spirit: the photograph is still the whole page, but the
-   words hang down the right-hand side in one column, clear of her figure. She
-   stands on the left of the frame; the right is wall and window, which is
-   where a column of type can live without covering her.
+   The client's chosen direction: the photograph is the whole page and the
+   words hang down the right-hand side. Two cuts of the same design, differing
+   only in the crop: the first frames her as shot; the second shifts her left,
+   cropping the out-flung elbow and bringing the jacket's own NJH embroidery
+   into the clear.
 
-   Same 1011px-wide source as L21, so the same caveat: fine on screen and on a
-   wall, worth re-exporting at full resolution for a print run. */
+   Client amendments, August 2026: no price list; the name set in the serif
+   with the headline rather than script; larger wordmark, contact details and
+   teal subheadings; individual & duet availability spelled out (Monday to
+   Friday and Sunday mornings, client-confirmed); Pilates for golfers left off
+   this sheet. The golfers line stays in the shared PILATES_FORMS because the
+   other designs still carry it; this sheet filters it out locally.
 
-const l22 = {
-  slug: "poster-l22-portrait-right",
-  label: "L22 Portrait, text right",
+   Same 1011px-wide source as L21: fine on screen and on a wall, worth a
+   full-resolution re-export for a print run. */
+
+const L22_PILATES_FORMS = PILATES_FORMS.filter((f) => !f.includes("golfers"));
+const L22_AVAILABILITY =
+  "Individual &amp; duet sessions available Monday to Friday &amp; Sunday mornings.";
+const L22_TT_LABEL = "Weekly small-group Pilates classes";
+
+const portraitRight = (slug, label, { src, alt, focus }) => ({
+  slug,
+  label,
   css: `
   ${COMP}
   ${leaders}
   ${TT_CSS}
   .sheet { background: var(--navy-deeper); }
-  /* Her head sits left of centre in the source; pushing the focal point to
-     12% keeps her whole figure in the left half of the trim. */
   .cover { position: absolute; inset: 0; }
-  .cover img { width: 100%; height: 100%; object-fit: cover; object-position: 12% 18%; }
-  /* The scrim is vertical, not horizontal: a right-hand shade wide enough to
-     carry the column, deepening toward the foot where the tables sit. */
+  .cover img { width: 100%; height: 100%; object-fit: cover; object-position: ${focus}; }
+  /* A right-hand shade carries the column; a soft foot shade steadies the
+     contact block. Both translucent, so the photograph stays the page. */
   .cover::after { content: ""; position: absolute; inset: 0; background:
     linear-gradient(90deg, rgba(21,27,63,0) 34%, rgba(21,27,63,.45) 50%, rgba(21,27,63,.8) 62%, rgba(21,27,63,.84) 100%),
     linear-gradient(180deg, rgba(21,27,63,.22) 0%, rgba(21,27,63,0) 16%, rgba(21,27,63,0) 70%, rgba(21,27,63,.45) 94%); }
@@ -1807,44 +1817,41 @@ const l22 = {
          padding: 12mm 12mm 9mm 0; display: flex; flex-direction: column; color: #fff;
          font-weight: 500; text-shadow: 0 0.2mm 1.2mm rgba(21,27,63,.6); }
 
-  .wordmark { display: flex; align-items: center; gap: 3.4mm; }
-  .wordmark__mark { width: 12.5mm; height: auto; filter: brightness(0) invert(1); }
+  .wordmark { display: flex; align-items: center; gap: 4.2mm; }
+  .wordmark__mark { width: 16mm; height: auto; filter: brightness(0) invert(1); }
   .wordmark__text { display: flex; flex-direction: column; line-height: 1; }
-  .wordmark__name { font-family: "STIX Two Text", serif; font-weight: 600; font-size: 22pt; color: #fff; }
-  .wordmark__descriptor { font-size: 6.8pt; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: rgba(255,255,255,.9); margin-top: 1.5mm; }
+  .wordmark__name { font-family: "STIX Two Text", serif; font-weight: 600; font-size: 27pt; color: #fff; }
+  .wordmark__descriptor { font-size: 7.8pt; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: rgba(255,255,255,.9); margin-top: 1.8mm; }
 
-  .sig { font-family: "Parisienne", cursive; font-size: 19pt; color: #fff; text-shadow: 0 0 3mm rgba(21,27,63,.55); margin-top: 11mm; }
-  .col h1 { font-size: 24pt; line-height: 1.15; letter-spacing: -0.018em; color: #fff; margin-top: 2mm; }
+  /* The name in the headline's own serif, semibold, rather than script. */
+  .name { font-family: "STIX Two Text", serif; font-weight: 600; font-size: 15pt; color: #fff;
+          letter-spacing: .01em; margin-top: 11mm; }
+  .col h1 { font-size: 24pt; line-height: 1.15; letter-spacing: -0.018em; color: #fff; margin-top: 2.4mm; }
   .col h1 em { font-style: italic; color: var(--periwinkle); }
   .col__intro { font-size: 9.4pt; line-height: 1.6; color: rgba(255,255,255,.94); margin-top: 4mm; }
 
-  .block { margin-top: 6mm; padding-top: 5mm; border-top: 0.25mm solid rgba(255,255,255,.3); }
-  .label { color: #56D6DA; font-size: 8pt; }
-  .block h2 { font-size: 13pt; color: #fff; margin: 2mm 0 1.8mm; }
+  .block { margin-top: 7.5mm; padding-top: 6mm; border-top: 0.25mm solid rgba(255,255,255,.3); }
+  .label { color: #56D6DA; font-size: 9.2pt; }
+  .block h2 { font-size: 13pt; color: #fff; margin: 2.2mm 0 2mm; }
   .block p { font-size: 8.8pt; line-height: 1.6; color: rgba(255,255,255,.92); }
+  .block .avail { margin-top: 2.6mm; color: #fff; font-weight: 600; }
 
-  .fees { display: grid; grid-template-columns: 1fr 1fr; gap: 0 7mm; margin-top: 3mm; }
-  .fees .label { font-size: 7pt; letter-spacing: .1em; margin-bottom: 2mm; }
-  .row { font-size: 8.7pt; line-height: 1.85; color: rgba(255,255,255,.94); }
-  .row__lead { border-bottom-color: rgba(255,255,255,.3); }
-  .row__fee { color: #fff; font-weight: 700; }
-
-  .tt__row { padding: 1.1mm 0; }
+  .tt__row { padding: 1.4mm 0; }
   .tt__row + .tt__row { border-top-color: rgba(255,255,255,.2); }
-  .tt__day { color: #fff; font-size: 8.7pt; flex: 0 0 16mm; font-weight: 700; }
-  .tt__times { color: rgba(255,255,255,.94); font-size: 8.7pt; }
+  .tt__day { color: #fff; font-size: 8.9pt; flex: 0 0 17mm; font-weight: 700; }
+  .tt__times { color: rgba(255,255,255,.94); font-size: 8.9pt; }
   .tt__times small { color: #56D6DA; }
 
-  .bar { margin-top: auto; padding-top: 4.5mm; border-top: 0.25mm solid rgba(255,255,255,.3); }
-  .bar b { display: block; font-size: 13pt; color: #fff; font-weight: 600; }
-  .bar span { display: block; font-size: 9pt; color: rgba(255,255,255,.94); line-height: 1.65; margin-top: 1.4mm; }
-  .bar .who { font-size: 6.8pt; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.66); font-weight: 600; margin-top: 3.5mm; }
+  .bar { margin-top: auto; padding-top: 5mm; border-top: 0.25mm solid rgba(255,255,255,.3); }
+  .bar b { display: block; font-size: 17pt; color: #fff; font-weight: 600; letter-spacing: .01em; }
+  .bar span { display: block; font-size: 10.5pt; color: rgba(255,255,255,.94); line-height: 1.6; margin-top: 2mm; }
+  .bar .who { font-size: 7pt; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.66); font-weight: 600; margin-top: 4mm; }
   `,
   html: `<div class="sheet">
-    <figure class="cover"><img src="/images/natasha-therapy-1011.webp" alt="Natasha Hadland in the Studham studio"></figure>
+    <figure class="cover"><img src="${src}" alt="${alt}"></figure>
     <div class="col">
       ${wordmark()}
-      <p class="sig">${BUSINESS.person}</p>
+      <p class="name">${BUSINESS.person}</p>
       <h1>Hands-on treatment and <em>precise movement.</em></h1>
       <p class="col__intro">Sports Therapy and Clinical Pilates from one private studio in ${BUSINESS.where}. Not only for athletes: clients here are aged eight to over eighty.</p>
 
@@ -1857,20 +1864,13 @@ const l22 = {
       <section class="block">
         <span class="label">Clinical Pilates</span>
         <h2>Teaching the body to support itself.</h2>
-        <p>${PILATES_FORMS.join(" &middot; ")}</p>
+        <p>${L22_PILATES_FORMS.join(" &middot; ")}</p>
+        <p class="avail">${L22_AVAILABILITY}</p>
       </section>
 
       <section class="block">
-        <span class="label">Prices</span>
-        <div class="fees">
-          <div><span class="label">Sports Therapy</span>${rows(PRICES_THERAPY)}</div>
-          <div><span class="label">Pilates</span>${rows(PRICES_PILATES)}</div>
-        </div>
-      </section>
-
-      <section class="block">
-        <span class="label">Weekly small-group classes</span>
-        <div style="margin-top: 2.5mm">${tt()}</div>
+        <span class="label">${L22_TT_LABEL}</span>
+        <div style="margin-top: 3mm">${tt()}</div>
       </section>
 
       <footer class="bar">
@@ -1880,7 +1880,23 @@ const l22 = {
       </footer>
     </div>
   </div>`,
-};
+});
 
-export const LAB_C = [l15, l16, l17, l18, l19, l20, l21, l22];
+/* As shot, and the client-requested recrop: pushing the focal point right in
+   object-position shifts her figure left on the page, cropping the out-flung
+   elbow at the left trim and clearing the jacket embroidery from the shade. */
+const PORTRAIT = { src: "/images/natasha-therapy-1011.webp", alt: "Natasha Hadland in the Studham studio" };
+const l22 = portraitRight("poster-l22-portrait-right", "L22 Portrait, text right", { ...PORTRAIT, focus: "12% 18%" });
+const l23 = portraitRight("poster-l23-portrait-shifted", "L23 Portrait, shifted crop", { ...PORTRAIT, focus: "88% 18%" });
+
+/* The home page's own hero: the studio set for a class, doors open to the
+   garden. Landscape, so the A4 crop keeps the middle of it: the doorway and
+   garden hold the left of the page and the plain wall takes the column. */
+const l24 = portraitRight("poster-l24-home-hero", "L24 Home hero", {
+  src: "/images/home-hero-2128.webp",
+  alt: "The NJH studio set for a small-group class, doors open to the garden",
+  focus: "62% 50%",
+});
+
+export const LAB_C = [l15, l16, l17, l18, l19, l20, l21, l22, l23, l24];
 export const LAB_VARIANTS = [...LAB_A, ...LAB_B, ...LAB_C];

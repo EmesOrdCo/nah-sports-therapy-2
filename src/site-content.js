@@ -11,7 +11,7 @@ import {
   FILMS_TITLE,
 } from "./films.js";
 import { journeysList, hasJourneys } from "./journeys.js";
-import { FEATURED_REVIEW } from "./reviews.js";
+import { FEATURED_REVIEWS, REVIEWS, SERVICE_LABELS } from "./reviews.js";
 
 const BUSINESS = {
   phoneDisplay: "07881 821 901",
@@ -692,26 +692,179 @@ function filmsHero() {
  * Renders nothing if the review has no paragraphs — no empty frame, the same
  * rule the shelf and the journeys are built on. */
 function storyQuote() {
-  const { name, paragraphs = [] } = FEATURED_REVIEW;
-  if (!paragraphs.length) return "";
-  const copy = paragraphs
-    .map((text) => `<p class="story-quote__p">${text}</p>`)
-    .join("\n            ");
-  return `<figure class="story-quote" data-reveal>
+  return FEATURED_REVIEWS.filter((review) => review.paragraphs?.length)
+    .map((review) => {
+      const copy = review.paragraphs
+        .map((text) => `<p class="story-quote__p">${text}</p>`)
+        .join("\n            ");
+      return `<figure class="story-quote" data-reveal>
         <blockquote class="story-quote__body">
           <span class="story-quote__mark story-quote__mark--open" aria-hidden="true">&ldquo;</span>
           ${copy}
           <span class="story-quote__mark story-quote__mark--close" aria-hidden="true">&rdquo;</span>
         </blockquote>
         ${
-          name
+          review.name
             ? `<figcaption class="story-quote__cite">
           <span class="story-quote__rule" aria-hidden="true"></span>
-          ${name}
+          ${review.name}
         </figcaption>`
             : ""
         }
       </figure>`;
+    })
+    .join("\n      ");
+}
+
+/* The written reviews, at the foot of /client-stories.
+ *
+ * The home page carries a drifting run of quotes, but that run takes the SHORT
+ * ones — cards go past there, and main.js caps them at 190 characters. Two
+ * thirds of reviews.js was longer than that and therefore stood nowhere on the
+ * site: a client describing a diastasis recti recovery or a return to Team GB
+ * selection is exactly the review somebody deciding whether to book wants, and
+ * exactly the one the run cannot hold.
+ *
+ * So this is the wall the run is not: every review in the file, at full
+ * length, on a page somebody has already chosen to read. It goes under the
+ * films and Kay's pull-quote and above the invitation, which puts the page in
+ * one order — watch, read, then get in touch.
+ *
+ * Columns rather than a grid of cards: reviews run from one line to a
+ * paragraph, and a row of boxes sized to the longest leaves the short ones
+ * floating in white. Columns pack them and the hairline over each is what
+ * separates one from the next — the same rule the home run's cards take, so a
+ * review looks like a review wherever it stands.
+ *
+ * Each review carries its own [data-reveal] rather than one on the list, the
+ * same as a journeys entry: the wall is several screens tall, and a single
+ * reveal on the whole of it fires once at the top and the rest arrives already
+ * shown.
+ *
+ * WHERE THE COLUMNS BREAK IS DECIDED HERE, not by the browser. Left to itself,
+ * CSS multi-column balances by height and nothing can be placed: an item sits
+ * at the foot of a column only because that is where the flow happened to run
+ * out. NJH asked for Kim's triathlon review at the foot of the FIRST column
+ * rather than dangling alone at the bottom of the third, which is where source
+ * order had left it — so the reviews are dealt into three runs here and the
+ * last item of the first two carries a class that forces the column to end.
+ *
+ * The runs are contiguous and sized by character count, which is the same
+ * shape the browser was producing; the only thing that has changed is that the
+ * break points are ours. Order within a run is still reviews.js's order.
+ *
+ * The forced breaks apply only where there are three columns to break into
+ * (see the media query in style.css). Below that the list is an ordinary flow
+ * again — two forced breaks inside a two-column box would make a third column
+ * the box has no room for.
+ *
+ * Note what this is NOT: nothing here shortens, re-words or re-orders a review
+ * relative to its neighbours. It arranges finished reviews on a page. The
+ * moment a layout wants a review changed to fit it, the layout is wrong — see
+ * the standing rule at the head of reviews.js.
+ *
+ * Caption rule is reviews.js's, not this file's: the service label and the
+ * client's first name, nothing else. Renders nothing if the file is empty. */
+const REVIEW_WALL_COLUMNS = 3;
+
+/* Identified by its opening words rather than by its index, so that adding a
+   review above it moves nobody: the placement follows Kim's review around. */
+const FOOT_OF_FIRST_COLUMN = "I asked Natasha if she could help me";
+
+/* Roughly how tall a review sets, in the units that matter — lines, not
+   characters. Counting characters alone made the columns 600px ragged, because
+   it valued a one-line review at nothing when on the page it still costs a
+   service label, a name, a rule and the gap to the next one. So: a fixed cost
+   per review, plus a line for every ~45 characters, which is what fits the
+   column at the wall's measure. Approximate on purpose — it decides where a
+   column breaks, and being a line out either way is invisible. */
+const REVIEW_LINE = 27;
+const REVIEW_CHROME = 115;
+const reviewHeight = (review) =>
+  REVIEW_CHROME + Math.ceil(review.quote.length / 45) * REVIEW_LINE;
+
+/* Deals the reviews into contiguous runs of roughly equal height, holding room
+   in the first run for the review pinned to its foot. */
+function reviewColumns(reviews) {
+  const pinned = reviews.find((review) =>
+    review.quote.startsWith(FOOT_OF_FIRST_COLUMN),
+  );
+  const rest = reviews.filter((review) => review !== pinned);
+  const total = reviews.reduce((sum, review) => sum + reviewHeight(review), 0);
+  const target = total / REVIEW_WALL_COLUMNS;
+
+  const columns = Array.from({ length: REVIEW_WALL_COLUMNS }, () => []);
+  let at = 0;
+  let run = 0;
+  for (const review of rest) {
+    /* The first column closes early by exactly the height of what is going to
+       be added to its foot, or pinning a review there would make it the long
+       column instead of the short one. */
+    const budget =
+      at === 0 && pinned ? target - reviewHeight(pinned) : target;
+    /* Close the column on whichever side of the target this review leaves it
+       nearer — stopping the moment the budget is passed always overshoots by
+       most of a review. */
+    const over = run + reviewHeight(review) - budget;
+    if (at < REVIEW_WALL_COLUMNS - 1 && over > 0 && over > budget - run) {
+      at += 1;
+      run = 0;
+    }
+    columns[at].push(review);
+    run += reviewHeight(review);
+  }
+  if (pinned) columns[0].push(pinned);
+  return columns.filter((column) => column.length);
+}
+function reviewsWall() {
+  if (!REVIEWS.length) return "";
+  const columns = reviewColumns(REVIEWS);
+  const items = columns
+    .flatMap((column, columnIndex) =>
+      column.map((review, index) => {
+        const services = review.services
+          .map((service) => SERVICE_LABELS[service])
+          .join(" &middot; ");
+        /* The last item of every column but the last closes its column. */
+        const closes =
+          index === column.length - 1 && columnIndex < columns.length - 1;
+        /* The file's own index, carried onto the element. The wall is dealt
+           into runs here and re-dealt on the client at other column counts,
+           and both need to be able to get back to reviews.js's order —
+           reading it off the DOM beats matching on a quote. */
+        const order = REVIEWS.indexOf(review);
+        const pin = review === REVIEWS.find((r) => r.quote.startsWith(FOOT_OF_FIRST_COLUMN));
+        /* Almost every review is one paragraph and this is a no-op for them.
+           Kay's is three — the arc of a five-year recovery rather than a note
+           about a class — and running them together would be a change to how
+           she wrote it, which this file does not get to make. A blank line in
+           the quote is a paragraph break, and it is set as one. */
+        const body = review.quote
+          .split(/\n\s*\n/)
+          .map((paragraph) => `<p>${paragraph}</p>`)
+          .join("");
+        return `<li class="review-wall__item${closes ? " review-wall__item--break-lg" : ""}" data-review-order="${order}"${pin ? " data-review-pin" : ""} data-reveal>
+          <p class="review-wall__service">${services}</p>
+          <blockquote>${body}</blockquote>
+          <cite>${review.name}</cite>
+        </li>`;
+      }),
+    )
+    .join("\n        ");
+
+  return `<section class="st-section review-wall" aria-labelledby="reviews-wall-title">
+    <div class="section-shell">
+      <div class="st-head" data-reveal>
+        <div>
+          <span class="st-eyebrow">Reviews</span>
+          <h2 id="reviews-wall-title">More in writing.</h2>
+        </div>
+      </div>
+      <ul class="review-wall__list">
+        ${items}
+      </ul>
+    </div>
+  </section>`;
 }
 
 /* Not through page(), because that prepends hero() — and this page's head is
@@ -727,6 +880,7 @@ const clientFilms = {
   tone: "light",
   html: `${filmsHero()}
   ${filmsMore({ after: storyQuote() })}
+  ${reviewsWall()}
   ${cta(
     "Would you like to be next?",
     "Tell Natasha what you would like help with and she will guide you towards the right place to start.",
@@ -1201,7 +1355,6 @@ function buildPilatesContinuousPage() {
         <article class="story__chapter" id="prenatal">
           <div class="story__copy">
             <div class="story__copy-inner" data-reveal>
-              <p class="story__index" aria-hidden="true">01</p>
               <h2>Prenatal Pilates</h2>
               <p class="story__lede">
                 Low-impact, closely watched movement through pregnancy, adapted
@@ -1231,7 +1384,6 @@ function buildPilatesContinuousPage() {
         <article class="story__chapter" id="postnatal">
           <div class="story__copy">
             <div class="story__copy-inner" data-reveal>
-              <p class="story__index" aria-hidden="true">02</p>
               <h2>Postnatal Pilates</h2>
               <p class="story__lede">
                 A careful return after birth, from the six-week GP check,
@@ -1354,60 +1506,35 @@ const STUDIO_CLASS_FILM = {
    for its subject rather than for a set of clinics that does not exist. */
 function buildStudioContinuousPage() {
   return {
-    title: "NJH Studio",
+    title: "The NJH Clinic in Studham",
     description:
       "The NJH Sports Therapy and Pilates studio in Studham, near Whipsnade.",
     canonical: "/studio",
     html: `<div class="clinics-longform">
-      <!-- The hero is NJH's own tour of the studio, silent and looping: in at
-           the folded-open doors, round the room, and out through the bifolds
-           onto the garden. A still of the same view sits under it and is what
-           shows while the clip loads, if the clip is refused, and for good
-           when reduced motion is asked for — the terrace photograph that was
-           the hero on its own until the footage arrived. The two open on the
-           same doorway from the same spot, so the hand-off reads as the
-           picture starting to move rather than as a cut to somewhere else.
-
-           The clip is trimmed out of a longer promotional film: the branded
-           card at each end and the closing web address are cut, and the
-           frame is cropped 64px off the foot to lose the lower-third labels
-           burnt into the footage — captions belong to a film being watched,
-           not to a room behind a page's type. The audio went with them; a
-           muted background loop has no use for a track.
-
-           The footage arrived WhatsApp-compressed at 832px, too soft
-           stretched across a desktop. Every frame went through Real-ESRGAN
-           at 4x (upscayl-lite-4x — on this footage it resolved better than
-           remacri and at twenty times the speed) and the loop was re-encoded
-           from those frames at double the source width, 1664, the phone file
-           supersampled down from the same set.
+      <!-- The hero is the terrace photograph: in through the folded-open
+           doors from the same spot the room is entered. It stood alone here
+           until a looping cut of NJH's promotional film was laid over it, and
+           it stands alone again — the film is out at Harry's request. If it is
+           ever wanted back, the markup was one <video class="clinics-hero__reel">
+           over this <img>, driven by initStudioReel(); the encoded files are
+           still in public/videos (studio-tour.mp4 and the 640 phone cut).
 
            The still ships as its whole 4:3 frame rather than pre-cropped:
-           both layers are object-fit: cover, so every viewport cuts its own
-           window, and 4:3 has the height a phone's tall window needs where a
-           16:9 pre-crop would have run out. The stylesheet nudges that
-           window right of centre so a narrow screen keeps the lit doorway
-           rather than the tree beside it — see .clinics-hero__still. -->
+           it is object-fit: cover, so every viewport cuts its own window, and
+           4:3 has the height a phone's tall window needs where a 16:9 pre-crop
+           would have run out. The stylesheet nudges that window right of
+           centre so a narrow screen keeps the lit doorway rather than the tree
+           beside it — see .clinics-hero__still. -->
       <section class="clinics-hero" id="overview" aria-labelledby="clinics-title">
         <div class="clinics-hero__media" aria-hidden="true">
           <img class="clinics-hero__still" src="/images/studio-hero-1600.webp" srcset="/images/studio-hero-800.webp 800w, /images/studio-hero-1600.webp 1600w, /images/studio-hero-2400.webp 2400w" sizes="100vw" alt="" width="1600" height="1248" fetchpriority="high" />
-          <video class="clinics-hero__reel" data-studio-reel muted loop playsinline preload="none" disablepictureinpicture tabindex="-1">
-            <!-- media on <source> is read once, when the element picks a file,
-                 and never re-evaluated on resize. That is the wrong behaviour
-                 for a responsive image and exactly the right one here: the
-                 narrow file exists so a phone on mobile data is not made to
-                 fetch 5.3MB of background loop, and a phone does not become a
-                 desktop mid-visit. -->
-            <source src="/videos/studio-tour-640.mp4" type="video/mp4" media="(max-width: 700px)" />
-            <source src="/videos/studio-tour.mp4" type="video/mp4" />
-          </video>
           <div class="clinics-hero__scrim"></div>
         </div>
         <div class="clinics-hero__inner">
           <p class="clinics-hero__eyebrow"><i aria-hidden="true"></i>Studham studio</p>
-          <h1 id="clinics-title">The NJH clinic in Studham.</h1>
+          <h1 id="clinics-title">The NJH Clinic in Studham.</h1>
           <div class="clinics-hero__footer">
-            <p>Professional, personal Sports Therapy and Pilates care from one private studio in Studham, near Whipsnade.</p>
+            <p>Professional Sports Therapy, Massage and Pilates care from one private studio in Studham, near Whipsnade.</p>
             <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Appointments · ${BUSINESS.phoneDisplay} <span>↗</span></a>
           </div>
         </div>
@@ -1431,7 +1558,7 @@ function buildStudioContinuousPage() {
       <section class="pilates-feature pilates-feature--equipment" id="studio" aria-labelledby="studio-title">
         <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first">
           <div class="pilates-feature__content" data-reveal>
-            <h2 id="studio-title">The Studham studio</h2>
+            <h2 id="studio-title">The Studham Studio</h2>
             <p class="pilates-feature__lead">Sports Therapy, individual Pilates and small-group Pilates, all in one private studio.</p>
             <p>After working in physio clinics for many years, January 2016 saw the launch of the NJH Sports Therapy and Pilates Studio. This tranquil, light and airy space provides the perfect place to switch off and focus on you.</p>
             <p>Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, Individual or Small Group Pilates sessions, this is a place to restore muscular wellbeing and improve posture.</p>
@@ -1509,7 +1636,7 @@ function buildStudioContinuousPage() {
       <section class="pilates-feature pilates-feature--equipment" id="reformer" aria-labelledby="studio-reformer-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-feature__content" data-reveal>
-            <h2 id="studio-reformer-title">The STOTT Merrithew Reformer</h2>
+            <h2 id="studio-reformer-title">Merrithew Reformer</h2>
             <p class="pilates-feature__lead">Comprises of a padded, rolling platform that moves back and forth along the frame tracks.</p>
             <p>Colour coded springs provide adjustable resistance levels for concentric and eccentric muscle contractions. An adjustable foot bar is used for pushing off with feet or hands during foundational movements. The ropes and straps create a pulley system attached to the top used for arm and leg coordination exercises.</p>
             <p>You lie, sit, kneel or stand on the Reformer moving the carriage against the footbar or the ropes and straps at the far end. The springs clip on and off underneath. Footbar, ropes, headrest and shoulder rests all reposition, and the springs change in seconds, making the Reformer a great rehabilitation tool but also fantastic to challenge those working at a more advanced level.</p>
@@ -1616,7 +1743,7 @@ function buildStudioContinuousPage() {
       <section class="pilates-feature pilates-feature--equipment" id="stability-chair" aria-labelledby="studio-chair-title">
         <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first">
           <div class="pilates-feature__content" data-reveal>
-            <h2 id="studio-chair-title">The STOTT Split-Pedal Stability Chair</h2>
+            <h2 id="studio-chair-title">Split-Pedal Stability Chair</h2>
             <p class="pilates-feature__lead">A multi-functional Pilates apparatus by Merrithew, featuring a dual-pedal system that can lock together or move independently.</p>
             <p>It challenges core stability, balance, and upper or lower body strength through adjustable spring resistance, making it valuable for both athletic conditioning and physical rehabilitation.</p>
             <!-- The client's spec of the machine, part by part, in the rows the
@@ -1627,7 +1754,7 @@ function buildStudioContinuousPage() {
                  job, as with the Reformer above. -->
             <dl class="pilates-facts">
               <div><dt>Split pedals</dt><dd>Function as a single unified pedal, or split apart for unilateral, bilateral and reciprocal limb movements</dd></div>
-              <div><dt>Adjustable springs</dt><dd>Typically two heavy and two light springs on a hook-on attachment system, for scaled resistance</dd></div>
+              <div><dt>Adjustable springs</dt><dd>Two heavy and two light springs on a hook-on attachment system, for scaled resistance</dd></div>
               <div><dt>Removable handles</dt><dd>Fully adjustable side handles that lock securely for exercises like lunges and dips, or detach for seated and lying work</dd></div>
               <div><dt>Compact footprint</dt><dd>A smaller base of support than a Reformer, intensifying the balance and stability challenge</dd></div>
               <div><dt>Double-steel frame</dt><dd>Structural durability during high-intensity or body-weight-bearing exercises</dd></div>
@@ -1697,7 +1824,7 @@ function buildStudioContinuousPage() {
       <section class="pilates-feature pilates-feature--equipment" id="physio-couch" aria-labelledby="studio-couch-title">
         <div class="section-shell pilates-feature__grid">
           <div class="pilates-feature__content" data-reveal>
-            <h2 id="studio-couch-title">The Hydraulic Physio Couch</h2>
+            <h2 id="studio-couch-title">Hydraulic Physio Couch</h2>
             <p class="pilates-feature__lead">The space easily transforms from a Pilates studio to Soft Tissue treatment clinic with a clever partition wall.</p>
             <p>A padded treatment couch by Metron, standing in the studio's treatment corner between the anatomy charts and the corner sink.</p>
             <p>This is where the Sports Therapy side of the practice happens: assessment, massage and Soft Tissue Release, with the couch set to the height each treatment calls for and adjusted at any point in a session.</p>
@@ -1793,7 +1920,7 @@ function buildStudioContinuousPage() {
         <div class="section-shell">
           <section class="st-card" id="visit" aria-labelledby="studio-contact-title" data-reveal>
             <h2 id="studio-contact-title">Come and see the room.</h2>
-            <p>For directions, availability, or to talk through which of them would suit you, contact Natasha Hadland.</p>
+            <p>For directions, availability, or to talk through how Natasha can best help you, get in touch.</p>
             <div class="st-card__actions">
               <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay} <span>↗</span></a>
               <a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a>
@@ -1995,11 +2122,11 @@ const TAPING_SLIDES = [
     alt: "Blue kinesiology tape laid in crossing strips across a client’s lower back as they lean forward on a treatment couch",
   },
   {
-    src: "/images/taping/taping-5794053-navy.webp",
-    width: 1072,
-    height: 1340,
+    src: "/images/taping/taping-5794053-hands.webp",
+    width: 816,
+    height: 1020,
     label: "Smoothed into place",
-    alt: "A therapist pressing a length of blue tape along a client’s lower back with both hands",
+    alt: "A therapist pressing a length of blue tape along a client’s lower back with both hands, cut strips resting on the couch beside them",
   },
 ];
 
@@ -2659,62 +2786,11 @@ function initEquipmentGallery() {
   });
 }
 
-/* The looping tour behind the /studio hero.
-
-   The clip is not in the markup's load path — the <video> ships preload="none"
-   — so nothing is fetched until this decides to fetch it. Asked for reduced
-   motion, it never is: the terrace still under it is the hero, and a couple of
-   megabytes of footage is not downloaded to sit paused on the first frame.
-
-   It also only runs while the hero is on screen. A muted background loop
-   decoding for the whole length of the page is a laptop fan for no reason. */
-function initStudioReel() {
-  const reel = document.querySelector("[data-studio-reel]");
-  if (!reel) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  // Set on the element as well as in markup: autoplay policies read the
-  // property, and a muted attribute that arrived via innerHTML is worth not
-  // relying on.
-  reel.muted = true;
-  reel.playsInline = true;
-
-  // Only reveal the video once it can actually play. Until then — and for
-  // good if the file is missing or the codec is refused — the still shows.
-  reel.addEventListener("canplay", () => reel.classList.add("is-ready"), {
-    once: true,
-  });
-
-  reel.preload = "auto";
-  reel.load();
-
-  if (!("IntersectionObserver" in window)) {
-    reel.play().catch(() => {});
-    return;
-  }
-
-  new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // Autoplay can still be refused (low power mode, data saver). The
-          // still is already behind it, so a rejected promise needs no
-          // handling beyond not throwing.
-          reel.play().catch(() => {});
-        } else {
-          reel.pause();
-        }
-      });
-    },
-    { threshold: 0.05 },
-  ).observe(reel);
-}
-
 export function initPageFeatures() {
-  // Ahead of the form guard: /studio carries the hero reel and the galleries,
-  // and no enquiry form. (initStudioCarousel lived here too, until the
-  // carousel gave way to the photographs now standing in the room section.)
-  initStudioReel();
+  // Ahead of the form guard: /studio carries the galleries and no enquiry
+  // form. (initStudioCarousel lived here too, until the carousel gave way to
+  // the photographs now standing in the room section; initStudioReel went
+  // with the hero film, which is a photograph again.)
   initEquipmentGallery();
 
   const form = document.querySelector("[data-enquiry-form]");

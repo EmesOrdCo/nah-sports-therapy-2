@@ -117,7 +117,8 @@ export function build() {
       <div class="clinics-hero__footer">
         <p>
           ${NAME} is a Sports Therapist and Certified STOTT Pilates instructor
-          in Studham. Where she trained, what she treats and why she does it.
+          in Studham. Discover below where she trained, what she treats and why
+          she does it.
         </p>
         <a class="pilates-arrow-link" href="/contact">
           Book an appointment <span>&#8599;</span>

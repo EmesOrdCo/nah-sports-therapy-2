@@ -199,6 +199,44 @@
   transition-delay: 190ms, 190ms, 0s;
 }
 
+/* The WhatsApp line, inside the blue tile under "Call Natasha". Raised above
+   the stretched dial link below it so its own link takes the tap; without the
+   z-index the number's covering pseudo-element sits on top and every press in
+   the tile dials, WhatsApp words included. */
+.cv__door-aside {
+  position: relative;
+  z-index: 1;
+  margin: var(--space-2xs) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step-00);
+  line-height: 1.5;
+}
+
+.cv__door-aside a {
+  color: var(--brand-strong);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The number, and the tile's tap target: the pseudo-element covers the whole
+   blue block, so a press anywhere in it that is not on the WhatsApp line
+   still rings Natasha — which is what the tile did when it was one big link. */
+.cv__door--call {
+  position: relative;
+}
+
+.cv__door-dial {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cv__door-dial::after {
+  position: absolute;
+  content: "";
+  inset: 0;
+}
+
 /* The press is immediate; only the arrival is delayed. */
 .cv__door:active {
   transform: translateY(1px);
@@ -211,8 +249,11 @@
   background: var(--periwinkle);
 }
 
+/* focus-within, not focus-visible: the tile is no longer the focusable thing
+   — the two links inside it are, and a keyboard landing on either should
+   light the block the way a pointer over it does. */
 .cv__door--call:hover,
-.cv__door--call:focus-visible {
+.cv__door--call:focus-within {
   background: var(--periwinkle-ice);
 }
 
@@ -555,6 +596,21 @@
   line-height: 1.6;
 }
 
+/* The one actionable line in this column. Set off from the body above it by a
+   space rather than by a rule or a button: it is a sentence Natasha would say,
+   not a second call to action competing with the form beside it. A filled tile
+   in the language of the hero doors was tried here and reverted — it shouted
+   across the column and made the other two reassurances look like small print. */
+.cv__assurance-action {
+  margin-block-start: 6px;
+}
+
+.cv__assurance-action a {
+  color: var(--periwinkle-ice);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ---- Details ---- */
 
 .cv__details {
@@ -621,6 +677,7 @@
   .cv__doors {
     grid-template-columns: 1fr 1fr;
   }
+
 
   .cv__fields {
     grid-template-columns: 1fr 1fr;

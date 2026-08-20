@@ -11,6 +11,11 @@ export const BUSINESS = {
      (DEFAULT_TO in netlify/functions/enquiry.js). The co.uk address this
      replaced was displayed on the site but was not where the form delivered. */
   email: "njhpilates@gmail.com",
+  /* Same number as phoneHref, in the form wa.me wants: international, no plus,
+     no spaces. Nothing new is disclosed by it — the number is already printed
+     on this page as the first hero tile — but it is Natasha's own mobile, so
+     it moves in step with phoneDisplay/phoneHref or not at all. */
+  whatsappHref: "https://wa.me/447881821901",
 };
 
 /* The studio is also a private home, so it is named by village only — no
@@ -26,6 +31,28 @@ export const PLACES = [
   },
 ];
 
+/* Natasha's own line, and the reason for it is hers too: email is not checked
+   every day and is hardest of all to check between clients, so the fast route
+   during clinic hours is WhatsApp. The reason stays here and off the page —
+   "I don't always check emails" reads as an apology next to the promise of a
+   reply within a working day, and undercuts it. What a client needs is the
+   quicker door, not the account of why.
+
+   One constant because the sentence now runs twice: under the phone number in
+   the hero, where somebody who came for the number is already looking, and
+   under "Natasha replies herself" further down. Two copies of a sentence is
+   one of them going stale.
+
+   It was briefly a filled tile in the language of the hero doors, which was
+   louder than this page wants to be — reverted at Harry's request. Her
+   sentence stays whole, "please" included, which the tile's two-line setting
+   had cost it. */
+export const WHATSAPP_NOTE = {
+  before: "For speedy replies during clinic time, please",
+  label: "WhatsApp directly",
+  href: BUSINESS.whatsappHref,
+};
+
 /* The three things a nervous first-time client wants to know before they will
    type anything into a form. These were variant A's left rail, were held
    unused through the two-door rebuild, and are now the third column beside the
@@ -37,14 +64,27 @@ export const REASSURANCE = [
   {
     heading: "Natasha replies herself",
     body: "Your enquiry goes straight to Natasha, not to a booking desk. She will usually come back to you within a working day.",
+    /* A line of its own under the body rather than folded into it: it is the
+       one thing in this column that can be acted on, and a link buried
+       mid-paragraph in a reassurance panel is one nobody taps. */
+    action: WHATSAPP_NOTE,
   },
   {
     heading: "You do not need a diagnosis",
     body: "Plenty of people arrive unsure whether they need treatment or movement work. Describing the problem in your own words is enough to start.",
   },
   {
+    /* Natasha's wording, and the third item is hers verbatim bar the standing
+       correction — punctuation and spelling to house style, never a rewrite:
+       the comma after "needs", and "cross-referral" for "cross Referral".
+
+       Note for anyone editing the site's other referral copy: this is the only
+       place the word runs outward. The three "professional referrals are
+       welcomed from GPs, consultants…" lines on /sports-therapy mean people
+       sent TO NJH. Same word, opposite direction, and the two should not be
+       made to sound like one sentence about one thing. */
     heading: "Asking is not booking",
-    body: "A first message is a conversation. If NJH is not the right fit, Natasha will say so and point you somewhere better.",
+    body: "A first message is a conversation. If NJH is not quite the right fit for your specific needs, Natasha will suggest an alternative cross-referral.",
   },
 ];
 
@@ -68,7 +108,18 @@ export const SERVICES = [
 
 /* No LOCATION_OPTIONS: with Studham the only location, a "preferred location"
    field had nothing to choose between, so the form field was removed. */
-export const REPLY_OPTIONS = ["Email", "Phone"];
+/* Phone first, and first is the default: the select carries no empty prompt,
+   so whichever option leads is what an untouched form submits. NJH asked for
+   the phone to lead — a call is the reply most people here want, and the one
+   that settles an enquiry in a minute rather than a thread. */
+/* Exported as its own constant because two things key off this exact string:
+   the option itself, and the phone field's requirement — bindPhoneRequirement()
+   in page.js makes the number mandatory when this is what is chosen. Reword the
+   option here and the link holds; write "Phone" a second time in page.js and a
+   later rewording quietly makes the number optional again. */
+export const REPLY_BY_PHONE = "Phone";
+
+export const REPLY_OPTIONS = [REPLY_BY_PHONE, "Email"];
 
 export const SAFETY_NOTE =
   "Please do not use this form for urgent medical help. Contact NHS 111 or emergency services where appropriate.";
