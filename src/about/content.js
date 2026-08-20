@@ -206,7 +206,7 @@ export const POLICIES = [
   {
     q: "What if I'm running late?",
     a: [
-      "If you are late for your 1:1 or 2:1 the session still falls within the scheduled appointment time. If the practitioner misses a scheduled 1:1 appointment, you will receive a free session.",
+      "If you are late for your 1:1 or 2:1 the session still falls within the scheduled appointment time. If the practitioner misses a scheduled 1:1 appointment, you will not be charged.",
     ],
   },
   {
