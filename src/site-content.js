@@ -930,13 +930,13 @@ function buildPilatesContinuousPage() {
             <dl class="pilates-orbit-facts">
               <div class="pilates-orbit-fact pilates-orbit-fact--format"><dt>Format</dt><dd>One-to-one or duet</dd></div>
               <div class="pilates-orbit-fact pilates-orbit-fact--length"><dt>Length</dt><dd>One hour</dd></div>
-              <div class="pilates-orbit-fact pilates-orbit-fact--available"><dt>Available</dt><dd>Monday to Friday</dd></div>
+              <div class="pilates-orbit-fact pilates-orbit-fact--available"><dt>Available</dt><dd>Monday to Friday, Sunday am</dd></div>
             </dl>
           </div>
           <div class="pilates-feature__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="individual-title" class="title-rule">Your Pilates session</h2>
             <p class="pilates-feature__lead">One-to-one Pilates, or a duet session with a friend, tailored to suit your needs and objectives.</p>
-            <p>Your session focuses on restoring muscular balance, with specific exercises designed for your posture type or medical conditions such as osteoporosis, frozen shoulder, and neck, knee or lower-back issues.</p>
+            <p>Your session focuses on restoring muscular balance, with specific exercises designed for your posture type to help improve medical conditions such as osteopenia/osteoporosis, frozen shoulder, rotator cuff injuries, stroke rehabilitation, breast cancer rehab, pelvic floor strengthening, pre and post natal Pilates, neck, knee, hip or lower back issues.</p>
             <p>Sessions work on the mat, the Reformer or the Stability Chair, and often move between them. Which you use is decided from your assessment rather than booked in advance.</p>
             <a class="pilates-arrow-link" href="#mat">See how a session works <span>→</span></a>
           </div>
@@ -1102,7 +1102,7 @@ function buildPilatesContinuousPage() {
         <div class="section-shell pilates-feature__grid pilates-feature__grid--media-first">
           <div class="pilates-feature__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="chair-title" class="title-rule">Stability Chair</h2>
-            <p class="pilates-feature__lead">A multifunctional Pilates machine that can be adjusted to train most muscle groups.</p>
+            <p class="pilates-feature__lead">A multifunctional Pilates machine that can be adjusted to train multiple muscle groups.</p>
             <p>This sturdy piece of equipment helps you achieve upper- and lower-body strength and conditioning, enhances stability, and helps to improve posture.</p>
             <!-- The client's uses and benefits, line by line, in the same rows
                  /studio#stability-chair sets out the machine's parts in. The
@@ -1831,7 +1831,7 @@ const THERAPY = {
     "Hip, groin, knee, ankle and upper-limb problems",
     "Soft-tissue rehabilitation and joint stiffness",
     "Muscular strains, ligament sprains and tendonitis",
-    "Scar restriction before and after surgery",
+    "Scar tissue restriction post surgery",
   ],
   outcomes: [
     "Improve posture",
@@ -1981,19 +1981,25 @@ const fasciaMap = (items) =>
    screen reader — nothing renders it on screen. */
 const TAPING_SLIDES = [
   {
-    src: "/images/taping/taping-5794056.webp",
+    src: "/images/taping/taping-5794056-crop.webp",
+    width: 730,
+    height: 912,
     label: "Applied over the shoulder",
-    alt: "A therapist smoothing a strip of blue kinesiology tape over the top of a seated client’s shoulder in a treatment room",
+    alt: "A therapist’s hand smoothing a strip of blue kinesiology tape over the top of a seated client’s shoulder",
   },
   {
-    src: "/images/taping/taping-5794060.webp",
+    src: "/images/taping/taping-5794060-crop.webp",
+    width: 830,
+    height: 1037,
     label: "A low back application",
     alt: "Blue kinesiology tape laid in crossing strips across a client’s lower back as they lean forward on a treatment couch",
   },
   {
-    src: "/images/taping/taping-5794053.webp",
+    src: "/images/taping/taping-5794053-navy.webp",
+    width: 1072,
+    height: 1340,
     label: "Smoothed into place",
-    alt: "A therapist pressing a length of blue tape along a client’s lower back with both hands, cut strips resting on the couch beside them",
+    alt: "A therapist pressing a length of blue tape along a client’s lower back with both hands",
   },
 ];
 
@@ -2023,7 +2029,7 @@ const tapingGallery = () =>
           ${TAPING_SLIDES.map(
             (slide) =>
               `<li class="taping-band__slide" data-gallery-slide>
-              <img src="${slide.src}" alt="${escapeContent(slide.alt)}" width="1100" height="1650" loading="lazy" decoding="async">
+              <img src="${slide.src}" alt="${escapeContent(slide.alt)}" width="${slide.width}" height="${slide.height}" loading="lazy" decoding="async">
             </li>`,
           ).join("")}
         </ul>

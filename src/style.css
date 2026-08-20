@@ -9050,9 +9050,10 @@ p.fascia-map__claim {
 }
 
 /* The column is the frame and the photograph fills it; the HTML width and
-   height only hold the ratio until the file lands. All three are the same 2:3
-   portrait, so cover crops the same amount off each and the band does not
-   shuffle as you move along. */
+   height only hold the ratio until the file lands. All three are the same 4:5
+   portrait — re-cut from the 2:3 originals to take the practitioner's head
+   (and her jeans) out of frame — so cover crops the same amount off each and
+   the band does not shuffle as you move along. */
 .taping-band__slide img {
   display: block;
   width: 100%;
