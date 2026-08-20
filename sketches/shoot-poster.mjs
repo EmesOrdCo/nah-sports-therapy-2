@@ -14,8 +14,10 @@ const outDir = resolve(here, "out");
 const browser = await chromium.launch();
 // 794 x 1123 CSS px is A4 at 96dpi; x2 gives a 1588px-wide image, which is
 // plenty for a Facebook post and still readable when zoomed.
+const portrait = { width: 794, height: 1123 };
+const landscape = { width: 1123, height: 794 };
 const page = await browser.newPage({
-  viewport: { width: 794, height: 1123 },
+  viewport: portrait,
   deviceScaleFactor: 2,
 });
 
@@ -24,6 +26,8 @@ const files = readdirSync(outDir)
   .sort();
 
 for (const file of files) {
+  const isLandscape = file.includes("landscape");
+  await page.setViewportSize(isLandscape ? landscape : portrait);
   await page.goto(pathToFileURL(resolve(outDir, file)).href, {
     waitUntil: "networkidle",
   });
@@ -33,6 +37,7 @@ for (const file of files) {
   await page.pdf({
     path: resolve(outDir, `${base}.pdf`),
     format: "A4",
+    landscape: isLandscape,
     printBackground: true,
   });
   console.log(`${base}.png + .pdf`);

@@ -1898,5 +1898,99 @@ const l24 = portraitRight("poster-l24-home-hero", "L24 Home hero", {
   focus: "62% 50%",
 });
 
-export const LAB_C = [l15, l16, l17, l18, l19, l20, l21, l22, l23, l24];
+/* ================================================ 25 home hero, landscape A4
+   The L24 sheet turned sideways, keeping the column where the client knows
+   it: everything written hangs down the right-hand side, and the room owns
+   the rest of the page. Landscape A4 is nearly the class photograph's own
+   shape, so almost the whole room survives the crop.
+
+   Note the overridden .sheet size: everything else in the file is portrait,
+   and shoot-poster.mjs picks the page orientation from the slug. */
+
+const l25 = {
+  slug: "poster-l25-home-hero-landscape",
+  label: "L25 Home hero, landscape",
+  css: `
+  ${COMP}
+  ${leaders}
+  ${TT_CSS}
+  @page { size: A4 landscape; }
+  .sheet { width: 297mm; height: 210mm; background: var(--navy-deeper); }
+  .cover { position: absolute; inset: 0; }
+  .cover img { width: 100%; height: 100%; object-fit: cover; object-position: 30% 40%; }
+  .cover::after { content: ""; position: absolute; inset: 0; background:
+    linear-gradient(90deg, rgba(21,27,63,0) 36%, rgba(21,27,63,.5) 50%, rgba(21,27,63,.82) 60%, rgba(21,27,63,.86) 100%),
+    linear-gradient(180deg, rgba(21,27,63,.14) 0%, rgba(21,27,63,0) 14%, rgba(21,27,63,0) 72%, rgba(21,27,63,.3) 96%); }
+
+  .col { position: relative; margin-left: auto; width: 126mm; height: 210mm;
+         padding: 9mm 10mm 7mm 0; display: flex; flex-direction: column; color: #fff;
+         font-weight: 500; text-shadow: 0 0.2mm 1.2mm rgba(21,27,63,.6); }
+
+  .wordmark { display: flex; align-items: center; gap: 4mm; }
+  .wordmark__mark { width: 14.5mm; height: auto; filter: brightness(0) invert(1); }
+  .wordmark__text { display: flex; flex-direction: column; line-height: 1; }
+  .wordmark__name { font-family: "STIX Two Text", serif; font-weight: 600; font-size: 25pt; color: #fff; }
+  .wordmark__descriptor { font-size: 7.6pt; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: rgba(255,255,255,.9); margin-top: 1.6mm; }
+
+  .name { font-family: "STIX Two Text", serif; font-weight: 600; font-size: 14pt; color: #fff; margin-top: 6mm; }
+  .col h1 { font-size: 21.5pt; line-height: 1.15; letter-spacing: -0.016em; color: #fff; margin-top: 2mm; }
+  .col h1 em { font-style: italic; color: var(--periwinkle); }
+  .col__intro { font-size: 9.6pt; line-height: 1.55; color: rgba(255,255,255,.96); margin-top: 3mm; }
+
+  .block { margin-top: 4.2mm; padding-top: 3.8mm; border-top: 0.25mm solid rgba(255,255,255,.3); }
+  .label { color: #56D6DA; font-size: 9.4pt; }
+  .block h2 { font-size: 13pt; color: #fff; margin: 1.8mm 0 1.6mm; }
+  .block p { font-size: 9.2pt; line-height: 1.52; color: rgba(255,255,255,.96); }
+  .block .avail { margin-top: 1.8mm; color: #fff; font-weight: 600; }
+
+  .tt__row { padding: 0.8mm 0; }
+  .tt__row + .tt__row { border-top-color: rgba(255,255,255,.2); }
+  .tt__day { color: #fff; font-size: 9.2pt; flex: 0 0 17mm; font-weight: 700; }
+  .tt__times { color: rgba(255,255,255,.96); font-size: 9.2pt; gap: .4mm 3mm; }
+  .tt__times small { color: #56D6DA; }
+
+  .bar { margin-top: auto; padding-top: 3.6mm; border-top: 0.25mm solid rgba(255,255,255,.3);
+         display: flex; align-items: baseline; justify-content: space-between; gap: 6mm; }
+  .bar b { font-size: 15.5pt; color: #fff; font-weight: 600; letter-spacing: .01em; white-space: nowrap; }
+  .bar .rest { text-align: right; }
+  .bar span { display: block; font-size: 10pt; color: rgba(255,255,255,.96); line-height: 1.5; }
+  `,
+  html: `<div class="sheet">
+    <figure class="cover"><img src="/images/home-hero-2128.webp" alt="The NJH studio set for a small-group class, doors open to the garden"></figure>
+    <div class="col">
+      ${wordmark()}
+      <p class="name">${BUSINESS.person}</p>
+      <h1>Hands-on treatment and <em>precise movement.</em></h1>
+      <p class="col__intro">Sports Therapy and Clinical Pilates from one private studio in ${BUSINESS.where}. Not only for athletes: clients here are aged eight to over eighty.</p>
+
+      <section class="block">
+        <span class="label">Sports Therapy</span>
+        <h2>Assessment-led, hands-on care.</h2>
+        <p>${THERAPY_CONCERNS.join(" &middot; ")}</p>
+      </section>
+
+      <section class="block">
+        <span class="label">Clinical Pilates</span>
+        <h2>Teaching the body to support itself.</h2>
+        <p>${L22_PILATES_FORMS.join(" &middot; ")}</p>
+        <p class="avail">${L22_AVAILABILITY}</p>
+      </section>
+
+      <section class="block">
+        <span class="label">${L22_TT_LABEL}</span>
+        <div style="margin-top: 2mm">${tt()}</div>
+      </section>
+
+      <footer class="bar">
+        <b>${BUSINESS.phone}</b>
+        <div class="rest">
+          <span>${BUSINESS.email}</span>
+          <span>${BUSINESS.web}</span>
+        </div>
+      </footer>
+    </div>
+  </div>`,
+};
+
+export const LAB_C = [l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, l25];
 export const LAB_VARIANTS = [...LAB_A, ...LAB_B, ...LAB_C];

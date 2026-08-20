@@ -4971,16 +4971,13 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   background: var(--navy);
 }
 
-/* Two columns: the copy, then the drawing. There was a photograph of a golf
-   swing in this band as well, four frames of it, and it is gone — 612px was all
-   the picture there ever was, so it could only ever be small, and small next to
-   a labelled drawing it had nothing to add. One picture, given the room the two
-   were sharing.
-
-   Even halves. The drawing carries fifteen labels and its type scales with the
-   column, so the column width IS the type size, and this is the widest it can
-   be without leaving the copy short of a comfortable measure. */
+/* Two halves over the photograph, only one of them filled: the copy takes the
+   left, and the right is left to the figure standing in it. Relative so the
+   grid takes a stacking context and sits above .pilates-golf__photo, which is
+   absolute inside the band. */
 .pilates-golf__grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(40px, 4.2vw, 72px);
@@ -4991,60 +4988,75 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   grid-column: 1;
 }
 
-/* Knocked out of the navy with no plate behind it: no border, no card, no
-   panel. The band is one colour and the body is drawn straight onto it. */
-.pilates-golf__figure {
-  margin: 0;
-  grid-column: 2;
+/* The photograph the whole band is set on, filling it edge to edge under the
+   copy and the drawing. 2400 and 1600 are the two cuts of it there are, picked
+   by density rather than by width — it is a background at every size, so it is
+   always being cropped by cover and the layout width never decides the cut.
+
+   Anchored hard right, and it has to be hard right: cover only promises the
+   image is at least as large as the box, not that any offset still covers it.
+   Inset the position by the gutter and the frame's right edge lands a gutter's
+   width short, leaving a bare stripe down the side of the band. Right it is,
+   which also happens to be where the figure wants to stand. */
+.pilates-golf__photo {
+  position: absolute;
+  inset: 0;
+  background-image: image-set(
+    url("/images/golf-backdrop-6256591-1600.webp") 1x,
+    url("/images/golf-backdrop-6256591-2400.webp") 2x
+  );
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.pilates-golf__figure img {
-  display: block;
-  width: min(100%, 620px);
-  height: auto;
-  margin-inline: auto;
+/* The scrim. The sky in that photograph is pale — cream and warm grey — and
+   --on-dark type on it has no contrast at all, so the navy has to come back
+   over the top. Heaviest at the left, where the copy is and the frame is only
+   sky anyway, and lightest at the right, where the figure is and there is
+   nothing to read. It never goes fully clear: the drawing is knocked out in
+   coral and needs a dark enough ground on the right to stay legible. */
+.pilates-golf__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    var(--navy) 0%,
+    color-mix(in oklch, var(--navy) 92%, transparent) 38%,
+    color-mix(in oklch, var(--navy) 68%, transparent) 100%
+  );
 }
 
-/* 1000 is where the drawing's column falls under ~410px and the muscle names go
-   under 13px — measured, not guessed. Below it the copy and the drawing give up
-   the split and run one under the other, the drawing at a width that keeps its
-   labels legible. */
+
+/* 1000 is where half the shell stops being a comfortable measure and the copy
+   starts running short and ragged. Below it it gives up the split and takes
+   the whole width. */
 @media (max-width: 1000px) {
   .pilates-golf__grid {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--pilates-block);
   }
 
-  .pilates-golf__content,
-  .pilates-golf__figure {
+  .pilates-golf__content {
     grid-column: 1;
   }
 
-  .pilates-golf__figure img {
-    width: min(100%, 420px);
+  /* The copy now runs the full width of the shell, across the part of the
+     frame the figure stands in, so the scrim stops being a gradient and goes
+     near-solid. The photograph reads as a dark ground with a shape in it
+     rather than as a picture with text sitting on the subject. */
+  .pilates-golf__photo::after {
+    background: color-mix(in oklch, var(--navy) 90%, transparent);
   }
 }
 
-/* On a phone the column is narrower than the drawing needs, and the labels are
-   the first thing to go: inside the gutters they land around 10px. So the
-   drawing alone breaks out to the full width of the screen, which buys back
-   about a sixth and puts them near 12. That is the ceiling for this file —
-   fifteen labels do not fit a phone at a comfortable size, and the real fix is
-   a second drawing carrying only the muscles this section's copy names, with
-   the leader lines of the dropped ones erased rather than left pointing at
-   nothing. Worth doing; it needs a decision about which ones survive. */
 @media (max-width: 700px) {
   /* Narrow enough that the picture is as wide as the screen, so the gutter it
      was set against would only push it off the right edge. It goes back to
      centre and takes the whole width. */
   .pilates-golf__photo {
     background-position: center;
-  }
-
-  .pilates-golf__figure img {
-    width: 100vw;
-    max-width: none;
-    margin-inline: calc(50% - 50vw);
   }
 }
 

@@ -1420,20 +1420,26 @@ function buildPilatesContinuousPage() {
         </div>
       </section>
 
-      <!-- One picture: the muscles a golf swing drives, knocked out of the navy
-           beside the copy. The band is the one place on /pilates that says what
-           the work is FOR, so it is the one place that shows the inside of the
-           movement rather than somebody doing it.
+      <!-- The band is set ON a photograph rather than beside one: a golfer at
+           the top of the backswing against a sunset, the figure standing in the
+           right third of the frame and most of the rest open sky. It is the
+           ground the copy sits on, so it goes behind a navy scrim heavy enough
+           to hold the text — the sky is pale, and white type on it would not
+           otherwise carry.
 
-           There was a photograph of a swing here too, four frames of it off the
-           left edge. It is gone. The file is 612px wide, which is every pixel
-           there is, so it was always going to be the smaller of the two — and a
-           small photograph of a man swinging says nothing the labelled drawing
-           does not say better.
+           The copy keeps to the left half, which is the half the photograph
+           leaves empty. Nothing goes in the right half: that is where the man
+           is, and the whole point of setting the band on him is that he is
+           looked at.
 
-           The drawing is line and flat colour, so it goes in as an SVG rather
-           than a photograph — it stays sharp at any width. -->
+           There was a labelled anatomy drawing there — the muscles the swing
+           drives, knocked out of the navy, /images/golfer-anatomy-navy.svg. It
+           stood in the right half too, on top of the figure, and the two read
+           as a double exposure. The file is still in public/images if the band
+           ever wants the inside of the movement back; it would need the other
+           half of the frame, not this one. -->
       <section class="pilates-golf" id="golfers" aria-labelledby="golf-title" data-drift>
+        <div class="pilates-golf__photo" role="img" aria-label="A golfer at the top of the backswing, seen from behind against a clouded sunset sky."></div>
         <div class="section-shell pilates-golf__grid">
           <div class="pilates-golf__content" data-reveal>
             ${eyebrow("Pilates")}<h2 id="golf-title" class="title-rule">Pilates for golfers</h2>
@@ -1441,9 +1447,6 @@ function buildPilatesContinuousPage() {
             <p>Core strength can improve hip rotation, range of motion in the shoulders and back stability, leading to improved performance.</p>
             <ul class="pilates-golf__benefits"><li>Improve balance and flexibility</li><li>Strengthen your core to avoid injury</li><li>Work on overall breathing and focus</li></ul>
           </div>
-          <figure class="pilates-golf__figure" data-drift-lead="0.05">
-            <img src="/images/golfer-anatomy-navy.svg" alt="A golfer at the top of the backswing with the working muscles picked out and named: pectoralis major, deltoid, latissimus dorsi, triceps, the abdominals, quadriceps, the adductors and tibialis anterior." width="1537" height="1693" loading="lazy" decoding="async" />
-          </figure>
         </div>
       </section>
 
@@ -2108,23 +2111,23 @@ const fasciaMap = (items) =>
    screen reader — nothing renders it on screen. */
 const TAPING_SLIDES = [
   {
-    src: "/images/taping/taping-5794056-crop.webp",
-    width: 730,
-    height: 912,
+    src: "/images/taping/taping-5794056-full.webp",
+    width: 1122,
+    height: 1402,
     label: "Applied over the shoulder",
     alt: "A therapist’s hand smoothing a strip of blue kinesiology tape over the top of a seated client’s shoulder",
   },
   {
-    src: "/images/taping/taping-5794060-crop.webp",
-    width: 830,
-    height: 1037,
+    src: "/images/taping/taping-5794060-full.webp",
+    width: 1121,
+    height: 1403,
     label: "A low back application",
     alt: "Blue kinesiology tape laid in crossing strips across a client’s lower back as they lean forward on a treatment couch",
   },
   {
-    src: "/images/taping/taping-5794053-hands.webp",
-    width: 816,
-    height: 1020,
+    src: "/images/taping/taping-5794053-formal.webp",
+    width: 1122,
+    height: 1402,
     label: "Smoothed into place",
     alt: "A therapist pressing a length of blue tape along a client’s lower back with both hands, cut strips resting on the couch beside them",
   },
