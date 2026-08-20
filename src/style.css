@@ -6969,14 +6969,20 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   text-transform: uppercase;
 }
 
-/* Narrower columns than the lead, and as many as fit. Three or four earlier
-   films sit in one row on a desktop.
+/* Narrower columns than the lead: two on a phone, four across a desktop.
 
-   The 140px minimum is doing one specific job: it is small enough that two
-   columns still fit across a 375px phone. Left at 200px these dropped to a
-   single stack, and three full-width 9:16 cards under the lead is most of a
-   screen each — a lot of thumb for films that are meant to be the back
-   catalogue. Two-up they read as a row of stills, which is what they are. */
+   Counted rather than fitted. This was `auto-fit` with a minimum, which sets
+   the column count by asking how many will go — fine at three or four films
+   and wrong the moment the shelf grew past them: a 140px minimum let SIX
+   squeeze across, and raising the minimum to stop that took the phone down
+   to a single stack, which is three full-width 9:16 cards of thumb for what
+   is meant to be the back catalogue. Two-up on a phone they read as a row of
+   stills, which is what they are.
+
+   Stating the count at each width gets both, and it buys the thing auto-fit
+   could never give: the number of columns is KNOWN, so the stagger below can
+   name which of them to drop. With auto-fit, "every second card" means one
+   column at one width and a diagonal at the next. */
 .films__shelf {
   display: grid;
   /* The max-widths below cap this well short of the shell, so it needs telling
@@ -6984,13 +6990,29 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
      the heading above. */
   margin-inline: auto;
   gap: clamp(18px, 2vw, 30px);
-  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 1020px;
+}
+
+@media (min-width: 620px) {
+  .films__shelf {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .films__shelf {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 /* One or two earlier films should not stretch to fill a row built for four:
    left to it, a single 9:16 card becomes half a screen tall. */
 .films__shelf[data-count="1"] {
   max-width: 240px;
+  /* One film is one column at every width — the base two would split a
+     240px shelf into a pair of 110px stamps, one of them empty. */
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .films__shelf[data-count="2"] {
@@ -7023,6 +7045,81 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
 
 .films__shelf .films__card:nth-child(4) {
   transition-delay: 330ms;
+}
+
+/* The second row settles left to right too, on its own count rather than
+   carrying on from the first: a fifth card waiting 440ms is a card that
+   arrives after the eye has already moved on. */
+.films__shelf .films__card:nth-child(6) {
+  transition-delay: 110ms;
+}
+
+.films__shelf .films__card:nth-child(7) {
+  transition-delay: 220ms;
+}
+
+.films__shelf .films__card:nth-child(8) {
+  transition-delay: 330ms;
+}
+
+/* ---- The weave ----
+
+   Four stills in a dead-straight row, then four more directly beneath them,
+   is a contact sheet: eight identical rectangles on a grid, and the eye reads
+   the GRID rather than any of the faces in it. Dropping the second and fourth
+   columns breaks the top line, and once the top line is broken each still is
+   its own object again.
+
+   It is set on the columns rather than on alternate cards so that both rows
+   drop in the same places — two columns standing, two hung a little lower,
+   the same shape twice. Alternating card-by-card would put the drop under a
+   different face on the second row and read as a mistake rather than as a
+   rhythm.
+
+   Only at four across, where "second and fourth" is a fact about the layout.
+   Below that the count changes and the same rule would draw a diagonal.
+
+   The measure is the one the studio's film pair already staggers by — see
+   .clinics-film__figure--set. Two staggered pairs on one site should be
+   staggered by the same amount.
+
+   margin, not transform: .films__card carries the reveal lift as a transform,
+   and a second one here would be the two of them fighting over the property.
+   The margin is outside that argument. */
+@media (min-width: 900px) {
+  .films__shelf .films__card:nth-child(2n) {
+    margin-block-start: clamp(1.75rem, 1rem + 2.5vw, 3rem);
+  }
+}
+
+/* A still lifts under the pointer — a small one, the distance a card would
+   move if you picked it off the shelf, not a hover effect with an opinion.
+   On the frame rather than the card for the same reason the stagger is a
+   margin: the card's transform belongs to the reveal.
+
+   focus-within, so arriving at the play button by keyboard lifts the still
+   the same way the pointer does. */
+.films__frame {
+  transition:
+    transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.films__card .films__frame:hover,
+.films__card .films__frame:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 44px rgba(17, 32, 75, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .films__frame {
+    transition: none;
+  }
+
+  .films__card .films__frame:hover,
+  .films__card .films__frame:focus-within {
+    transform: none;
+  }
 }
 
 /* 9:16 — short form, the way these are shot and the way they are watched. The

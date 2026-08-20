@@ -87,6 +87,84 @@ export const FILMS = [
     poster: "/images/films/client-story-4.webp",
     sources: [{ src: "/videos/films/client-story-4.mp4" }],
   },
+
+  /* ---- Five films delivered 20 Aug 2026 (Harry's "Client videos" folder:
+     IMG_1294, IMG_1312, IMG_1315, IMG_1320; and "Merge these 2":
+     IMG_0217 + IMG_0218, which are two takes of one person) ----
+
+     Five more clients, filmed in the studio the same way as the four above,
+     and NONE of them is anybody already on this shelf.
+
+     The names come from Mark Hadland, who sent the files over one per email
+     with the client named in the subject line — Tessa, Darren, Inga, Niki,
+     and Kay — so each name is matched to its face through the filename that
+     came with it, not through anybody's reading of the still. Kay's,
+     Tessa's and Niki's corroborate: all three already have written reviews
+     in reviews.js, and Kay's talks about the chair Pilates she is filmed
+     sitting on.
+
+     `blurb` is still missing on all five. It is the line under the name and
+     it is meant to be what each of them actually says on camera, so it comes
+     from the film or from NJH rather than from a guess — see the note at the
+     top of this file. captionText renders the name alone until then, which
+     is a caption doing less than it could rather than a broken one.
+
+     They sit here, at the head of the earlier shelf, rather than at the top
+     of the list where the file's newest-first rule would otherwise put them.
+     The top of the list is the lead and the lead IS the head of the page, so
+     which of these should stand there is an editorial call rather than a
+     mechanical one — the order they arrived in does not settle it. Move one
+     up above Suzannah to change what the page opens on.
+
+     Consent, per the block at the top of this file, is written, specific and
+     withdrawable — not a verbal yes in the studio. Nothing above was taken
+     as covering these. */
+  {
+    /* IMG_0217 + IMG_0218, delivered 20 Aug 2026 ("Merge these 2"). One
+       client in one sitting, filmed in two takes because the phone was
+       stopped and started again — joined here into a single 1m27s film
+       rather than shipped as two cards of the same face. The cut lands at
+       42s and the camera had shifted a little closer between takes, so it
+       reads as a cut rather than as a seam; the poster is taken from before
+       it, where the film opens. Levels came in 4dB hotter than the shelf and
+       were brought down to match. */
+    name: "Kay",
+    poster: "/images/films/client-story-9.webp",
+    sources: [{ src: "/videos/films/client-story-9.mp4" }],
+  },
+  {
+    /* IMG_1320 — the most recent of the four. The only one of the set shot
+       landscape-ish (1288x1080, no rotation flag); cropped to 9:16 around the
+       subject at encode time rather than left for the frame to crop, so the
+       poster and the film agree on where she sits. */
+    name: "Niki",
+    poster: "/images/films/client-story-8.webp",
+    sources: [{ src: "/videos/films/client-story-8.mp4" }],
+  },
+  {
+    /* IMG_1315. The long one of the set at 2m22s — twice the length of
+       anything else on the shelf, and worth a trim at both ends before this
+       goes live. Uncut here because where to cut somebody describing their
+       own injury is NJH's call, not ours. */
+    name: "Inga",
+    poster: "/images/films/client-story-7.webp",
+    sources: [{ src: "/videos/films/client-story-7.mp4" }],
+  },
+  {
+    /* IMG_1312. The short one, 38s, and the first man on the shelf. */
+    name: "Darren",
+    poster: "/images/films/client-story-6.webp",
+    sources: [{ src: "/videos/films/client-story-6.mp4" }],
+  },
+  {
+    /* IMG_1294. Came off the camera 6dB under the rest of the shelf, so this
+       is the one film of the four carrying a gain — +6dB at encode, which
+       lands it at about -35 LUFS with the others. */
+    name: "Tessa",
+    poster: "/images/films/client-story-5.webp",
+    sources: [{ src: "/videos/films/client-story-5.mp4" }],
+  },
+
   {
     name: "Jo",
     poster: "/images/films/client-story-1.webp",
