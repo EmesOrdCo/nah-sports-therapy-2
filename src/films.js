@@ -80,6 +80,22 @@
    ============================================================ */
 export const FILMS = [
   {
+    name: "Jo",
+    poster: "/images/films/client-story-1.webp",
+    sources: [{ src: "/videos/films/client-story-1.mp4" }],
+  },
+  {
+    name: "Julia",
+    poster: "/images/films/client-story-2.webp",
+    sources: [{ src: "/videos/films/client-story-2.mp4" }],
+  },
+  {
+    name: "Isabella",
+    poster: "/images/films/client-story-3.webp",
+    sources: [{ src: "/videos/films/client-story-3.mp4" }],
+  },
+
+  {
     /* Shot 13 Aug 2026 (Harry's IMG_1152.MOV). Blurb to come from NJH — see
        the note above: it is what she actually says on camera, not a caption
        invented for the still. */
@@ -109,12 +125,11 @@ export const FILMS = [
      top of this file. captionText renders the name alone until then, which
      is a caption doing less than it could rather than a broken one.
 
-     They sit here, at the head of the earlier shelf, rather than at the top
-     of the list where the file's newest-first rule would otherwise put them.
+     They sit below Jo, Julia and Isabella, who Harry moved to the head of
+     the shelf on 20 Aug 2026 so the page opens on the three earliest films.
      The top of the list is the lead and the lead IS the head of the page, so
-     which of these should stand there is an editorial call rather than a
-     mechanical one — the order they arrived in does not settle it. Move one
-     up above Suzannah to change what the page opens on.
+     which film stands there is an editorial call rather than a mechanical
+     one — the order they arrived in does not settle it.
 
      Consent, per the block at the top of this file, is written, specific and
      withdrawable — not a verbal yes in the studio. Nothing above was taken
@@ -163,22 +178,6 @@ export const FILMS = [
     name: "Tessa",
     poster: "/images/films/client-story-5.webp",
     sources: [{ src: "/videos/films/client-story-5.mp4" }],
-  },
-
-  {
-    name: "Jo",
-    poster: "/images/films/client-story-1.webp",
-    sources: [{ src: "/videos/films/client-story-1.mp4" }],
-  },
-  {
-    name: "Julia",
-    poster: "/images/films/client-story-2.webp",
-    sources: [{ src: "/videos/films/client-story-2.mp4" }],
-  },
-  {
-    name: "Isabella",
-    poster: "/images/films/client-story-3.webp",
-    sources: [{ src: "/videos/films/client-story-3.mp4" }],
   },
 ];
 

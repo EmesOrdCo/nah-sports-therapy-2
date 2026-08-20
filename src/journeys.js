@@ -75,35 +75,46 @@
    leaving one real client sitting in a row of specimens. Empty is a state this
    section handles.
    ============================================================ */
-export const JOURNEYS = [
-  {
-    name: "First story",
-    injury:
-      "Placeholder. What brought this client in goes here: the injury or the condition, how long they had had it, and what it was stopping them doing.",
-    helped:
-      "Placeholder. What has changed since, in their words: the movement they have back, the pain that has gone, the thing they can do again.",
-    enjoy:
-      "Placeholder. What they get out of the sessions themselves, the part that keeps them coming once the original problem has settled.",
-  },
-  {
-    name: "Second story",
-    injury:
-      "Placeholder. What brought this client in goes here: the injury or the condition, how long they had had it, and what it was stopping them doing.",
-    helped:
-      "Placeholder. What has changed since, in their words: the movement they have back, the pain that has gone, the thing they can do again.",
-    enjoy:
-      "Placeholder. What they get out of the sessions themselves, the part that keeps them coming once the original problem has settled.",
-  },
-  {
-    name: "Third story",
-    injury:
-      "Placeholder. What brought this client in goes here: the injury or the condition, how long they had had it, and what it was stopping them doing.",
-    helped:
-      "Placeholder. What has changed since, in their words: the movement they have back, the pain that has gone, the thing they can do again.",
-    enjoy:
-      "Placeholder. What they get out of the sessions themselves, the part that keeps them coming once the original problem has settled.",
-  },
-];
+/* Off public view at Natasha's request, 20 Aug 2026, until there are real
+   client journeys with written consent to put here. An empty list is a state
+   this file is built for: no section, no /client-stories/journeys route, and
+   no Journeys tab on the stories switch — /client-stories is the films alone.
+   See hasJourneys() and the note at the top of this file.
+
+   To bring the page back, replace the empty list below with real entries in
+   the shape shown under it. The placeholders that were live until now:
+
+   export const JOURNEYS = [
+     {
+       name: "First story",
+       injury:
+         "Placeholder. What brought this client in goes here: the injury or the condition, how long they had had it, and what it was stopping them doing.",
+       helped:
+         "Placeholder. What has changed since, in their words: the movement they have back, the pain that has gone, the thing they can do again.",
+       enjoy:
+         "Placeholder. What they get out of the sessions themselves, the part that keeps them coming once the original problem has settled.",
+     },
+     {
+       name: "Second story",
+       injury:
+         "Placeholder. What brought this client in goes here: the injury or the condition, how long they had had it, and what it was stopping them doing.",
+       helped:
+         "Placeholder. What has changed since, in their words: the movement they have back, the pain that has gone, the thing they can do again.",
+       enjoy:
+         "Placeholder. What they get out of the sessions themselves, the part that keeps them coming once the original problem has settled.",
+     },
+     {
+       name: "Third story",
+       injury:
+         "Placeholder. What brought this client in goes here: the injury or the condition, how long they had had it, and what it was stopping them doing.",
+       helped:
+         "Placeholder. What has changed since, in their words: the movement they have back, the pain that has gone, the thing they can do again.",
+       enjoy:
+         "Placeholder. What they get out of the sessions themselves, the part that keeps them coming once the original problem has settled.",
+     },
+   ];
+*/
+export const JOURNEYS = [];
 
 /* The shape a real entry takes:
  *
