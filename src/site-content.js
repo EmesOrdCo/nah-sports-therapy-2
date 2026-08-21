@@ -23,7 +23,7 @@ const BUSINESS = {
      21 Aug 2026. Every "call Natasha" route on the pages built from this
      file now points here. Do not restore tel: links or a wa.me/<number>
      link: both would republish the number. */
-  whatsappHref: "https://wa.me/message/MDDF72Z4L7GFF1",
+  whatsappHref: "https://wa.me/message/PLACEHOLDER",
   whatsappLabel: "Message on WhatsApp",
 };
 

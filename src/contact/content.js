@@ -9,7 +9,12 @@ export const BUSINESS = {
      (DEFAULT_TO in netlify/functions/enquiry.js). The co.uk address this
      replaced was displayed on the site but was not where the form delivered. */
   email: "njhpilates@gmail.com",
-  /* Natasha's WhatsApp Business short link, generated in her app under
+  /* PLACEHOLDER — not a working link. The real short link was removed on
+     21 Aug 2026 and must be pasted back here (and into src/site-content.js
+     and src/about/content.js) before this goes anywhere near production:
+     as it stands every WhatsApp route on the site is dead.
+
+     Natasha's WhatsApp Business short link, generated in her app under
      Settings, Business tools, Short link, and the only public route to her
      phone from 21 Aug 2026. It opens a chat with her without her number
      appearing in the URL, which is the entire point of it: the mobile was
@@ -22,7 +27,7 @@ export const BUSINESS = {
 
      The same link is held in src/site-content.js and src/about/content.js
      for the pages built from those files. All three move together. */
-  whatsappHref: "https://wa.me/message/MDDF72Z4L7GFF1",
+  whatsappHref: "https://wa.me/message/PLACEHOLDER",
 };
 
 /* The studio is also a private home, so it is named by village only — no

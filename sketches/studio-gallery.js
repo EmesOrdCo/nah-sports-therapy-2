@@ -70,7 +70,7 @@ function hero() {
       <h1 id="sg-title">${H1}</h1>
       <div class="clinics-hero__footer">
         <p>${LEDE}</p>
-        <a class="pilates-arrow-link" href="https://wa.me/message/MDDF72Z4L7GFF1">Appointments &middot; WhatsApp <span>&#8599;</span></a>
+        <a class="pilates-arrow-link" href="https://wa.me/message/PLACEHOLDER">Appointments &middot; WhatsApp <span>&#8599;</span></a>
       </div>
     </div>
   </section>`;
@@ -92,7 +92,7 @@ function foot() {
       </div>
       <div class="sg-foot__col sg-foot__col--act">
         <p class="sg-label">Book</p>
-        <a class="sg-cta" href="https://wa.me/message/MDDF72Z4L7GFF1">Message on WhatsApp</a>
+        <a class="sg-cta" href="https://wa.me/message/PLACEHOLDER">Message on WhatsApp</a>
         <a class="sg-textlink" href="/contact">Send an enquiry <span>&#8594;</span></a>
       </div>
     </div>

@@ -16,7 +16,7 @@ export const CONTACT = {
   /* Natasha's WhatsApp Business short link, replacing the mobile that used to
      sit here — see the long note in src/contact/content.js. Read by /faq,
      which is built from this file. */
-  whatsappHref: "https://wa.me/message/MDDF72Z4L7GFF1",
+  whatsappHref: "https://wa.me/message/PLACEHOLDER",
 };
 
 /* Verbatim from the current /about page, in her voice. */
