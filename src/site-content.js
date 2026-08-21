@@ -1144,6 +1144,35 @@ function buildPilatesContinuousPage() {
                one session, the plate included in the count. -->
           <div class="pilates-feature__media pilates-gallery" style="--frame-count: 4" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
+              <!-- Lightened 21 Aug 2026 at Harry's request. Shot straight
+                   into the open garden doors, so the camera exposed for the
+                   daylight behind her and left the client, the mat and the
+                   whole near half of the room sitting in shadow.
+
+                   Not a global curve. A first pass at gamma 1.25 lifted the
+                   whole frame, which does brighten her but pays for it by
+                   washing the garden and the sunlit wall that were correctly
+                   exposed already. This is scripts/shadow-lift.py at 0.85:
+                   the lift is driven by a heavily blurred luminance map, so
+                   its strength follows which REGION of the room is in shade
+                   rather than which pixel is dark. Deep shade gets a gamma
+                   near 1.85, anything already mid-bright gets nothing, and
+                   the two are joined by a smoothstep. Blur radius is 4.5% of
+                   the frame — wide enough that no halo forms round the door
+                   frames, which is the failure mode of a tighter mask.
+
+                   Result: the near floor, her face and the near mats come
+                   up; the garden, the lit doorway and the sunlit wall are
+                   left where the camera put them. The darkest 5% of the
+                   frame moved from 14 to 32 while highlight clipping went
+                   0.58% to 0.71%. Stopped at 0.85 — 1.05 was tried and
+                   starts greying the mats.
+
+                   Applied to all three files at the same strength, and the
+                   mask radius is a fraction of the frame rather than a fixed
+                   pixel count, so every size gets the same treatment and the
+                   srcset cannot switch brightness mid-page. Originals are in
+                   git if it wants backing off. -->
               <img data-drift-lag="0.025" data-gallery-plate data-small="/images/pilates/mat-ab-curl-500.webp" data-large="/images/pilates/mat-ab-curl-1000.webp" data-xl="/images/pilates/mat-ab-curl-1536.webp" data-xl-width="1536" src="/images/pilates/mat-ab-curl-1000.webp" srcset="/images/pilates/mat-ab-curl-500.webp 500w, /images/pilates/mat-ab-curl-1000.webp 1000w, /images/pilates/mat-ab-curl-1536.webp 1536w" sizes="(max-width: 960px) 92vw, 52vw" alt="A client holding a curled sit up position on the mat, legs lifted, the studio's garden doors folded open behind her" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous mat Pilates photograph" hidden>←</button>
               <button class="pilates-gallery__arrow pilates-gallery__arrow--next" type="button" data-gallery-step="1" aria-label="Next mat Pilates photograph" hidden>→</button>
@@ -1531,23 +1560,52 @@ function buildStudioContinuousPage() {
       "The NJH Sports Therapy and Pilates studio in Studham, near Whipsnade.",
     canonical: "/studio",
     html: `<div class="clinics-longform">
-      <!-- The hero is the terrace photograph: in through the folded-open
-           doors from the same spot the room is entered. It stood alone here
-           until a looping cut of NJH's promotional film was laid over it, and
-           it stands alone again — the film is out at Harry's request. If it is
-           ever wanted back, the markup was one <video class="clinics-hero__reel">
-           over this <img>, driven by initStudioReel(); the encoded files are
-           still in public/videos (studio-tour.mp4 and the 640 phone cut).
+      <!-- The hero is the room laid out for a class, seen from the far end
+           with a magic circle and weighted balls on each mat and the folding
+           doors closed onto the terrace. Harry's pick, 21 Aug 2026. It
+           replaces the terrace photograph, the view in through the folded
+           doors from outside. That view of the building is not lost: the
+           gallery below closes on studio-dusk, the same terrace after dark.
+           The hero's own files (studio-hero-800/1600/2400.webp) are now
+           referenced from nowhere and kept in public/images against the day
+           somebody wants the outside back at the top.
 
-           The still ships as its whole 4:3 frame rather than pre-cropped:
+           Inside beats outside at the top of a page about a room. The old
+           hero showed a visitor the doors they would walk through; this one
+           shows them what is on the other side of them, which is the thing
+           they are deciding about.
+
+           Before that it carried a looping cut of NJH's promotional film,
+           out at Harry's request. If it is ever wanted back, the markup was
+           one <video class="clinics-hero__reel"> over this <img>, driven by
+           initStudioReel(); the encoded files are still in public/videos
+           (studio-tour.mp4 and the 640 phone cut).
+
+           The still ships as its whole square frame rather than pre-cropped:
            it is object-fit: cover, so every viewport cuts its own window, and
-           4:3 has the height a phone's tall window needs where a 16:9 pre-crop
-           would have run out. The stylesheet nudges that window right of
-           centre so a narrow screen keeps the lit doorway rather than the tree
-           beside it — see .clinics-hero__still. -->
+           1:1 has even more of the height a phone's tall window needs than
+           the 4:3 terrace frame did. The stylesheet's right-of-centre nudge
+           went with the old photograph — see .clinics-hero__still.
+
+           RESOLUTION, and the one thing on this page that is not straight
+           off a camera. The photograph exists at 1000px and no larger — the
+           original is not in the repo and was not found on this machine, and
+           1000px full bleed is soft on a wide desktop. So the 1600 and 2400
+           candidates in the srcset are Upscayl remacri-4x from the 1000,
+           resampled down from its 4000px output, which is the same treatment
+           the site's other undersized photographs have had.
+
+           This is the exception to the no-upscaling line the home page's
+           studio band states, and it is marked here rather than quietly
+           taken: a hero is the one frame on the page big enough for the
+           difference to show. The room takes it well — flat walls, a plain
+           floor, no faces and no fine text in the frame — but it is still a
+           guess at detail the camera recorded and nobody has. If the original
+           turns up, re-cut 1600 and 2400 from it, overwrite these two files
+           and delete this paragraph. -->
       <section class="clinics-hero" id="overview" aria-labelledby="clinics-title">
         <div class="clinics-hero__media" aria-hidden="true">
-          <img class="clinics-hero__still" src="/images/studio-hero-1600.webp" srcset="/images/studio-hero-800.webp 800w, /images/studio-hero-1600.webp 1600w, /images/studio-hero-2400.webp 2400w" sizes="100vw" alt="" width="1600" height="1248" fetchpriority="high" />
+          <img class="clinics-hero__still" src="/images/pilates/room-rings-1600.webp" srcset="/images/pilates/room-rings-500.webp 500w, /images/pilates/room-rings-1000.webp 1000w, /images/pilates/room-rings-1600.webp 1600w, /images/pilates/room-rings-2400.webp 2400w" sizes="100vw" alt="" width="1600" height="1600" fetchpriority="high" />
           <div class="clinics-hero__scrim"></div>
         </div>
         <div class="clinics-hero__inner">
@@ -1600,15 +1658,30 @@ function buildStudioContinuousPage() {
             </dl>
             <a class="pilates-arrow-link" href="#reformer">See what is in the room <span>→</span></a>
           </div>
-          <!-- The third gallery: four photographs of the room itself, the
-               corner row three frames like the Reformer's below. The mat
-               layouts from either end came first; the shoot of August 2026
-               added the room seen from the open doors with both machines
-               standing in it, and the building from the terrace at dusk —
-               the hero's view, after dark. Square like every frame in these
-               galleries: the dusk photograph is cut down to the doorway and
-               the lit room, the fuchsias kept as its near corner. -->
-          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 4" data-reveal data-drift data-equipment-gallery>
+          <!-- The third gallery: five photographs of the room itself, the
+               corner row four frames. The mat layouts from either end came
+               first; the shoot of August 2026 added the room seen from the
+               open doors with both machines standing in it, and the building
+               from the terrace at dusk — the hero's view, after dark. Square
+               like every frame in these galleries: the dusk photograph is cut
+               down to the doorway and the lit room, the fuchsias kept as its
+               near corner.
+
+               The treatment couch joined the row on 21 Aug 2026. This gallery
+               is the room, not the mat work, and a set that showed only mats,
+               machines and the outside of the building left out the half of
+               the room the lead sentence above is about — the space turning
+               from a Pilates studio into a treatment clinic.
+
+               couch-posters, Harry's pick: the couch made up with its rolled
+               towels, taken from far enough back to carry the charts, the
+               sink, the window and the clock. It is the widest, most made-up
+               view of the treatment corner, which is what this row wants —
+               #physio-couch below leads on couch-window, the tighter one, so
+               the two rows are not the same photograph twice. Its file lives
+               in public/images/therapy with the rest of the couch's, not in
+               pilates with the room's. -->
+          <div class="pilates-feature__media pilates-gallery" style="--frame-count: 5" data-reveal data-drift data-equipment-gallery>
             <figure class="pilates-feature__shot pilates-gallery__plate">
               <img data-drift-lag="0.025" data-gallery-plate data-small="/images/pilates/room-rings-500.webp" data-large="/images/pilates/room-rings-1000.webp" data-xl="/images/pilates/room-rings-1000.webp" data-xl-width="1000" src="/images/pilates/room-rings-1000.webp" srcset="/images/pilates/room-rings-500.webp 500w, /images/pilates/room-rings-1000.webp 1000w" sizes="(max-width: 960px) 92vw, 52vw" alt="The room from the other end, mats laid out with a magic circle and weighted balls on each, the folding doors closed onto the terrace" width="1000" height="1000" loading="lazy">
               <button class="pilates-gallery__arrow pilates-gallery__arrow--prev" type="button" data-gallery-step="-1" aria-label="Previous photograph of the room" hidden>←</button>
@@ -1620,6 +1693,9 @@ function buildStudioContinuousPage() {
               </button>
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
                 <img data-small="/images/pilates/room-machines-500.webp" data-large="/images/pilates/room-machines-1000.webp" data-xl="/images/pilates/room-machines-1536.webp" data-xl-width="1536" src="/images/pilates/room-machines-500.webp" alt="The room from the open garden doors, mats down the centre and the Reformer and Stability Chair standing ready beyond them" width="500" height="500" loading="lazy">
+              </button>
+              <button type="button" class="pilates-gallery__pick" data-gallery-pick>
+                <img data-small="/images/therapy/couch-posters-500.webp" data-large="/images/therapy/couch-posters-1000.webp" data-xl="/images/therapy/couch-posters-1536.webp" data-xl-width="1536" src="/images/therapy/couch-posters-500.webp" alt="The room set up for treatment, the hydraulic couch made up with rolled towels, the muscular and skeletal charts on the wall and the clock above the window" width="500" height="500" loading="lazy">
               </button>
               <button type="button" class="pilates-gallery__pick" data-gallery-pick>
                 <img data-small="/images/pilates/studio-dusk-500.webp" data-large="/images/pilates/studio-dusk-1000.webp" data-xl="/images/pilates/studio-dusk-1536.webp" data-xl-width="1536" src="/images/pilates/studio-dusk-500.webp" alt="The studio from the terrace at dusk, the garden doors folded open onto the lit room, fuchsias in the foreground" width="500" height="500" loading="lazy">

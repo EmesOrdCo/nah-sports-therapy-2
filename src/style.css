@@ -5359,12 +5359,16 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   pointer-events: none;
 }
 
-/* The photograph ships as its full 4:3 frame and this is where each screen's
-   window is cut. 62% and not center: a phone's tall window keeps barely a
-   third of the width, and dead centre that third is mostly the bay tree —
-   biased right it is the open doorway with the lit room behind it, which is
-   the picture. Desktop shows the full width either way, so the bias costs
-   the wide screens nothing. */
+/* The photograph ships as its full frame and this is where each screen's
+   window is cut.
+
+   Centred, since 21 Aug 2026. It used to be 62%, which belonged to the
+   terrace photograph: a phone's tall window keeps barely a third of the
+   width, dead centre that third was mostly the bay tree, and biased right it
+   was the open doorway with the lit room behind it. The room photograph that
+   replaced it is composed on its own centre line — the garden doors dead
+   ahead, mats running away on both sides — so the same bias would now crop
+   the doors off one edge and hand the type nothing in exchange. */
 .clinics-hero__still {
   position: absolute;
   display: block;
@@ -5372,7 +5376,7 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   height: 100%;
   inset: 0;
   object-fit: cover;
-  object-position: 62% 50%;
+  object-position: 50% 50%;
 }
 
 /* Three layers, each answering something the photograph does not promise on
@@ -7083,35 +7087,22 @@ body:has(.home-hero, .cv__hero, .clinics-hero)
   transition-delay: 330ms;
 }
 
-/* ---- The weave ----
+/* ---- Straight rows ----
 
-   Four stills in a dead-straight row, then four more directly beneath them,
-   is a contact sheet: eight identical rectangles on a grid, and the eye reads
-   the GRID rather than any of the faces in it. Dropping the second and fourth
-   columns breaks the top line, and once the top line is broken each still is
-   its own object again.
+   The shelf used to weave: at four across, the second and fourth columns hung
+   a little lower than the first and third, so the top line was broken and each
+   still read as its own object rather than as one cell of a contact sheet.
 
-   It is set on the columns rather than on alternate cards so that both rows
-   drop in the same places — two columns standing, two hung a little lower,
-   the same shape twice. Alternating card-by-card would put the drop under a
-   different face on the second row and read as a mistake rather than as a
-   rhythm.
+   Off at Harry's request, 21 Aug 2026. The films now sit in a rigid parallel
+   grid — every card on the same baseline, rows squared to each other, columns
+   squared down the page. A row of clients' faces is a set of equals, and
+   nudging half of them out of line is the layout having an opinion about them
+   that nothing in the films supports.
 
-   Only at four across, where "second and fourth" is a fact about the layout.
-   Below that the count changes and the same rule would draw a diagonal.
-
-   The measure is the one the studio's film pair already staggers by — see
-   .clinics-film__figure--set. Two staggered pairs on one site should be
-   staggered by the same amount.
-
-   margin, not transform: .films__card carries the reveal lift as a transform,
-   and a second one here would be the two of them fighting over the property.
-   The margin is outside that argument. */
-@media (min-width: 900px) {
-  .films__shelf .films__card:nth-child(2n) {
-    margin-block-start: clamp(1.75rem, 1rem + 2.5vw, 3rem);
-  }
-}
+   Nothing replaces the rule: the grid was already flat underneath it, and the
+   card-by-card reveal delays above still settle the row left to right, which
+   is the rhythm the weave was reaching for and the one that costs the
+   alignment nothing. */
 
 /* A still lifts under the pointer — a small one, the distance a card would
    move if you picked it off the shelf, not a hover effect with an opinion.

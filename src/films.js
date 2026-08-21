@@ -80,6 +80,14 @@
    ============================================================ */
 export const FILMS = [
   {
+    /* The lead, at Harry's call on 21 Aug 2026. Shot 13 Aug 2026 (Harry's
+       IMG_1152.MOV). Blurb to come from NJH — see the note above: it is what
+       she actually says on camera, not a caption invented for the still. */
+    name: "Suzannah",
+    poster: "/images/films/client-story-4.webp",
+    sources: [{ src: "/videos/films/client-story-4.mp4" }],
+  },
+  {
     name: "Jo",
     poster: "/images/films/client-story-1.webp",
     sources: [{ src: "/videos/films/client-story-1.mp4" }],
@@ -95,14 +103,6 @@ export const FILMS = [
     sources: [{ src: "/videos/films/client-story-3.mp4" }],
   },
 
-  {
-    /* Shot 13 Aug 2026 (Harry's IMG_1152.MOV). Blurb to come from NJH — see
-       the note above: it is what she actually says on camera, not a caption
-       invented for the still. */
-    name: "Suzannah",
-    poster: "/images/films/client-story-4.webp",
-    sources: [{ src: "/videos/films/client-story-4.mp4" }],
-  },
 
   /* ---- Five films delivered 20 Aug 2026 (Harry's "Client videos" folder:
      IMG_1294, IMG_1312, IMG_1315, IMG_1320; and "Merge these 2":
@@ -125,11 +125,12 @@ export const FILMS = [
      top of this file. captionText renders the name alone until then, which
      is a caption doing less than it could rather than a broken one.
 
-     They sit below Jo, Julia and Isabella, who Harry moved to the head of
-     the shelf on 20 Aug 2026 so the page opens on the three earliest films.
-     The top of the list is the lead and the lead IS the head of the page, so
-     which film stands there is an editorial call rather than a mechanical
-     one — the order they arrived in does not settle it.
+     They sit below Suzannah, Jo, Julia and Isabella. Harry moved the three
+     earliest to the head of the shelf on 20 Aug 2026, and put Suzannah above
+     them on 21 Aug 2026, so hers is the film the page opens on. The top of
+     the list is the lead and the lead IS the head of the page, so which film
+     stands there is an editorial call rather than a mechanical one — the
+     order they arrived in does not settle it.
 
      Consent, per the block at the top of this file, is written, specific and
      withdrawable — not a verbal yes in the studio. Nothing above was taken
