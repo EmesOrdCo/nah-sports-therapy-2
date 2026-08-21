@@ -2633,6 +2633,31 @@ function updateMetadata(route, path) {
   if (description && route?.description) {
     description.setAttribute("content", route.description);
   }
+  /* The Open Graph and Twitter pairs, kept in step with the two above.
+     Worth being clear about what this does and does not buy, because the
+     obvious reading of it is wrong: the scrapers these tags exist for —
+     WhatsApp, Facebook, iMessage, LinkedIn — do not run JavaScript, so a
+     shared inner page still previews with the home-page values written into
+     index.html. This is for the renderers that do (Google, Slack's unfurler,
+     devtools), and so that the tags are never caught disagreeing with the
+     title and description sitting beside them. Per-route share cards need the
+     tags emitted per route at build time; there is no client-side fix. */
+  const setMeta = (selector, content) => {
+    if (!content) return;
+    document.querySelector(selector)?.setAttribute("content", content);
+  };
+  /* document.title, not plainTitle: the suffix rule above appends "| NJH" to
+     any title that does not already carry it, and an og:title that disagreed
+     with the <title> beside it would be the one thing this block exists to
+     prevent. */
+  setMeta('meta[property="og:title"]', document.title);
+  setMeta('meta[name="twitter:title"]', document.title);
+  setMeta('meta[property="og:description"]', route?.description);
+  setMeta('meta[name="twitter:description"]', route?.description);
+  setMeta(
+    'meta[property="og:url"]',
+    `https://www.njhsportstherapy.co.uk${route?.canonical || path}`,
+  );
   let canonical = document.querySelector('link[rel="canonical"]');
   if (!canonical) {
     canonical = document.createElement("link");

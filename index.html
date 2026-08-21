@@ -9,6 +9,119 @@
       content="NJH Sports Therapy & Pilates provides personal, hands on treatment and Pilates to help you move freely and recover with confidence."
     />
     <title>NJH Sports Therapy & Pilates</title>
+    <!-- Open Graph, for the link previews in WhatsApp, Facebook, LinkedIn and
+         iMessage. Read the values here as the *home page's*, not the current
+         route's: every one of those scrapers fetches the URL and reads the
+         markup without ever running JavaScript, so what they see on /pilates is
+         this file, unchanged. updateMetadata() in site-content.js keeps these in
+         step for anything that does render, but a per-route share card needs the
+         tags written per route at build time — it cannot be done from the
+         client. Until then, a shared inner page previews as the home page.
+
+         og:image must be an absolute URL — a root-relative path is silently
+         dropped by most scrapers — so it names the live domain outright rather
+         than going through BASE_PATH. That is deliberate: njhsportstherapy.co.uk
+         is the canonical home whichever host built the file. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NJH Sports Therapy & Pilates" />
+    <meta property="og:title" content="NJH Sports Therapy & Pilates" />
+    <meta
+      property="og:description"
+      content="NJH Sports Therapy & Pilates provides personal, hands on treatment and Pilates to help you move freely and recover with confidence."
+    />
+    <meta property="og:url" content="https://www.njhsportstherapy.co.uk/" />
+    <meta
+      property="og:image"
+      content="https://www.njhsportstherapy.co.uk/images/og-card.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="The Studham studio, mats and rollers laid out, with the doors folded open onto the garden."
+    />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NJH Sports Therapy & Pilates" />
+    <meta
+      name="twitter:description"
+      content="NJH Sports Therapy & Pilates provides personal, hands on treatment and Pilates to help you move freely and recover with confidence."
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.njhsportstherapy.co.uk/images/og-card.jpg"
+    />
+    <!-- Structured data. Two nodes, and the WebSite one is doing a specific job:
+         `name` is where Google takes the bold site name in a result from, and
+         left to guess it has been printing the old Weebly site's "njh-sports".
+         It is stated here so the guess is not needed.
+
+         Everything in the LocalBusiness node is already printed on /contact —
+         nothing is disclosed by repeating it in machine-readable form. The
+         address stops at the village on purpose: the studio is a private home,
+         so no street, no postcode and no geo coordinates, per the note in
+         src/contact/content.js. Type is plain LocalBusiness rather than
+         Physiotherapy — "physiotherapist" is a protected title in the UK and
+         Natasha is a Sports Therapist. No openingHours and no prices: neither
+         is documented anywhere on the site, and structured data that has gone
+         stale is worse than structured data that was never written. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://www.njhsportstherapy.co.uk/#website",
+            "url": "https://www.njhsportstherapy.co.uk/",
+            "name": "NJH Sports Therapy & Pilates",
+            "inLanguage": "en-GB",
+            "publisher": {
+              "@id": "https://www.njhsportstherapy.co.uk/#business"
+            }
+          },
+          {
+            "@type": "LocalBusiness",
+            "@id": "https://www.njhsportstherapy.co.uk/#business",
+            "name": "NJH Sports Therapy & Pilates",
+            "url": "https://www.njhsportstherapy.co.uk/",
+            "description": "NJH Sports Therapy & Pilates provides personal, hands on treatment and Pilates to help you move freely and recover with confidence.",
+            "image": "https://www.njhsportstherapy.co.uk/images/og-card.jpg",
+            "logo": "https://www.njhsportstherapy.co.uk/apple-touch-icon.png",
+            "telephone": "+44 7881 821901",
+            "email": "njhpilates@gmail.com",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Studham",
+              "addressRegion": "Bedfordshire",
+              "addressCountry": "GB"
+            },
+            "founder": {
+              "@type": "Person",
+              "name": "Natasha Hadland",
+              "jobTitle": "Sports Therapist and certified STOTT Pilates instructor"
+            },
+            "makesOffer": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Sports Therapy",
+                  "description": "Hands on treatment for pain, injury or restricted movement."
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Clinical Pilates",
+                  "description": "Individual and small group movement work, including pre and postnatal."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
     <!-- The hands mark, cropped square. The SVG carries its own
          prefers-color-scheme rule because the indigo half all but vanishes on a
          dark tab strip; the .ico is the flat fallback for browsers that ignore
