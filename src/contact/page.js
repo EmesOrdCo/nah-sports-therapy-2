@@ -5,6 +5,7 @@ import {
   SERVICES,
   REPLY_OPTIONS,
   REPLY_BY_PHONE,
+  WHATSAPP_DOOR,
   WHATSAPP_NOTE,
   REASSURANCE,
   SAFETY_NOTE,
@@ -16,8 +17,8 @@ import {
 /* Contact — photographic hero, then the form in three columns.
 
    The page opens on a treatment photograph with the choice laid over it: a
-   filled tile carrying the phone number and a white one carrying the enquiry,
-   side by side, so somebody who only wants the number never has to read past
+   filled tile carrying the WhatsApp link and a white one carrying the enquiry,
+   side by side, so somebody who only wants to message never has to read past
    it. Under the photograph the ground returns to --navy — the same dark band
    the Sports Therapy page uses and the same navy the footer deepens into — and
    carries the short fields, the message, and the three things a first-time
@@ -50,11 +51,13 @@ const HERO = {
   alt: "The NJH studio in Studham, a light, empty room with a wooden floor",
 };
 
-/* Stroke glyphs rather than a webfont: five icons is not worth a request, and
-   currentColor lets each one take the colour of the tile it sits in. */
+/* Stroke glyphs rather than a webfont: four icons is not worth a request, and
+   currentColor lets each one take the colour of the tile it sits in.
+
+   No phone glyph any more — the tile it belonged to is a WhatsApp door now
+   and takes the speech bubble. A WhatsApp brand mark would be plainer still,
+   but it is Meta's asset and every other glyph here is house linework. */
 const ICONS = {
-  phone:
-    '<path d="M6.8 3.6h3.1l1.5 3.6-2 1.4a12.2 12.2 0 0 0 5.5 5.5l1.4-2 3.6 1.5v3.1a1.6 1.6 0 0 1-1.7 1.6A16.3 16.3 0 0 1 5.2 5.3 1.6 1.6 0 0 1 6.8 3.6Z"/>',
   mail: '<path d="M3.2 6.4h17.6v11.2H3.2z"/><path d="m3.6 7 8.4 5.8L20.4 7"/>',
   person:
     '<circle cx="12" cy="8.2" r="3.3"/><path d="M5.6 19.4a6.4 6.4 0 0 1 12.8 0"/>',
@@ -94,22 +97,17 @@ function hero() {
       <p class="cv__lede">Get in touch to ask a question, discuss what you need or arrange an appointment.</p>
 
       <div class="cv__doors">
-        ${/* The call tile holds two links now — the number and the WhatsApp
-              line — so it cannot itself be one: an anchor inside an anchor is
-              dropped by the parser, and the WhatsApp words would dial. It is
-              a div whose number link is stretched over the whole tile by a
-              pseudo-element instead, so tapping anywhere in the blue still
-              rings Natasha, and the WhatsApp line sits above that layer and
-              takes its own taps. The write tile is one link and stays one. */ ""}
-        <div class="cv__door cv__door--call" data-reveal>
-          <span class="cv__door-icon">${icon("phone")}</span>
-          ${/* No "Call Natasha" line under the number any more: the WhatsApp
-                sentence took that slot, and a tile captioned twice reads as
-                two instructions where there is one. The number in a tile with
-                a phone icon on it does not need to be told it is for calling. */ ""}
-          <a class="cv__door-value cv__door-dial" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a>
-          <p class="cv__door-aside">${WHATSAPP_NOTE.before} <a href="${WHATSAPP_NOTE.href}">${WHATSAPP_NOTE.label}</a>.</p>
-        </div>
+        ${/* One link again. While this tile carried the phone number it also
+              carried the WhatsApp sentence, and two links meant it could not
+              itself be an anchor — it was a div with the number stretched over
+              it by a pseudo-element. With the number gone there is one
+              destination, so the tile is a plain link like the one beside it
+              and the pseudo-element hack went with it. */ ""}
+        <a class="cv__door cv__door--call" href="${WHATSAPP_DOOR.href}" data-reveal>
+          <span class="cv__door-icon">${icon("speech")}</span>
+          <span class="cv__door-value">${WHATSAPP_DOOR.label}</span>
+          <span class="cv__door-note">${WHATSAPP_DOOR.note}</span>
+        </a>
         <a class="cv__door cv__door--write" href="#enquiry" data-reveal>
           <span class="cv__door-icon">${icon("mail")}</span>
           <h2 class="cv__door-value" id="enquiry-title">Send an enquiry</h2>

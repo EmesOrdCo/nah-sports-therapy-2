@@ -5,17 +5,24 @@
    change them only against something Natasha has confirmed. */
 
 export const BUSINESS = {
-  phoneDisplay: "07881 821 901",
-  phoneHref: "tel:+447881821901",
   /* Client-supplied, and the same inbox enquiry notifications already go to
      (DEFAULT_TO in netlify/functions/enquiry.js). The co.uk address this
      replaced was displayed on the site but was not where the form delivered. */
   email: "njhpilates@gmail.com",
-  /* Same number as phoneHref, in the form wa.me wants: international, no plus,
-     no spaces. Nothing new is disclosed by it — the number is already printed
-     on this page as the first hero tile — but it is Natasha's own mobile, so
-     it moves in step with phoneDisplay/phoneHref or not at all. */
-  whatsappHref: "https://wa.me/447881821901",
+  /* Natasha's WhatsApp Business short link, generated in her app under
+     Settings, Business tools, Short link, and the only public route to her
+     phone from 21 Aug 2026. It opens a chat with her without her number
+     appearing in the URL, which is the entire point of it: the mobile was
+     being harvested off this page and she was getting spam calls, so it is
+     no longer printed anywhere on the site or in the structured data.
+
+     Do not "improve" this into wa.me/<number> or a tel: link. Either would
+     republish the number and undo the change. If the link ever needs
+     regenerating it comes from Natasha's phone, not from the number.
+
+     The same link is held in src/site-content.js and src/about/content.js
+     for the pages built from those files. All three move together. */
+  whatsappHref: "https://wa.me/message/MDDF72Z4L7GFF1",
 };
 
 /* The studio is also a private home, so it is named by village only — no
@@ -47,6 +54,20 @@ export const PLACES = [
    louder than this page wants to be — reverted at Harry's request. Her
    sentence stays whole, "please" included, which the tile's two-line setting
    had cost it. */
+/* The first hero tile. It carried the phone number until 21 Aug 2026; with
+   the number gone the tile is the WhatsApp door itself, and it is a plain
+   link again like the enquiry tile beside it.
+
+   The note under it is cut from Natasha's own sentence below rather than
+   written fresh, so the page says the same thing in both places in her
+   vocabulary. Her sentence survives whole in the reassurance column, where
+   there is room for it. */
+export const WHATSAPP_DOOR = {
+  label: "WhatsApp Natasha",
+  note: "Speedy replies during clinic time.",
+  href: BUSINESS.whatsappHref,
+};
+
 export const WHATSAPP_NOTE = {
   before: "For speedy replies during clinic time, please",
   label: "WhatsApp directly",

@@ -77,9 +77,9 @@ function priceAnswer() {
 }
 
 function bookingAnswer() {
-  return `<p>Call or send a note describing what you would like help with, and Natasha will guide you towards the most suitable first appointment.</p>
+  return `<p>Send Natasha a note describing what you would like help with, and she will guide you towards the most suitable first appointment.</p>
     <ul class="faq-contact">
-      <li><a href="${CONTACT.telHref}">${CONTACT.tel}</a></li>
+      <li><a href="${CONTACT.whatsappHref}">Message on WhatsApp</a></li>
       <li><a href="mailto:${CONTACT.email}">${CONTACT.email}</a></li>
     </ul>`;
 }

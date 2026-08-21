@@ -14,12 +14,17 @@ import { journeysList, hasJourneys } from "./journeys.js";
 import { FEATURED_REVIEWS, REVIEWS, SERVICE_LABELS } from "./reviews.js";
 
 const BUSINESS = {
-  phoneDisplay: "07881 821 901",
-  phoneHref: "tel:+447881821901",
   /* Client-supplied, and the same inbox enquiry notifications already go to
      (DEFAULT_TO in netlify/functions/enquiry.js). The co.uk address this
      replaced was displayed on the site but was not where the form delivered. */
   email: "njhpilates@gmail.com",
+  /* Natasha's WhatsApp Business short link — see the long note in
+     src/contact/content.js for why the mobile came off the site on
+     21 Aug 2026. Every "call Natasha" route on the pages built from this
+     file now points here. Do not restore tel: links or a wa.me/<number>
+     link: both would republish the number. */
+  whatsappHref: "https://wa.me/message/MDDF72Z4L7GFF1",
+  whatsappLabel: "Message on WhatsApp",
 };
 
 const escapePath = (path) => path.replace(/\/+$/, "") || "/";
@@ -247,7 +252,7 @@ const studio = page(
     "A calm setting for personal care.",
     `<p>The NJH studio opened in 2016 as a dedicated place to step away from daily demands and focus on your movement and wellbeing.</p>
      <p>It hosts Sports Therapy appointments, individual Pilates and small group Pilates. The setting is private and relaxed, with the space and equipment needed to tailor each session.</p>
-     <div class="inline-contact"><span>Discuss your needs</span><a href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay}</a></div>`,
+     <div class="inline-contact"><span>Discuss your needs</span><a href="${BUSINESS.whatsappHref}">${BUSINESS.whatsappLabel}</a></div>`,
   )}
   ${cards([
     { title: "Sports Therapy", text: "Assessment led, hands on care and practical rehabilitation.", href: "/what-is-what-are-the-benifits", icon: "hands" },
@@ -1510,7 +1515,7 @@ function buildPilatesContinuousPage() {
             ${eyebrow("Pilates")}<h2 id="pilates-contact-title" class="title-rule">Find the right place to begin.</h2>
             <p>For further details or to discuss your specific requirements, contact Natasha Hadland.</p>
             <div class="st-card__actions">
-              <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay} <span>↗</span></a>
+              <a class="pilates-arrow-link" href="${BUSINESS.whatsappHref}">${BUSINESS.whatsappLabel} <span>↗</span></a>
               <a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a>
             </div>
           </section>
@@ -1613,7 +1618,7 @@ function buildStudioContinuousPage() {
           <h1 id="clinics-title">The NJH Clinic in Studham.</h1>
           <div class="clinics-hero__footer">
             <p>Professional Sports Therapy, Massage and Pilates care from one private studio in Studham, near Whipsnade.</p>
-            <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">Appointments · ${BUSINESS.phoneDisplay} <span>↗</span></a>
+            <a class="pilates-arrow-link" href="${BUSINESS.whatsappHref}">Appointments · WhatsApp <span>↗</span></a>
           </div>
         </div>
       </section>
@@ -2018,7 +2023,7 @@ function buildStudioContinuousPage() {
             <h2 id="studio-contact-title">Come and see the room.</h2>
             <p>For directions, availability, or to talk through how Natasha can best help you, get in touch.</p>
             <div class="st-card__actions">
-              <a class="pilates-arrow-link" href="${BUSINESS.phoneHref}">${BUSINESS.phoneDisplay} <span>↗</span></a>
+              <a class="pilates-arrow-link" href="${BUSINESS.whatsappHref}">${BUSINESS.whatsappLabel} <span>↗</span></a>
               <a class="button-link button-link--ink" href="/contact">Send an enquiry <span>↗</span></a>
             </div>
           </section>
@@ -2381,9 +2386,16 @@ function formatLegacyText(value) {
       /(https?:\/\/[^\s]+)/g,
       '<a href="$1" target="_blank" rel="noreferrer">$1</a>',
     )
+    /* The old site printed the mobile in five places in its body copy, and
+       this used to wrap it in a tel: link. Those five now hold the token
+       [[PHONE]] instead of the digits and it is swapped for the WhatsApp link
+       here. The digits had to come out of legacy-content.js itself rather than
+       just being replaced at render: this file is bundled and served, so a
+       number left in the archive is a number published in public JavaScript,
+       which is the thing we were removing. The originals are in git. */
     .replace(
-      /\b07881\s?821\s?901\b/g,
-      '<a href="tel:+447881821901">$&</a>',
+      /\[\[PHONE\]\]/g,
+      `<a href="${BUSINESS.whatsappHref}">WhatsApp</a>`,
     )
     .replaceAll("\n", "<br>");
 }

@@ -74,7 +74,7 @@ Whether it is to receive Soft Tissue Release with a Sports Therapy appointment, 
 
 Please do feel free to give me a call on
 
-07881 821901 to discuss your specific needs.`,
+[[PHONE]] to discuss your specific needs.`,
   },
   "/small-group-pilates-timetable": {
     parent: "pilates",
@@ -136,7 +136,7 @@ Private one hour 1:1 sessions are available Monday to Friday.
 
 For further details or to discuss your specific requirements
 please do feel free to contact
-Natasha Hadland on 07881 821901.`,
+Natasha Hadland on [[PHONE]].`,
   },
   "/pilates-for-golfers": {
     parent: "pilates",
@@ -235,7 +235,7 @@ Includes 2 nights accommodation, breakfast, lunch & dinner (alcohol not inc)
 4 small group pilates sessions run by Natasha.
 Soft Tissue appointments available with Natasha at an additional cost.
 £395pp Shared room  £430 Single room. (£200 deposit)
-For further information please contact Natasha Hadland 07881821901
+For further information please contact Natasha Hadland on [[PHONE]]
 
 Italian Retreat
 
@@ -279,7 +279,7 @@ Please see link for article featured in the Institute of Sport and Remedial Mass
   "/clinics": {
     parent: "clinics",
     headings: ["The Studham studio"],
-    copy: `Clinics - for an appointment call 07881 821 901
+    copy: `Clinics - for an appointment get in touch on [[PHONE]]
 
 The Studham studio
 
@@ -646,7 +646,7 @@ to help treat pain, improve flexibility and reduce imbalances.
 
 Taping can be included as part of your appointment time or as a stand alone session of approximately 15-20 minutes.
 
-If you would like more information please do not hesitate to contact me on 07881 821901`,
+If you would like more information please do not hesitate to contact me on [[PHONE]]`,
   },
   "/office-based-sports-massage": {
     parent: "therapy",

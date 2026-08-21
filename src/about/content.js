@@ -9,12 +9,14 @@
 export const NAME = "Natasha Hadland";
 
 export const CONTACT = {
-  tel: "07881 821901",
-  telHref: "tel:+447881821901",
   /* Client-supplied, and the same inbox enquiry notifications already go to
      (DEFAULT_TO in netlify/functions/enquiry.js). The co.uk address this
      replaced was displayed on the site but was not where the form delivered. */
   email: "njhpilates@gmail.com",
+  /* Natasha's WhatsApp Business short link, replacing the mobile that used to
+     sit here — see the long note in src/contact/content.js. Read by /faq,
+     which is built from this file. */
+  whatsappHref: "https://wa.me/message/MDDF72Z4L7GFF1",
 };
 
 /* Verbatim from the current /about page, in her voice. */

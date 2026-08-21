@@ -199,43 +199,10 @@
   transition-delay: 190ms, 190ms, 0s;
 }
 
-/* The WhatsApp line, inside the blue tile under "Call Natasha". Raised above
-   the stretched dial link below it so its own link takes the tap; without the
-   z-index the number's covering pseudo-element sits on top and every press in
-   the tile dials, WhatsApp words included. */
-.cv__door-aside {
-  position: relative;
-  z-index: 1;
-  margin: var(--space-2xs) 0 0;
-  color: var(--ink-soft);
-  font-size: var(--step-00);
-  line-height: 1.5;
-}
-
-.cv__door-aside a {
-  color: var(--brand-strong);
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-/* The number, and the tile's tap target: the pseudo-element covers the whole
-   blue block, so a press anywhere in it that is not on the WhatsApp line
-   still rings Natasha — which is what the tile did when it was one big link. */
-.cv__door--call {
-  position: relative;
-}
-
-.cv__door-dial {
-  color: inherit;
-  text-decoration: none;
-}
-
-.cv__door-dial::after {
-  position: absolute;
-  content: "";
-  inset: 0;
-}
+/* The blue tile's second line used to be a sentence with a link in it, which
+   is why it had a z-index and the tile had a stretched pseudo-element under
+   it. The tile is a single WhatsApp link now, so both went: the note below it
+   is .cv__door-note, the same class the enquiry tile uses. */
 
 /* The press is immediate; only the arrival is delayed. */
 .cv__door:active {
