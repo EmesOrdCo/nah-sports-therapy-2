@@ -1256,6 +1256,13 @@ a {
   text-transform: uppercase;
 }
 
+/* The agency credit is the one link in the bottom line; underlined so it
+   reads as one at a size where nothing else distinguishes it. */
+.site-footer__bottom a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .site-header.is-scrolled {
   position: fixed;
   height: var(--header-scrolled);

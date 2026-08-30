@@ -2698,7 +2698,7 @@ function hydrateShell(path) {
   const footerBottom = document.querySelector(".site-footer__bottom");
   if (footerBottom) {
     footerBottom.innerHTML =
-      "<p>© 2026 NJH Sports Therapy & Pilates</p><p>Website information does not replace individual medical advice.</p>";
+      '<p>© 2026 NJH Sports Therapy & Pilates</p><p>Website by <a href="https://valinorsystems.co.uk">Valinor Systems</a></p><p>Website information does not replace individual medical advice.</p>';
   }
 }
 
