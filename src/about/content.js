@@ -148,7 +148,10 @@ export const CHARITY = {
 export const WHERE = [
   {
     name: "The Studham studio",
-    lines: ["A private studio near Whipsnade"],
+    lines: [
+      "A private studio near Whipsnade",
+      "We serve clients across Studham, Kensworth, Whipsnade, Caddington, Little Gaddesden, Markyate, Gaddesden Row and Berkhamsted, among others across the area.",
+    ],
     href: "/studio#studio",
   },
 ];

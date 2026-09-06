@@ -1653,6 +1653,11 @@ function buildStudioContinuousPage() {
                  that breaks the leading of the column it lands in. The arrow
                  link under this column carries the reader instead. -->
             <p>Alongside the mat work, the studio is equipped with a Reformer, worked one to one, and a Stability Chair, which takes one to one or 2:1 sessions.</p>
+            <!-- Where clients come from. Written as a sentence rather than a
+                 list because it is a fact about the practice, not a search
+                 target dressed as one, and left open at the end so it reads as
+                 examples rather than the only places NJH covers. -->
+            <p>We serve clients across Studham, Kensworth, Whipsnade, Caddington, Little Gaddesden, Markyate, Gaddesden Row and Berkhamsted, among others across the area.</p>
             <!-- The directions line was the tail of the opening paragraph,
                  where the one fact a visitor actually needs sat behind three
                  clauses about what the studio offers. It is a fact, so it goes

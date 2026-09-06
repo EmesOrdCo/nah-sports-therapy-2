@@ -195,6 +195,9 @@ export function build() {
           Under a minute of film: Natasha opens the studio door and shows you
           around, so your first visit already feels familiar.
         </p>
+        <p class="av-e__film-lead" data-reveal>
+          We serve clients across Studham, Kensworth, Whipsnade, Caddington, Little Gaddesden, Markyate, Gaddesden Row and Berkhamsted, among others across the area.
+        </p>
         <a class="pilates-arrow-link" href="/studio" data-reveal>
           Look around the studio <span>&#8599;</span>
         </a>
