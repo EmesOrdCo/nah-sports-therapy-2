@@ -1657,7 +1657,7 @@ function buildStudioContinuousPage() {
                  list because it is a fact about the practice, not a search
                  target dressed as one, and left open at the end so it reads as
                  examples rather than the only places NJH covers. -->
-            <p>We serve clients across Studham, Kensworth, Whipsnade, Caddington, Little Gaddesden, Markyate, Gaddesden Row and Berkhamsted, among others across the area.</p>
+            <p>We serve clients across Studham, Kensworth, Whipsnade, Caddington, Dagnall, Edlesborough, Ivinghoe, Little Gaddesden, Gaddesden Row, Markyate, Redbourn, Potten End, Berkhamsted, Tring and Albury, among others across the area.</p>
             <!-- The directions line was the tail of the opening paragraph,
                  where the one fact a visitor actually needs sat behind three
                  clauses about what the studio offers. It is a fact, so it goes

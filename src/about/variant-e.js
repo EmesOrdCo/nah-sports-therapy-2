@@ -196,7 +196,7 @@ export function build() {
           around, so your first visit already feels familiar.
         </p>
         <p class="av-e__film-lead" data-reveal>
-          We serve clients across Studham, Kensworth, Whipsnade, Caddington, Little Gaddesden, Markyate, Gaddesden Row and Berkhamsted, among others across the area.
+          We serve clients across Studham, Kensworth, Whipsnade, Caddington, Dagnall, Edlesborough, Ivinghoe, Little Gaddesden, Gaddesden Row, Markyate, Redbourn, Potten End, Berkhamsted, Tring and Albury, among others across the area.
         </p>
         <a class="pilates-arrow-link" href="/studio" data-reveal>
           Look around the studio <span>&#8599;</span>
