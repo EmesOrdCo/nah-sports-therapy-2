@@ -10,8 +10,7 @@
     "dev:netlify": "netlify dev",
     "email:preview": "node scripts/email-preview.mjs",
     "images:sources": "python3 scripts/image-sources.py",
-    "test:migration": "node --test tests/vercel-migration.test.mjs",
-    "prebuild": "node scripts/migration-fingerprints.mjs"
+    "test:migration": "node --test tests/vercel-migration.test.mjs"
   },
   "devDependencies": {
     "@fontsource/parisienne": "^5.3.0",
