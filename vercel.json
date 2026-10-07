@@ -1,0 +1,131 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "BASE_PATH=/ npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm ci",
+  "redirects": [
+    {
+      "source": "/blank-1",
+      "destination": "/studio#studio",
+      "statusCode": 301
+    },
+    {
+      "source": "/individual-pilates",
+      "destination": "/pilates#individual",
+      "statusCode": 301
+    },
+    {
+      "source": "/small-group-pilates-timetable",
+      "destination": "/pilates#small-group",
+      "statusCode": 301
+    },
+    {
+      "source": "/blank",
+      "destination": "/pilates#pre-postnatal",
+      "statusCode": 301
+    },
+    {
+      "source": "/pilates-for-golfers",
+      "destination": "/pilates#golfers",
+      "statusCode": 301
+    },
+    {
+      "source": "/clinic-policies",
+      "destination": "/faq#practical",
+      "statusCode": 301
+    },
+    {
+      "source": "/retreats",
+      "destination": "/pilates",
+      "statusCode": 301
+    },
+    {
+      "source": "/testimonial",
+      "destination": "/client-stories",
+      "statusCode": 301
+    },
+    {
+      "source": "/testimonials",
+      "destination": "/client-stories",
+      "statusCode": 301
+    },
+    {
+      "source": "/client-stories/reviews",
+      "destination": "/client-stories",
+      "statusCode": 301
+    },
+    {
+      "source": "/clinics",
+      "destination": "/studio",
+      "statusCode": 301
+    },
+    {
+      "source": "/links",
+      "destination": "/studio",
+      "statusCode": 301
+    },
+    {
+      "source": "/charity-work",
+      "destination": "/about#charity",
+      "statusCode": 301
+    },
+    {
+      "source": "/what-is-what-are-the-benifits",
+      "destination": "/sports-therapy#overview",
+      "statusCode": 301
+    },
+    {
+      "source": "/treatment",
+      "destination": "/sports-therapy#treatment",
+      "statusCode": 301
+    },
+    {
+      "source": "/myofascial-release",
+      "destination": "/sports-therapy#myofascial-release",
+      "statusCode": 301
+    },
+    {
+      "source": "/what-to-expect",
+      "destination": "/sports-therapy#what-to-expect",
+      "statusCode": 301
+    },
+    {
+      "source": "/kinesiology-taping",
+      "destination": "/sports-therapy#kinesiology-taping",
+      "statusCode": 301
+    },
+    {
+      "source": "/office-based-sports-massage",
+      "destination": "/sports-therapy",
+      "statusCode": 301
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/.netlify/functions/enquiry",
+      "destination": "/api/enquiry"
+    },
+    {
+      "source": "/:path((?!api(?:/|$)).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": ".*\\.vercel\\.app"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    }
+  ]
+}
