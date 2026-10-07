@@ -13,3 +13,7 @@ The Vercel build runs `BASE_PATH=/ npm run build`, so assets and deep links stay
 - Keep the Netlify deployment available until DNS caches expire and the Vercel site is verified; rollback restores the previous DNS targets.
 
 No DNS changes or live enquiries were made by the migration tests. The test suite uses an in-process mock mail service.
+
+## Deployment identity
+
+Use GitHub `valinor-systems26` for deployment commits. This business account has Write access to this repository and is already linked to the owner of the Vercel Pro team. Repository ownership stays with its current owner.
